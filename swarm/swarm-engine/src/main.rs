@@ -1002,6 +1002,7 @@ async fn main() {
             bridge.write_state(&core_ipc::AgentState {
                 sniper_vote: None,
                 risk_vote: Some(state.is_trading_allowed()),
+                consensus_reached: None,
                 liquidation_target: None,
                 global_sentiment_modifier: 0.0,
                 timestamp: chrono::Utc::now().timestamp() as u64,

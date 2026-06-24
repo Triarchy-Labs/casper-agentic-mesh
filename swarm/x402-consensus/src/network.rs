@@ -5,7 +5,7 @@ use crate::{config, engine};
 pub async fn run_consensus_loop() {
     println!("[Consensus Node] Initializing Policy Governor (Signal + Trend + Regime voting)...");
 
-    let ipc = IpcBridge::new();
+    let mut ipc = IpcBridge::new();
     let governor = engine::PolicyGovernor::new();
     let mut last_timestamp = 0;
 
@@ -74,13 +74,28 @@ pub async fn run_consensus_loop() {
                              decision.action, decision.confidence, decision.votes_received);
                     if decision.vetoed {
                         println!("[Consensus Node] ⚠️ VETOED: {:?}", decision.veto_reason);
+                        let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                        ipc.update_state(|s| {
+                            s.consensus_reached = Some(false);
+                            s.timestamp = current_ts;
+                        });
                     } else {
                         println!("[Consensus Node] 🚀 Consensus REACHED — forwarding to execution!");
+                        let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                        ipc.update_state(|s| {
+                            s.consensus_reached = Some(true);
+                            s.timestamp = current_ts;
+                        });
                     }
                 }
                 engine::Action::Wait => {
                     let reason = decision.veto_reason.as_deref().unwrap_or("No actionable signal");
                     println!("[Consensus Node] ⏳ WAIT — {}", reason);
+                    let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                    ipc.update_state(|s| {
+                        s.consensus_reached = Some(false);
+                        s.timestamp = current_ts;
+                    });
                 }
             }
 

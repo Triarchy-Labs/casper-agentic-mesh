@@ -3,56 +3,87 @@ use std::time::Duration;
 use crate::{config, engine};
 
 pub async fn run_sniper_loop() {
-    let ipc = IpcBridge::new();
+    let mut ipc = IpcBridge::new();
     let mut last_timestamp = 0;
+    let mut target_in_flight = false;
+    let mut tick_count = 0;
 
     let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://rpc.testnet.casperlabs.io/rpc".to_string());
     println!("[Sniper Agent] Initialized and connected to Casper RPC: {}", rpc_str);
 
     loop {
+        tick_count += 1;
+        
+        // Mock target generation: generate a new target every 20 ticks if none is in flight
+        if !target_in_flight && tick_count % 20 == 0 {
+            println!("[Sniper Agent] 🔭 New arbitrage target discovered via internal scanner!");
+            let new_target = format!("pool_0x{:04x}", tick_count);
+            let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+            ipc.update_state(|s| {
+                s.liquidation_target = Some(new_target);
+                s.sniper_vote = Some(true);
+                s.consensus_reached = None; // Reset consensus for new target
+                s.timestamp = current_ts;
+            });
+            target_in_flight = true;
+        }
+
         if let Some(state) = ipc.read_state() {
             if state.timestamp > last_timestamp {
                 last_timestamp = state.timestamp;
                 
                 if let Some(target) = state.liquidation_target {
-                    println!("\n[Sniper Agent] ⚡ COGNITIVE ARBITRAGE OPPORTUNITY DETECTED ⚡");
-                    println!("[Sniper Agent] Target: {}", target);
-                    
-                    let sentiment = state.global_sentiment_modifier;
-                    let leverage_multiplier = engine::calculate_leverage_multiplier(sentiment);
-                    
-                    // Vector Gamma: Integration with Go x402 Facilitator
-                    // We interact with the local x402 Go sidecar to negotiate payment
-                    let x402_payload = serde_json::json!({
-                        "task_id": target,
-                        "bid_amount": 500 * leverage_multiplier as i64,
-                        "currency": "CSPR"
-                    });
-                    
-                    println!("[x402 Facilitator] Executing M2M Micropayment Negotiation...");
-                    
-                    // Production-ready HTTP call to Go Facilitator
-                    let client = reqwest::Client::new();
-                    match client.post("http://localhost:8080/x402/negotiate")
-                        .json(&x402_payload)
-                        .send()
-                        .await 
-                    {
-                        Ok(res) => {
-                            if res.status().is_success() {
-                                println!("[x402 Facilitator] Payment successful. Target unlocked.");
-                                match engine::execute_flash_loan_tx(&target, leverage_multiplier).await {
-                                    Ok(hash) => println!("[Sniper Agent] 💥 Arbitrage successful! Hash: {}", hash),
-                                    Err(e) => println!("[Sniper Agent] ❌ Arbitrage failed: {}", e),
+                    if state.consensus_reached.unwrap_or(false) {
+                        println!("\n[Sniper Agent] ⚡ CONSENSUS REACHED. EXECUTING TARGET: {} ⚡", target);
+                        
+                        let sentiment = state.global_sentiment_modifier;
+                        let leverage_multiplier = engine::calculate_leverage_multiplier(sentiment);
+                        
+                        // Vector Gamma: Integration with Go x402 Facilitator
+                        // We interact with the local x402 Go sidecar to negotiate payment
+                        let x402_payload = serde_json::json!({
+                            "task_id": target,
+                            "bid_amount": 500 * leverage_multiplier as i64,
+                            "currency": "CSPR"
+                        });
+                        
+                        println!("[x402 Facilitator] Executing M2M Micropayment Negotiation...");
+                        
+                        // Production-ready HTTP call to Go Facilitator
+                        let client = reqwest::Client::new();
+                        match client.post("http://localhost:8080/x402/negotiate")
+                            .json(&x402_payload)
+                            .send()
+                            .await 
+                        {
+                            Ok(res) => {
+                                if res.status().is_success() {
+                                    println!("[x402 Facilitator] Payment successful. Target unlocked.");
+                                    match engine::execute_flash_loan_tx(&target, leverage_multiplier).await {
+                                        Ok(hash) => println!("[Sniper Agent] 💥 Arbitrage successful! Hash: {}", hash),
+                                        Err(e) => println!("[Sniper Agent] ❌ Arbitrage failed: {}", e),
+                                    }
+                                } else {
+                                    println!("[x402 Facilitator] Payment rejected. Status: {}", res.status());
                                 }
-                            } else {
-                                println!("[x402 Facilitator] Payment rejected. Status: {}", res.status());
+                            },
+                            Err(e) => {
+                                println!("[x402 Facilitator] ⚠️ ERROR: Facilitator unreachable: {}", e);
+                                println!("[Sniper Agent] ❌ Arbitrage aborted. No payment, no payload.");
                             }
-                        },
-                        Err(e) => {
-                            println!("[x402 Facilitator] ⚠️ ERROR: Facilitator unreachable: {}", e);
-                            println!("[Sniper Agent] ❌ Arbitrage aborted. No payment, no payload.");
                         }
+
+                        // Clear the target after execution attempt to allow new targets
+                        let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                        ipc.update_state(|s| {
+                            s.liquidation_target = None;
+                            s.sniper_vote = None;
+                            s.consensus_reached = None;
+                            s.timestamp = current_ts;
+                        });
+                        target_in_flight = false;
+                    } else {
+                        println!("[Sniper Agent] ⏳ Target in flight. Waiting for swarm consensus on {}...", target);
                     }
                 }
             }

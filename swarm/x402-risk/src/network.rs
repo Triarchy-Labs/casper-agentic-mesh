@@ -1,9 +1,11 @@
 use std::time::Duration;
 use crate::{config, engine};
+use core_ipc::IpcBridge;
 
 pub async fn run_risk_loop() {
     println!("[Risk Agent] Initializing full Risk Gate (Kelly + ATR + BucketCap + KillSwitch + AutoRamp)...");
 
+    let mut ipc = IpcBridge::new();
     let mut risk_gate = engine::RiskGate::new(config::MAX_EXPOSURE_USD);
     let mut tick_count: u64 = 0;
 
@@ -58,9 +60,19 @@ pub async fn run_risk_loop() {
             Ok(position_size) => {
                 println!("[Risk Agent] ✅ Trade APPROVED for {} | Size: ${:.2} | Regime: {:?}",
                          symbol, position_size, regime);
+                let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                ipc.update_state(|state| {
+                    state.risk_vote = Some(true);
+                    state.timestamp = current_ts;
+                });
             }
             Err(reason) => {
                 println!("[Risk Agent] 🚫 Trade BLOCKED: {}", reason);
+                let current_ts = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+                ipc.update_state(|state| {
+                    state.risk_vote = Some(false);
+                    state.timestamp = current_ts;
+                });
             }
         }
 

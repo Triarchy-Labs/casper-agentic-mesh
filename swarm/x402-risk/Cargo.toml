@@ -5,6 +5,7 @@ edition = "2024"
 description = "Kelly sizing, KillSwitch, ATR stops, BucketCap risk management"
 
 [dependencies]
+core-ipc = { path = "../core-ipc" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 reqwest = { workspace = true }

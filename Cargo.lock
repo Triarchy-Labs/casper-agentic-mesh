@@ -4714,6 +4714,7 @@ name = "x402-risk"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "core-ipc",
  "reqwest",
  "serde",
  "serde_json",
