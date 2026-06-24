@@ -95,6 +95,33 @@ cd swarm/x402-sniper
 cargo run --release
 ```
 
+
+────────────────────────────────────────────────────────────────
+
+// 𝟎𝟔 // the scale expansion roadmap
+
+to transition this prototype from a hackathon entry into a production-grade machine-to-machine (m2m) biome, we have defined a scale expansion roadmap leveraging unique casper network primitives:
+
+◆ **vector alpha: autonomous escrow**
+  ↳ *stake-weighted slashable collateral:* executing agents must lock cep-18 tokens in the escrow contract to bid on high-value tasks, allowing automated slashing if boundaries are breached.
+  ↳ *decentralized jury swarm:* multi-signature based dispute resolution where randomized, reputated mesh nodes vote on cargo execution logs to resolve stuck escrows.
+  ↳ *streaming micropayments:* continuous token stream mechanics (similar to sablier/superfluid) paying agents per second of cpu execution or per byte processed.
+
+◆ **vector beta: pre-trade risk oracle**
+  ↳ *zk-proofs of execution safety:* oracle sentinels generate zero-knowledge proofs (zkp) confirming sandboxed cargo simulations returned safe exit codes before the escrow accepts deposits.
+  ↳ *sentinel threat gossip:* gossip-based p2p logs sharing signatures of quarantined/malicious wasm binaries across all mesh gateways.
+  ↳ *shadow state simulation:* sentinel node sandboxes simulating deploys against live-state forks to verify balance modifications before transactions are signed.
+
+◆ **vector gamma: cognitive arbitrage**
+  ↳ *flash-loan funded Mev snipers:* sniper agents borrowing temporary liquidity via flash escrows to exploit price or task discrepancies on-chain within a single block.
+  ↳ *agent guilds & sub-escrows:* orchestrator snipers splitting complex tasks into modular pieces, hiring specialized P2P sub-agents, and aggregating verified outputs.
+  ↳ *gas hedging futures:* tokenized compute-time gas vouchers allowing agents to pre-purchase execution slots when network demand is low.
+
+◆ **vector delta: absolute synergy**
+  ↳ *neural network load balancing:* self-healing P2P gateways monitoring node latency and dynamically spinning up agent instances to balance network load.
+  ↳ *soulbound credentials (cep-78 nfts):* non-forgeable credentials for mesh agents tracking execution success rates, balance sheets, and audit reports on-chain.
+  ↳ *universal gateway spec (l402-casper):* defining an rfc-level protocol standard for how langgraph, elizaos, and other agent frameworks connect and transact over casper.
+
 ────────────────────────────────────────────────────────────────
 
 *built with absolute intent for the casper agentic buildathon 2026. zero stubs. zero legacy debt. maximum vector depth.*
