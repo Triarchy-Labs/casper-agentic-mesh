@@ -1,0 +1,13 @@
+[package]
+name = "x402-polymarket"
+version = "0.1.0"
+edition = "2024"
+description = "Gamma API prediction market sentiment oracle"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+core-ipc = { path = "../core-ipc" }

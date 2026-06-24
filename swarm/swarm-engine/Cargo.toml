@@ -1,0 +1,35 @@
+[package]
+name = "swarm-engine"
+version = "0.1.0"
+edition = "2021"
+description = "Main orchestrator — all 12 crates wired into autonomous swarm"
+
+[dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+chrono = { workspace = true }
+dotenvy = { workspace = true }
+alloy = { workspace = true }
+
+# D1: Ouroboros Brain
+ouroboros-brain = { path = "../ouroboros-brain" }
+# D2: Titan Core
+titan-core = { path = "../titan-core" }
+# D3: Hive Mind Intelligence
+hive-intel = { path = "../hive-intel" }
+# D4: X402 Agent Swarm
+x402-consensus = { path = "../x402-consensus" }
+x402-risk = { path = "../x402-risk" }
+x402-memory = { path = "../x402-memory" }
+x402-sniper = { path = "../x402-sniper" }
+x402-liquidator = { path = "../x402-liquidator" }
+x402-polymarket = { path = "../x402-polymarket" }
+# D5: Mantle Chain
+mantle-chain = { path = "../mantle-chain" }
+# L3: Inter-agent IPC
+core-ipc = { path = "../core-ipc" }
+# Telemetry HTTP
+axum = { workspace = true }

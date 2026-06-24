@@ -1,0 +1,11 @@
+[package]
+name = "core-ipc"
+version = "0.1.0"
+edition = "2021"
+description = "Shared IPC bridge — mmap-based inter-agent communication"
+
+[dependencies]
+serde = { workspace = true }
+bincode = "1"
+memmap2 = "0.9"
+fs2 = "0.4"

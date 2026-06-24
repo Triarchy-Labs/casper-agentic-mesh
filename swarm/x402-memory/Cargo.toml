@@ -1,0 +1,16 @@
+[package]
+name = "x402-memory"
+version = "0.1.0"
+edition = "2024"
+description = "HyperEdge graph persistent memory node"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+
+notify = "7"
+bincode = "1"
+core-ipc = { path = "../core-ipc" }
+tokio = { workspace = true }
+sled = "0.34"

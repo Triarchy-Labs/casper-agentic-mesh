@@ -1,0 +1,15 @@
+[package]
+name = "x402-liquidator"
+version = "0.1.0"
+edition = "2024"
+description = "On-chain flash liquidation daemon"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+alloy = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+url = "2"
+core-ipc = { path = "../core-ipc" }

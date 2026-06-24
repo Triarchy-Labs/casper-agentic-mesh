@@ -1,0 +1,24 @@
+# Build artifacts
+target/
+node_modules/
+.next/
+out/
+
+# Secrets & keys
+*.pem
+key.pem
+secret_key.pem
+*.secret
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Casper
+casper-ai-toolkit/

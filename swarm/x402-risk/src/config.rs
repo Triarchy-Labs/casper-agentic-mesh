@@ -1,0 +1,2 @@
+pub const MAX_EXPOSURE_USD: f64 = 100_000.0;
+pub const RISK_POLL_INTERVAL_MS: u64 = 500;

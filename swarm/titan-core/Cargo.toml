@@ -1,0 +1,13 @@
+[package]
+name = "titan-core"
+version = "0.1.0"
+edition = "2021"
+description = "Exchange-agnostic trading core — NeuralBrain, RiskMatrix, EntryPipeline, indicators"
+
+[dependencies]
+tokio = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }

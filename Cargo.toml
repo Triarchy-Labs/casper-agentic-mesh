@@ -1,0 +1,71 @@
+[workspace]
+resolver = "2"
+exclude = ["contracts/casper-mesh-contract"]
+members = [
+    "swarm/casper-client",
+    "swarm/ouroboros-brain",
+    "swarm/titan-core",
+    "swarm/hive-intel",
+    "swarm/mantle-chain",
+    "swarm/swarm-engine",
+    "swarm/x402-consensus",
+    "swarm/x402-risk",
+    "swarm/x402-polymarket",
+    "swarm/x402-memory",
+    "swarm/x402-sniper",
+    "swarm/x402-liquidator",
+    "swarm/core-ipc",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/Triarchy-Labs/casper-agentic-mesh"
+
+[workspace.dependencies]
+# Async
+tokio = { version = "1", features = ["full"] }
+
+# HTTP
+reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Config
+toml = "0.8"
+
+# Concurrent
+dashmap = "6"
+
+# HTTP server
+axum = "0.8"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Environment
+dotenvy = "0.15"
+
+# Regex
+regex = "1"
+
+# Crypto (for HMAC signatures)
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+# On-chain (Mantle) - kept for reference if needed
+alloy = { version = "2.0", features = ["full"] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"

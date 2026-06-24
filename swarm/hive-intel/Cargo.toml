@@ -1,0 +1,17 @@
+[package]
+name = "hive-intel"
+version = "0.1.0"
+edition = "2021"
+description = "Collective intelligence — ML local inference, SIMD turbo, strategy validation"
+
+[dependencies]
+tokio = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+chrono = { workspace = true }
+dashmap = { workspace = true }
+axum = { workspace = true }
+bincode = "1"
+zstd = "0.13"

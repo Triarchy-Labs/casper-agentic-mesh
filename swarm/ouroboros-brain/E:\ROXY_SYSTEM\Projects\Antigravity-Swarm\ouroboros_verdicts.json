@@ -1,0 +1,11 @@
+{
+  "TEST": {
+    "confidence": 30.0,
+    "cycle": 1,
+    "macro_bias": "NEUTRAL",
+    "meta_agrees": true,
+    "score": 0.5,
+    "timestamp": "2026-05-27T14:41:59.314746816+00:00",
+    "verdict": "HOLD"
+  }
+}
