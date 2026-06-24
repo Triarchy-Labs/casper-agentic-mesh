@@ -10,7 +10,8 @@ export default function FluidBackground() {
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050505);
+    scene.background = new THREE.Color(0x000000);
+    scene.fog = new THREE.FogExp2(0x000000, 0.08);
 
     const camera = new THREE.PerspectiveCamera(
       75,

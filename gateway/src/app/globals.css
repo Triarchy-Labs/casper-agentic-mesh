@@ -49,8 +49,77 @@
   --red-900: #ff565f;
   --red-1000: #ffe9ed;
 
+  /* Geist Blue Accent Scale */
+  --blue-100: #06193a;
+  --blue-200: #022248;
+  --blue-300: #002f62;
+  --blue-400: #003674;
+  --blue-500: #00418b;
+  --blue-600: #0090ff;
   --blue-700: #006efe;
+  --blue-800: #005be7;
   --blue-900: #47a8ff;
+  --blue-1000: #eaf6ff;
+
+  /* Geist Amber Accent Scale */
+  --amber-100: #2a1700;
+  --amber-200: #361900;
+  --amber-300: #502800;
+  --amber-400: #5b3000;
+  --amber-500: #703e00;
+  --amber-600: #ed9a00;
+  --amber-700: #ffae00;
+  --amber-800: #ff9300;
+  --amber-900: #ff9300;
+  --amber-1000: #fff3d5;
+
+  /* Geist Green Accent Scale */
+  --green-100: #002608;
+  --green-200: #00320b;
+  --green-300: #003a0e;
+  --green-400: #004615;
+  --green-500: #006717;
+  --green-600: #00952d;
+  --green-700: #00ac3a;
+  --green-800: #009432;
+  --green-900: #00ca50;
+  --green-1000: #d8ffe4;
+
+  /* Geist Teal Accent Scale */
+  --teal-100: #00231b;
+  --teal-200: #002b22;
+  --teal-300: #003d34;
+  --teal-400: #004035;
+  --teal-500: #006354;
+  --teal-600: #009e86;
+  --teal-700: #00aa95;
+  --teal-800: #00927f;
+  --teal-900: #00cfb7;
+  --teal-1000: #cbfff5;
+
+  /* Geist Purple Accent Scale */
+  --purple-100: #290c33;
+  --purple-200: #341142;
+  --purple-300: #47185e;
+  --purple-400: #541a76;
+  --purple-500: #642290;
+  --purple-600: #9440d5;
+  --purple-700: #9440d5;
+  --purple-800: #7d2bba;
+  --purple-900: #c472fb;
+  --purple-1000: #fbecff;
+
+  /* Geist Pink Accent Scale */
+  --pink-100: #310d1e;
+  --pink-200: #420c25;
+  --pink-300: #571032;
+  --pink-400: #5d0c34;
+  --pink-500: #76063f;
+  --pink-600: #ba0056;
+  --pink-700: #f12b82;
+  --pink-800: #e7006d;
+  --pink-900: #ff4d8d;
+  --pink-1000: #ffe9f4;
 
   --background: var(--background-100);
   --foreground: var(--gray-1000);
