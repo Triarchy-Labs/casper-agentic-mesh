@@ -6,9 +6,9 @@ import { AgentOrb } from "@/components/AgentOrb";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const checkCasperConnected = async () => {
-    if (typeof window !== "undefined" && (window as any).casperWallet) {
+    if (typeof window !== "undefined" && window.casperWallet) {
         try {
-            const isConnected = await (window as any).casperWallet.isConnected();
+            const isConnected = await window.casperWallet.isConnected();
             return { isConnected };
         } catch (e) {
             return { isConnected: false };
@@ -18,10 +18,10 @@ const checkCasperConnected = async () => {
 };
 
 const requestAccess = async () => {
-    if (typeof window !== "undefined" && (window as any).casperWallet) {
+    if (typeof window !== "undefined" && window.casperWallet) {
         try {
-            await (window as any).casperWallet.requestConnection();
-            const activeKey = await (window as any).casperWallet.getActivePublicKey();
+            await window.casperWallet.requestConnection();
+            const activeKey = await window.casperWallet.getActivePublicKey();
             return { address: activeKey };
         } catch (error) {
             return { error };
@@ -68,7 +68,7 @@ export function Nav() {
 
 		setConnecting(true);
 		try {
-            if (typeof window === "undefined" || !(window as any).casperWallet) {
+            if (typeof window === "undefined" || !window.casperWallet) {
                 setWalletMissing(true);
                 return;
             }

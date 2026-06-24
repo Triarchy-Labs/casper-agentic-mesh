@@ -111,14 +111,14 @@ body {
   border-color: var(--gray-500);
 }
 
-/* Geist Elevation (Dark) */
-.glass-panel {
-  background: rgba(26, 26, 26, 0.6); /* gray-100 + alpha */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* Editorial Elevation (Fable 5) */
+.editorial-panel {
+  background-color: var(--background-100);
   border: 1px solid var(--gray-400);
-  border-radius: 12px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.02), 0 8px 16px -4px rgba(0,0,0,0.04), 0 24px 32px -8px rgba(0,0,0,0.06);
+  /* Zero border-radius for raw authentic feel */
+  border-radius: 0px;
+  position: relative;
+  z-index: 10;
 }
 
 /* Fable 5 Aesthetics */

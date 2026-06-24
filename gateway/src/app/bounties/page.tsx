@@ -6,10 +6,10 @@ import { Nav } from "@/components/Nav";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
-    if (typeof window !== "undefined" && (window as any).casperWallet) {
+    if (typeof window !== "undefined" && window.casperWallet) {
         try {
-            await (window as any).casperWallet.requestConnection();
-            const activeKey = await (window as any).casperWallet.getActivePublicKey();
+            await window.casperWallet.requestConnection();
+            const activeKey = await window.casperWallet.getActivePublicKey();
             return { address: activeKey };
         } catch (error) {
             return { error: String(error) };
@@ -92,7 +92,7 @@ const BountiesPage = () => {
 			setEscrowResult(`✓ ESCROW SECURED (Casper: ${userPubKey.substring(0,6)}...${userPubKey.slice(-4)})`);
 		} catch (e: unknown) {
 			setEscrowStatus("error");
-			setEscrowResult(`WALLET REJECTED: ${e instanceof Error ? e.message : "Connection denied"}`);
+			setEscrowResult(`WALLET REJECTED: ${e instanceof Error ? (e instanceof Error ? e.message : String(e)) : "Connection denied"}`);
 		}
 	};
 
@@ -152,7 +152,7 @@ const BountiesPage = () => {
 							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "(Fastest: 45ms)", isFloat: true },
 							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "Agent-to-Agent" }
 						].map((kpi, idx) => (
-							<div key={idx} className="col-span-12 md:col-span-3 glass-panel p-[24px]">
+							<div key={idx} className="col-span-12 md:col-span-3 editorial-panel p-[24px]">
 								<div className="label-14-mono text-[var(--gray-600)] mb-[8px]">{kpi.label}</div>
 								<div className="heading-40 text-[var(--gray-1000)]">
 									{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
@@ -214,7 +214,7 @@ const BountiesPage = () => {
 
 					{/* 3. Right Column: Ingestion Terminal (Sticky per Fable 5) */}
 					<div className="col-span-12 md:col-span-4 sticky-section" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
-						<div className="glass-panel p-[24px] w-full">
+						<div className="editorial-panel p-[24px] w-full">
 							<h3 className="label-14-mono text-[var(--red-700)] mb-[24px]">_INGESTION_TERMINAL</h3>
 							
 							{/* Human UI vs Bot API toggle */}

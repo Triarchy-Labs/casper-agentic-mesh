@@ -1,0 +1,1 @@
+export {}; declare global { interface Window { casperWallet?: { requestConnection: () => Promise<void>; getActivePublicKey: () => Promise<string>; signMessage: (msg: string, pub: string) => Promise<string | object>; isConnected: () => Promise<boolean>; } } }

@@ -58,8 +58,8 @@ export async function POST(req: Request) {
         await saveBounties(bounties);
         
         return NextResponse.json(newBounty, { status: 201 });
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (e: unknown) {
+        return NextResponse.json({ error: (e instanceof Error ? e.message : String(e)) }, { status: 500 });
     }
 }
 
@@ -75,7 +75,7 @@ export async function PATCH(req: Request) {
         await saveBounties(bounties);
         
         return NextResponse.json(bounties[bountyIndex]);
-    } catch (e: any) {
-        return NextResponse.json({ error: e.message }, { status: 500 });
+    } catch (e: unknown) {
+        return NextResponse.json({ error: (e instanceof Error ? e.message : String(e)) }, { status: 500 });
     }
 }

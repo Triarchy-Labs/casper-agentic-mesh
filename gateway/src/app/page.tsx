@@ -101,7 +101,7 @@ export default function Page() {
           
           {/* TAB 1: ESCROW */}
           <div className="synergy-section min-h-[60vh] flex items-center justify-start sticky top-[20vh]">
-            <div className="glass-panel p-[40px] w-full max-w-lg">
+            <div className="editorial-panel p-[40px] w-full max-w-lg">
               <p className="label-14-mono text-[var(--red-700)] mb-[16px]">01 // Vector Alpha</p>
               <h2 className="heading-40 mb-[16px]">Autonomous Escrow</h2>
               <p className="copy-16 mb-[24px]">
@@ -123,7 +123,7 @@ export default function Page() {
 
           {/* TAB 2: ORACLE */}
           <div className="synergy-section min-h-[60vh] flex items-center justify-end sticky top-[30vh]">
-            <div className="glass-panel p-[40px] w-full max-w-lg">
+            <div className="editorial-panel p-[40px] w-full max-w-lg">
               <p className="label-14-mono text-[var(--red-700)] mb-[16px]">02 // Vector Beta</p>
               <h2 className="heading-40 mb-[16px]">Pre-Trade Risk Oracle</h2>
               <p className="copy-16 mb-[24px]">
@@ -145,7 +145,7 @@ export default function Page() {
 
           {/* TAB 3: ARBITRAGE */}
           <div className="synergy-section min-h-[60vh] flex items-center justify-start sticky top-[40vh]">
-            <div className="glass-panel p-[40px] w-full max-w-lg">
+            <div className="editorial-panel p-[40px] w-full max-w-lg">
               <p className="label-14-mono text-[var(--red-700)] mb-[16px]">03 // Vector Gamma</p>
               <h2 className="heading-40 mb-[16px]">Cognitive Arbitrage</h2>
               <p className="copy-16 mb-[24px]">
@@ -167,7 +167,7 @@ export default function Page() {
 
           {/* TAB 4: SYNERGY */}
           <div className="synergy-section min-h-screen flex items-center justify-center relative">
-            <div className="glass-panel p-[48px] w-full max-w-3xl text-center border-[var(--red-900)] relative overflow-hidden">
+            <div className="editorial-panel p-[48px] w-full max-w-3xl text-center border-[var(--red-900)] relative overflow-hidden">
               <div className="absolute inset-0 bg-[var(--red-500)] opacity-5 z-0 pointer-events-none"></div>
               <div className="relative z-10">
                 <p className="label-14-mono text-[var(--red-700)] mb-[16px]">04 // Absolute Synergy</p>
