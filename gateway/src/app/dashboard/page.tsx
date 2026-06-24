@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -45,11 +45,18 @@ const AnimatedCounter = ({ value, prefix = "", suffix = "", isFloat = false }: {
 	return <span ref={ref}>{prefix}00{suffix}</span>;
 }
 
+interface WasiNode {
+	id: number;
+	cluster: string;
+	speed: number;
+	latency: number;
+	status: "BREACHED" | "COMPUTING" | "IDLE";
+}
+
 export default function Dashboard() {
 	const [agentState, setAgentState] = useState<AgentState>("idle");
     const [progress, setProgress] = useState(0);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [wasiNodes, setWasiNodes] = useState<any[]>([]);
+    const [wasiNodes, setWasiNodes] = useState<WasiNode[]>([]);
 	const [sysLoad, setSysLoad] = useState("0.00");
     const [inputValue, setInputValue] = useState("");
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
@@ -59,7 +66,7 @@ export default function Dashboard() {
     const heroRef = useRef<HTMLElement>(null);
     const gridRef = useRef<HTMLElement>(null);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
         
         const ctx = gsap.context(() => {
@@ -119,6 +126,7 @@ export default function Dashboard() {
             if (accessDetails.error) throw new Error(accessDetails.error);
             const userPubKey = accessDetails.address || "GXYZ...";
 
+            // MOCK: Fallback unique signature identifier when window.casperWallet signature is simulated or bypassed
             let txHashHeader = "mock_csprclick_" + userPubKey;
             if (typeof window !== "undefined" && window.casperWallet) {
                 try {
@@ -151,9 +159,9 @@ export default function Dashboard() {
             } else {
                 setAgentState("danger");
             }
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (e: any) {
-            setLastResult({ status: "error", error: e.message });
+        } catch (e) {
+            const err = e as Error;
+            setLastResult({ status: "error", error: err.message || "Execution sequence failed" });
             setAgentState("danger");
         }
     };

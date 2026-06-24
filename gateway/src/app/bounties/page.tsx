@@ -41,13 +41,23 @@ const AnimatedCounter = ({ value, prefix = "", suffix = "", isFloat = false }: {
 	return <span ref={ref}>{prefix}0{suffix}</span>;
 }
 
+interface Bounty {
+	id: string;
+	title: string;
+	bounty: string;
+	status: "OPEN" | "IN PROGRESS" | "LOCKED" | "COMPLETED";
+	issuer: string;
+	skills: string[];
+	difficulty: string;
+}
+
 const BountiesPage = () => {
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 	const [directive, setDirective] = useState("");
 	const [reward, setReward] = useState("");
 	const [escrowStatus, setEscrowStatus] = useState<"idle" | "working" | "success" | "error">("idle");
 	const [escrowResult, setEscrowResult] = useState<string | null>(null);
-	const [bounties, setBounties] = useState<any[]>([]);
+	const [bounties, setBounties] = useState<Bounty[]>([]);
 
 	const handleEscrow = async () => {
 		if (!directive.trim()) return;

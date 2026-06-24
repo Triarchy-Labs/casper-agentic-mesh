@@ -3,7 +3,6 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import { Nav } from "@/components/Nav";
 import FluidBackground from "@/components/FluidBackground";
 
@@ -13,24 +12,7 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Lenis for buttery smooth scrolling
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-      touchMultiplier: 2,
-    });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
 
   // GSAP Cinematic Transitions & Pinning (Fable 5 Aesthetic)
   useGSAP(() => {

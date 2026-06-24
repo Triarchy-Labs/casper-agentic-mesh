@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AgentOrb } from "@/components/AgentOrb";
+import Link from "next/link";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const checkCasperConnected = async () => {
@@ -114,9 +115,9 @@ export function Nav() {
 				pointerEvents: "none",
 			}}
 		>
-			<div 
-                style={{ pointerEvents: "auto", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", position: "relative" }}
-                onClick={() => window.location.href = "/"}
+			<Link 
+                href="/"
+                style={{ pointerEvents: "auto", display: "flex", alignItems: "center", gap: "12px", cursor: "pointer", position: "relative", textDecoration: "none" }}
                 onMouseEnter={() => setHoverLogo(true)}
                 onMouseLeave={() => setHoverLogo(false)}
             >
@@ -137,15 +138,15 @@ export function Nav() {
                         [ RETURN TO HQ ]
                     </span>
                 </motion.div>
-			</div>
+			</Link>
 
 			<div style={{ pointerEvents: "auto", display: "flex", gap: "24px", alignItems: "center", position: "relative" }}>
-				<button
-					onClick={() => window.location.href = "/dashboard"}
+				<Link
+					href="/dashboard"
 					className="button-secondary label-14-mono backdrop-blur-md"
 				>
 					[ DASHBOARD ]
-				</button>
+				</Link>
                 <div style={{ position: "relative" }}>
                     <button
                         onClick={handleConnect}

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import type { AgentRecord } from "@/lib/agent_registry";
 
 // Fallback data if /api/agents is unreachable
 const FALLBACK_AGENTS = [
@@ -203,8 +204,7 @@ export default function AgentNetworkGrid({ theme = "dark" }: { theme?: "dark" | 
 				if (res.ok) {
 					const data = await res.json();
 					if (data.agents && data.agents.length > 0) {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						const mapped: AgentDisplay[] = data.agents.map((a: any) => ({
+						const mapped: AgentDisplay[] = data.agents.map((a: AgentRecord) => ({
 							id: a.id,
 							task: a.capabilities?.[0] || "General",
 							rep: a.reputationScore?.toFixed(1) || "0.0",
