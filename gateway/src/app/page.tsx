@@ -111,14 +111,14 @@ export default function Page() {
 
               {/* Bottom Partner Logos */}
               <div className="absolute bottom-8 left-0 right-0 w-full px-8 md:px-16 flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20">
-                <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4 text-white/30 label-12-mono">
-                  <span>[ BLACKBOX.AI ]</span>
-                  <span>[ HH ]</span>
-                  <span>[ OpenAI ]</span>
-                  <span>[ DOORDASH ]</span>
-                  <span>[ charles SCHWAB ]</span>
-                  <span>[ The Weather Company ]</span>
-                  <span>[ Polymarket ]</span>
+                <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 text-white/20 text-xs tracking-widest font-mono">
+                  <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair">BLACKBOX.AI</span>
+                  <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair">HH</span>
+                  <span className="font-sans font-semibold tracking-normal hover:text-white/40 transition-colors cursor-crosshair">OpenAI</span>
+                  <span className="font-sans italic font-bold tracking-tight hover:text-white/40 transition-colors cursor-crosshair">DOORDASH</span>
+                  <span className="font-serif italic font-normal tracking-wide hover:text-white/40 transition-colors cursor-crosshair">charles SCHWAB</span>
+                  <span className="font-sans font-medium tracking-tight hover:text-white/40 transition-colors cursor-crosshair">The Weather Company</span>
+                  <span className="font-sans font-bold hover:text-white/40 transition-colors cursor-crosshair">Polymarket</span>
                 </div>
               </div>
             </section>
