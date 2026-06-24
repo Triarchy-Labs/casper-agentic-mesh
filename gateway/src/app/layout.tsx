@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
+import { Footer } from "@/components/Footer";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -40,8 +41,13 @@ export default function RootLayout({
 				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 				<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 			</head>
-			<body className="flex flex-col">
-				<SmoothScroller>{children}</SmoothScroller>
+			<body className="flex flex-col min-h-screen">
+				<SmoothScroller>
+					<div className="flex flex-col min-h-screen">
+						<div className="flex-1">{children}</div>
+						<Footer />
+					</div>
+				</SmoothScroller>
 			</body>
 		</html>
 	);
