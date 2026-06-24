@@ -72,7 +72,7 @@ export default function AgentDashboard() {
 					<div
 						key={agent.id}
 						style={{
-							background: "rgba(0, 15, 0, 0.4)",
+							background: "rgba(15, 15, 15, 0.4)",
 							border: `1px solid ${agent.status === "active" ? "rgba(255, 255, 255, 0.4)" : agent.status === "quarantined" ? "rgba(255, 0, 60, 0.4)" : "rgba(100, 100, 100, 0.4)"}`,
 							borderRadius: "4px",
 							padding: "1.5rem",

@@ -65,7 +65,7 @@ function ModuleCard({ module, showSnake }: { module: ModuleInfo; showSnake: bool
 				background: "rgba(255,255,255,0.05)",
 				backdropFilter: "blur(24px) saturate(1.2)",
 				WebkitBackdropFilter: "blur(24px) saturate(1.2)",
-				border: showSnake ? "1px solid rgba(0,255,65,0.2)" : "1px solid rgba(255,255,255,0.08)",
+				border: showSnake ? "1px solid rgba(241,50,66,0.2)" : "1px solid rgba(255,255,255,0.08)",
 				borderRadius: 12,
 				zIndex: 30,
 				pointerEvents: "none",
@@ -76,7 +76,7 @@ function ModuleCard({ module, showSnake }: { module: ModuleInfo; showSnake: bool
 				fontSize: "0.65rem",
 				fontWeight: 600,
 				letterSpacing: "0.14em",
-				color: showSnake ? "#00ff41" : "rgba(255,255,255,0.8)",
+				color: showSnake ? "#f13242" : "rgba(255,255,255,0.8)",
 				marginBottom: 6,
 				transition: "color 1s ease",
 			}}>
@@ -99,8 +99,8 @@ function ModuleCard({ module, showSnake }: { module: ModuleInfo; showSnake: bool
 				width: 4,
 				height: 4,
 				borderRadius: "50%",
-				background: showSnake ? "#00ff41" : "rgba(255,255,255,0.3)",
-				boxShadow: showSnake ? "0 0 8px rgba(0,255,65,0.6)" : "none",
+				background: showSnake ? "#f13242" : "rgba(255,255,255,0.3)",
+				boxShadow: showSnake ? "0 0 8px rgba(241,50,66,0.6)" : "none",
 				transition: "all 1s",
 			}} />
 		</motion.div>
@@ -121,7 +121,6 @@ export default function FloatingModules({ hovered }: { hovered: boolean }) {
 	useEffect(() => {
 		if (!hovered) {
 			// Mouse left: graceful fade out (AnimatePresence handles exit)
-			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setActiveModules([]);
 			setAllMode(false);
 			nextIndexRef.current = 0;

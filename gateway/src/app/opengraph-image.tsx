@@ -18,18 +18,18 @@ export default async function Image() {
 					justifyContent: 'center',
 					backgroundColor: '#0a0a0a',
 					fontFamily: 'monospace',
-					backgroundImage: 'radial-gradient(circle at 50% -20%, #1a2f1a 0%, #0a0a0a 60%)',
+					backgroundImage: 'radial-gradient(circle at 50% -20%, #330a11 0%, #0a0a0a 60%)',
 				}}
 			>
 				{/* Top thin line */}
-				<div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', backgroundColor: '#00ff41' }} />
+				<div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', backgroundColor: '#f13242' }} />
 				
 				{/* Glitchy "Hacker" frame elements */}
-				<div style={{ position: 'absolute', top: 40, left: 40, color: '#00ff41', fontSize: 16 }}>[SYS_BOOT]</div>
-				<div style={{ position: 'absolute', bottom: 40, right: 40, color: '#444', fontSize: 16 }}>L402 / SOROBAN</div>
+				<div style={{ position: 'absolute', top: 40, left: 40, color: '#f13242', fontSize: 16 }}>[SYS_BOOT]</div>
+				<div style={{ position: 'absolute', bottom: 40, right: 40, color: '#444', fontSize: 16 }}>L402 / CASPER</div>
 
 				{/* Main Content */}
-				<div style={{ display: 'flex', fontSize: 140, color: '#00ff41', fontWeight: 'bold', letterSpacing: '-0.02em', textShadow: '0 0 40px rgba(0, 255, 65, 0.4)' }}>
+				<div style={{ display: 'flex', fontSize: 140, color: '#f13242', fontWeight: 'bold', letterSpacing: '-0.02em', textShadow: '0 0 40px rgba(241, 50, 66, 0.4)' }}>
 					x402 MESH
 				</div>
 				

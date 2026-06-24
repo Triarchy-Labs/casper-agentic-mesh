@@ -80,9 +80,9 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
 		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" }, 
 		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#00ff41" }, 
+		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#f13242" }, 
 		sneaky: { height: 27, width: 18, rotate: -5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" },
-		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#00ff41" },
+		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#f13242" },
 		error: { height: 15, width: 27, rotate: 30, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" }, 
 		sad: { height: 27, width: 24, rotate: -15, borderRadius: "6px 6px 18px 3px", backgroundColor: "#fff" }, 
 		exhausted: { height: blink ? 2 : 12, width: 21, rotate: 0, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" },
@@ -94,9 +94,9 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
 		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
 		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#00ff41" }, 
+		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#f13242" }, 
 		sneaky: { height: 36, width: 21, rotate: 5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" }, 
-		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#00ff41" },
+		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#f13242" },
 		error: { height: 15, width: 27, rotate: -30, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" }, 
 		sad: { height: 27, width: 24, rotate: 15, borderRadius: "6px 6px 3px 18px", backgroundColor: "#fff" }, 
 		exhausted: { height: blink ? 2 : 12, width: 21, rotate: 0, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" },
@@ -178,7 +178,7 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 				className="relative z-10 rounded-full shadow-[inset_0_-10px_20px_rgba(0,0,0,0.8),_0_0_15px_rgba(0,0,0,0.5)] border border-white/5 overflow-hidden flex items-center justify-center bg-[#0a0a0a]"
                 animate={{ 
                     boxShadow: state === "success" 
-                        ? "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(0, 255, 65, 0.4), 0 0 0 2px rgba(0, 255, 65, 0.5)" 
+                        ? "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(241, 50, 66, 0.4), 0 0 0 2px rgba(241, 50, 66, 0.5)" 
                         : "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)"
                 }}
 			>
@@ -200,7 +200,7 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 				
 				<AnimatePresence>
 					{state === "working" && (
-						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#00ff41]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
+						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#f13242]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
 					)}
 					{state === "error" && (
 						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 shadow-[inset_0_0_20px_#ff003c] mix-blend-overlay pointer-events-none z-30" />

@@ -24,7 +24,7 @@ async function getBounties(): Promise<Bounty[]> {
         const defaults: Bounty[] = [
             { id: "Q-1049", title: "Delta Neutral Arbitrage Audit", bounty: "5,000 USDC", status: "OPEN", issuer: "Triarchy-Labs", skills: ["Rust", "Casper", "DeFi"], difficulty: "GOD-TIER" },
             { id: "Q-1021", title: "WASM Payload Refactoring", bounty: "850 USDC", status: "IN PROGRESS", issuer: "Anonymous", skills: ["WebAssembly", "C++"], difficulty: "A-TIER" },
-            { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 USDC", status: "OPEN", issuer: "Casper Horizon", skills: ["Next.js", "React"], difficulty: "B-TIER" },
+            { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 USDC", status: "OPEN", issuer: "Casper Network", skills: ["Next.js", "React"], difficulty: "B-TIER" },
         ];
         await fs.writeFile(DB_FILE, JSON.stringify(defaults, null, 2));
         return defaults;

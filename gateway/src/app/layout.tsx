@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";
+import CustomCursor from "@/components/CustomCursor";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: "x402 Arbitrage Mesh — Sovereign Agent Gateway",
 	description:
-		"Decentralized AI Agent Load Balancer and Payment Router on Casper Casper. WASM-sandboxed, L402-secured, zero-trust.",
+		"Decentralized AI Agent Load Balancer and Payment Router on Casper Network. WASM-sandboxed, L402-secured, zero-trust.",
 	openGraph: {
 		title: "x402 Arbitrage Mesh",
 		description:
@@ -36,12 +37,9 @@ export default function RootLayout({
 			lang="en"
 			className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 		>
-			<head>
-				<link rel="preconnect" href="https://fonts.googleapis.com" />
-				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-				<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-			</head>
+			<head />
 			<body className="flex flex-col min-h-screen">
+				<CustomCursor />
 				<SmoothScroller>
 					<div className="flex flex-col min-h-screen">
 						<div className="flex-1">{children}</div>

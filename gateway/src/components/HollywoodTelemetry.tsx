@@ -25,7 +25,7 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 			"QUARANTINE_THREAD_SLEEP: ",
 			"WASI_0.2_HEARTBEAT: OK",
 			"P2P_NODE_DISCOVERY: SCANNING",
-			"SOROBAN_RPC_LATENCY: ",
+			"CASPER_RPC_LATENCY: ",
 			"EXTISM_PLUGIN_LIFECYCLE: ",
 			"SOVEREIGN_ROUTING_HOP: "
 		];
@@ -59,17 +59,17 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 
 	// Lusion palette — always dark (only canvas inverts)
 	const borderColor = hovered 
-		? "rgba(0,255,65,0.4)"
+		? "rgba(241,50,66,0.4)"
 		: "rgba(255,255,255,0.1)";
 	// bgColor removed — Peachworlds glass uses inline values
 	const textColor = hovered
-		? "#00ff41"
+		? "#f13242"
 		: "rgba(255,255,255,0.6)";
 	const headerColor = hovered
-		? "#00ff41"
+		? "#f13242"
 		: "rgba(255,255,255,0.8)";
 	const glowShadow = hovered
-		? "0 0 25px rgba(0,255,65,0.2)"
+		? "0 0 25px rgba(241,50,66,0.2)"
 		: "none";
 
 	return (
@@ -83,7 +83,7 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 				width: 400,
 				height: 220,
 				background: hovered 
-					? (theme === "dark" ? "rgba(0,15,0,0.4)" : "rgba(5,15,5,0.95)")
+					? (theme === "dark" ? "rgba(241,50,66,0.06)" : "rgba(241,50,66,0.15)")
 					: (theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(8,8,8,0.95)"),
 				border: `1px solid ${borderColor}`,
 				borderRadius: 12,

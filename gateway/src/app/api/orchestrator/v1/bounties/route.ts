@@ -80,7 +80,7 @@ export async function GET() {
         protocol: "x402/L402",
         description: "Autonomous bounty ingestion for AI agents (ElizaOS / OpenClaw / curl)",
         example: {
-            bot_pubkey: "GXYZ...",
+            bot_pubkey: "01c0...",
             action: "claim",
             quest_id: "Q-1049",
             bounty_usdc: 5.0,

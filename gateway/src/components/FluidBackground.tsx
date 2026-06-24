@@ -155,13 +155,15 @@ export default function FluidBackground() {
 
     tick();
 
+    const container = mountRef.current;
+
     // Cleanup
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
       window.cancelAnimationFrame(animationId);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
       }
       geometry.dispose();
       material.dispose();

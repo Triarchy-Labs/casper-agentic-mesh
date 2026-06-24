@@ -248,28 +248,57 @@ body {
   gap: 16px; /* Geist spacing */
 }
 
-/* Giant Strobing Lamp (Preserved Casper Aesthetic) */
-.giant-strobing-lamp {
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: black;
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+/* Volumetric Drifting Triangle (Cinematic Brutalism) */
+.drifting-hero-container {
+  position: relative;
+  width: 450px;
+  height: 450px;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: strobeNeon 4s ease-in-out infinite alternate;
 }
 
-@keyframes strobeNeon {
+.volumetric-light-cone {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  background: conic-gradient(
+    from 150deg at 50% 25%,
+    rgba(255, 255, 255, 0.22) 0deg,
+    rgba(255, 255, 255, 0.12) 30deg,
+    rgba(255, 255, 255, 0) 90deg,
+    rgba(255, 255, 255, 0) 270deg,
+    rgba(255, 255, 255, 0.12) 330deg,
+    rgba(255, 255, 255, 0.22) 360deg
+  );
+  filter: blur(44px);
+  pointer-events: none;
+  z-index: 5;
+  animation: driftingLight 14s ease-in-out infinite alternate;
+}
+
+.silhouetted-triangle {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  background: #000000;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  z-index: 10;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.95);
+}
+
+@keyframes driftingLight {
   0% {
-    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.8);
+    transform: translate(-2.5%, -1.5%) scale(1.01) rotate(-1.5deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate(2.5%, 1%) scale(0.99) rotate(1deg);
+    opacity: 0.95;
   }
   100% {
-    box-shadow: 0 0 100px var(--red-700), inset 0 0 50px var(--red-500);
-    border-color: var(--red-700);
+    transform: translate(-1%, 2.5%) scale(1.02) rotate(-0.5deg);
+    opacity: 0.8;
   }
 }
 
@@ -291,9 +320,112 @@ body {
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  .giant-strobing-lamp {
+  .volumetric-light-cone {
     animation: none !important;
-    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2) !important;
-    border-color: rgba(255, 255, 255, 0.8) !important;
+  }
+  .rare-snake-border::after {
+    animation: none !important;
+    opacity: 0.3 !important;
   }
 }
+
+/* ============================================================
+   SNAKE BORDER & CONIC GRADIENTS (HOUDINI API)
+   ============================================================ */
+@property --snake-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes snakeRotate {
+  0% { --snake-angle: 0deg; }
+  100% { --snake-angle: 360deg; }
+}
+
+@keyframes rareSnakeOpacity {
+  0%, 90% { opacity: 0; }
+  92% { opacity: 0.6; }
+  98% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+.rare-snake-border {
+  position: relative;
+}
+
+.rare-snake-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--snake-angle),
+    transparent 0%,
+    transparent 80%,
+    rgba(241, 50, 66, 0.3) 88%,
+    rgba(241, 50, 66, 0.9) 95%,
+    rgba(241, 50, 66, 0.3) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: snakeRotate 3s linear infinite, rareSnakeOpacity 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ============================================================
+   RESPONSIVE BENTO GRID (AWWWARDS / GEIST GRID)
+   ============================================================ */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.bento-card {
+  grid-column: span 12;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+  .bento-card-0 { grid-column: 1 / 8; grid-row: span 2; }
+  .bento-card-1 { grid-column: 8 / 13; grid-row: span 1; }
+  .bento-card-2 { grid-column: 8 / 13; grid-row: span 1; }
+  .bento-card-3 { grid-column: 1 / 6; grid-row: span 1; }
+  .bento-card-4 { grid-column: 6 / 13; grid-row: span 2; }
+  .bento-card-5 { grid-column: 1 / 6; grid-row: span 1; }
+  .bento-card-6 { grid-column: 1 / 13; grid-row: span 1; }
+}
+
+/* ============================================================
+   BLUEPRINT CORNER MARKS (+)
+   ============================================================ */
+.corner-mark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  user-select: none;
+  color: var(--gray-500);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.corner-mark-tl { top: -5px; left: -3px; }
+.corner-mark-tr { top: -5px; right: -3px; }
+.corner-mark-bl { bottom: -5px; left: -3px; }
+.corner-mark-br { bottom: -5px; right: -3px; }
+
+.editorial-panel:hover .corner-mark {
+  color: var(--red-700);
+  transform: rotate(90deg);
+}
+

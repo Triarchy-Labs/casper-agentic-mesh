@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Nav } from "@/components/Nav";
 import { AgentOrb, AgentState } from "@/components/AgentOrb";
-import { GlitchWormProgress } from "@/components/GlitchWormProgress";
+import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -60,7 +60,7 @@ export default function Dashboard() {
 	const [sysLoad, setSysLoad] = useState("0.00");
     const [inputValue, setInputValue] = useState("");
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
-    const [balance, setBalance] = useState(140);
+    const [balance] = useState(140);
 
     const mainRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLElement>(null);
@@ -106,7 +106,7 @@ export default function Dashboard() {
                     if (data.nodes) setWasiNodes(data.nodes);
                     if (data.system?.load) setSysLoad(data.system.load);
                 }
-            } catch (err) {
+            } catch {
                 // Silently bypass fetch errors
             }
         };
@@ -133,7 +133,7 @@ export default function Dashboard() {
                     const message = `SIGN_INTENT: ${inputValue}`;
                     const signature = await window.casperWallet.signMessage(message, userPubKey);
                     txHashHeader = typeof signature === 'string' ? signature : JSON.stringify(signature);
-                } catch (signError) {
+                } catch {
                     throw new Error("USER_SIGNATURE_REQUIRED");
                 }
             }
@@ -244,8 +244,9 @@ export default function Dashboard() {
                 <div className="max-w-7xl mx-auto editorial-grid">
                     
                     {/* Execution Terminal (8 cols) */}
-                    <div className="col-span-12 md:col-span-8 editorial-panel p-8 min-h-[400px] flex flex-col grid-item">
-                        <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between">
+                    <div className="col-span-12 md:col-span-8 editorial-panel p-8 min-h-[400px] flex flex-col grid-item relative">
+                        <CornerMarks />
+                        <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
                             <span>L1_TERMINAL</span>
                             <span>SYS_LOG</span>
                         </div>
@@ -278,19 +279,21 @@ export default function Dashboard() {
                         
                         {/* Agent Stage */}
                         <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
+                            <CornerMarks />
                             <AgentOrb state={agentState} size={120} />
                             {agentState === "exhausted" && (
-                                <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase">Zzz</div>
+                                <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
                             )}
                         </div>
 
                         {/* WASI Nodes */}
-                        <div className="editorial-panel p-8 flex-1">
-                            <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10">
+                        <div className="editorial-panel p-8 flex-1 relative">
+                            <CornerMarks />
+                            <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
                                 ACTIVE_NODES
                             </div>
                             <div className="flex flex-col gap-4">
-                                {wasiNodes.length > 0 ? wasiNodes.map((node, i) => (
+                                {wasiNodes.length > 0 ? wasiNodes.map((node) => (
                                     <div key={node.id} className="flex justify-between items-center text-xs">
                                         <div className="flex items-center gap-3">
                                             <div className={`w-1.5 h-1.5 ${node.status === "COMPUTING" ? "bg-white animate-pulse" : node.status === "BREACHED" ? "bg-red-500" : "bg-white/20"}`} />
@@ -305,6 +308,12 @@ export default function Dashboard() {
                         </div>
 
                     </div>
+
+                </div>
+
+                {/* Live Agent Registry */}
+                <div className="max-w-7xl mx-auto mt-20">
+                    <AgentNetworkGrid />
                 </div>
             </section>
 
@@ -338,7 +347,8 @@ export default function Dashboard() {
                         <button 
                             onClick={handleExecute}
                             disabled={!inputValue.trim() || agentState === "working"}
-                            className="w-full bg-white text-black py-4 text-xs font-bold tracking-widest uppercase hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full button-primary label-12-mono font-bold tracking-widest uppercase active:scale-[0.98] transition-transform"
+                            style={{ height: "48px" }}
                         >
                             {agentState === "working" ? "EXECUTING..." : "EXECUTE_SEQ"}
                         </button>

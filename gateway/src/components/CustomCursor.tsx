@@ -92,21 +92,28 @@ export default function CustomCursor() {
 				left: 0,
 				width: 20,
 				height: 20,
-				borderRadius: "50%",
-				// Apple Glass: Clear interior, frosted border, high refraction
-				backgroundColor: isHovering ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.2)",
-				border: isHovering ? "1px solid rgba(255,255,255,0.15)" : "1px solid rgba(255,255,255,0.4)",
+				borderRadius: "0px",
+				border: "1.5px solid var(--red-700)",
+				backgroundColor: isHovering ? "rgba(241, 50, 66, 0.08)" : "transparent",
 				pointerEvents: "none",
 				zIndex: 99999,
-				backdropFilter: isHovering ? "blur(1.5px) saturate(150%) brightness(1.05) contrast(110%)" : "blur(1px) saturate(110%)",
-				WebkitBackdropFilter: isHovering ? "blur(1.5px) saturate(150%) brightness(1.05) contrast(110%)" : "blur(1px) saturate(110%)",
-				// Multilayered inset to simulate glass bezel distortion
-				boxShadow: isHovering 
-					? "inset 0 0.5px 0.5px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.2), 0 4px 15px rgba(0,0,0,0.2)" 
-					: "0 2px 5px rgba(0,0,0,0.15)",
-				transition: "background-color 0.6s ease, border 0.6s ease, backdrop-filter 0.6s ease, box-shadow 0.6s ease",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				boxShadow: isHovering ? "0 0 10px rgba(241, 50, 66, 0.4)" : "none",
+				transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
 				willChange: "transform",
 			}}
-		/>
+		>
+			<div 
+				style={{
+					width: 4,
+					height: 4,
+					backgroundColor: "var(--red-700)",
+					transition: "transform 0.3s ease",
+					transform: isHovering ? "scale(1.5)" : "scale(1)"
+				}}
+			/>
+		</div>
 	);
 }

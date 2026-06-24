@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Nav } from "@/components/Nav";
+import { CornerMarks } from "@/components/AgentNetworkGrid";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -162,12 +163,13 @@ const BountiesPage = () => {
 							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "(Fastest: 45ms)", isFloat: true },
 							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "Agent-to-Agent" }
 						].map((kpi, idx) => (
-							<div key={idx} className="col-span-12 md:col-span-3 editorial-panel p-[24px]">
-								<div className="label-14-mono text-[var(--gray-600)] mb-[8px]">{kpi.label}</div>
-								<div className="heading-40 text-[var(--gray-1000)]">
+							<div key={idx} className="col-span-12 md:col-span-3 editorial-panel p-[24px] relative">
+								<CornerMarks />
+								<div className="label-14-mono text-[var(--gray-600)] mb-[8px] z-10">{kpi.label}</div>
+								<div className="heading-40 text-[var(--gray-1000)] z-10">
 									{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
 								</div>
-								{kpi.sub && <div className="label-14 text-[var(--gray-700)] mt-[4px]">{kpi.sub}</div>}
+								{kpi.sub && <div className="label-14 text-[var(--gray-700)] mt-[4px] z-10">{kpi.sub}</div>}
 							</div>
 						))}
 					</div>
@@ -183,7 +185,7 @@ const BountiesPage = () => {
 						</div>
 
 						{/* Table Headers */}
-						<div className="grid grid-cols-[1fr_3fr_1.5fr_1fr] px-[24px] label-14-mono text-[var(--gray-700)]">
+						<div className="hidden md:grid grid-cols-[1fr_3fr_1.5fr_1fr] px-[24px] label-14-mono text-[var(--gray-700)]">
 							<span>ID</span>
 							<span>DIRECTIVE</span>
 							<span>PAYOUT</span>
@@ -203,19 +205,26 @@ const BountiesPage = () => {
 									setDirective(`Execute ${bounty.title} under Triarchy protocol guidelines.\nRequire: ${bounty.skills.join(', ')} expertise.\nPriority: ${bounty.difficulty}`);
 									setReward(bounty.bounty.split(' ')[0].replace(/,/g, ''));
 								}}
-								className={`grid grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[24px] border rounded-[12px] cursor-pointer transition-all duration-300 ${hoverIndex === i ? 'bg-[var(--gray-200)] border-[var(--gray-500)]' : 'bg-transparent border-[var(--gray-400)]'}`}
+								className={`grid grid-cols-[2fr_1fr] md:grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[16px] md:p-[24px] border rounded-none cursor-pointer transition-all duration-300 relative ${hoverIndex === i ? 'bg-[var(--gray-200)] border-[var(--gray-500)]' : 'bg-transparent border-[var(--gray-400)]'}`}
 							>
-								<span className="label-14-mono text-[var(--gray-600)]">{bounty.id}</span>
-								<div className="flex flex-col gap-[4px]">
-									<span className="copy-16 text-[var(--gray-1000)] font-medium">{bounty.title}</span>
-									<div className="flex gap-[8px]">
+								<CornerMarks />
+								<span className="hidden md:inline label-14-mono text-[var(--gray-600)] z-10">{bounty.id}</span>
+								<div className="flex flex-col gap-[4px] z-10">
+									<span className="copy-14 md:copy-16 text-[var(--gray-1000)] font-medium">{bounty.title}</span>
+									<div className="flex flex-wrap gap-[6px] md:gap-[8px]">
+										<span className="inline md:hidden label-12-mono text-[var(--gray-600)]">{bounty.id}</span>
 										{bounty.skills.map((skill: string) => (
-											<span key={skill} className="label-14 text-[var(--gray-700)]">#{skill}</span>
+											<span key={skill} className="label-12 md:label-14 text-[var(--gray-700)]">#{skill}</span>
 										))}
 									</div>
 								</div>
-								<span className="label-14-mono text-[var(--red-700)] font-bold">{bounty.bounty}</span>
-								<span className={`text-right label-14-mono ${bounty.status === "OPEN" ? "text-[var(--red-700)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+								<div className="flex flex-col items-end md:items-start gap-[4px] z-10">
+									<span className="label-14-mono text-[var(--red-700)] font-bold">{bounty.bounty}</span>
+									<span className={`inline md:hidden label-12-mono ${bounty.status === "OPEN" ? "text-[var(--red-700)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+										[{bounty.status}]
+									</span>
+								</div>
+								<span className={`hidden md:inline text-right label-14-mono z-10 ${bounty.status === "OPEN" ? "text-[var(--red-700)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
 									[{bounty.status}]
 								</span>
 							</motion.div>
@@ -224,11 +233,12 @@ const BountiesPage = () => {
 
 					{/* 3. Right Column: Ingestion Terminal (Sticky per Fable 5) */}
 					<div className="col-span-12 md:col-span-4 sticky-section" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
-						<div className="editorial-panel p-[24px] w-full">
-							<h3 className="label-14-mono text-[var(--red-700)] mb-[24px]">_INGESTION_TERMINAL</h3>
+						<div className="editorial-panel p-[24px] w-full relative">
+							<CornerMarks />
+							<h3 className="label-14-mono text-[var(--red-700)] mb-[24px] z-10">_INGESTION_TERMINAL</h3>
 							
 							{/* Human UI vs Bot API toggle */}
-							<div className="flex gap-[8px] mb-[24px]">
+							<div className="flex gap-[8px] mb-[24px] z-10">
 								<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-[2px]">HUMAN_UI</span>
 								<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-[2px]">BOT_API / WASM</span>
 							</div>
@@ -237,18 +247,22 @@ const BountiesPage = () => {
 								placeholder="Define directive... (e.g. 'Audit this smart contract...')"
 								value={directive}
 								onChange={(e) => setDirective(e.target.value)}
-								className="w-full min-h-[120px] bg-[var(--background-100)] border border-[var(--gray-500)] rounded-[6px] p-[16px] text-[var(--gray-1000)] label-14-mono resize-none outline-none focus:border-[var(--blue-700)] mb-[16px] transition-colors"
+								className="w-full min-h-[120px] bg-[var(--background-100)] border border-[var(--gray-500)] rounded-none p-[16px] text-[var(--gray-1000)] label-14-mono resize-none outline-none focus:border-[var(--red-700)] mb-[16px] transition-colors z-10"
 							/>
 							
-							<div className="flex justify-between mb-[24px] gap-[8px]">
+							<div className="flex justify-between mb-[24px] gap-[8px] z-10">
 								<button className="button-secondary w-full label-14-mono" style={{ height: '32px', fontSize: '10px' }}>+ FILES</button>
-								<input type="text" placeholder="USDC REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-[var(--background-100)] border border-[var(--red-700)] text-[var(--red-700)] px-[8px] rounded-[6px] label-14-mono text-right outline-none" />
+								<input type="text" placeholder="USDC REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-[var(--background-100)] border border-[var(--red-700)] text-[var(--red-700)] px-[8px] rounded-none label-14-mono text-right outline-none" />
 							</div>
 
 							<button 
 								onClick={handleEscrow}
 								disabled={!directive.trim() || escrowStatus === "working"}
-								className={`w-full py-[12px] rounded-[6px] font-bold label-14-mono transition-all ${!directive.trim() ? 'opacity-40 cursor-not-allowed bg-[var(--gray-200)] text-[var(--gray-700)]' : escrowStatus === 'working' ? 'bg-[var(--gray-200)] text-[var(--gray-1000)] cursor-wait' : escrowStatus === 'success' ? 'bg-[var(--gray-1000)] text-[var(--background-100)]' : escrowStatus === 'error' ? 'bg-[var(--red-800)] text-white' : 'bg-[var(--red-700)] text-white hover:bg-[var(--red-900)]'}`}
+								className={`w-full button-primary label-14-mono font-bold tracking-widest uppercase transition-all z-10 ${
+									escrowStatus === "error" ? "bg-[var(--red-800)] text-white" :
+									escrowStatus === "working" ? "cursor-wait" : ""
+								}`}
+								style={{ height: "48px" }}
 							>
 								{escrowStatus === "working" ? "[ DEPLOYING... ]" : escrowStatus === "success" ? "[ ✓ DEPLOYED ]" : "[ ESCROW & DEPLOY ]"}
 							</button>

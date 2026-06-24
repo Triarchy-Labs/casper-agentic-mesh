@@ -39,7 +39,7 @@ export async function GET() {
             },
             nodes
         });
-    } catch (e) {
+    } catch {
         return NextResponse.json({ error: "Failed to read OS telemetry" }, { status: 500 });
     }
 }

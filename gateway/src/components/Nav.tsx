@@ -11,7 +11,7 @@ const checkCasperConnected = async () => {
         try {
             const isConnected = await window.casperWallet.isConnected();
             return { isConnected };
-        } catch (e) {
+        } catch {
             return { isConnected: false };
         }
     }

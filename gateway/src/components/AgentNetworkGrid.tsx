@@ -22,179 +22,155 @@ interface AgentDisplay {
 	status: string;
 }
 
-const FONT_HEADING = "'Helvetica Now Display', 'Inter', sans-serif";
-const lusionTransition = "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)";
+export function CornerMarks() {
+	return (
+		<>
+			<span className="corner-mark corner-mark-tl">+</span>
+			<span className="corner-mark corner-mark-tr">+</span>
+			<span className="corner-mark corner-mark-bl">+</span>
+			<span className="corner-mark corner-mark-br">+</span>
+		</>
+	);
+}
 
-function AgentCard({ agent, theme, index }: { agent: AgentDisplay; theme: "dark" | "light"; index: number }) {
+function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 	const [hovered, setHovered] = useState(false);
 	const isQuarantined = agent.status === "QUARANTINED";
-	
 	const isMark53 = agent.id === "mark_53_sarcophagus";
-	
+
+	let statusColor = "var(--gray-700)";
+	if (agent.status === "ACTIVE") statusColor = "var(--gray-1000)";
+	else if (agent.status === "QUARANTINED") statusColor = "var(--red-700)";
+	else if (agent.status === "GOLDEN_TEMPLATE") statusColor = "var(--red-700)";
+
 	let borderColor = isQuarantined 
-		? "#ff003c" 
+		? "var(--red-700)" 
 		: hovered 
-			? (theme === "dark" ? "rgba(0,255,65,0.5)" : "rgba(0,100,34,0.4)")
-			: (theme === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)");
-	const statusColor = isQuarantined 
-		? "#ff003c" 
-		: hovered 
-			? (theme === "dark" ? "#00ff41" : "#006622")
-			: (theme === "dark" ? "rgba(255,255,255,0.6)" : "#333");
+			? "var(--gray-600)"
+			: "var(--gray-400)";
 
 	if (isMark53) {
 		borderColor = "transparent"; // Handled by rare-snake-border pseudo-element
 	}
 
-	// Lusion asymmetric bento — each card has unique grid placement
-	const LUSION_GRID_MAP: Record<number, React.CSSProperties> = {
-		0: { gridColumn: "1 / 8", gridRow: "span 2" },      // Large hero left
-		1: { gridColumn: "8 / 13", gridRow: "span 1" },     // Small right top
-		2: { gridColumn: "8 / 13", gridRow: "span 1" },     // Small right bottom
-		3: { gridColumn: "1 / 6", gridRow: "span 1" },      // Medium left
-		4: { gridColumn: "6 / 13", gridRow: "span 2" },     // Large right
-		5: { gridColumn: "1 / 6", gridRow: "span 1" },      // Medium left bottom
-		6: { gridColumn: "1 / 13", gridRow: "span 1" },     // Mark53 full-width
-	};
-	const gridPlacement = LUSION_GRID_MAP[index] || {};
-
 	return (
 		<motion.div
-			className={isMark53 ? "rare-snake-border" : ""}
-			// Lusion Benchmark Physics: Pure 1.5s duration, strict 15-degree X tilt, zero Y twisting, heavy Expo-Out bezier.
-			initial={{ opacity: 0, y: 150, rotateX: 15, scale: 0.95 }}
+			className={`editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
+			initial={{ opacity: 0, y: 50, rotateX: 5, scale: 0.98 }}
 			whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-			whileHover={{ y: -8, scale: 1.075, zIndex: 10 }}
-			viewport={{ once: true, amount: 0.2 }}
-			transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: (index % 2) * 0.15 }}
+			whileHover={{ y: -8, scale: 1.015, zIndex: 10 }}
+			viewport={{ once: true, amount: 0.1 }}
+			transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: (index % 2) * 0.1 }}
 			onMouseEnter={() => setHovered(true)}
 			onMouseLeave={() => setHovered(false)}
 			style={{
 				transformStyle: "preserve-3d",
 				transformOrigin: `top ${index % 2 === 0 ? "left" : "right"}`,
-				...gridPlacement,
-				padding: "clamp(1.5rem, 3vw, 3rem)",
-			background: hovered 
-					? (theme === "dark" ? "rgba(0,15,0,0.45)" : "rgba(5,15,5,0.95)")
-					: (theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(10,10,10,0.92)"),
+				padding: "32px",
+				backgroundColor: hovered ? "var(--gray-200)" : "var(--background-100)",
 				border: isMark53 ? "none" : `1px solid ${borderColor}`,
-				borderRadius: "24px",
-				backdropFilter: hovered ? "blur(32px) saturate(1.5)" : "blur(24px) saturate(1.2)",
-				WebkitBackdropFilter: hovered ? "blur(32px) saturate(1.5)" : "blur(24px) saturate(1.2)",
+				borderRadius: "0px",
 				display: "flex",
 				flexDirection: "column",
-				gap: "1.5rem",
+				gap: "24px",
 				cursor: "crosshair",
-				transition: "background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease",
+				transition: "background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
 				boxShadow: isMark53 
-					? "0 0 60px rgba(255, 215, 0, 0.05)"
+					? "0 0 40px rgba(241, 50, 66, 0.15)"
 					: hovered 
-						? "0 20px 40px rgba(0,255,65,0.08)" 
+						? "0 20px 40px rgba(0,0,0,0.5)" 
 						: "none",
-                minHeight: index === 0 || index === 3 || index === 6 ? "240px" : "320px",
-                justifyContent: "space-between",
+				minHeight: index === 0 || index === 3 || index === 6 ? "200px" : "280px",
+				justifyContent: "space-between",
 				overflow: "hidden",
 				wordBreak: "break-word" as const,
 				maxWidth: "100%",
 				boxSizing: "border-box" as const,
-				// For the snake border pseudo-element to render correctly
 				position: "relative"
 			}}
 		>
-			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-				<span style={{ 
-					fontWeight: 500, 
-					fontSize: "1.4rem", 
-					letterSpacing: "0.02em",
-					color: hovered ? "#00ff41" : "#fff",
-					transition: lusionTransition,
-				}}>
+			<CornerMarks />
+			
+			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", zIndex: 6 }}>
+				<span className="label-14-mono text-[var(--gray-1000)]" style={{ fontWeight: 600 }}>
 					{agent.id}
 				</span>
 				<span
+					className="label-12-mono"
 					style={{
-						padding: "6px 12px",
-						fontSize: "0.8rem",
+						padding: "4px 8px",
 						border: `1px solid ${statusColor}`,
 						color: statusColor,
-						borderRadius: "6px",
-						fontFamily: "'SF Mono', monospace",
-						letterSpacing: "0.1em",
-						transition: lusionTransition,
-                        fontWeight: 600
+						borderRadius: "4px",
+						fontWeight: 600
 					}}
 				>
 					{agent.status}
 				</span>
 			</div>
 			
-			<div style={{ 
-				display: "flex", 
-				justifyContent: "space-between", 
-                alignItems: "flex-end",
-				marginTop: "auto", 
-				fontSize: "0.95rem", 
-				color: "rgba(255,255,255,0.6)",
-                fontFamily: "'SF Mono', monospace"
-			}}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                    <span style={{ fontSize: "0.75rem", opacity: 0.6, letterSpacing: "0.1em" }}>DOMAIN</span>
-                    <span>[{agent.task}]</span>
-                </div>
+			<div 
+				className="label-14-mono text-[var(--gray-800)]"
+				style={{ 
+					display: "flex", 
+					justifyContent: "space-between", 
+					alignItems: "flex-end",
+					marginTop: "auto",
+					zIndex: 6
+				}}
+			>
+				<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+					<span className="text-[10px] text-[var(--gray-600)]">DOMAIN</span>
+					<span className="text-[var(--gray-1000)]">[{agent.task}]</span>
+				</div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", alignItems: "flex-end" }}>
-                    <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-                        <span>REP: {agent.rep}</span>
-                        <span style={{ color: isMark53 ? statusColor : (theme === "dark" ? "#fff" : "#111") }}>
+				<div style={{ display: "flex", flexDirection: "column", gap: "4px", alignItems: "flex-end" }}>
+					<div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+						<span>REP: {agent.rep}</span>
+						<span style={{ color: isMark53 ? statusColor : "var(--gray-1000)" }}>
 							{isMark53 ? "" : "USDC: "}{agent.earned}
 						</span>
-                    </div>
+					</div>
 					{isMark53 && (
-						<div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
+						<div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
 							<button 
-                                onClick={() => window.open("https://github.com/Triarchy-Labs/mark53-autonomous-node", "_blank")}
-                                style={{
-								padding: "8px 16px",
-								background: "transparent",
-								border: `1px solid ${statusColor}`,
-								color: statusColor,
-								borderRadius: "4px",
-								fontFamily: "'SF Mono', monospace",
-								fontSize: "0.75rem",
-								letterSpacing: "0.1em",
-								cursor: "pointer",
-								transition: lusionTransition,
-								opacity: hovered ? 1 : 0.7
-							}}>
-								[ OPENROUTER / LOCAL LLM CONFIG ]
+								onClick={() => window.open("https://github.com/Triarchy-Labs/mark53-autonomous-node", "_blank")}
+								className="button-secondary label-12-mono"
+								style={{
+									padding: "4px 8px",
+									height: "28px",
+									fontSize: "9px",
+									cursor: "pointer",
+									opacity: hovered ? 1 : 0.7
+								}}
+							>
+								[ OS CONFIG ]
 							</button>
 							<button 
-                                onClick={() => window.open("https://github.com/Triarchy-Labs/tauri-exosuit-gateway", "_blank")}
-                                style={{
-								padding: "8px 16px",
-								background: statusColor,
-								border: "none",
-								color: theme === "dark" ? "#000" : "#fff",
-								borderRadius: "4px",
-								fontFamily: "'SF Mono', monospace",
-								fontSize: "0.75rem",
-								letterSpacing: "0.1em",
-								fontWeight: "bold",
-								cursor: "pointer",
-								transition: lusionTransition,
-								opacity: hovered ? 1 : 0.8
-							}}>
-								[ VIEW TAURI EXOSUIT BASE ]
+								onClick={() => window.open("https://github.com/Triarchy-Labs/tauri-exosuit-gateway", "_blank")}
+								className="button-primary label-12-mono"
+								style={{
+									padding: "4px 8px",
+									height: "28px",
+									fontSize: "9px",
+									fontWeight: "bold",
+									cursor: "pointer",
+									backgroundColor: "var(--red-700)",
+									color: "#fff",
+									opacity: hovered ? 1 : 0.8
+								}}
+							>
+								[ TAURI EXOSUIT ]
 							</button>
 						</div>
 					)}
-                </div>
+				</div>
 			</div>
 		</motion.div>
 	);
 }
 
-export default function AgentNetworkGrid({ theme = "dark" }: { theme?: "dark" | "light" }) {
+export default function AgentNetworkGrid() {
 	const [agents, setAgents] = useState<AgentDisplay[]>(FALLBACK_AGENTS);
 
 	useEffect(() => {
@@ -216,14 +192,14 @@ export default function AgentNetworkGrid({ theme = "dark" }: { theme?: "dark" | 
 						if (!hasMark53) {
 							mapped.push(FALLBACK_AGENTS.find(a => a.id === "mark_53_sarcophagus") || FALLBACK_AGENTS[6]);
 						}
-                        
-                        // Refill to 7 nodes so visual masonry grid is preserved
-                        for (const fb of FALLBACK_AGENTS) {
-                            if (mapped.length >= 7) break;
-                            if (!mapped.find(a => a.id === fb.id)) {
-                                mapped.push(fb);
-                            }
-                        }
+						
+						// Refill to 7 nodes so visual masonry grid is preserved
+						for (const fb of FALLBACK_AGENTS) {
+							if (mapped.length >= 7) break;
+							if (!mapped.find(a => a.id === fb.id)) {
+								mapped.push(fb);
+							}
+						}
 						setAgents(mapped);
 					}
 				}
@@ -239,22 +215,21 @@ export default function AgentNetworkGrid({ theme = "dark" }: { theme?: "dark" | 
 	return (
 		<div
 			style={{
-				padding: "4rem 10vw",
+				padding: "40px 0",
 				background: "transparent",
-				color: theme === "dark" ? "#fff" : "#111",
-				fontFamily: FONT_HEADING,
+				color: "var(--gray-1000)",
+				fontFamily: "var(--font-mono)",
 			}}
 		>
-			{/* Subtle gradient divider */}
 			<div style={{
-				width: "40%",
-				margin: "0 auto 3rem",
+				width: "100%",
+				margin: "0 auto 40px",
 				height: "1px",
-				background: `linear-gradient(90deg, transparent, ${theme === "dark" ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.1)"}, transparent)`,
+				background: `linear-gradient(90deg, transparent, var(--gray-400), transparent)`,
 			}} />
 
 			<motion.div
-				initial={{ opacity: 0, y: 20 }}
+				initial={{ opacity: 0, y: 10 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
 				transition={{ duration: 0.8 }}
@@ -262,41 +237,20 @@ export default function AgentNetworkGrid({ theme = "dark" }: { theme?: "dark" | 
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
-					marginBottom: "4rem",
+					marginBottom: "24px",
 				}}
 			>
-				<h2 style={{ 
-					color: theme === "dark" ? "rgba(255,255,255,0.9)" : "#111", 
-					fontSize: "1.8rem", 
-					letterSpacing: "0.15em", 
-					margin: 0,
-					fontWeight: 500,
-				}}>
-					LIVE AGENT REGISTRY
+				<h2 className="label-14-mono text-[var(--gray-700)] m-0">
+					{"// LIVE AGENT REGISTRY"}
 				</h2>
-				<div style={{ 
-					fontSize: "0.85rem", 
-					color: theme === "dark" ? "#555" : "#888", 
-					letterSpacing: "0.1em",
-					fontFamily: "'SF Mono', monospace",
-				}}>
+				<div className="label-14-mono text-[var(--gray-700)]">
 					NODES: {agents.length}
 				</div>
 			</motion.div>
 
-			<div
-				style={{
-					display: "grid",
-                    // Bento grid: adaptive auto-fit
-					gridTemplateColumns: "repeat(12, 1fr)",
-					gridAutoRows: "minmax(200px, auto)",
-					gap: "clamp(1.5rem, 4vw, 4rem)",
-					paddingBottom: "3rem",
-                    perspective: "1200px" // Required for the Lusion 3D tilt interaction
-				}}
-			>
+			<div className="bento-grid">
 				{agents.map((agent: AgentDisplay, i: number) => (
-					<AgentCard key={agent.id} agent={agent} theme={theme} index={i} />
+					<AgentCard key={agent.id} agent={agent} index={i} />
 				))}
 			</div>
 		</div>
