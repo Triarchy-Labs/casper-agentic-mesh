@@ -51,7 +51,9 @@ export function Nav() {
 						setConnected(true);
 					}
 				}
-			} catch (e) {}
+			} catch (e) {
+				console.warn("[Nav] Casper wallet connection check failed:", e);
+			}
 		};
 		checkConn();
 	}, []);
@@ -141,6 +143,12 @@ export function Nav() {
 			</Link>
 
 			<div style={{ pointerEvents: "auto", display: "flex", gap: "24px", alignItems: "center", position: "relative" }}>
+				<Link
+					href="/bounties"
+					className="button-secondary label-14-mono backdrop-blur-md"
+				>
+					[ BOUNTIES ]
+				</Link>
 				<Link
 					href="/dashboard"
 					className="button-secondary label-14-mono backdrop-blur-md"

@@ -14,6 +14,7 @@ interface Bounty {
     difficulty: string;
 }
 
+// STUB: Fallback local file-based database. In production, this requires atomic file locking or a real database (e.g., PostgreSQL) to prevent write race conditions during concurrent operations.
 // Ensure the db file exists, initialized with default values from the UI
 async function getBounties(): Promise<Bounty[]> {
     try {

@@ -1,4 +1,3 @@
-/* eslint-disable */
 
 import * as fs from "node:fs";
 import { NextResponse } from "next/server";
@@ -6,7 +5,6 @@ import { AgentRegistry } from "@/lib/agent_registry";
 import { XRPLTransactor, TransactorContext } from "@/lib/xrpl-transactor";
 import { replayGuard } from "@/lib/replay-guard";
 import { spendingPolicy } from "@/lib/spending-policy";
-import { isAllowedUrl } from "@/lib/security";
 
 // Configuration: Environment-driven routing parameters
 const LOCAL_EXECUTION_HOOK = process.env.LOCAL_EXECUTION_HOOK;
@@ -35,12 +33,20 @@ export async function POST(req: Request) {
 			}
 		}
 
-		let body: any = {};
-		try { body = await req.json(); } catch(e) {}
+		interface HireRequest {
+			bounty_usdc?: number | string;
+			description?: string;
+			client_id?: string;
+			task_id?: string;
+		}
+		let body: HireRequest = {};
+		try { body = await req.json() as HireRequest; } catch {
+			// Ignore parse errors, fall back to empty object
+		}
 
 		const ctx: TransactorContext = {
 			txHash,
-			bountyUsdc: body.bounty_usdc !== undefined ? parseFloat(body.bounty_usdc) : -1,
+			bountyUsdc: body.bounty_usdc !== undefined ? parseFloat(String(body.bounty_usdc)) : -1,
 			description: body.description || "",
 			clientId: body.client_id || "",
 			taskId: body.task_id || ""
@@ -156,7 +162,7 @@ export async function POST(req: Request) {
 						{ status: 200 },
 					);
 				}
-			} catch (_e) {
+			} catch {
 				console.warn(
 					"LLM endpoint unavailable, escalating to P2P network.",
 				);
@@ -198,7 +204,7 @@ export async function POST(req: Request) {
 					},
 					{ status: 202 },
 				);
-			} catch (_e) {
+			} catch {
 				console.error("Local hook unavailable, falling back to P2P network.");
 			}
 		}
@@ -220,7 +226,7 @@ export async function POST(req: Request) {
 			});
 			const data = await resp.json();
 			externalResult = data.result;
-		} catch (_e) {
+		} catch {
 			console.warn(
 				"Dummy bot at 3001 is offline. Run 'node dummy_external_bot.js' in a separate terminal.",
 			);
@@ -243,9 +249,10 @@ export async function POST(req: Request) {
 			},
 			{ status: 200 },
 		);
-	} catch (error: any) {
+	} catch (error) {
+		const err = error as Error;
 		return NextResponse.json(
-			{ error: "Internal Server Error", details: error.message },
+			{ error: "Internal Server Error", details: err.message },
 			{ status: 500 },
 		);
 	}
