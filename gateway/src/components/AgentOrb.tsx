@@ -138,7 +138,11 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 							transition={{ repeat: Infinity, duration: 0.4, ease: "easeInOut" }}
 							className="w-14 h-10 bg-black border border-white/20 absolute right-1.5 top-0 rounded-l-md shadow-[0_0_20px_#ff003c] flex items-center justify-center text-[10px]"
 						>
-							☠️
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff003c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
+								<path d="M12 2a5 5 0 0 0-5 5v4a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V7a5 5 0 0 0-5-5z" />
+								<path d="M9 10h.01M15 10h.01M12 13h.01" strokeWidth="2.5" />
+								<path d="M10 17h4M12 17v2" />
+							</svg>
 						</motion.div>
 					</motion.div>
 				)}
