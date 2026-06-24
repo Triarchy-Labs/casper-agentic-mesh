@@ -79,11 +79,6 @@ export default function Dashboard() {
         setProgress(0);
         setLastResult(null);
 
-        // DEMO OVERRIDE FOR PITCH VIDEO
-        if (inputValue.toLowerCase().includes("demo") || inputValue.toLowerCase().includes("bounty") || inputValue.toLowerCase().includes("x402")) {
-            return; // Let the Test loop simulate the success naturally
-        }
-
         try {
             const accessDetails = await requestAccess();
             
@@ -93,11 +88,26 @@ export default function Dashboard() {
 
             const userPubKey = accessDetails.address || "GXYZ...";
 
+            // PHASE 1 REINFORCEMENT: Genuine Casper Wallet Signature Generation
+            let txHashHeader = "mock_csprclick_" + userPubKey;
+            if (typeof window !== "undefined" && (window as any).casperWallet) {
+                try {
+                    const message = `Sign this message to authorize agentic task execution: ${inputValue}`;
+                    const signature = await (window as any).casperWallet.signMessage(message, userPubKey);
+                    // The signature is returned natively from the Casper extension. 
+                    // We encode it as the X402 proof of intent.
+                    txHashHeader = typeof signature === 'string' ? signature : JSON.stringify(signature);
+                } catch (signError) {
+                    console.warn("Wallet signature rejected or failed:", signError);
+                    throw new Error("User signature required for task authorization.");
+                }
+            }
+
             const res = await fetch("/api/hire", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-l402-txhash": "mock_csprclick_" + userPubKey,
+                    "x-l402-txhash": txHashHeader,
                 },
                 body: JSON.stringify({
                     description: inputValue,
@@ -164,22 +174,8 @@ export default function Dashboard() {
     useEffect(() => {
         if (agentState === "working" && progress >= 100) {
             setTimeout(() => setAgentState("success"), 0);
-            // --- DEMO SUCCESS OVERRIDE LOGIC ---
-            if (inputValue.toLowerCase().includes("demo") || inputValue.toLowerCase().includes("bounty") || inputValue.toLowerCase().includes("x402")) {
-                setTimeout(() => setBalance(b => b + 500), 0);
-                setTimeout(() => setLastResult({
-                    status: "completed",
-                    executor: "0x892a...3B9A",
-                    result: "0x98f7c8b2... [Proof Verified]. Bounty executed with 0-Trust anomaly. 500 USDC dispensed."
-                }), 0);
-                // Play retro coin sound
-                try {
-                    const audio = new Audio("https://actions.google.com/sounds/v1/cartoon/bling_bonus.ogg");
-                    audio.volume = 0.4;
-                    audio.play();
-                } catch (e) {}
-            }
-            // -----------------------------------
+            // Result is now purely populated by the authentic /api/hire response
+            // No demo overrides injecting fake funds or fake transaction hashes.
         }
     }, [progress, agentState, inputValue]);
 
