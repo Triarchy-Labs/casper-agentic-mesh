@@ -143,7 +143,7 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 					</motion.div>
 				)}
 
-                {/* Freighter Keys Prop: Appears when 'success', orbiting the orb */}
+                {/* CSPR.click Keys Prop: Appears when 'success', orbiting the orb */}
                 {state === "success" && (
                     <motion.div 
 						initial={{ scale: 0, opacity: 0 }}

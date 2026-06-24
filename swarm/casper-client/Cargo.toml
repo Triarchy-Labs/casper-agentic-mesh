@@ -1,5 +1,5 @@
 [package]
-name = "casper-agentic-mesh-client"
+name = "casper-client"
 version = "0.1.0"
 edition = "2021"
 

@@ -2,11 +2,11 @@
 resolver = "2"
 exclude = ["contracts/casper-mesh-contract"]
 members = [
+    "contracts/casper_escrow",
     "swarm/casper-client",
     "swarm/ouroboros-brain",
     "swarm/titan-core",
     "swarm/hive-intel",
-    "swarm/mantle-chain",
     "swarm/swarm-engine",
     "swarm/x402-consensus",
     "swarm/x402-risk",
@@ -59,9 +59,6 @@ regex = "1"
 hmac = "0.12"
 sha2 = "0.10"
 hex = "0.4"
-
-# On-chain (Mantle) - kept for reference if needed
-alloy = { version = "2.0", features = ["full"] }
 
 [profile.release]
 opt-level = 3

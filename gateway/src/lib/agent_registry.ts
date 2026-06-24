@@ -1,5 +1,5 @@
 // Triarchy In-Memory Agent Registry
-// Absorbed from trionlabs (Stellar 8004) architecture, but designed for real-time memory instead of on-chain CRUD.
+// Absorbed from trionlabs (Casper 8004) architecture, but designed for real-time memory instead of on-chain CRUD.
 
 export interface AgentRecord {
 	id: string; // The specific agent UUID or client_id

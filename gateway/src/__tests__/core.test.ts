@@ -13,7 +13,7 @@ describe("L402 Payment Validation", () => {
 		expect(txHash).toBeFalsy();
 	});
 
-	it("should accept valid Stellar transaction hash format (64 hex chars)", () => {
+	it("should accept valid Casper transaction hash format (64 hex chars)", () => {
 		const validHash = "a".repeat(64);
 		expect(validHash).toMatch(/^[a-f0-9]{64}$/);
 	});

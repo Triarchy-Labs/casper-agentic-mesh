@@ -12,7 +12,6 @@ tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 chrono = { workspace = true }
 dotenvy = { workspace = true }
-alloy = { workspace = true }
 
 # D1: Ouroboros Brain
 ouroboros-brain = { path = "../ouroboros-brain" }
@@ -27,8 +26,8 @@ x402-memory = { path = "../x402-memory" }
 x402-sniper = { path = "../x402-sniper" }
 x402-liquidator = { path = "../x402-liquidator" }
 x402-polymarket = { path = "../x402-polymarket" }
-# D5: Mantle Chain
-mantle-chain = { path = "../mantle-chain" }
+# D5: Casper Client
+casper-client = { path = "../casper-client" }
 # L3: Inter-agent IPC
 core-ipc = { path = "../core-ipc" }
 # Telemetry HTTP

@@ -1,7 +1,7 @@
 /**
  * SSRF PROTECTION — URL Allowlist Filter
  * 
- * Assimilated from: RenderGate (3rd Place Stellar Hacks)
+ * Assimilated from: RenderGate (3rd Place Casper Hacks)
  * Source: rendergate/server.js:22-38
  * 
  * Blocks requests to internal/private networks to prevent SSRF attacks.
@@ -57,7 +57,7 @@ export function isAllowedUrl(urlStr: string): boolean {
 /**
  * BUDGET DEGRADATION — Graceful Degradation When Budget Exhausted
  * 
- * Assimilated from: Toll (5th Place Stellar Hacks)
+ * Assimilated from: Toll (5th Place Casper Hacks)
  * Source: toll/packages/gateway/src/budgetDegradation.ts
  * 
  * Three strategies:

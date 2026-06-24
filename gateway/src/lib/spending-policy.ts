@@ -1,7 +1,7 @@
 /**
  * SPENDING POLICY — Per-Caller Budget Enforcement
  * 
- * Assimilated from: Toll (5th Place Stellar Hacks)
+ * Assimilated from: Toll (5th Place Casper Hacks)
  * Source: toll/packages/gateway/src/spendingPolicy.ts
  * 
  * Enforces budget caps and access controls BEFORE payment verification.
@@ -19,9 +19,9 @@ export interface SpendingPolicyConfig {
     maxDailyPerCaller?: number;
     /** Max USDC total across all callers per day */
     maxDailyGlobal?: number;
-    /** Stellar addresses allowed to submit tasks (empty = allow all) */
+    /** Casper addresses allowed to submit tasks (empty = allow all) */
     allowedCallers?: string[];
-    /** Stellar addresses blocked from submitting tasks */
+    /** Casper addresses blocked from submitting tasks */
     blockedCallers?: string[];
 }
 

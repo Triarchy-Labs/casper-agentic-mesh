@@ -3,7 +3,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Nav } from "@/components/Nav";
-import { requestAccess } from "@stellar/freighter-api";
+// Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
+const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
+    if (typeof window !== "undefined" && (window as any).casperWallet) {
+        try {
+            await (window as any).casperWallet.requestConnection();
+            const activeKey = await (window as any).casperWallet.getActivePublicKey();
+            return { address: activeKey };
+        } catch (error) {
+            return { error: String(error) };
+        }
+    }
+    return { error: "Casper Wallet not installed" };
+};
 import { AgentOrb, AgentState } from "@/components/AgentOrb";
 import { GlitchWormProgress } from "@/components/GlitchWormProgress";
 
@@ -85,7 +97,7 @@ export default function Dashboard() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-l402-txhash": "mock_freighter_" + userPubKey,
+                    "x-l402-txhash": "mock_csprclick_" + userPubKey,
                 },
                 body: JSON.stringify({
                     description: inputValue,

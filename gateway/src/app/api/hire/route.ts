@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 			if (l402Mode === "subscription") {
 				return NextResponse.json(
 					{ error: "Subscription Payment Required. Please provide valid recurring txhash via L402." },
-					{ status: 402, headers: { "WWW-Authenticate": 'L402 invoice="soroban_subscription_required"' } }
+					{ status: 402, headers: { "WWW-Authenticate": 'L402 invoice="casper_subscription_required"' } }
 				);
 			}
 		}
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 		if (!preflight.valid) {
 			return NextResponse.json({ error: preflight.error }, { 
                 status: 402,
-                headers: { "WWW-Authenticate": 'L402 invoice="soroban_payment_required"' }
+                headers: { "WWW-Authenticate": 'L402 invoice="casper_payment_required"' }
             });
 		}
 

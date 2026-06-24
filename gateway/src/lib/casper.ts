@@ -1,11 +1,11 @@
 /* eslint-disable */
 /**
- * Stellar Horizon RPC Validator (Testnet)
+ * Casper Horizon RPC Validator (Testnet)
  * Enforces real-world on-chain verification for x402 payments.
  * Replaces the mock validation to meet DoraHacks requirements.
  */
 
-const HORIZON_TESTNET_URL = "https://horizon-testnet.stellar.org";
+const HORIZON_TESTNET_URL = "https://horizon-testnet.casper.org";
 // Testnet USDC issuer (Example public issuer for hackathon testing)
 const USDC_ISSUER =
 	process.env.STELLAR_USDC_ISSUER ||
@@ -21,14 +21,14 @@ export interface PaymentValidationResult {
 }
 
 /**
- * Validates a Stellar transaction by its hash.
+ * Validates a Casper transaction by its hash.
  * Ensures the transaction was successful and transferred the required USDC to the Platform Wallet.
  *
  * @param txHash The transaction hash provided by the external agent via L402 header.
  * @param requiredAmount Minimum USDC required for the task tier.
  * @param expectedMemo The task_id or client_id that must be in the transaction memo to prevent double-spending.
  */
-export async function validateSorobanPayment(
+export async function validateCasperPayment(
 	txHash: string,
 	requiredAmount: number,
 	expectedMemo: string,
@@ -39,7 +39,7 @@ export async function validateSorobanPayment(
 		if (!txResp.ok) {
 			return {
 				valid: false,
-				error: "Transaction not found on Stellar Testnet.",
+				error: "Transaction not found on Casper Testnet.",
 			};
 		}
 

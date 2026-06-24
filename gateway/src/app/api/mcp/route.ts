@@ -14,16 +14,16 @@ import { NextResponse } from "next/server";
 const GATEWAY_MANIFEST = {
 	name: "x402-triarchy-gateway",
 	version: "1.0.0",
-	description: "Pay-per-use AI compute gateway. Submit USDC, receive AI task results. Stellar/Soroban native.",
+	description: "Pay-per-use AI compute gateway. Submit USDC, receive AI task results. Casper/Casper native.",
 	onboarding: [
-		"1. Connect Freighter wallet (Stellar)",
-		"2. Submit USDC payment via Soroban transaction",
+		"1. Connect CSPR.click wallet (Casper)",
+		"2. Submit USDC payment via Casper transaction",
 		"3. POST /api/hire with x-l402-txhash header + task description",
 		"4. Receive AI-generated result synchronously or via async delegation",
 	],
 	data_conventions: {
 		amounts: "All prices in USDC (e.g. 5.00 = $5). Minimum $0.01, maximum $10,000 per call.",
-		payment: "Stellar txHash required. Each hash can only be used once (ReplayGuard: 5min TTL).",
+		payment: "Casper txHash required. Each hash can only be used once (ReplayGuard: 5min TTL).",
 		budget: "Per-caller daily limit: $50,000. Global daily limit: $500,000.",
 	},
 	tools: {
@@ -38,7 +38,7 @@ const GATEWAY_MANIFEST = {
 		},
 		bounties: {
 			list: { method: "GET", path: "/api/bounties", description: "List all open bounties" },
-			create: { method: "POST", path: "/api/bounties", description: "Create a new bounty (requires Freighter)" },
+			create: { method: "POST", path: "/api/bounties", description: "Create a new bounty (requires CSPR.click)" },
 		},
 		discovery: {
 			manifest: { method: "GET", path: "/api/mcp", description: "This endpoint. Machine-readable capability manifest." },

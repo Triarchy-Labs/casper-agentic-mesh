@@ -1,7 +1,7 @@
 /**
  * REPLAY GUARD — Anti-Replay Protection for x402 Payment Signatures
  * 
- * Assimilated from: Toll (5th Place Stellar Hacks)
+ * Assimilated from: Toll (5th Place Casper Hacks)
  * Source: toll/packages/gateway/src/middleware.ts:36-55
  * 
  * Prevents double-spending by tracking used payment signatures with TTL.

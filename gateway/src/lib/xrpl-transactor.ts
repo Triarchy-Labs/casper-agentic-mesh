@@ -1,4 +1,4 @@
-import { validateSorobanPayment } from "./soroban";
+import { validateCasperPayment } from "./casper";
 import { validateForeignPayload } from "./wasm_sandbox";
 import * as fs from "node:fs";
 
@@ -49,8 +49,8 @@ export class XRPLTransactor {
     static async preclaim(ctx: TransactorContext): Promise<{ valid: boolean; error?: string; refundedUsdc?: number; details?: string }> {
         const expectedMemo = ctx.clientId || ctx.taskId || "demo";
         
-        // 1. Soroban Validation (Testnet validation)
-        const validation = await validateSorobanPayment(ctx.txHash, ctx.bountyUsdc, expectedMemo);
+        // 1. Casper Validation (Testnet validation)
+        const validation = await validateCasperPayment(ctx.txHash, ctx.bountyUsdc, expectedMemo);
         if (!validation.valid) {
             return { valid: false, error: `x402 Payment Validation Failed (TER_NO_FUNDS): ${validation.error}` };
         }

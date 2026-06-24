@@ -7,6 +7,7 @@ description = "Kelly sizing, KillSwitch, ATR stops, BucketCap risk management"
 [dependencies]
 serde = { workspace = true }
 serde_json = { workspace = true }
+reqwest = { workspace = true }
 tracing = { workspace = true }
 chrono = { workspace = true }
 tokio = { workspace = true }

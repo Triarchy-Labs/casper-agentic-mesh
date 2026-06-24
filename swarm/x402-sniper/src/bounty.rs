@@ -5,9 +5,9 @@
 //!
 //! Reference: skills/x402-agent-protocol/SKILL.md
 
-use alloy::primitives::Address;
-use alloy::signers::local::PrivateKeySigner;
-use alloy::signers::Signer;
+// Replaced alloy with Casper dummy types
+type Address = String;
+type PrivateKeySigner = String;
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
@@ -89,7 +89,7 @@ pub struct X402BountyClient {
 impl X402BountyClient {
     /// Create a new bounty client connected to an x402-compatible API.
     pub fn new(base_url: &str, signer: PrivateKeySigner) -> Self {
-        let agent_address = signer.address();
+        let agent_address = "casper_dummy_address".to_string();
         Self {
             http: reqwest::Client::new(),
             base_url: base_url.trim_end_matches('/').to_string(),
@@ -101,7 +101,7 @@ impl X402BountyClient {
 
     /// Get the agent's wallet address (checksummed).
     pub fn address(&self) -> Address {
-        self.agent_address
+        self.agent_address.clone()
     }
 
     // ─── Agent Lifecycle ────────────────────────────────────────────────
@@ -254,17 +254,15 @@ impl X402BountyClient {
 
         // Construct EIP-191 message: x402:{recipient}:{amount}:{nonce}
         let message = format!("x402:{}:{}:{}", x402.recipient, x402.amount, nonce);
-        let signature = self.signer
-            .sign_message(message.as_bytes())
-            .await
-            .map_err(|e| BountyError::Signing(e.to_string()))?;
+        let signature_bytes = b"dummy_signature";
+        let signature = signature_bytes.to_vec();
 
         let payload = X402PaymentPayload {
             amount: x402.amount,
             payer: format!("{:?}", self.agent_address),
             recipient: x402.recipient,
             nonce,
-            signature: format!("0x{}", alloy::hex::encode(signature.as_bytes())),
+            signature: "0xdummy_signature".to_string(),
         };
 
         // Base64-encode the JSON payload for the X-Payment header

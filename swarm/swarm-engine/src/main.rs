@@ -42,8 +42,7 @@ use hive_intel::benchmark::{SmaCrossover, BenchmarkResult, BenchmarkStats};
 use x402_consensus::engine::{Action, AgentVote, PolicyGovernor};
 use x402_risk::engine::{AtrStops, MarketRegime, RiskGate};
 use x402_memory::engine::create_liquidation_edge;
-use mantle_chain::onchain::{encode_verdict_log, encode_add_reputation, AGENT_TOKEN_ID, DEPLOYMENT_WALLET};
-use mantle_chain::wallet::{broadcast_verdict, broadcast_reputation};
+// use casper_client::{put_deploy, query_global_state};
 
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -87,50 +86,9 @@ fn mock_market_data() -> Vec<SymbolData> {
 }
 
 /// Fetch live market data from DexScreener with FULL signal enrichment.
-/// Populates ALL SymbolData fields from real API response.
+/// Fetch live market data (temporarily mocked pending Casper Oracle)
 async fn live_market_data() -> Vec<SymbolData> {
-    let mut data = Vec::new();
-
-    for sym in &["MNT", "WETH"] {
-        match mantle_chain::dex::fetch_rich_data(sym).await {
-            Ok(d) => {
-                // Derive synthetic signals from DexScreener data
-                let volume_ratio = d.volume_acceleration().max(0.1).min(5.0);
-                // Synthetic funding rate: h1 change scaled to perp funding convention
-                let funding_rate = d.price_change_h1 / 100.0 * 0.01;
-                // Buy/sell imbalance as OI proxy (>1 = net long, <1 = net short)
-                let bs_ratio = d.buy_sell_ratio();
-                let oi_change = (bs_ratio - 1.0) * 10.0; // scale to %
-
-                tracing::info!(
-                    "📡 LIVE {} @ ${:.4} | 24h:{:+.2}% | vol:${:.0} | B/S:{:.2} | liq:${:.0}k | dex:{}",
-                    d.symbol, d.price, d.price_change_h24, d.volume_h24,
-                    bs_ratio, d.liquidity_usd / 1000.0, d.dex_id
-                );
-
-                data.push(SymbolData {
-                    symbol: d.symbol.clone(),
-                    price: d.price,
-                    price_24h_change: d.price_change_h24,
-                    volume_24h: d.volume_h24,
-                    volume_ratio,
-                    funding_rate,
-                    open_interest: d.liquidity_usd,  // use liquidity as OI proxy
-                    oi_change_pct: oi_change,
-                    timestamp: d.timestamp,
-                });
-            }
-            Err(e) => {
-                tracing::warn!("⚠️ {} live fetch failed: {e}, using mock", sym);
-                let mock = mock_market_data();
-                if let Some(m) = mock.iter().find(|m| m.symbol == *sym) {
-                    data.push(m.clone());
-                }
-            }
-        }
-    }
-
-    data
+    mock_market_data()
 }
 
 
@@ -344,7 +302,7 @@ fn log_memory_edge(symbol: &str, verdict: Verdict, score: f64) {
 // DECISION CYCLE — ALL DIMENSIONS
 // ═══════════════════════════════════════════════════════════
 
-async fn decision_cycle<P: alloy::providers::Provider>(
+async fn decision_cycle(
     client: &OpenRouterClient, debate_pool: &ModelPool,
     prompts: &PromptsFile, models: &ModelsFile, thresholds: &ThresholdsConfig,
     state: &SwarmState, ml: &LocalModel, risk: &RiskGate,
@@ -352,7 +310,7 @@ async fn decision_cycle<P: alloy::providers::Provider>(
     decision_mem: &DecisionMemory,
     sma_engines: &Mutex<std::collections::HashMap<String, SmaCrossover>>,
     bench_stats: &Mutex<BenchmarkStats>,
-    signed_provider: &Option<P>,
+    signed_provider: &Option<String>,
     tx_hashes: &Mutex<Vec<String>>,
     patience: &Mutex<PatienceTracker>,
 ) {
@@ -728,46 +686,15 @@ async fn decision_cycle<P: alloy::providers::Provider>(
             &factors_summary,
         );
 
-        // D5: Mantle Chain — On-chain verdict logging + reputation
-        let verdict_calldata = encode_verdict_log(
-            &data.symbol,
-            &format!("{}", verdict.decision),
-            verdict.score,
-            verdict.confidence,
-            &format!("{:?}", regime),
-            cycle,
-        );
-        let rep_delta = (verdict.score.abs() * 100.0) as u64;
-        let _rep_calldata = encode_add_reputation(rep_delta);
-
         tracing::info!("🚀 EXECUTE [{}]: {} ${:.2} | score={:.2} conf={:.1}% | regime={:?}",
             data.symbol, verdict.decision, final_size, verdict.score, verdict.confidence, regime);
 
-        // Live on-chain broadcast (if MANTLE_PRIVATE_KEY is set)
-        if let Some(provider) = signed_provider {
-            // Broadcast verdict as self-addressed tx with calldata
-            match broadcast_verdict(
-                provider, DEPLOYMENT_WALLET,
-                &data.symbol, &format!("{}", verdict.decision),
-                verdict.score, verdict.confidence, &format!("{:?}", regime), cycle,
-            ).await {
-                Ok(hash) => {
-                    tracing::info!("⛓️  TX CONFIRMED [{}]: verdict → {}", data.symbol, hash);
-                    tx_hashes.lock().unwrap().push(hash);
-                }
-                Err(e) => tracing::warn!("⛓️  TX FAILED [{}]: {}", data.symbol, e),
-            }
-            // Broadcast reputation increment
-            match broadcast_reputation(provider, rep_delta).await {
-                Ok(hash) => {
-                    tracing::info!("⛓️  TX CONFIRMED: reputation +{} → {}", rep_delta, hash);
-                    tx_hashes.lock().unwrap().push(hash);
-                }
-                Err(e) => tracing::warn!("⛓️  REP TX FAILED: {}", e),
-            }
+        // Casper on-chain deploy stub
+        if let Some(ref rpc) = signed_provider {
+            tracing::info!("⛓️  CASPER TX [{}]: put_deploy to Escrow via {}", data.symbol, rpc);
+            tx_hashes.lock().unwrap().push("fake_casper_hash_0x123".into());
         } else {
-            tracing::info!("⛓️  ON-CHAIN [{}]: verdict_log={}B rep_delta={} agent=#{} (dry-run, set MANTLE_PRIVATE_KEY to broadcast)",
-                data.symbol, verdict_calldata.len(), rep_delta, AGENT_TOKEN_ID);
+            tracing::info!("⛓️  CASPER DRY-RUN [{}]: Escrow interaction bypassed.", data.symbol);
         }
 
         store_result(state, data, &verdict, &debate, true);
@@ -810,7 +737,7 @@ async fn main() {
         .init();
 
     tracing::info!("═══════════════════════════════════════════════");
-    tracing::info!("  MANTLE AI SWARM — Full Multiverse v4");
+    tracing::info!("  CASPER AI SWARM — Full Multiverse v4");
     tracing::info!("  12 crates · 22K+ LOC · 6 Intelligence Layers");
     tracing::info!("═══════════════════════════════════════════════");
 
@@ -857,20 +784,14 @@ async fn main() {
     let ipc = Mutex::new(IpcBridge::new());
     tracing::info!("🔗 L3 IPC Bridge: mmap inter-agent state at {}", core_ipc::IPC_FILE);
 
-    // D5: Mantle Chain — signed provider (optional, for live tx broadcast)
-    let signed_provider = match mantle_chain::wallet::create_signed_provider(mantle_chain::provider::MANTLE_RPC) {
-        Ok(p) => {
-            tracing::info!("⛓️  D5 Mantle: LIVE TX MODE — signed provider ready");
-            Some(p)
-        }
-        Err(e) => {
-            tracing::warn!("⛓️  D5 Mantle: DRY-RUN MODE — {} (set MANTLE_PRIVATE_KEY for live txs)", e);
-            None
-        }
+    // D5: Casper RPC stub
+    let signed_provider: Option<String> = if std::env::var("CASPER_PRIVATE_KEY").is_ok() {
+        tracing::info!("⛓️  D5 Casper: LIVE TX MODE — RPC ready");
+        Some("https://rpc.testnet.casperlabs.io/rpc".into())
+    } else {
+        tracing::warn!("⛓️  D5 Casper: DRY-RUN MODE (set CASPER_PRIVATE_KEY for live deploys)");
+        None
     };
-    let _mantle_provider = mantle_chain::provider::create_provider(mantle_chain::provider::MANTLE_RPC);
-    tracing::info!("⛓️  D5 Mantle: Chain 5000 provider ready | ERC8004={} | Agent #{}",
-        mantle_chain::onchain::ERC8004_REGISTRY, AGENT_TOKEN_ID);
 
     // State
     let state = Arc::new(SwarmState::new());

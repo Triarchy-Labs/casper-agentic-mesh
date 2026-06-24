@@ -1,22 +1,17 @@
 use core_ipc::IpcBridge;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use crate::{config, engine};
-use alloy::providers::ProviderBuilder;
-use url::Url;
 
 pub async fn run_liquidator_loop() {
     let mut ipc = IpcBridge::new();
     
-    // Initialize Mantle Provider (Supports both Testnet and Mainnet via Env Var)
-    let rpc_str = std::env::var("MANTLE_RPC_URL").unwrap_or_else(|_| "https://rpc.mantle.xyz".to_string());
-    let rpc_url = Url::parse(&rpc_str).unwrap();
-    let provider = ProviderBuilder::new().connect_http(rpc_url);
-    println!("[Liquidator Daemon] Connected to Mantle RPC: {}", rpc_str);
+    let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://rpc.testnet.casperlabs.io/rpc".to_string());
+    println!("[Liquidator Daemon] Connected to Casper RPC: {}", rpc_str);
 
     loop {
-        if let Some(target) = engine::scan_for_targets(&provider).await {
+        if let Some(target) = engine::scan_for_targets().await {
             println!("[Liquidator Daemon] TARGET ACQUIRED: {} (Health: {})", target.address, target.health_factor);
-            println!("[Liquidator Daemon] Human weakness detected. Preparing Agni Finance Flash Loan...");
+            println!("[Liquidator Daemon] Human weakness detected. Preparing Casper Escrow action...");
 
             let mut state = ipc.read_state().unwrap_or_default();
             
@@ -27,7 +22,7 @@ pub async fn run_liquidator_loop() {
                 .as_secs();
 
             ipc.write_state(&state);
-            println!("[Liquidator Daemon] L0 IPC Memmap Updated: Flash Loan execution request broadcasted to Swarm.");
+            println!("[Liquidator Daemon] L0 IPC Memmap Updated: Execution request broadcasted to Swarm.");
         }
 
         tokio::time::sleep(Duration::from_secs(config::SCAN_INTERVAL_SECS)).await;

@@ -17,11 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: "x402 Arbitrage Mesh — Sovereign Agent Gateway",
 	description:
-		"Decentralized AI Agent Load Balancer and Payment Router on Stellar Soroban. WASM-sandboxed, L402-secured, zero-trust.",
+		"Decentralized AI Agent Load Balancer and Payment Router on Casper Casper. WASM-sandboxed, L402-secured, zero-trust.",
 	openGraph: {
 		title: "x402 Arbitrage Mesh",
 		description:
-			"The world's first Agent-to-Agent Payment Router with WASM Quarantine, built on Stellar.",
+			"The world's first Agent-to-Agent Payment Router with WASM Quarantine, built on Casper.",
 		type: "website",
 	},
 };

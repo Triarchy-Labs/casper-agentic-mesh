@@ -1,460 +1,161 @@
 @import "tailwindcss";
 
-/* Lusion postInvert: light theme inverts WebGL canvas (dump: ThemeController line 48903) */
-html[data-theme="light"] .global-bg-canvas {
-	filter: invert(1);
-	transition: filter 0.7s ease;
-}
-html[data-theme="dark"] .global-bg-canvas {
-	filter: invert(0);
-	transition: filter 0.7s ease;
-}
-
-/* Peachworlds Typography: Helvetica Now Display */
-@font-face {
-	font-family: 'Helvetica Now Display';
-	src: url('/fonts/helvetica-now-display-regular.ttf') format('truetype');
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
-@font-face {
-	font-family: 'Helvetica Now Display';
-	src: url('/fonts/helvetica-now-display-medium.ttf') format('truetype');
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;
-}
-
-:root {
-	--background: #ffffff;
-	--foreground: #171717;
-	--font-heading: 'Helvetica Now Display', 'Inter', 'Helvetica Neue', sans-serif;
-	--font-body: 'Inter', 'DM Sans', 'Helvetica Neue', sans-serif;
-
-	/* Fluid spacing system */
-	--space-nav-x: clamp(16px, 4vw, 40px);
-	--space-nav-y: clamp(12px, 2vw, 20px);
-	--space-section: clamp(2rem, 6vw, 4rem);
-	--space-hero-top: clamp(10vh, 15vh, 20vh);
-	--space-content-x: clamp(1rem, 4vw, 2rem);
-
-	/* Fluid typography */
-	--text-hero: clamp(2.2rem, 6vw, 5rem);
-	--text-h2: clamp(1.5rem, 4vw, 2.5rem);
-	--text-h3: clamp(1.1rem, 2.5vw, 1.5rem);
-	--text-body: clamp(0.875rem, 2vw, 1.2rem);
-	--text-caption: clamp(0.7rem, 1.5vw, 0.85rem);
-	--text-mono: clamp(0.65rem, 1.2vw, 0.75rem);
-
-	/* Fixed element positions — fluid */
-	--pos-logo-top: clamp(20px, 3vw, 50px);
-	--pos-logo-left: clamp(16px, 3vw, 40px);
-	--pos-fab-bottom: clamp(16px, 3vw, 40px);
-	--pos-fab-right: clamp(16px, 3vw, 40px);
-
-	/* Touch target minimum (Apple HIG) */
-	--tap-target: 44px;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-casper-red: #ff0000;
+  --color-casper-darkred: #8b0000;
+  --font-mono: "Space Mono", "Courier New", monospace;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--background: #0a0a0a;
-		--foreground: #ededed;
-	}
+:root {
+  /* Geist Dark Theme Colors */
+  --gray-100: #1a1a1a;
+  --gray-200: #1f1f1f;
+  --gray-300: #292929;
+  --gray-400: #2e2e2e;
+  --gray-500: #454545;
+  --gray-600: #878787;
+  --gray-700: #8f8f8f;
+  --gray-800: #7d7d7d;
+  --gray-900: #a0a0a0;
+  --gray-1000: #ededed;
+  
+  --background-100: #000000;
+  --background-200: #000000;
+
+  /* Casper Red Accent Scale (replacing Geist Red) */
+  --red-100: #330000;
+  --red-200: #440000;
+  --red-300: #5d0000;
+  --red-400: #6f0000;
+  --red-500: #880000;
+  --red-600: #f30000;
+  --red-700: #ff0000;
+  --red-800: #e20000;
+  --red-900: #ff5656;
+  --red-1000: #ffe9e9;
+
+  --blue-700: #006efe;
+  --blue-900: #47a8ff;
+
+  --background: var(--background-100);
+  --foreground: var(--gray-1000);
 }
 
 body {
-	background: var(--background);
-	color: var(--foreground);
-	font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-::-webkit-scrollbar {
-    display: none;
+::selection {
+  background-color: var(--red-700);
+  color: #fff;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-* {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Geist Typography */
+.heading-72 { font-size: 72px; font-weight: 600; line-height: 72px; letter-spacing: -4.32px; }
+.heading-64 { font-size: 64px; font-weight: 600; line-height: 64px; letter-spacing: -3.84px; }
+.heading-56 { font-size: 56px; font-weight: 600; line-height: 56px; letter-spacing: -3.36px; }
+.heading-40 { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -2.4px; }
+.heading-24 { font-size: 24px; font-weight: 600; line-height: 32px; letter-spacing: -0.96px; }
+
+.label-14 { font-size: 14px; font-weight: 400; line-height: 20px; }
+.label-14-mono { font-family: var(--font-mono); font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+
+.copy-16 { font-size: 16px; font-weight: 400; line-height: 24px; color: var(--gray-900); }
+
+.button-14 { font-size: 14px; font-weight: 500; line-height: 20px; }
+.button-16 { font-size: 16px; font-weight: 500; line-height: 20px; }
+
+/* Geist Components */
+.button-primary {
+  background-color: var(--gray-1000);
+  color: var(--background-100);
+  border-radius: 6px;
+  padding: 0 16px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+.button-primary:hover {
+  background-color: var(--gray-900);
 }
 
-/* React Lenis Core Fixes */
-html.lenis, html.lenis body {
-  height: auto;
+.button-secondary {
+  background-color: var(--background-100);
+  color: var(--gray-1000);
+  border: 1px solid var(--gray-400);
+  border-radius: 6px;
+  padding: 0 16px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-/* ============================================================
-   FINISHER ANIMATIONS — Green sweep + bottom glow
-   ============================================================ */
-
-/* Green light sweep: left→right through text */
-@keyframes greenSweep {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+.button-secondary:hover {
+  background-color: var(--gray-200);
+  border-color: var(--gray-500);
 }
 
-/* Subtle pulse for bottom glow — thin & bright */
-@keyframes infinityPulse {
-  0%, 100% { opacity: 0.4; transform: scaleX(0.6); }
-  50% { opacity: 0.85; transform: scaleX(1); }
-}
-
-/* Scroll-to-top breathing: glass ↔ soft green */
-@keyframes breathe {
-  0%, 100% { 
-    border-color: rgba(255,255,255,0.08);
-    box-shadow: none;
-    background: rgba(20,20,28,0.4);
-  }
-  50% { 
-    border-color: rgba(0,255,65,0.25);
-    box-shadow: 0 0 12px rgba(0,255,65,0.1);
-    background: rgba(0,15,0,0.3);
-  }
-}
-
-/* Peachworlds frosted glass — reusable */
-.peachworlds-glass {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-}
-.peachworlds-glass-light {
-  background: rgba(255,255,255,0.45);
-  backdrop-filter: blur(24px) saturate(1.2);
-  -webkit-backdrop-filter: blur(24px) saturate(1.2);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-}
-
-/* Snake border — neon green aura crawls along edge */
-@keyframes snakeRotate {
-  0% { --snake-angle: 0deg; }
-  100% { --snake-angle: 360deg; }
-}
-
-@property --snake-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-.snake-border {
-  position: relative;
-}
-.snake-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 2px;
-  background: conic-gradient(
-    from var(--snake-angle),
-    transparent 0%,
-    transparent 75%,
-    rgba(0,255,65,0.5) 85%,
-    rgba(0,255,65,0.8) 90%,
-    rgba(0,255,65,0.5) 95%,
-    transparent 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: snakeRotate 10s linear infinite;
-  pointer-events: none;
-  opacity: 0.7;
-}
-.snake-border:hover::before {
-  opacity: 1;
-  animation-duration: 4s;
-}
-
-/* Scroll-to-top fade in */
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Typewriter cursor blink */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.green-sweep-text {
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.4) 0%,
-    rgba(255,255,255,0.4) 35%,
-    #00ff41 50%,
-    rgba(255,255,255,0.4) 65%,
-    rgba(255,255,255,0.4) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: greenSweep 6s ease-in-out infinite;
-}
-
-.green-sweep-stats {
-  background: linear-gradient(
-    90deg,
-    rgba(136,136,136,1) 0%,
-    rgba(136,136,136,1) 35%,
-    #00ff41 50%,
-    rgba(136,136,136,1) 65%,
-    rgba(136,136,136,1) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: greenSweep 8s ease-in-out infinite;
-  animation-delay: 3s;
-}
-
-/* Rare 30s snake event */
-@keyframes rareSnakeOpacity {
-  0%, 90% { opacity: 0; }
-  92% { opacity: 0.6; }
-  98% { opacity: 0.6; }
-  100% { opacity: 0; }
-}
-
-.rare-snake-border::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(
-    from var(--snake-angle),
-    transparent 0%,
-    transparent 80%,
-    rgba(0,255,65,0.3) 88%,
-    rgba(0,255,65,0.9) 95%,
-    rgba(0,255,65,0.3) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: snakeRotate 3s linear infinite, rareSnakeOpacity 30s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* Microscopic Drift */
-@keyframes microDrift {
-  0%, 100% { transform: translate(0px, 0px); }
-  25% { transform: translate(1px, -1px); }
-  50% { transform: translate(-0.5px, 0.5px); }
-  75% { transform: translate(1px, 2px); }
-}
-.micro-drift {
-  animation: microDrift 10s ease-in-out infinite;
-}
-
-/* ============================================================
-   GLITCH WORM PROGRESS — GPU-native CSS (was 28× Framer RAF)
-   ============================================================ */
-@keyframes wormHeadBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-@keyframes wormShineSweep {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
-}
-
-/* ============================================================
-   NAV BUTTON GLITCH (BORDER STROBE + TEXT BREATHE)
-   ============================================================ */
-@keyframes border-strobe {
-  0% { 
-    box-shadow: none; 
-    border-color: rgba(255, 255, 255, 0.2); 
-  }
-  
-  /* LEFT-BOTTOM IMPULSE: Bias toward the bottom left */
-  15% { 
-    box-shadow: inset 10px -10px 15px -10px #00ff41, -5px 5px 10px -5px #00ff41; 
-    border-color: rgba(255, 255, 255, 0.2);
-    border-left-color: #00ff41; 
-  }
-  25% { 
-    box-shadow: none; 
-    border-color: rgba(255, 255, 255, 0.2); 
-  }
-
-  /* RIGHT-TOP IMPULSE: Bias toward the top right */
-  50% { 
-    box-shadow: inset -10px 10px 15px -10px #00ff41, 5px -5px 10px -5px #00ff41; 
-    border-color: rgba(255, 255, 255, 0.2);
-    border-right-color: #00ff41; 
-  }
-  60% { 
-    box-shadow: none; 
-    border-color: rgba(255, 255, 255, 0.2); 
-  }
-  
-  100% { 
-    box-shadow: none; 
-    border-color: rgba(255, 255, 255, 0.2); 
-  }
-}
-@keyframes text-breathe {
-  0%, 100% { text-shadow: 0 0 4px rgba(0,255,65,0.4); color: #00ff41; }
-  50% { text-shadow: 0 0 12px rgba(0,255,65,0.9); color: #b3ffc4; }
-}
-
-.connect-btn-base {
-  padding: 10px 26px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-family: "Space Mono", monospace;
-  font-size: 0.75rem;
-  font-weight: bold;
-  letter-spacing: 0.15em;
+/* Geist Elevation (Dark) */
+.glass-panel {
+  background: rgba(26, 26, 26, 0.6); /* gray-100 + alpha */
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s, border 0.2s;
+  border: 1px solid var(--gray-400);
+  border-radius: 12px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02), 0 8px 16px -4px rgba(0,0,0,0.04), 0 24px 32px -8px rgba(0,0,0,0.06);
 }
 
-.connect-state-false {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Fable 5 Aesthetics */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px; /* Geist spacing */
 }
 
-.connect-state-true {
-  background: rgba(0, 255, 65, 0.1);
-  color: #00ff41;
-  border: 1px solid rgba(0, 255, 65, 0.5);
+/* Giant Strobing Lamp (Preserved Casper Aesthetic) */
+.giant-strobing-lamp {
+  position: absolute; /* Using GSAP fixed pinning instead of position: fixed directly if needed */
+  width: 400px;
+  height: 400px;
+  background: black;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: strobeNeon 4s ease-in-out infinite alternate;
 }
 
-.connect-btn-hover-fx:hover {
-  animation: border-strobe 3s ease-in-out infinite;
-}
-.connect-btn-hover-fx span {
-  display: inline-block;
-}
-.connect-btn-hover-fx:hover span {
-	animation: text-breathe 2s ease-in-out infinite;
-}
-
-/* ============================================================
-   RESPONSIVE BREAKPOINTS — LUSION-GRADE ADAPTIVE
-   Single dynamic codebase. No separate mobile pack.
-   ============================================================ */
-
-/* MOBILE: ≤768px — Stack, simplify, enlarge targets */
-@media (max-width: 768px) {
-	/* Nav compact */
-	.nav-actions {
-		gap: 8px !important;
-	}
-
-	/* Stats row wrap */
-	.green-sweep-stats {
-		flex-wrap: wrap;
-		gap: 0.5rem !important;
-		justify-content: center;
-	}
-
-	/* Snake borders — disable complex animation on mobile (perf) */
-	.snake-border::before,
-	.rare-snake-border::after {
-		animation: none;
-		opacity: 0.3;
-	}
-
-	/* Backdrop-filter: blur(24px) → blur(8px) on mobile (prevents GPU overdraw + heating) */
-	.peachworlds-glass,
-	.peachworlds-glass-light {
-		backdrop-filter: blur(8px) saturate(1.1);
-		-webkit-backdrop-filter: blur(8px) saturate(1.1);
-	}
+@keyframes strobeNeon {
+  0% {
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 100px var(--red-700), inset 0 0 50px var(--red-500);
+    border-color: var(--red-700);
+  }
 }
 
-/* SMALL MOBILE: ≤480px — Extreme compact */
-@media (max-width: 480px) {
-	.connect-btn-base {
-		padding: 8px 16px;
-		font-size: 0.65rem;
-		letter-spacing: 0.08em;
-	}
-}
-
-/* TOUCH DEVICES — No hover effects, enlarge targets */
-@media (pointer: coarse) {
-	/* Disable custom cursor entirely — handled in component */
-
-	/* Enlarge all interactive elements for thumb */
-	button, a, [role="button"] {
-		min-height: var(--tap-target);
-		min-width: var(--tap-target);
-	}
-
-	/* Disable hover-only animations on touch */
-	.connect-btn-hover-fx:hover {
-		animation: none;
-	}
-	.connect-btn-hover-fx:hover span {
-		animation: none;
-	}
-	.snake-border:hover::before {
-		animation-duration: 10s;
-		opacity: 0.7;
-	}
-}
-
-/* DESKTOP ONLY — Fine pointer, enable full Lusion hover system */
-@media (pointer: fine) {
-	/* All hover effects work naturally via existing CSS */
-	/* Custom cursor enabled — handled in component */
-}
-
-/* REDUCED MOTION — Accessibility */
-@media (prefers-reduced-motion: reduce) {
-	.snake-border::before,
-	.rare-snake-border::after,
-	.micro-drift,
-	.green-sweep-text,
-	.green-sweep-stats {
-		animation: none !important;
-	}
-}
-
-/* LANDSCAPE PHONE — Prevent hero from being too tall */
-@media (max-height: 500px) and (orientation: landscape) {
-	:root {
-		--space-hero-top: 5vh;
-	}
+.text-gradient-casper {
+  background: linear-gradient(90deg, var(--red-700) 0%, var(--red-500) 50%, var(--gray-1000) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

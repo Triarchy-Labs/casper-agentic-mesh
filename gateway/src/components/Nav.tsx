@@ -1,27 +1,47 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {
-  isConnected as checkFreighterConnected,
-  requestAccess,
-} from "@stellar/freighter-api";
 import { AgentOrb } from "@/components/AgentOrb";
-import { useEffect } from "react";
+
+// Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
+const checkCasperConnected = async () => {
+    if (typeof window !== "undefined" && (window as any).casperWallet) {
+        try {
+            const isConnected = await (window as any).casperWallet.isConnected();
+            return { isConnected };
+        } catch (e) {
+            return { isConnected: false };
+        }
+    }
+    return { isConnected: false };
+};
+
+const requestAccess = async () => {
+    if (typeof window !== "undefined" && (window as any).casperWallet) {
+        try {
+            await (window as any).casperWallet.requestConnection();
+            const activeKey = await (window as any).casperWallet.getActivePublicKey();
+            return { address: activeKey };
+        } catch (error) {
+            return { error };
+        }
+    }
+    return { error: "Casper Wallet not installed" };
+};
 
 export function Nav() {
 	const [connected, setConnected] = useState(false);
 	const [pubKey, setPubKey] = useState("");
 	const [connecting, setConnecting] = useState(false);
-	const [freighterMissing, setFreighterMissing] = useState(false);
+	const [walletMissing, setWalletMissing] = useState(false);
     const [hoverLogo, setHoverLogo] = useState(false);
     const [showDisconnect, setShowDisconnect] = useState(false);
 
-    // Auto-connect on load across Dashboard and Page
     useEffect(() => {
 		const checkConn = async () => {
 			try {
-				const status = await checkFreighterConnected();
+				const status = await checkCasperConnected();
 				if (status.isConnected) {
 					const access = await requestAccess();
 					if (access.address) {
@@ -41,28 +61,28 @@ export function Nav() {
             return;
         }
 
-		if (freighterMissing) {
-			window.open("https://chromewebstore.google.com/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk", "_blank");
+		if (walletMissing) {
+			window.open("https://www.casperwallet.io/", "_blank");
 			return;
 		}
 
 		setConnecting(true);
 		try {
-            const status = await checkFreighterConnected();
-            if (status.isConnected) {
-                const access = await requestAccess();
-                if (access.error) {
-                    console.log("Freighter connection rejected.", access.error);
-                } else if (access.address) {
-                    const key = access.address;
-                    setPubKey(key.substring(0, 4) + "..." + key.substring(key.length - 4));
-                    setConnected(true);
-                }
-            } else {
-                setFreighterMissing(true);
+            if (typeof window === "undefined" || !(window as any).casperWallet) {
+                setWalletMissing(true);
+                return;
+            }
+
+            const access = await requestAccess();
+            if (access.error) {
+                console.log("Casper Wallet connection rejected.", access.error);
+            } else if (access.address) {
+                const key = access.address;
+                setPubKey(key.substring(0, 4) + "..." + key.substring(key.length - 4));
+                setConnected(true);
             }
 		} catch (error) {
-			console.error("Freighter connect failed", error);
+			console.error("Casper Wallet connect failed", error);
 		} finally {
 			setConnecting(false);
 		}
@@ -88,9 +108,9 @@ export function Nav() {
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "center",
-				padding: "0 var(--space-nav-x)",
+				padding: "0 24px",
 				zIndex: 100,
-				background: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 100%)",
+				background: "linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)",
 				pointerEvents: "none",
 			}}
 		>
@@ -113,64 +133,25 @@ export function Nav() {
                     style={{ overflow: "hidden", whiteSpace: "nowrap" }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
                 >
-                    <span className="hidden sm:inline" style={{ 
-                        fontFamily: '"Space Mono", monospace', 
-                        fontSize: "0.85rem", 
-                        fontWeight: "bold",
-                        letterSpacing: "0.1em",
-                        textTransform: "uppercase",
-                        color: "#fff",
-                        paddingLeft: "4px"
-                    }}>
+                    <span className="hidden sm:inline label-14-mono text-[var(--gray-1000)] pl-[8px]">
                         [ RETURN TO HQ ]
                     </span>
                 </motion.div>
 			</div>
 
-			<div className="nav-actions" style={{ pointerEvents: "auto", display: "flex", gap: "24px", alignItems: "center", position: "relative" }}>
+			<div style={{ pointerEvents: "auto", display: "flex", gap: "24px", alignItems: "center", position: "relative" }}>
 				<button
 					onClick={() => window.location.href = "/dashboard"}
-					style={{
-						background: "rgba(10,10,10,0.7)",
-						color: "rgba(255,255,255,0.7)",
-						border: "1px solid rgba(255,255,255,0.2)",
-						padding: "8px 24px",
-						borderRadius: "40px",
-						cursor: "pointer",
-						fontFamily: '"Space Mono", monospace',
-						fontSize: "0.8rem",
-						fontWeight: "bold",
-						letterSpacing: "0.1em",
-						transition: "all 0.2s ease",
-						backdropFilter: "blur(12px)",
-					}}
-					onMouseEnter={(e) => { 
-						e.currentTarget.style.backgroundColor = "rgba(0, 255, 65, 0.15)";
-						e.currentTarget.style.color = "#00ff41";
-						e.currentTarget.style.borderColor = "rgba(0, 255, 65, 0.4)";
-					}}
-					onMouseLeave={(e) => { 
-						e.currentTarget.style.backgroundColor = "rgba(10,10,10,0.7)";
-						e.currentTarget.style.color = "rgba(255,255,255,0.7)";
-						e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)";
-					}}
+					className="button-secondary label-14-mono backdrop-blur-md"
 				>
 					[ DASHBOARD ]
 				</button>
                 <div style={{ position: "relative" }}>
                     <button
                         onClick={handleConnect}
-                        className={`connect-btn-base ${connected || freighterMissing ? "connect-state-true" : "connect-state-false connect-btn-hover-fx"}`}
-                        style={{
-                            transform: "scale(1)",
-                            ...(freighterMissing ? { backgroundColor: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)", color: "#aaa" } : {})
-                        }}
-                        onMouseDown={(e) => e.currentTarget.style.transform = "scale(0.95)"}
-                        onMouseUp={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                        onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                        onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+                        className="button-primary label-14-mono transition-transform active:scale-95"
                     >
-                        <span>{connecting ? "[ CONNECTING... ]" : connected ? `[ ${pubKey} ]` : freighterMissing ? "[ GET FREIGHTER ]" : "[ CONNECT WALLET ]"}</span>
+                        <span>{connecting ? "[ CONNECTING... ]" : connected ? `[ ${pubKey} ]` : walletMissing ? "[ GET CASPER WALLET ]" : "[ CONNECT WALLET ]"}</span>
                     </button>
 
                     {/* Disconnect Bubble */}
@@ -181,17 +162,17 @@ export function Nav() {
                             position: "absolute",
                             top: "100%",
                             right: 0,
-                            background: "rgba(255, 0, 60, 0.1)",
-                            border: "1px solid rgba(255, 0, 60, 0.5)",
-                            backdropFilter: "blur(12px)",
+                            background: "var(--red-100)",
+                            border: "1px solid var(--red-700)",
                             padding: "8px 16px",
-                            borderRadius: "12px",
+                            borderRadius: "6px",
                             cursor: "pointer",
-                            color: "#ff003c"
+                            color: "var(--red-700)",
+                            marginTop: "8px"
                         }}
                         onClick={handleDisconnect}
                     >
-                        <span style={{ fontFamily: '"Space Mono", monospace', fontSize: "0.75rem", fontWeight: "bold" }}>DISCONNECT</span>
+                        <span className="label-14-mono">DISCONNECT</span>
                     </motion.div>
                 </div>
 			</div>
