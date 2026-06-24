@@ -155,7 +155,7 @@ const BountiesPage = () => {
 						))}
 					</p>
 					
-					{/* KPI Matrix (Fable 5 CSS Grid) */}
+					{/* KPI Matrix (Brutalist CSS Grid) */}
 					<div className="editorial-grid mb-[48px]">
 						{[
 							{ label: "TOTAL USDC VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
@@ -231,7 +231,7 @@ const BountiesPage = () => {
 						))}
 					</div>
 
-					{/* 3. Right Column: Ingestion Terminal (Sticky per Fable 5) */}
+					{/* 3. Right Column: Ingestion Terminal (Sticky layout) */}
 					<div className="col-span-12 md:col-span-4 sticky-section" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
 						<div className="editorial-panel p-[24px] w-full relative">
 							<CornerMarks />

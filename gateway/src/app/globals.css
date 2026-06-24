@@ -231,7 +231,7 @@ body {
   cursor: not-allowed;
 }
 
-/* Editorial Elevation (Fable 5) */
+/* Editorial Elevation */
 .editorial-panel {
   background-color: var(--background-100);
   border: 1px solid var(--gray-400);
@@ -241,7 +241,7 @@ body {
   z-index: 10;
 }
 
-/* Fable 5 Aesthetics */
+/* Brutalist Aesthetics */
 .editorial-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);

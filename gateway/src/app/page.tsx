@@ -34,7 +34,7 @@ export default function Page() {
 
 
 
-  // GSAP Cinematic Transitions & Pinning (Fable 5 Aesthetic)
+  // GSAP Cinematic Transitions & Pinning (Brutalist Aesthetic)
   useGSAP(() => {
     const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
     sections.forEach((section) => {

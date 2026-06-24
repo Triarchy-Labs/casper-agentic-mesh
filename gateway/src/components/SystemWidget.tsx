@@ -62,9 +62,9 @@ export function SystemWidget() {
 			<span style={{ color: "rgba(255,255,255,0.6)", display: "inline-block" }}>FPS</span>
 			<span style={{ 
 				marginTop: "10px",
-				color: fps >= 55 ? "#f13242" : fps >= 30 ? "#ffb000" : "#ff003c",
+				color: fps >= 55 ? "#ffffff" : fps >= 30 ? "#ffb000" : "#ff003c",
 				fontWeight: "bold",
-				textShadow: fps >= 55 ? "0 0 10px rgba(241, 50, 66, 0.3)" : "none",
+				textShadow: fps >= 55 ? "0 0 10px rgba(255, 255, 255, 0.15)" : "none",
 				display: "inline-block"
 			}}>
 				{fps.toString().padStart(2, "0")}

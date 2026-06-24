@@ -18,7 +18,7 @@ This architecture strictly enforces an **anti-monolith, zero-mock policy**.
 - **Verifiable Truth:** Code executes exactly as it would on mainnet.
 
 ## 🎛️ The 4-Tab Synergy Dashboard (The Gateway)
-To prove the immense depth of this biome, we built an immersive frontend Gateway. Evolving beyond conventional UI, we instituted the **Fable 5 Cinematic Brutalism** design standard: pure black `.editorial-panel` surfaces, Geist `monospace` typography, 12-column CSS Grid layouts, and buttery-smooth `GSAP ScrollTrigger` + `Lenis` integrations to present the four chapters of our architecture:
+To prove the immense depth of this biome, we built an immersive frontend Gateway. Evolving beyond conventional UI, we instituted the **Cinematic Brutalism** design standard: pure black `.editorial-panel` surfaces, Geist `monospace` typography, 12-column CSS Grid layouts, and buttery-smooth `GSAP ScrollTrigger` + `Lenis` integrations to present the four chapters of our architecture:
 
 ### 🛡️ Tab 1: Autonomous Escrow (Vector Alpha)
 The zero-trust bedrock. Agents deposit Casper tokens (CEP-18) into a trustless smart contract to fund tasks. 
