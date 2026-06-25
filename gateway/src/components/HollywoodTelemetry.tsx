@@ -27,7 +27,17 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 			"P2P_NODE_DISCOVERY: SCANNING",
 			"CASPER_RPC_LATENCY: ",
 			"EXTISM_PLUGIN_LIFECYCLE: ",
-			"SOVEREIGN_ROUTING_HOP: "
+			"SOVEREIGN_ROUTING_HOP: ",
+			"SENTINEL_GOSSIP_WARN: Malicious WASM signature detected: 0x",
+			"MEV_FLASH_LOAN_ARBITRAGE: Borrowed 1,500,000 CSPR from flash-escrow block #1,809,202",
+			"GAS_FUTURES_HEDGING: Purchased gas voucher at 0.0028 CSPR/gas-unit",
+			"SUB_ESCROW_DELEGATION: Split bounty #1049 into 3 sub-escrow nodes",
+			"P2P_LOAD_BALANCER: Latency spike >450ms, spawning replica agent instances",
+			"L402_AUTH_KEY_VERIFICATION: Handshake OK. Invoice payment verified",
+			"SHADOW_SIMULATOR: Pre-execution dry-run OK. Gas: ",
+			"CEP78_REPUTATION_UPDATE: Updated Agent Passport 01c0... with proof: 0x",
+			"DECISION_TREE: Spawned child agent_executor_",
+			"COLLATERAL_LOCKED: Agent 01c0... staked 50,000 CEP-18 in Escrow"
 		];
 
 		let i = 0;

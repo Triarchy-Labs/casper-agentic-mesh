@@ -4,14 +4,15 @@ import { motion } from "framer-motion";
 import type { AgentRecord } from "@/lib/agent_registry";
 
 // Fallback data if /api/agents is unreachable
+// Fallback data if /api/agents is unreachable
 const FALLBACK_AGENTS = [
-	{ id: "x402-AEGIS-NODE", task: "Security Matrix", rep: "99.9", earned: "$1,240.50", status: "ACTIVE" },
-	{ id: "agent_alpha_arbitrage", task: "DEX Arbitrage", rep: "95.0", earned: "$420.00", status: "ACTIVE" },
-	{ id: "casper_scrapper_v2", task: "Data Injection", rep: "88.5", earned: "$110.20", status: "IDLE" },
-	{ id: "malicious_node_x9", task: "Phishing Attempt", rep: "12.0", earned: "$0.00", status: "QUARANTINED" },
-	{ id: "cortex_reviewer", task: "Code Audit", rep: "97.2", earned: "$890.00", status: "ACTIVE" },
-	{ id: "liquidity_sniper", task: "Flash Loans", rep: "91.4", earned: "$3,400.10", status: "ACTIVE" },
-	{ id: "mark_53_sarcophagus", task: "Casper Autonomous Engine", rep: "100.0", earned: "Reference Protocol", status: "GOLDEN_TEMPLATE" },
+	{ id: "x402-AEGIS-NODE", task: "Security Matrix", rep: "99.9", earned: "$1,240.50", status: "ACTIVE", staked: "500,000 CSPR", passport: "CEP78-SB-0042" },
+	{ id: "agent_alpha_arbitrage", task: "DEX Arbitrage", rep: "95.0", earned: "$420.00", status: "ACTIVE", staked: "150,000 CSPR", passport: "CEP78-SB-8902" },
+	{ id: "casper_scrapper_v2", task: "Data Injection", rep: "88.5", earned: "$110.20", status: "IDLE", staked: "45,000 CSPR", passport: "CEP78-SB-7719" },
+	{ id: "malicious_node_x9", task: "Phishing Attempt", rep: "12.0", earned: "$0.00", status: "QUARANTINED", staked: "0 CSPR", passport: "CEP78-SB-666D" },
+	{ id: "cortex_reviewer", task: "Code Audit", rep: "97.2", earned: "$890.00", status: "ACTIVE", staked: "180,000 CSPR", passport: "CEP78-SB-2901" },
+	{ id: "liquidity_sniper", task: "Flash Loans", rep: "91.4", earned: "$3,400.10", status: "ACTIVE", staked: "350,000 CSPR", passport: "CEP78-SB-5092" },
+	{ id: "mark_53_sarcophagus", task: "Casper Autonomous Engine", rep: "100.0", earned: "Reference Protocol", status: "GOLDEN_TEMPLATE", staked: "1,000,000 CSPR", passport: "CEP78-SB-9999" },
 ];
 
 interface AgentDisplay {
@@ -20,6 +21,8 @@ interface AgentDisplay {
 	rep: string;
 	earned: string;
 	status: string;
+	staked: string;
+	passport: string;
 }
 
 export function CornerMarks() {
@@ -72,7 +75,7 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 				borderRadius: "0px",
 				display: "flex",
 				flexDirection: "column",
-				gap: "24px",
+				gap: "20px",
 				cursor: "crosshair",
 				transition: "background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
 				boxShadow: isMark53 
@@ -80,7 +83,7 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 					: hovered 
 						? "0 20px 40px rgba(0,0,0,0.5)" 
 						: "none",
-				minHeight: index === 0 || index === 3 || index === 6 ? "200px" : "280px",
+				minHeight: index === 0 || index === 3 || index === 6 ? "240px" : "320px",
 				justifyContent: "space-between",
 				overflow: "hidden",
 				wordBreak: "break-word" as const,
@@ -107,6 +110,17 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 				>
 					{agent.status}
 				</span>
+			</div>
+
+			<div style={{ display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid var(--gray-400)", paddingTop: "12px", zIndex: 6 }}>
+				<div style={{ display: "flex", justifyContent: "space-between" }} className="label-12-mono text-[var(--gray-700)]">
+					<span>PASSPORT:</span>
+					<span className="text-[var(--gray-1000)]">{agent.passport}</span>
+				</div>
+				<div style={{ display: "flex", justifyContent: "space-between" }} className="label-12-mono text-[var(--gray-700)]">
+					<span>COLLATERAL:</span>
+					<span className="text-[var(--gray-1000)]">{agent.staked}</span>
+				</div>
 			</div>
 			
 			<div 
@@ -186,6 +200,8 @@ export default function AgentNetworkGrid() {
 							rep: a.reputationScore?.toFixed(1) || "0.0",
 							earned: `$${(a.usdcSettled || 0).toFixed(2)}`,
 							status: a.status?.toUpperCase() || "IDLE",
+							staked: `${(a.stakedCollateralCspr || 0).toLocaleString()} CSPR`,
+							passport: a.passportId || "CEP78-SB-XXXX"
 						}));
 						// Always append Mark 53 golden template
 						const hasMark53 = mapped.some(a => a.id === "mark_53_sarcophagus");

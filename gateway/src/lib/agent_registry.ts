@@ -9,6 +9,8 @@ export interface AgentRecord {
 	tasksCompleted: number;
 	usdcSettled: number;
 	lastActiveTracker: string; // ISO timestamp
+	stakedCollateralCspr: number;
+	passportId: string;
 }
 
 class TriarchyAgentRegistry {
@@ -24,6 +26,8 @@ class TriarchyAgentRegistry {
 			tasksCompleted: 1042,
 			usdcSettled: 420.5,
 			lastActiveTracker: new Date().toISOString(),
+			stakedCollateralCspr: 150000,
+			passportId: "CEP78-SB-8902",
 		});
 
 		this.register({
@@ -34,6 +38,8 @@ class TriarchyAgentRegistry {
 			tasksCompleted: 450,
 			usdcSettled: 120.0,
 			lastActiveTracker: new Date().toISOString(),
+			stakedCollateralCspr: 250000,
+			passportId: "CEP78-SB-1104",
 		});
 
 		this.register({
@@ -44,6 +50,8 @@ class TriarchyAgentRegistry {
 			tasksCompleted: 5,
 			usdcSettled: 0.0,
 			lastActiveTracker: new Date().toISOString(),
+			stakedCollateralCspr: 0,
+			passportId: "CEP78-SB-666D",
 		});
 	}
 
@@ -79,6 +87,8 @@ class TriarchyAgentRegistry {
 				tasksCompleted: 1,
 				usdcSettled: feeUsdc,
 				lastActiveTracker: new Date().toISOString(),
+				stakedCollateralCspr: 50000,
+				passportId: `CEP78-SB-${Math.floor(1000 + Math.random() * 9000)}`,
 			});
 		}
 	}

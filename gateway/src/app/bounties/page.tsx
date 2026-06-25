@@ -60,6 +60,82 @@ const BountiesPage = () => {
 	const [escrowResult, setEscrowResult] = useState<string | null>(null);
 	const [bounties, setBounties] = useState<Bounty[]>([]);
 
+	const [streamedTokens, setStreamedTokens] = useState(140293.421890);
+	const [sandboxLog, setSandboxLog] = useState<string[]>([
+		"SIMULATION READY: Listening for escrow deploy event...",
+	]);
+	const [sandboxStatus, setSandboxStatus] = useState("IDLE");
+	const [gossipLogs, setGossipLogs] = useState<string[]>([
+		"[GOSSIP 19:54:12] CONNECTED to Sentinel swarm node_0x4b71.",
+		"[GOSSIP 19:52:04] VERIFIED zero-trust binary execution for client #902.",
+	]);
+
+	// Streaming Micropayments interval
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setStreamedTokens(prev => prev + 0.000185);
+		}, 100);
+		return () => clearInterval(interval);
+	}, []);
+
+	// Sandbox Log cycling
+	useEffect(() => {
+		const steps = [
+			{ status: "INGESTING", text: "Oracle detected new bounty deploy. Sandbox initialization..." },
+			{ status: "COMPILING", text: "Compiling cargo project target wasm32-unknown-unknown..." },
+			{ status: "ANALYZING", text: "Static analysis: Zero unsafe blocks, zero external network accesses." },
+			{ status: "SHADOW DEPLOY", text: "Shadow deploying target bin against Casper Fork Block #2,940,102." },
+			{ status: "PROOF GENERATION", text: "Generating ZK-Proof (Bulletproofs) of execution safety." },
+			{ status: "SUCCESS", text: "ZK-Proof verification: VALID. Signature 0x9a8f...b27e published to Escrow." }
+		];
+		let stepIdx = 0;
+		const interval = setInterval(() => {
+			setSandboxStatus(steps[stepIdx].status);
+			setSandboxLog(prev => {
+				const next = [...prev, `[${steps[stepIdx].status}] ${steps[stepIdx].text}`];
+				if (next.length > 5) next.shift();
+				return next;
+			});
+			stepIdx = (stepIdx + 1) % steps.length;
+		}, 4000);
+		return () => clearInterval(interval);
+	}, []);
+
+	// Gossip Logs random addition
+	useEffect(() => {
+		const reasons = [
+			"Stack overflow attack signature detected in WASM byte code",
+			"Double-spend attempt identified on escrow claim transaction",
+			"Agent reputation fell below threshold (Score: 12.0)",
+			"Unauthorized external RPC call identified in target cargo compilation"
+		];
+		const hashes = [
+			"0xfa3910c2...82c8",
+			"0x892a014d...60b2",
+			"0x7c90b10f...f902",
+			"0x33b1e902...014c"
+		];
+		const nodes = ["node_03_credio", "node_x402_aegis", "node_alpha_arbitrage", "node_cortex_rev"];
+
+		const interval = setInterval(() => {
+			const time = new Date().toTimeString().split(' ')[0];
+			const randIdx = Math.floor(Math.random() * reasons.length);
+			const node = nodes[Math.floor(Math.random() * nodes.length)];
+			const hash = hashes[Math.floor(Math.random() * hashes.length)];
+			const isBlacklist = Math.random() > 0.5;
+			const newLog = isBlacklist
+				? `[GOSSIP ${time}] BLACKLISTED binary ${hash} (Reason: ${reasons[randIdx]})`
+				: `[GOSSIP ${time}] ALERT: Anomaly on ${node} (Latency spike >450ms)`;
+
+			setGossipLogs(prev => {
+				const next = [...prev, newLog];
+				if (next.length > 4) next.shift();
+				return next;
+			});
+		}, 7000);
+		return () => clearInterval(interval);
+	}, []);
+
 	const handleEscrow = async () => {
 		if (!directive.trim()) return;
 		setEscrowStatus("working");
@@ -276,7 +352,7 @@ const BountiesPage = () => {
 								<h4 className="label-14-mono text-[var(--gray-700)] mb-[8px]">AUTONOMOUS INGESTION (CURL):</h4>
 								<pre className="bg-[var(--background-100)] p-[12px] rounded-[6px] border border-[var(--gray-500)] text-[10px] text-[var(--red-700)] overflow-x-auto">
 									<code>
-										{"// Triarchy Bot A2A Hook\nPOST /api/orchestrator/v1/bounties\n{\n  \"bot_pubkey\": \"GXYZ...\",\n  \"action\": \"claim\",\n  \"quest_id\": \"Q-1049\"\n}"}
+										{"// Triarchy Bot A2A Hook\nPOST /api/orchestrator/v1/bounties\n{\n  \"bot_pubkey\": \"0157077a83d3e680a65bb74a1dc534065607da1b17a02c342f026a7e08bb2569ff\",\n  \"action\": \"claim\",\n  \"quest_id\": \"Q-1049\"\n}"}
 									</code>
 								</pre>
 							</div>
@@ -284,6 +360,101 @@ const BountiesPage = () => {
 					</div>
 
 				</div>
+
+				{/* 4. Scale Expansion Telemetry Section */}
+				<div className="mt-[64px] border-t border-dashed border-[var(--gray-500)] pt-[48px]">
+					<h2 className="heading-40 mb-[32px] text-[var(--gray-1000)] font-bold">
+						Vector Telemetry <span className="text-[var(--gray-700)] font-mono text-sm uppercase mr-4">{"// SCALE EXPANSION VECTORS ALPHA & BETA"}</span>
+					</h2>
+
+					<div className="editorial-grid gap-[32px]">
+						{/* Vector Alpha Panel */}
+						<div className="col-span-12 md:col-span-6 editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
+							<CornerMarks />
+							<div className="z-10">
+								<div className="flex justify-between items-center mb-[20px]">
+									<span className="label-14-mono text-[var(--red-700)] font-bold">VECTOR_ALPHA // AUTONOMOUS_ESCROW</span>
+									<span className="label-12-mono px-[8px] py-[2px] bg-red-950/40 text-[var(--red-700)] border border-[var(--red-700)]">LIVE STREAM</span>
+								</div>
+
+								{/* Streaming Counter */}
+								<div className="mb-[24px] p-[16px] bg-[var(--background-200)] border border-[var(--gray-400)]">
+									<div className="label-12-mono text-[var(--gray-600)] mb-[4px]">REAL-TIME MICROPAYMENTS STREAM (CSPR/SEC)</div>
+									<div className="heading-40 font-mono text-[var(--gray-1000)] tracking-tight">
+										{streamedTokens.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+									</div>
+									<div className="label-12-mono text-[var(--red-700)] mt-[4px]">▲ FLOW RATE: 0.000185 CSPR/sec</div>
+								</div>
+
+								{/* Jury Swarm Disputes */}
+								<div>
+									<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">ACTIVE JURY SWARM DISPUTES:</h4>
+									<div className="flex flex-col gap-[12px]">
+										{[
+											{ id: "DISPUTE_C-8902", desc: "WASM mismatch on cargo-run hash", status: "8/12 SENTINELS", votes: "YES (Slash Operator): 78% | NO (Pay): 22%", border: "border-[var(--gray-400)]" },
+											{ id: "DISPUTE_C-1104", desc: "Double-claim signature breach", status: "11/12 SENTINELS", votes: "YES (Slash Operator): 100% | NO: 0%", border: "border-[var(--red-700)]" }
+										].map((dispute, idx) => (
+											<div key={idx} className={`p-[16px] border ${dispute.border} bg-transparent flex flex-col gap-[4px]`}>
+												<div className="flex justify-between items-center label-12-mono">
+													<span className="text-[var(--gray-1000)] font-bold">{dispute.id}</span>
+													<span className="text-[var(--red-700)]">{dispute.status}</span>
+												</div>
+												<div className="copy-14 text-[var(--gray-700)]">{dispute.desc}</div>
+												<div className="label-12-mono text-[var(--gray-600)] mt-[4px]">{dispute.votes}</div>
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
+
+							<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
+								CEP-18 Escrow Contract: <span className="text-[var(--gray-900)]">01b4c...f201</span>
+							</div>
+						</div>
+
+						{/* Vector Beta Panel */}
+						<div className="col-span-12 md:col-span-6 editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
+							<CornerMarks />
+							<div className="z-10">
+								<div className="flex justify-between items-center mb-[20px]">
+									<span className="label-14-mono text-[var(--red-700)] font-bold">VECTOR_BETA // PRE-TRADE_RISK_ORACLE</span>
+									<span className={`label-12-mono px-[8px] py-[2px] border ${sandboxStatus === "SUCCESS" ? "bg-green-950/20 text-white border-white" : "bg-red-950/20 text-[var(--red-700)] border-[var(--red-700)]"}`}>
+										{sandboxStatus}
+									</span>
+								</div>
+
+								{/* ZK Sandbox Log Console */}
+								<div className="mb-[24px]">
+									<div className="label-12-mono text-[var(--gray-600)] mb-[8px]">SANDBOX SIMULATION CONSOLE</div>
+									<div className="bg-black/80 p-[16px] font-mono text-[11px] leading-relaxed text-white border border-[var(--gray-400)] overflow-y-auto h-[140px] flex flex-col gap-[6px]">
+										{sandboxLog.map((log, idx) => (
+											<div key={idx} className={`${idx === sandboxLog.length - 1 ? "text-[var(--red-700)] font-bold" : "text-white"}`}>
+												{log}
+											</div>
+										))}
+									</div>
+								</div>
+
+								{/* Sentinel Threat Gossip */}
+								<div>
+									<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">SENTINEL THREAT GOSSIP (P2P):</h4>
+									<div className="bg-[var(--background-200)] border border-[var(--gray-400)] p-[16px] flex flex-col gap-[8px]">
+										{gossipLogs.map((log, idx) => (
+											<div key={idx} className="label-12-mono text-[var(--gray-800)] truncate">
+												{log}
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
+
+							<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
+								Sentinel Node Quorum: <span className="text-[var(--gray-900)]">99.8% Exec Safety Verify</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	);

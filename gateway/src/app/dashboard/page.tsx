@@ -62,6 +62,12 @@ export default function Dashboard() {
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
     const [balance] = useState(140);
 
+	const [gasPrice, setGasPrice] = useState(0.002840);
+	const [gasHedged, setGasHedged] = useState(450000);
+	const [l402Console, setL402Console] = useState<string>("// Ready to challenge L402 gate");
+	const [l402Status, setL402Status] = useState<"IDLE" | "CHALLENGED" | "SUCCESS">("IDLE");
+	const [meshLoad, setMeshLoad] = useState<number[]>([12, 45, 89, 23, 67, 10, 34, 56, 88, 92, 14, 41]);
+
     const mainRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLElement>(null);
     const gridRef = useRef<HTMLElement>(null);
@@ -114,6 +120,28 @@ export default function Dashboard() {
         const int = setInterval(fetchTelemetry, 2000);
         return () => clearInterval(int);
     }, []);
+
+	// Ticking gas price
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setGasPrice(prev => {
+				const change = (Math.random() - 0.5) * 0.00005;
+				return Math.max(0.001, prev + change);
+			});
+		}, 1500);
+		return () => clearInterval(interval);
+	}, []);
+
+	// Mesh Load variation
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setMeshLoad(prev => prev.map(val => {
+				const change = Math.floor((Math.random() - 0.5) * 15);
+				return Math.min(100, Math.max(5, val + change));
+			}));
+		}, 2000);
+		return () => clearInterval(interval);
+	}, []);
 
     const handleExecute = async () => {
         if (!inputValue.trim()) return;
@@ -311,10 +339,149 @@ export default function Dashboard() {
 
                 </div>
 
-                {/* Live Agent Registry */}
-                <div className="max-w-7xl mx-auto mt-20">
-                    <AgentNetworkGrid />
-                </div>
+				{/* 4. Scale Expansion Telemetry Section */}
+				<div className="max-w-7xl mx-auto mt-20 border-t border-white/20 pt-16">
+					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
+						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
+					</h2>
+
+					<div className="editorial-grid gap-8">
+						{/* Vector Gamma Panel */}
+						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
+							<CornerMarks />
+							<div className="z-10">
+								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_GAMMA // COGNITIVE_ARBITRAGE</span>
+									<span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--red-700)] text-[var(--red-700)]">ACTIVE</span>
+								</div>
+
+								{/* Gas Futures Tracker */}
+								<div className="mb-8 p-4 bg-white/5 border border-white/10">
+									<div className="text-[10px] text-white/40 mb-2 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
+									<div className="text-3xl font-mono font-bold text-white tracking-tight">
+										{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+									</div>
+									<div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+										<span className="text-xs text-white/60">Hedged Capacity: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas-units</span></span>
+										<div className="flex gap-2">
+											<button 
+												onClick={() => {
+													setGasHedged(prev => prev + 100000);
+													setGasPrice(p => p + 0.000120);
+												}}
+												className="px-2 py-1 bg-white text-black font-bold text-[9px] uppercase tracking-wider"
+											>
+												+ 100K HEDGE
+											</button>
+											<button 
+												onClick={() => {
+													setGasHedged(prev => Math.max(0, prev - 100000));
+													setGasPrice(p => Math.max(0.001, p - 0.000100));
+												}}
+												className="px-2 py-1 border border-white/20 text-white font-bold text-[9px] uppercase tracking-wider hover:bg-white/5"
+											>
+												RELEASE
+											</button>
+										</div>
+									</div>
+								</div>
+
+								{/* Arbitrage Delegation Tree */}
+								<div>
+									<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
+									<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
+										<div className="flex items-center gap-2">
+											<span className="text-[var(--red-700)]">[Orchestrator]</span>
+											<span className="text-white/40">mark_53_sarcophagus</span>
+										</div>
+										<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
+											<div className="flex items-center gap-2">
+												<span className="text-white/40">├── [Sub-Escrow A]</span>
+												<span className="text-white font-bold">credio_risk_monitor</span>
+												<span className="text-[var(--red-700)] text-[10px]">(Risk Analysis: SECURE)</span>
+											</div>
+											<div className="flex items-center gap-2">
+												<span className="text-white/40">├── [Sub-Escrow B]</span>
+												<span className="text-white font-bold">agent_alpha_arbitrage</span>
+												<span className="text-green-500 text-[10px]">(Claiming: 420.5 USDC)</span>
+											</div>
+											<div className="flex items-center gap-2">
+												<span className="text-white/40">└── [Sub-Escrow C]</span>
+												<span className="text-white font-bold">liquidity_sniper</span>
+												<span className="text-yellow-500 text-[10px]">(MEV Flash-loan: PENDING)</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{/* Vector Delta Panel */}
+						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
+							<CornerMarks />
+							<div className="z-10">
+								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_DELTA // ABSOLUTE_SYNERGY</span>
+									<span className="text-[10px] font-mono px-2 py-0.5 border border-white/20 text-white/60">LOAD_BALANCER</span>
+								</div>
+
+								{/* P2P Load Balancer / Latency Map */}
+								<div className="mb-8">
+									<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
+									<div className="grid grid-cols-6 gap-2">
+										{meshLoad.map((val, idx) => {
+											let boxColor = "bg-white/10 border-white/10";
+											if (val > 80) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.3)] animate-pulse";
+											else if (val > 40) boxColor = "bg-white/40 border-white/40";
+											
+											return (
+												<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
+													<div className={`w-3 h-3 ${boxColor} rounded-none`} />
+													<span className="text-[9px] font-mono text-white/50">{val}%</span>
+												</div>
+											);
+										})}
+									</div>
+								</div>
+
+								{/* L402 Casper Gateway Challenge Console */}
+								<div>
+									<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
+									<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
+										<pre className="text-white/60 max-h-[80px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
+											<code>{l402Console}</code>
+										</pre>
+										<div className="flex justify-between items-center pt-2 border-t border-white/10">
+											<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
+											<button 
+												onClick={() => {
+													if (l402Status === "IDLE") {
+														setL402Status("CHALLENGED");
+														setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
+													} else if (l402Status === "CHALLENGED") {
+														setL402Status("SUCCESS");
+														setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
+													} else {
+														setL402Status("IDLE");
+														setL402Console("// Console reset. Ready to challenge L402 gate");
+													}
+												}}
+												className="px-3 py-1 bg-[var(--red-700)] text-white font-bold text-[9px] uppercase tracking-wider"
+											>
+												{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Live Agent Registry */}
+				<div className="max-w-7xl mx-auto mt-20">
+					<AgentNetworkGrid />
+				</div>
             </section>
 
             {/* Sticky Execution Input */}
