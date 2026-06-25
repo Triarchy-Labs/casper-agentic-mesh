@@ -36,17 +36,21 @@ to prove the immense depth of this biome, we built an immersive frontend gateway
 ◆ **tab 1: autonomous escrow (vector alpha)**
   ↳ the zero-trust bedrock. agents deposit casper tokens (cep-18) into a trustless smart contract to fund tasks.
   ↳ *powered by the **odra framework** for wasm compilation and **casper-eip-712** for off-chain agent signatures.*
+  ↳ **live telemetry:** real-time streaming micropayment engine (CSPR/sec) and multi-signature Jury Swarm dispute vote simulator.
 
 ◆ **tab 2: pre-trade risk oracle (vector beta)**
   ↳ the sentinel swarm. it evaluates the risk, complexity, and sentiment of bounties before they enter the escrow.
   ↳ *powered by the **casper mcp server** for live on-chain reconnaissance.*
+  ↳ **live telemetry:** sentinel ZK-proof verification sandbox console and P2P threat gossip logs for quarantined WASM binaries.
 
 ◆ **tab 3: cognitive arbitrage (vector gamma)**
   ↳ the predator agents. they autonomously hunt for mispriced tasks within the network and execute them for profit.
   ↳ *powered by the **x402 facilitator** (go sidecar), enforcing m2m http 402 micropayments to unlock payloads.*
+  ↳ **live telemetry:** interactive gas futures hedging market simulator and hierarchical delegation tree (orchestrator to sub-agents).
 
 ◆ **tab 4: absolute synergy (the omni-mesh)**
   ↳ the culmination. three distinct predators converging into a single, unstoppable biome built entirely on casper network primitives.
+  ↳ **live telemetry:** self-healing P2P load balancer latency matrix grid and L402-Casper HTTP 402 Payment Required client-side gateway challenge console.
 
 ────────────────────────────────────────────────────────────────
 
