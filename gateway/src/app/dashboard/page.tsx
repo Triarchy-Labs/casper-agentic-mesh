@@ -293,8 +293,8 @@ export default function Dashboard() {
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
                     <div className="col-span-12 mb-4">
-                        <div className="text-xs tracking-[0.3em] text-white/40 uppercase mb-6 pb-3 border-b border-white/10">
-                            MESH_CONTROL · OVERSEER + ADVERSARIAL COURT
+                        <div className="text-xs tracking-[0.3em] text-white/40 mb-6 pb-3 border-b border-white/10 flex items-center gap-3">
+                            <span className="text-[var(--red-700)]">◢◤</span> MESH_CONTROL <span className="text-white/25">// overseer · adversarial court</span>
                         </div>
                     </div>
                     <MeshControl />

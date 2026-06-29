@@ -80,13 +80,13 @@ export function MeshControl() {
 			<div className="col-span-12 lg:col-span-5 editorial-panel p-8 relative">
 				<CornerMarks />
 				<div className="flex items-center justify-between mb-2">
-					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80"><span className="text-[var(--red-700)]">▚</span> The Tower · Overseer</h3>
-					<span className="text-[10px] tracking-widest uppercase text-white/30">read-only</span>
+					<h3 className="text-sm tracking-[0.2em] text-white/80"><span className="text-[var(--red-700)]">◢◤</span> THE TOWER <span className="text-white/30">// overseer</span></h3>
+					<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
 				</div>
-				<p className="text-xs text-white/40 leading-relaxed mb-5">
-					One brain over the swarm. Reads the on-chain world (oracle, reputation,
-					agent liveness), then dispatches sub-agents. Click to scan — nothing runs
-					in the background, nothing is spent.
+				<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
+					one brain over the swarm. reads the on-chain world — oracle, reputation,
+					agent liveness — then dispatches sub-agents. ◆ click to scan. nothing runs
+					in the background. nothing is spent.
 				</p>
 				<Btn onClick={scanTower} busy={towerBusy}>Scan mesh</Btn>
 				{towerLines && <Console lines={towerLines} />}
@@ -96,13 +96,13 @@ export function MeshControl() {
 			<div className="col-span-12 lg:col-span-7 editorial-panel p-8 relative">
 				<CornerMarks />
 				<div className="flex items-center justify-between mb-2">
-					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80"><span className="text-[var(--red-700)]">▞</span> Agent Tribunal · Arena</h3>
-					<span className="text-[10px] tracking-widest uppercase text-white/50">dry-run · no funds moved</span>
+					<h3 className="text-sm tracking-[0.2em] text-white/80"><span className="text-[var(--red-700)]">◢◤</span> AGENT TRIBUNAL <span className="text-white/30">// arena</span></h3>
+					<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
 				</div>
-				<p className="text-xs text-white/40 leading-relaxed mb-5">
-					An adversarial court of real models — prosecutor, defender, a jury of
-					diverse LLMs, and a chief judge — deliberates a bounty. On a real run the
-					verdict moves CSPR on-chain; here it deliberates only.
+				<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
+					an adversarial court of real models — prosecutor, defender, a jury of
+					diverse llms, and a chief judge — deliberates a bounty. on a real run the
+					verdict moves cspr on-chain. ◆ here it deliberates only.
 				</p>
 				<div className="grid gap-3 mb-4">
 					<textarea

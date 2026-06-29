@@ -80,9 +80,9 @@ export default function Page() {
                 {/* Left: Heading and CTAs (full-bleed, breathing) */}
                 <div className="md:col-span-8 md:col-start-1 flex flex-col items-start text-left z-20 pl-2 md:pl-12">
                   <div className="flex items-center gap-3 mb-7 flex-wrap">
-                    <span className="nb-tag"><span className="text-[var(--red-700)]">●</span> CASPER · TESTNET LIVE</span>
-                    <span className="nb-tag nb-tag-ghost">VOL.01 // AGENT ECONOMY</span>
-                    <span className="nb-index hud-slashes">2026</span>
+                    <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
+                    <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
+                    <span className="nb-index">𝟐𝟎𝟐𝟔</span>
                   </div>
                   <h1 className="nb-display text-[64px] md:text-[112px] mb-1">
                     Agentic
@@ -92,7 +92,7 @@ export default function Page() {
                   </h1>
                   <div className="flex items-center gap-4 mb-9 w-full max-w-xl">
                     <div className="tech-line flex-1" />
-                    <span className="nb-index whitespace-nowrap">ESCROW · TRIBUNAL · ORACLE · THE TOWER</span>
+                    <span className="nb-index whitespace-nowrap">escrow · tribunal · oracle · the tower</span>
                   </div>
                   <div className="flex gap-4 flex-wrap">
                     <button className="btn-neon">Deploy Now</button>
@@ -101,11 +101,12 @@ export default function Page() {
                 </div>
 
                 {/* Right: Mono manifesto tags */}
-                <div className="md:col-span-3 md:col-start-10 flex flex-col items-start md:items-end justify-center text-left md:text-right label-14-mono text-white/45 space-y-3 z-20 uppercase tracking-[0.18em] font-medium">
-                  <p className="text-white/70">For coding agents</p>
-                  <p>To ship apps and agents</p>
-                  <p>Automated by agents</p>
-                  <p className="text-[var(--red-700)] pt-4">Settled on Casper · live on-chain</p>
+                <div className="md:col-span-3 md:col-start-10 flex flex-col items-start md:items-end justify-center text-left md:text-right label-14-mono text-white/45 space-y-3 z-20 lowercase tracking-[0.18em] font-medium">
+                  <p className="text-white/70">◆ for coding agents</p>
+                  <p>↳ to ship apps and agents</p>
+                  <p>↳ automated by agents</p>
+                  <div className="tech-line w-24 my-2 self-end" />
+                  <p className="text-[var(--red-700)]">settled on casper · live on-chain</p>
                 </div>
 
               </div>
