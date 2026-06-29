@@ -435,17 +435,27 @@ body {
    Racing DNA masked under serious web3 (Casper / Vercel-Geist).
    ════════════════════════════════════════════════════════════════ */
 
-/* Woven carbon-fibre texture in deep racing red over near-black. */
+/* Real woven CARBON-FIBRE twill — matte, premium, dark racing red.
+   Fine 2x2 twill so the fibres read like fabric under magnification,
+   not a glow. No volumetric radials. */
 body {
-  background-color: #050304;
+  background-color: #0a0204;
   background-image:
-    repeating-linear-gradient(45deg, rgba(241,50,66,0.045) 0 1px, transparent 1px 5px),
-    repeating-linear-gradient(-45deg, rgba(241,50,66,0.04) 0 1px, transparent 1px 5px),
-    repeating-linear-gradient(45deg, rgba(0,0,0,0.55) 0 3px, transparent 3px 6px),
-    radial-gradient(120% 90% at 18% 8%, rgba(136,21,31,0.30), transparent 55%),
-    radial-gradient(120% 90% at 85% 92%, rgba(111,16,27,0.26), transparent 52%),
-    #050304;
+    linear-gradient(27deg,  #2a0710 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #2a0710 5px, transparent 5px) 11px 0,
+    linear-gradient(27deg,  #350a14 5px, transparent 5px) 0 11px,
+    linear-gradient(207deg, #350a14 5px, transparent 5px) 11px 5px,
+    linear-gradient(90deg,  #18050a 11px, transparent 11px),
+    linear-gradient(180deg, #20060c 25%, #140409 25%, #140409 50%, transparent 50%, transparent 75%, #28070e 75%, #28070e);
+  background-size: 22px 22px;
   background-attachment: fixed;
+}
+/* whisper-thin matte sheen so the weave has depth without becoming jelly */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  background: linear-gradient(125deg, rgba(241,50,66,0.05), transparent 38%, transparent 70%, rgba(0,0,0,0.5));
 }
 
 /* Left-edge neon aura — the brand spine, replaces the hero triangle. */
@@ -553,3 +563,42 @@ body {
 /* Smooth scroll (Lenis) */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   NEO-BRUTALIST type + cyberpunk HUD accents (racing/techwear refs)
+   ════════════════════════════════════════════════════════════════ */
+.nb-display { font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
+.nb-thin    { font-weight: 200; letter-spacing: -0.03em; }
+/* outlined stroke text — raw brutalist contrast */
+.nb-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.4px rgba(255,233,237,0.5);
+  text-stroke: 1.4px rgba(255,233,237,0.5);
+}
+/* hard red highlight block behind a word */
+.nb-hl {
+  background: var(--red-700);
+  color: #0a0204;
+  padding: 0 0.22em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+/* mono HUD tag chip — [ 23 // MESH ] */
+.nb-tag {
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--red-1000);
+  border: 1px solid rgba(241,50,66,0.5);
+  padding: 4px 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(241,50,66,0.06);
+}
+.nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
+/* diagonal slash motif from techwear refs */
+.hud-slashes::before { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-right: 12px; opacity: 0.9; }
+.hud-slashes::after  { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-left: 12px; opacity: 0.4; }
+/* thin technical connector lines */
+.tech-line   { height: 1px; background: linear-gradient(90deg, var(--red-700) 0%, rgba(241,50,66,0.0) 100%); }
+.tech-line-v { width: 1px;  background: linear-gradient(180deg, rgba(241,50,66,0.0), var(--red-700), rgba(241,50,66,0.0)); }
+/* small index counter like "+ 23 >" */
+.nb-index { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--gray-700); }

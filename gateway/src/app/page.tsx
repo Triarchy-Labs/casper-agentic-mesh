@@ -79,13 +79,21 @@ export default function Page() {
 
                 {/* Left: Heading and CTAs (full-bleed, breathing) */}
                 <div className="md:col-span-8 md:col-start-1 flex flex-col items-start text-left z-20 pl-2 md:pl-12">
-                  <p className="label-14-mono text-[var(--red-700)] mb-6 tracking-[0.3em]">// TRIARCHY · CASPER AGENTIC MESH</p>
-                  <h1 className="heading-72 md:text-[104px] md:leading-[0.95] leading-[1.05] tracking-tight mb-3 font-semibold">
+                  <div className="flex items-center gap-3 mb-7 flex-wrap">
+                    <span className="nb-tag"><span className="text-[var(--red-700)]">●</span> CASPER · TESTNET LIVE</span>
+                    <span className="nb-tag nb-tag-ghost">VOL.01 // AGENT ECONOMY</span>
+                    <span className="nb-index hud-slashes">2026</span>
+                  </div>
+                  <h1 className="nb-display text-[64px] md:text-[112px] mb-1">
                     Agentic
                   </h1>
-                  <h1 className="heading-72 md:text-[104px] md:leading-[0.95] leading-[1.05] tracking-tight mb-10 font-light text-white/55">
+                  <h1 className="nb-thin nb-outline text-[64px] md:text-[112px] mb-6">
                     Infrastructure
                   </h1>
+                  <div className="flex items-center gap-4 mb-9 w-full max-w-xl">
+                    <div className="tech-line flex-1" />
+                    <span className="nb-index whitespace-nowrap">ESCROW · TRIBUNAL · ORACLE · THE TOWER</span>
+                  </div>
                   <div className="flex gap-4 flex-wrap">
                     <button className="btn-neon">Deploy Now</button>
                     <button className="btn-ghost">Talk to Sales</button>

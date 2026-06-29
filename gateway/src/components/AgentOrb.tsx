@@ -178,12 +178,12 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 
 			<motion.div 
 				ref={orbRef}
-				style={{ width: 120, height: 120 }} 
-				className="relative z-10 rounded-full border border-[#f13242]/20 overflow-hidden flex items-center justify-center bg-[#160406]"
+				style={{ width: 120, height: 120, background: "radial-gradient(circle at 36% 28%, #6a0f20 0%, #3a0813 42%, #1a0409 100%)" }}
+				className="relative z-10 rounded-full border border-[#f13242]/30 overflow-hidden flex items-center justify-center"
                 animate={{
                     boxShadow: state === "success"
-                        ? "inset 0 -12px 24px rgba(0,0,0,0.85), inset 0 0 30px rgba(136,21,31,0.5), 0 0 34px rgba(241,50,66,0.45), 0 0 0 2px rgba(241,50,66,0.5)"
-                        : "inset 0 -12px 24px rgba(0,0,0,0.88), inset 0 0 34px rgba(136,21,31,0.5), 0 0 22px rgba(241,50,66,0.22), 0 0 0 1px rgba(241,50,66,0.28)"
+                        ? "inset 0 -14px 22px rgba(0,0,0,0.55), inset 0 8px 18px rgba(255,120,140,0.18), 0 0 36px rgba(241,50,66,0.5), 0 0 0 2px rgba(241,50,66,0.55)"
+                        : "inset 0 -14px 22px rgba(0,0,0,0.6), inset 0 8px 18px rgba(255,120,140,0.14), 0 0 24px rgba(241,50,66,0.28), 0 0 0 1px rgba(241,50,66,0.35)"
                 }}
 			>
 				<div className="absolute top-[10%] left-[20%] w-[40%] h-[20%] bg-white/10 rounded-full blur-[2px] rotate-[-20deg] pointer-events-none z-20" />
