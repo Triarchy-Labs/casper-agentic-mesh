@@ -330,7 +330,7 @@ export default function Dashboard() {
                                             href={`https://testnet.cspr.live/transaction/${paymentTx}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-emerald-400 underline break-all hover:text-emerald-300"
+                                            className="text-[var(--red-900)] underline break-all hover:text-white"
                                         >
                                             {paymentTx.slice(0, 10)}…{paymentTx.slice(-8)} ↗
                                         </a>
@@ -347,7 +347,7 @@ export default function Dashboard() {
                             <CornerMarks />
                             <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
                                 <span>ON-CHAIN STATE · CASPER TESTNET</span>
-                                <span className={onchain ? "text-emerald-400" : "text-white/30"}>
+                                <span className={onchain ? "text-[var(--red-700)]" : "text-white/30"}>
                                     {onchain ? "● LIVE" : "○ …"}
                                 </span>
                             </div>
@@ -356,7 +356,7 @@ export default function Dashboard() {
                                     <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
                                     <div><span className="text-white/40 w-40 inline-block">AGENT REPUTATION:</span> {onchain.reputation ?? 0}</div>
                                     {onchain.peg && (
-                                        <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-emerald-400">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
+                                        <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-[var(--red-1000)]">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
                                     )}
                                     <div className="text-white/30 text-xs mt-2">synced {new Date(onchain.fetchedAt).toLocaleTimeString()} · source: ledger (no mock)</div>
                                 </div>
@@ -467,7 +467,7 @@ export default function Dashboard() {
 											<div className="flex items-center gap-2">
 												<span className="text-white/40">├── [Sub-Escrow B]</span>
 												<span className="text-white font-bold">agent_alpha_arbitrage</span>
-												<span className="text-green-500 text-[10px]">(Claiming: 420.5 USDC)</span>
+												<span className="text-[var(--red-700)] text-[10px]">(Claiming: 420.5 USDC)</span>
 											</div>
 											<div className="flex items-center gap-2">
 												<span className="text-white/40">└── [Sub-Escrow C]</span>

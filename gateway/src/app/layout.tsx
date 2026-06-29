@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
+import { CursorAura } from "@/components/CursorAura";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -39,7 +39,8 @@ export default function RootLayout({
 		>
 			<head />
 			<body className="flex flex-col min-h-screen">
-				<CustomCursor />
+				<div className="edge-aura" aria-hidden />
+				<CursorAura />
 				<SmoothScroller>
 					<div className="flex flex-col min-h-screen">
 						<div className="flex-1">{children}</div>

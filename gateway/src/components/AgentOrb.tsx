@@ -77,9 +77,9 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 	// Pure White Eye shapes without black UI masks
     // IMPORTANT: ALL borderRadius values MUST have 4 explicit values so framer-motion interpolates without snapping!
 	const leftEyeVariants = {
-		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" }, 
-		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
+		idle: { height: blink ? 2 : 17, width: 25, rotate: 0, borderRadius: "5px 5px 8px 8px", backgroundColor: "#ffe9ed" },
+		typing: { height: blink ? 2 : 17, width: 25, rotate: 0, borderRadius: "5px 5px 8px 8px", backgroundColor: "#ffe9ed" },
+		thinking: { height: blink ? 2 : 20, width: 25, rotate: 0, borderRadius: "5px 5px 8px 8px", backgroundColor: "#ffe9ed" },
 		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#fff" }, 
 		sneaky: { height: 27, width: 18, rotate: -5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" },
 		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
@@ -91,9 +91,9 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 	};
     
 	const rightEyeVariants = {
-		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
+		idle: { height: blink ? 2 : 17, width: 25, rotate: 0, borderRadius: "5px 5px 8px 8px", backgroundColor: "#ffe9ed" },
 		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
+		thinking: { height: blink ? 2 : 20, width: 25, rotate: 0, borderRadius: "5px 5px 8px 8px", backgroundColor: "#ffe9ed" },
 		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#fff" }, 
 		sneaky: { height: 36, width: 21, rotate: 5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" }, 
 		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
@@ -179,11 +179,11 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 			<motion.div 
 				ref={orbRef}
 				style={{ width: 120, height: 120 }} 
-				className="relative z-10 rounded-full shadow-[inset_0_-10px_20px_rgba(0,0,0,0.8),_0_0_15px_rgba(0,0,0,0.5)] border border-white/5 overflow-hidden flex items-center justify-center bg-[#0a0a0a]"
-                animate={{ 
-                    boxShadow: state === "success" 
-                        ? "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(241, 50, 66, 0.4), 0 0 0 2px rgba(241, 50, 66, 0.5)" 
-                        : "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)"
+				className="relative z-10 rounded-full border border-[#f13242]/20 overflow-hidden flex items-center justify-center bg-[#160406]"
+                animate={{
+                    boxShadow: state === "success"
+                        ? "inset 0 -12px 24px rgba(0,0,0,0.85), inset 0 0 30px rgba(136,21,31,0.5), 0 0 34px rgba(241,50,66,0.45), 0 0 0 2px rgba(241,50,66,0.5)"
+                        : "inset 0 -12px 24px rgba(0,0,0,0.88), inset 0 0 34px rgba(136,21,31,0.5), 0 0 22px rgba(241,50,66,0.22), 0 0 0 1px rgba(241,50,66,0.28)"
                 }}
 			>
 				<div className="absolute top-[10%] left-[20%] w-[40%] h-[20%] bg-white/10 rounded-full blur-[2px] rotate-[-20deg] pointer-events-none z-20" />

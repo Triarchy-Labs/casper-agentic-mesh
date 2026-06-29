@@ -8,11 +8,11 @@ function lineClass(line: string): string {
 	if (line.includes("🗡️") || line.includes("PROSECUTION")) return "text-[#f13242]";
 	if (line.includes("🛡️") || line.includes("DEFENSE")) return "text-sky-400";
 	if (line.includes("👨‍⚖️") || line.includes("RULING") || line.includes("CHIEF")) return "text-amber-300";
-	if (line.includes("✅") || line.includes("APPROVE") || line.includes("ALIVE") || line.includes("healthy")) return "text-emerald-400";
+	if (line.includes("✅") || line.includes("APPROVE") || line.includes("ALIVE") || line.includes("healthy")) return "text-white";
 	if (line.includes("❌") || line.includes("REJECT") || line.includes("🚨") || line.includes("STALE")) return "text-[#f13242]";
 	if (line.includes("🛑") || line.includes("DEGRADED") || line.includes("frozen")) return "text-[#f13242] font-semibold";
 	if (line.includes("⚠️") || line.includes("PARTIAL")) return "text-amber-300";
-	if (line.includes("🔗") || line.includes("https://")) return "text-emerald-400";
+	if (line.includes("🔗") || line.includes("https://")) return "text-[var(--red-900)] underline";
 	if (line.startsWith("⚖️") || line.includes("JUROR")) return "text-white/70";
 	return "text-white/50";
 }
@@ -80,7 +80,7 @@ export function MeshControl() {
 			<div className="col-span-12 lg:col-span-5 editorial-panel p-8 relative">
 				<CornerMarks />
 				<div className="flex items-center justify-between mb-2">
-					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80">🗼 The Tower · Overseer</h3>
+					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80"><span className="text-[var(--red-700)]">▚</span> The Tower · Overseer</h3>
 					<span className="text-[10px] tracking-widest uppercase text-white/30">read-only</span>
 				</div>
 				<p className="text-xs text-white/40 leading-relaxed mb-5">
@@ -96,8 +96,8 @@ export function MeshControl() {
 			<div className="col-span-12 lg:col-span-7 editorial-panel p-8 relative">
 				<CornerMarks />
 				<div className="flex items-center justify-between mb-2">
-					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80">⚖️ Agent Tribunal · Arena</h3>
-					<span className="text-[10px] tracking-widest uppercase text-emerald-400">dry-run · no funds moved</span>
+					<h3 className="text-sm tracking-[0.2em] uppercase text-white/80"><span className="text-[var(--red-700)]">▞</span> Agent Tribunal · Arena</h3>
+					<span className="text-[10px] tracking-widest uppercase text-white/50">dry-run · no funds moved</span>
 				</div>
 				<p className="text-xs text-white/40 leading-relaxed mb-5">
 					An adversarial court of real models — prosecutor, defender, a jury of

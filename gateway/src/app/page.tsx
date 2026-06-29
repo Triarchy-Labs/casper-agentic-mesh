@@ -74,37 +74,30 @@ export default function Page() {
             <Nav />
 
             {/* Hero Section */}
-            <section className="relative h-screen flex items-center justify-center px-8 md:px-16 overflow-hidden">
-              <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative min-h-[500px]">
-                
-                {/* Left Column: Heading and CTAs */}
-                <div className="md:col-span-5 flex flex-col items-start text-left z-20">
-                  <h1 className="heading-72 leading-[1.05] tracking-tight mb-8">
-                    Agentic <br/> Infrastructure
+            <section className="relative h-screen flex items-center px-8 md:px-24 overflow-hidden">
+              <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative min-h-[500px]">
+
+                {/* Left: Heading and CTAs (full-bleed, breathing) */}
+                <div className="md:col-span-8 md:col-start-1 flex flex-col items-start text-left z-20 pl-2 md:pl-12">
+                  <p className="label-14-mono text-[var(--red-700)] mb-6 tracking-[0.3em]">// TRIARCHY · CASPER AGENTIC MESH</p>
+                  <h1 className="heading-72 md:text-[104px] md:leading-[0.95] leading-[1.05] tracking-tight mb-3 font-semibold">
+                    Agentic
                   </h1>
-                  <div className="flex gap-[16px]">
-                    <button className="button-primary rounded-full px-8 py-3 bg-white text-black border border-white hover:bg-neutral-200 transition-colors">
-                      Deploy Now
-                    </button>
-                    <button className="button-secondary rounded-full px-8 py-3 border border-white/20 text-white bg-black/40 hover:bg-white/10 transition-colors backdrop-blur-md">
-                      Talk to Sales
-                    </button>
+                  <h1 className="heading-72 md:text-[104px] md:leading-[0.95] leading-[1.05] tracking-tight mb-10 font-light text-white/55">
+                    Infrastructure
+                  </h1>
+                  <div className="flex gap-4 flex-wrap">
+                    <button className="btn-neon">Deploy Now</button>
+                    <button className="btn-ghost">Talk to Sales</button>
                   </div>
                 </div>
 
-                {/* Center Column: Drifting Volumetric Triangle */}
-                <div className="md:col-span-4 flex items-center justify-center z-10">
-                  <div className="drifting-hero-container">
-                    <div className="volumetric-light-cone"></div>
-                    <div className="silhouetted-triangle"></div>
-                  </div>
-                </div>
-
-                {/* Right Column: Mono tags */}
-                <div className="md:col-span-3 flex flex-col items-start md:items-end justify-center text-left md:text-right label-14-mono text-white/50 space-y-3 z-20 uppercase tracking-[0.15em] font-medium">
-                  <p>FOR CODING AGENTS</p>
-                  <p>TO SHIP APPS AND AGENTS</p>
-                  <p>AUTOMATED BY AGENTS</p>
+                {/* Right: Mono manifesto tags */}
+                <div className="md:col-span-3 md:col-start-10 flex flex-col items-start md:items-end justify-center text-left md:text-right label-14-mono text-white/45 space-y-3 z-20 uppercase tracking-[0.18em] font-medium">
+                  <p className="text-white/70">For coding agents</p>
+                  <p>To ship apps and agents</p>
+                  <p>Automated by agents</p>
+                  <p className="text-[var(--red-700)] pt-4">Settled on Casper · live on-chain</p>
                 </div>
 
               </div>
@@ -124,7 +117,7 @@ export default function Page() {
             </section>
 
             {/* Synergy Dashboard Cinematic Chapters */}
-            <div ref={sectionsRef} className="w-full max-w-6xl mx-auto px-6 py-[96px] flex flex-col gap-[128px]">
+            <div ref={sectionsRef} className="w-full px-8 md:px-24 py-[96px] flex flex-col gap-[128px]">
               
               {/* TAB 1: ESCROW */}
               <div className="synergy-section min-h-[60vh] flex items-center justify-start sticky top-[20vh]">

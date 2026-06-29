@@ -429,3 +429,127 @@ body {
   transform: rotate(90deg);
 }
 
+
+/* ════════════════════════════════════════════════════════════════
+   PREMIUM OVERHAUL — carbon-fibre red, neon aura, frontier cursor
+   Racing DNA masked under serious web3 (Casper / Vercel-Geist).
+   ════════════════════════════════════════════════════════════════ */
+
+/* Woven carbon-fibre texture in deep racing red over near-black. */
+body {
+  background-color: #050304;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(241,50,66,0.045) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(-45deg, rgba(241,50,66,0.04) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.55) 0 3px, transparent 3px 6px),
+    radial-gradient(120% 90% at 18% 8%, rgba(136,21,31,0.30), transparent 55%),
+    radial-gradient(120% 90% at 85% 92%, rgba(111,16,27,0.26), transparent 52%),
+    #050304;
+  background-attachment: fixed;
+}
+
+/* Left-edge neon aura — the brand spine, replaces the hero triangle. */
+.edge-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 38vw;
+  max-width: 560px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(60% 50% at 0% 50%, rgba(241,50,66,0.30), transparent 70%),
+    linear-gradient(90deg, rgba(241,50,66,0.16) 0%, transparent 72%);
+  filter: blur(6px);
+  animation: edgeBreathe 7s ease-in-out infinite;
+}
+.edge-aura::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 100%;
+  background: linear-gradient(180deg, transparent, var(--red-700) 18%, var(--red-900) 50%, var(--red-700) 82%, transparent);
+  box-shadow: 0 0 22px 3px rgba(241,50,66,0.55), 0 0 60px 8px rgba(241,50,66,0.25);
+}
+@keyframes edgeBreathe {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+
+/* Neon button — soft pulsing red aura, not flat. */
+.btn-neon {
+  position: relative;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  padding: 12px 22px;
+  color: var(--red-1000);
+  background: linear-gradient(180deg, rgba(241,50,66,0.10), rgba(0,0,0,0.4));
+  border: 1px solid rgba(241,50,66,0.55);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.2,0.8,0.2,1);
+  box-shadow: 0 0 0 0 rgba(241,50,66,0.0), inset 0 0 12px rgba(241,50,66,0.08);
+  animation: neonIdle 3.4s ease-in-out infinite;
+}
+.btn-neon:hover {
+  color: #fff;
+  border-color: var(--red-900);
+  box-shadow: 0 0 18px 2px rgba(241,50,66,0.55), 0 0 48px 8px rgba(241,50,66,0.28), inset 0 0 18px rgba(241,50,66,0.2);
+  transform: translateY(-1px);
+}
+.btn-neon:disabled { opacity: 0.4; cursor: not-allowed; animation: none; }
+@keyframes neonIdle {
+  0%, 100% { box-shadow: 0 0 6px 0 rgba(241,50,66,0.18), inset 0 0 12px rgba(241,50,66,0.08); }
+  50% { box-shadow: 0 0 14px 1px rgba(241,50,66,0.34), inset 0 0 14px rgba(241,50,66,0.12); }
+}
+
+.btn-ghost {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 12px;
+  padding: 12px 22px;
+  color: var(--gray-1000);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--gray-alpha-300);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: var(--gray-alpha-500); }
+
+/* Frontier custom cursor — dot + lerping ring with screen blend. */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+  a, button, [role="button"], textarea, input { cursor: none; }
+}
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--red-900);
+  box-shadow: 0 0 10px 2px rgba(241,50,66,0.8);
+}
+.cursor-ring {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(241,50,66,0.6);
+  box-shadow: 0 0 14px rgba(241,50,66,0.4), inset 0 0 10px rgba(241,50,66,0.15);
+  transition: width 160ms ease, height 160ms ease, border-color 160ms ease;
+}
+.cursor-ring.is-hot { width: 52px; height: 52px; border-color: var(--red-900); }
+
+/* Smooth scroll (Lenis) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
