@@ -8,7 +8,7 @@ pub async fn run_sniper_loop() {
     let mut target_in_flight = false;
     let mut tick_count = 0;
 
-    let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://rpc.testnet.casperlabs.io/rpc".to_string());
+    let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://node.testnet.casper.network/rpc".to_string());
     println!("[Sniper Agent] Initialized and connected to Casper RPC: {}", rpc_str);
 
     loop {

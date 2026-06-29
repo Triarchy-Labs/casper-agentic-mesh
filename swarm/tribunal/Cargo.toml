@@ -1,0 +1,11 @@
+[package]
+name = "tribunal"
+version = "0.1.0"
+edition = "2021"
+description = "Triarchy Tribunal: adversarial multi-agent court that rules on bounties and moves real CSPR on-chain"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }

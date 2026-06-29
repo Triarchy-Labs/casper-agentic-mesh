@@ -689,12 +689,18 @@ async fn decision_cycle(
         tracing::info!("🚀 EXECUTE [{}]: {} ${:.2} | score={:.2} conf={:.1}% | regime={:?}",
             data.symbol, verdict.decision, final_size, verdict.score, verdict.confidence, regime);
 
-        // Casper on-chain deploy stub
-        if let Some(ref rpc) = signed_provider {
-            tracing::info!("⛓️  CASPER TX [{}]: put_deploy to Escrow via {}", data.symbol, rpc);
-            tx_hashes.lock().unwrap().push("fake_casper_hash_0x123".into());
+        // Casper on-chain write: record the agent's decision on the deployed escrow
+        // contract via a real, signed TransactionV1 (never a fabricated hash).
+        if signed_provider.is_some() {
+            match casper_onchain_record(&data.symbol) {
+                Ok(tx) => {
+                    tracing::info!("⛓️  CASPER TX [{}]: {}", data.symbol, tx);
+                    tx_hashes.lock().unwrap().push(tx);
+                }
+                Err(e) => tracing::warn!("⛓️  CASPER TX [{}] rejected: {}", data.symbol, e),
+            }
         } else {
-            tracing::info!("⛓️  CASPER DRY-RUN [{}]: Escrow interaction bypassed.", data.symbol);
+            tracing::info!("⛓️  CASPER DRY-RUN [{}]: set CASPER_PRIVATE_KEY for live on-chain writes.", data.symbol);
         }
 
         store_result(state, data, &verdict, &debate, true);
@@ -713,6 +719,53 @@ async fn decision_cycle(
         let s = pe.stats();
         tracing::info!("  📊 Paper: {} trades | WR={:.0}% | PnL=${:.2} | DD=${:.2}", s.total_trades, s.win_rate*100.0, s.total_pnl, s.max_drawdown);
     }
+}
+
+/// Submit a real, signed on-chain transaction to the deployed Casper escrow
+/// contract recording this agent's decision. Shells out to the project signer
+/// (`casper-tx-signer`), which builds + signs + broadcasts a TransactionV1 and
+/// prints the real 64-char tx hash. Returns an error instead of a fake hash on
+/// any failure.
+fn casper_onchain_record(symbol: &str) -> Result<String, String> {
+    let env_or = |k: &str, d: &str| std::env::var(k).unwrap_or_else(|_| d.to_string());
+    let node = env_or("CASPER_RPC_URL", "https://node.testnet.casper.network/rpc");
+    let chain = env_or("CASPER_CHAIN", "casper-test");
+    let secret_key = env_or("CASPER_SECRET_KEY", "swarm/casper-client/key.pem");
+    let signer = env_or("CASPER_SIGNER_BIN", "./swarm/casper-client/go-signer/casper-tx-signer");
+    let package = env_or(
+        "CASPER_CONTRACT_PACKAGE",
+        "a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d",
+    );
+    let pubkey = env_or(
+        "CASPER_AGENT_PUBKEY",
+        "013d8de764919e6dfb002636071ec1729abb0f2be2c3589da79e2278131ce52c35",
+    );
+    let metadata = format!("decision-{}", symbol).replace([',', ':'], "-");
+    let args = format!("public_key:string:{pubkey},metadata_uri:string:{metadata}");
+
+    let output = std::process::Command::new(&signer)
+        .args([
+            "--mode", "call-entrypoint",
+            "--node", &node,
+            "--chain", &chain,
+            "--secret-key", &secret_key,
+            "--algo", "ed25519",
+            "--payment", "5000000000",
+            "--contract-hash", &package,
+            "--entrypoint", "register_agent",
+            "--args", &args,
+        ])
+        .output()
+        .map_err(|e| format!("failed to launch signer '{signer}': {e}"))?;
+
+    if !output.status.success() {
+        return Err(String::from_utf8_lossy(&output.stderr).trim().to_string());
+    }
+    let tx = String::from_utf8_lossy(&output.stdout).trim().to_string();
+    if tx.len() != 64 || !tx.chars().all(|c| c.is_ascii_hexdigit()) {
+        return Err(format!("unexpected tx hash: '{tx}'"));
+    }
+    Ok(tx)
 }
 
 fn store_result(state: &SwarmState, data: &SymbolData, v: &JudgeVerdict, d: &DebateResult, agreed: bool) {

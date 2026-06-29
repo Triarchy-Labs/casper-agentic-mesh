@@ -1,133 +1,183 @@
 ◢◤￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣◥◣
 
-            the omni-mesh manifesto
+            the triarchy agentic mesh
          casper agentic buildathon 2026
 
 ◥◣＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿◢◤
 
-"for coding agents. to ship apps and agents. automated by agents."
+An autonomous machine-to-machine (M2M) bounty economy on the **Casper Network**:
+AI agents register on-chain, escrow CSPR for tasks, and release funds to each
+other through a trustless smart contract — with an x402 payment layer and a
+Next.js gateway that verifies every payment against the live ledger.
 
 ────────────────────────────────────────────────────────────────
 
-// 𝟎𝟏 // the motivation
+## ✅ Live on Casper Testnet — verifiable, not simulated
 
-most projects in the web3 ai space build a single, isolated agent that holds a private key, blindly trusts inputs, and inevitably bleeds liquidity. they are flat, one-dimensional scripts.
+The escrow contract is deployed and the **full bounty lifecycle has executed
+on-chain**. Every hash below opens on the block explorer. Full ledger,
+reproduction steps and engineering notes: **[DEPLOYMENTS.md](DEPLOYMENTS.md)**.
 
-we refused to build a flat script. we built the **immune system** for the entire ai economy. 
+| Action | Result | Explorer |
+|--------|--------|----------|
+| Deploy escrow contract | ✅ `error: None` | [`df851585…e9815`](https://testnet.cspr.live/transaction/df8515855c98612e793ec30857ba9bd5cc27354f188e6e35608722df8ffe9815) |
+| `init` (dicts + escrow purse) | ✅ `error: None` | [`ac7602d1…f162`](https://testnet.cspr.live/transaction/ac7602d1f2f5518f4b45d1828588682a21562f40a8b6baafee44928efc8ef162) |
+| `register_agent` | ✅ `error: None` | [`27a70094…a150`](https://testnet.cspr.live/transaction/27a7009489008d32d6fe463540ec5322423fcd4f1c0413f9eb67f27342e0a150) |
+| `create_bounty` — **lock 10 CSPR in escrow** | ✅ `error: None` | [`4ad2744e…492a`](https://testnet.cspr.live/transaction/4ad2744e9beeb6b6ae161948a03cc97f34dd58744c87e05e64836227d1d4492a) |
+| `release_bounty` — **pay 10 CSPR from escrow** | ✅ `error: None` | [`1ea27a03…1185`](https://testnet.cspr.live/transaction/1ea27a03a072b0db1f8b5f4cf176364eec9ef50cb396bafb9f56829c21204f14) |
 
-the triarchy agentic mesh is an uncompromising, absolute machine-to-machine (m2m) ecosystem on the casper network. we have engineered a multi-dimensional biome where ai agents hire, evaluate, and pay each other completely autonomously, governed by zero-trust execution and global liquidity flow.
-
-────────────────────────────────────────────────────────────────
-
-// 𝟎𝟐 // the zero-mock & modular plug-and-play protocol
-
-this architecture strictly enforces an **anti-monolith, zero-mock policy**.
-
-◆ **production code first:** banned all `println!("simulated call")` stubs. all interactions with the casper mcp server and go x402 facilitator are built as genuine, production-ready `reqwest` http clients.
-◆ **plug-and-play modularity:** agents interact across clean, headless boundaries. if the external x402 sidecar drops, the agent fails gracefully—it does not hallucinate success. the `x402liquidator` (cognitive arbitrage) has been fully decoupled into its own native odra wasm module, separating financial execution from the base `escrowcontract`.
-◆ **verifiable truth:** code executes exactly as it would on mainnet.
-
-────────────────────────────────────────────────────────────────
-
-// 𝟎𝟑 // the 4-tab synergy dashboard (the gateway)
-
-to prove the immense depth of this biome, we built an immersive frontend gateway. evolving beyond conventional ui, we instituted the **cinematic brutalism** design standard: pure black `.editorial-panel` surfaces, geist `monospace` typography, 12-column css grid layouts, and buttery-smooth `gsap scrolltrigger` + `lenis` integrations to present the four chapters of our architecture:
-
-◆ **tab 1: autonomous escrow (vector alpha)**
-  ↳ the zero-trust bedrock. agents deposit casper tokens (cep-18) into a trustless smart contract to fund tasks.
-  ↳ *powered by the **odra framework** for wasm compilation and **casper-eip-712** for off-chain agent signatures.*
-  ↳ **live telemetry:** real-time streaming micropayment engine (CSPR/sec) and multi-signature Jury Swarm dispute vote simulator.
-
-◆ **tab 2: pre-trade risk oracle (vector beta)**
-  ↳ the sentinel swarm. it evaluates the risk, complexity, and sentiment of bounties before they enter the escrow.
-  ↳ *powered by the **casper mcp server** for live on-chain reconnaissance.*
-  ↳ **live telemetry:** sentinel ZK-proof verification sandbox console and P2P threat gossip logs for quarantined WASM binaries.
-
-◆ **tab 3: cognitive arbitrage (vector gamma)**
-  ↳ the predator agents. they autonomously hunt for mispriced tasks within the network and execute them for profit.
-  ↳ *powered by the **x402 facilitator** (go sidecar), enforcing m2m http 402 micropayments to unlock payloads.*
-  ↳ **live telemetry:** interactive gas futures hedging market simulator and hierarchical delegation tree (orchestrator to sub-agents).
-
-◆ **tab 4: absolute synergy (the omni-mesh)**
-  ↳ the culmination. three distinct predators converging into a single, unstoppable biome built entirely on casper network primitives.
-  ↳ **live telemetry:** self-healing P2P load balancer latency matrix grid and L402-Casper HTTP 402 Payment Required client-side gateway challenge console.
-
-────────────────────────────────────────────────────────────────
-
-// 𝟎𝟒 // technical stack & hackathon integration
-
-we have aggressively mapped every tool provided by the **casper ai toolkit** into the core of our infrastructure:
-
-| toolkit component | biome integration | purpose |
-|-------------------|-------------------|---------|
-| **odra framework** | vector alpha | secure, efficient rust smart contracts for the escrow logic. |
-| **casper mcp** | vector beta | provides on-chain context to the llm oracle without writing custom rpc code. |
-| **x402 facilitator** | vector gamma | acts as the m2m toll-booth, forcing arbitrage agents to spend tokens for access. |
-| **casper-eip-712** | vector alpha | enables gasless state progression via off-chain agent signatures. |
-| **casper wallet** | next.js gateway | enterprise-grade wallet connection (`window.casperwallet`) for the 4-tab synergy dashboard. zero mocks. |
-
-────────────────────────────────────────────────────────────────
-
-// 𝟎𝟓 // getting started
-
-### 1. the headless demo script (end-to-end simulation)
-to experience the entire triarchy synergy executing the odra contracts, x402 sidecar, risk oracle, and sniper in a coordinated headless environment:
+**Contract package:** [`a7e6a383…4f6d`](https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d)
 
 ```bash
-chmod +x run_demo.sh
-./run_demo.sh
+./run_demo.sh   # performs a real on-chain register_agent and prints live tx links
 ```
-
-### 2. the synergy dashboard (next.js)
-experience the 4-tab omniscient view of the agentic mesh. designed with absolute editorial depth, pure black aesthetic, and casper neon accents.
-
-```bash
-cd gateway
-npm install
-npm run dev
-```
-
-### 3. odra smart contracts
-```bash
-cd contracts/casper_escrow
-cargo check
-```
-
-### 4. start the individual agent swarm
-```bash
-cd swarm/x402-sniper
-cargo run --release
-```
-
 
 ────────────────────────────────────────────────────────────────
 
-// 𝟎𝟔 // the scale expansion roadmap
+## Scorecard (self-assessed against the buildathon criteria)
 
-to transition this prototype from a hackathon entry into a production-grade machine-to-machine (m2m) biome, we have defined a scale expansion roadmap leveraging unique casper network primitives:
+| Criterion | Where it's proven |
+|-----------|-------------------|
+| Working Smart Contracts | escrow + oracle deployed; full state machine + read-back ([DEPLOYMENTS.md](DEPLOYMENTS.md)) |
+| Technical Execution | green workspace tests, CI, contracts build, gateway typechecks |
+| Use of AI / Agentic | bounty-judge + multi-model Tribunal + Tower overseer, all real, on-chain settlement |
+| Real-World / RWA | live RWA oracle (real CSPR/USD on-chain) + RWA-pegged pricing |
+| UX & Design | cinematic-brutalism gateway with live on-chain panel + click-triggered Mesh Control |
+| Innovation | adversarial agent court + Antifragile Mesh (Proof-of-Liveness) — primitives the brief never named |
+| Long-Term Launch | CI, LICENSE, [LAUNCH.md](LAUNCH.md), full [VISION.md](VISION.md) roadmap |
 
-◆ **vector alpha: autonomous escrow**
-  ↳ *stake-weighted slashable collateral:* executing agents must lock cep-18 tokens in the escrow contract to bid on high-value tasks, allowing automated slashing if boundaries are breached.
-  ↳ *decentralized jury swarm:* multi-signature based dispute resolution where randomized, reputated mesh nodes vote on cargo execution logs to resolve stuck escrows.
-  ↳ *streaming micropayments:* continuous token stream mechanics (similar to sablier/superfluid) paying agents per second of cpu execution or per byte processed.
+Beyond the brief: the buildathon's four examples covered RWA oracles and DAO
+governance; we also shipped two **external** primitives — an adversarial **Tribunal**
+and the **Antifragile Mesh** — plus **The Tower** overseer that turns the swarm into
+one organism. Full vector map: [VISION.md](VISION.md).
 
-◆ **vector beta: pre-trade risk oracle**
-  ↳ *zk-proofs of execution safety:* oracle sentinels generate zero-knowledge proofs (zkp) confirming sandboxed cargo simulations returned safe exit codes before the escrow accepts deposits.
-  ↳ *sentinel threat gossip:* gossip-based p2p logs sharing signatures of quarantined/malicious wasm binaries across all mesh gateways.
-  ↳ *shadow state simulation:* sentinel node sandboxes simulating deploys against live-state forks to verify balance modifications before transactions are signed.
+## What is actually built (and what is roadmap)
 
-◆ **vector gamma: cognitive arbitrage**
-  ↳ *flash-loan funded Mev snipers:* sniper agents borrowing temporary liquidity via flash escrows to exploit price or task discrepancies on-chain within a single block.
-  ↳ *agent guilds & sub-escrows:* orchestrator snipers splitting complex tasks into modular pieces, hiring specialized P2P sub-agents, and aggregating verified outputs.
-  ↳ *gas hedging futures:* tokenized compute-time gas vouchers allowing agents to pre-purchase execution slots when network demand is low.
+We separate shipped reality from vision on purpose — judges should be able to
+trust every claim.
 
-◆ **vector delta: absolute synergy**
-  ↳ *neural network load balancing:* self-healing P2P gateways monitoring node latency and dynamically spinning up agent instances to balance network load.
-  ↳ *soulbound credentials (cep-78 nfts):* non-forgeable credentials for mesh agents tracking execution success rates, balance sheets, and audit reports on-chain.
-  ↳ *universal gateway spec (l402-casper):* defining an rfc-level protocol standard for how langgraph, elizaos, and other agent frameworks connect and transact over casper.
+### Shipped & on-chain
+- **Escrow smart contract** — native `casper-contract` (`#![no_std]`), with
+  `init` / `register_agent` / `create_bounty` / `release_bounty` / `refund_bounty`.
+  Source: [`contracts/casper-mesh-contract/src/lib.rs`](contracts/casper-mesh-contract/src/lib.rs).
+- **Session deposit proxy** — the canonical Casper escrow-funding pattern (a
+  stored contract cannot withdraw from a caller's main purse), at
+  [`contracts/deposit-proxy/src/lib.rs`](contracts/deposit-proxy/src/lib.rs).
+- **Signer / RPC client** — a Go-backed `TransactionV1` signer
+  ([`swarm/casper-client/go-signer`](swarm/casper-client/go-signer)) and a Rust
+  JSON-RPC client ([`swarm/casper-client`](swarm/casper-client/src/main.rs)):
+  deploy-wasm, call-entrypoint, session-wasm, balance/dictionary queries.
+- **Gateway** (Next.js) — [`gateway`](gateway): 4-tab dashboard, Casper Wallet
+  connection, and **server-side payment verification with no bypass**
+  ([`gateway/src/lib/casper.ts`](gateway/src/lib/casper.ts)): a payment is valid
+  only if its transaction is found on the ledger and executed successfully.
+  Browser payments are real transfers signed by Casper Wallet via `casper-js-sdk`
+  ([`gateway/src/lib/pay.ts`](gateway/src/lib/pay.ts)).
+- **Swarm agents** — `x402-sniper` and `swarm-engine` submit **real signed
+  transactions** through the signer (no fabricated hashes); `x402-liquidator`
+  derives its health factor from **live on-chain balances** via RPC.
+- **Bounty Judge agent** — the core agentic loop
+  ([`swarm/bounty-judge`](swarm/bounty-judge/src/main.rs)): it asks an LLM (via
+  OpenRouter) to APPROVE/REJECT a submitted proof, and **on approval autonomously
+  submits a real `release_bounty` transaction** that pays the hunter. The verdict
+  is a real model call and the payout is a real signed tx — with no key or a
+  failed call it aborts, never inventing a verdict or a hash.
+
+  ```bash
+  OPENROUTER_API_KEY=sk-... cargo run -p bounty-judge -- \
+    --task-id bounty-alpha-004 \
+    --description "Optimize the AST hypergraph for the Odra escrow modules." \
+    --proof https://github.com/Triarchy-Labs/casper-agentic-mesh/pull/1
+  ```
+- **RWA Oracle contract + agent** — on-chain data feed, agent identity,
+  reputation and an event log ([`contracts/oracle-contract`](contracts/oracle-contract/src/lib.rs));
+  the [`rwa-oracle`](swarm/rwa-oracle/src/main.rs) agent posts a **real CSPR/USD
+  price** on-chain. Drives RWA-pegged bounty pricing in the UI.
+- **🔥 Triarchy Tribunal** — an adversarial court of real models (prosecutor,
+  defender, a jury of diverse LLMs, a chief judge) that rules on a bounty and
+  moves CSPR on-chain (`release`/`refund`), anchoring each verdict on the oracle
+  ([`swarm/tribunal`](swarm/tribunal/src/main.rs)). Fault-tolerant: partial bench →
+  "indicative, not fully precise"; all agents down → "functions frozen, no funds
+  moved"; `--dry-run` deliberates without spending.
+- **🗼 The Tower** — an overseer meta-agent that reads the whole on-chain world and
+  dispatches sub-agents ([`swarm/tower`](swarm/tower/src/main.rs)). Read-only,
+  click-triggered, never an autonomous background loop.
+- **🧬 Antifragile Mesh (Proof-of-Liveness)** — agents post an on-chain heartbeat;
+  if one goes dark the Tower nominates a reputation-ranked successor and the
+  Tribunal ratifies — open escrows are rescued, never frozen. Original primitive,
+  live on-chain.
+- **Mesh Control UI** — the dashboard surfaces all of the above as click-triggered
+  panels in the Vercel-Geist / Casper aesthetic ([`gateway/src/components/MeshControl.tsx`](gateway/src/components/MeshControl.tsx)),
+  backed by `/api/tower`, `/api/tribunal` (dry-run) and `/api/onchain` (live reads).
+
+### Roadmap (clearly not yet on-chain)
+Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution
+safety, flash-loan-funded snipers, soulbound (CEP-78) reputation, and an
+L402-Casper gateway spec. See the bottom of this file. The `swarm-engine`
+trading/decision core is ported intelligence and uses market-data feeds (live
+DexScreener, or `MOCK_DATA=1` for offline runs) — its **Casper writes are real**.
 
 ────────────────────────────────────────────────────────────────
 
-*built with absolute intent for the casper agentic buildathon 2026. zero stubs. zero legacy debt. maximum vector depth.*
+## Casper engineering notes (the hard parts, done right)
+
+- **Bulk-memory:** the Casper VM rejects the bulk-memory proposal, and modern
+  Rust emits `memory.copy` regardless of `-C target-feature=-bulk-memory`. We
+  lower it to MVP loops with `wasm-opt --llvm-memory-copy-fill-lowering`
+  (binaryen ≥ 124). Replacing those opcodes with `unreachable` — as the old
+  `patch_wasm.py` did — traps at runtime the moment a string is copied; that
+  approach was removed.
+- **Pricing mode:** transactions are built as `TransactionV1` with `Limited`
+  pricing via the Go SDK, which matches current testnet (API 2.0.0) and avoids
+  the "invalid pricing mode" failures seen with mismatched CLI versions.
+- **Main-purse rule:** escrow funding must run as session code (see deposit
+  proxy) because a stored contract cannot spend a caller's main purse.
+
+────────────────────────────────────────────────────────────────
+
+## Quick start
+
+```bash
+# 1. Contract → wasm → Casper-ready (lower bulk-memory)
+cd contracts/casper-mesh-contract
+cargo build --release --target wasm32-unknown-unknown
+wasm-opt target/wasm32-unknown-unknown/release/casper_agentic_mesh_contract.wasm \
+  --llvm-memory-copy-fill-lowering --signext-lowering -O2 \
+  --disable-bulk-memory --disable-sign-ext -o escrow_casper_ready.wasm
+
+# 2. Signer
+cd ../../swarm/casper-client/go-signer && go build -o casper-tx-signer main.go
+
+# 3. Live demo (real on-chain tx)
+cd ../../.. && ./run_demo.sh
+
+# 4. Gateway
+cd gateway && npm install && npm run dev
+```
+
+Full deploy + lifecycle reproduction: **[DEPLOYMENTS.md](DEPLOYMENTS.md)**.
+
+### Deploying the gateway (Vercel)
+Import this repo and set **Root Directory = `gateway`**. `/api/onchain` (live ledger
+reads) works on serverless as-is. The `/api/tower` and `/api/tribunal` routes spawn
+the compiled Rust agents, so they need those binaries present — run the gateway on a
+host/VM (or a small backend service) for the live Tower/Tribunal buttons; on pure
+serverless they degrade gracefully ("functions frozen — we are working on it").
+
+────────────────────────────────────────────────────────────────
+
+## Scale expansion roadmap
+
+◆ **Vector Alpha — Autonomous escrow:** stake-weighted slashable collateral;
+  decentralized jury swarm for dispute resolution; streaming micropayments.
+◆ **Vector Beta — Pre-trade risk oracle:** ZK proofs of execution safety;
+  sentinel threat gossip; shadow-state simulation against live forks.
+◆ **Vector Gamma — Cognitive arbitrage:** flash-escrow-funded snipers; agent
+  guilds & sub-escrows; tokenized gas-hedging futures.
+◆ **Vector Delta — Absolute synergy:** self-healing P2P load balancing;
+  soulbound CEP-78 reputation credentials; an L402-Casper gateway RFC.
+
+*Built for the Casper Agentic Buildathon 2026. On-chain claims are verifiable;
+roadmap items are labeled as such.*
 
 // triarchy labs

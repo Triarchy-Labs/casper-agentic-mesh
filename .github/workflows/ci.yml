@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  rust:
+    name: Rust mesh (build + test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Build workspace
+        run: cargo build --workspace --locked
+      - name: Test mesh crates
+        # ouroboros-brain is ported intelligence whose parity tests need
+        # uncommitted trading fixtures; the mesh crates are fully tested.
+        run: cargo test --workspace --exclude ouroboros-brain
+
+  gateway:
+    name: Gateway (typecheck + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gateway
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+
+  contracts:
+    name: Contracts (wasm build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Build escrow + oracle wasm
+        run: |
+          (cd contracts/casper-mesh-contract && cargo build --release --target wasm32-unknown-unknown)
+          (cd contracts/oracle-contract && cargo build --release --target wasm32-unknown-unknown)

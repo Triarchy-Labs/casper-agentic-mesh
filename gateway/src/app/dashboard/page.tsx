@@ -7,6 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Nav } from "@/components/Nav";
 import { AgentOrb, AgentState } from "@/components/AgentOrb";
 import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
+import { payForTask } from "@/lib/pay";
+import { MeshControl } from "@/components/MeshControl";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -60,6 +62,8 @@ export default function Dashboard() {
 	const [sysLoad, setSysLoad] = useState("0.00");
     const [inputValue, setInputValue] = useState("");
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
+    const [paymentTx, setPaymentTx] = useState<string | null>(null);
+    const [onchain, setOnchain] = useState<{asset: string; reading: string | null; reputation: number | null; priceUsd: number | null; peg: {usd: number; cspr: number} | null; fetchedAt: string} | null>(null);
     const [balance] = useState(140);
 
 	const [gasPrice, setGasPrice] = useState(0.002840);
@@ -143,28 +147,44 @@ export default function Dashboard() {
 		return () => clearInterval(interval);
 	}, []);
 
+    // Live on-chain snapshot (oracle reading + agent reputation) — polled from the ledger.
+    useEffect(() => {
+        let alive = true;
+        const pull = async () => {
+            try {
+                const r = await fetch("/api/onchain");
+                const d = await r.json();
+                if (alive && !d.error) setOnchain(d);
+            } catch { /* keep last snapshot */ }
+        };
+        pull();
+        const id = setInterval(pull, 30000);
+        return () => { alive = false; clearInterval(id); };
+    }, []);
+
     const handleExecute = async () => {
         if (!inputValue.trim()) return;
         setAgentState("working");
         setProgress(0);
         setLastResult(null);
+        setPaymentTx(null);
 
         try {
             const accessDetails = await requestAccess();
             if (accessDetails.error) throw new Error(accessDetails.error);
             const userPubKey = accessDetails.address || "GXYZ...";
 
-            // MOCK: Fallback unique signature identifier when window.casperWallet signature is simulated or bypassed
-            let txHashHeader = "mock_csprclick_" + userPubKey;
-            if (typeof window !== "undefined" && window.casperWallet) {
-                try {
-                    const message = `SIGN_INTENT: ${inputValue}`;
-                    const signature = await window.casperWallet.signMessage(message, userPubKey);
-                    txHashHeader = typeof signature === 'string' ? signature : JSON.stringify(signature);
-                } catch {
-                    throw new Error("USER_SIGNATURE_REQUIRED");
-                }
+            // Real on-chain payment only — no mock/bypass.
+            // The L402 payment proof must be a real Casper transaction hash whose
+            // execution succeeded on the ledger (verified server-side in casper.ts).
+            if (typeof window === "undefined" || !window.casperWallet) {
+                throw new Error("CASPER_WALLET_REQUIRED");
             }
+            const txHashHeader = await payForTask(inputValue, userPubKey);
+            if (!/^[0-9a-fA-F]{64}$/.test(txHashHeader)) {
+                throw new Error("PAYMENT_NOT_CONFIRMED");
+            }
+            setPaymentTx(txHashHeader);
 
             const res = await fetch("/api/hire", {
                 method: "POST",
@@ -270,7 +290,15 @@ export default function Dashboard() {
             {/* Editorial Grid Section (Scrolls over Hero) */}
             <section ref={gridRef} className="relative z-10 bg-black min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
                 <div className="max-w-7xl mx-auto editorial-grid">
-                    
+
+                    {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
+                    <div className="col-span-12 mb-4">
+                        <div className="text-xs tracking-[0.3em] text-white/40 uppercase mb-6 pb-3 border-b border-white/10">
+                            MESH_CONTROL · OVERSEER + ADVERSARIAL COURT
+                        </div>
+                    </div>
+                    <MeshControl />
+
                     {/* Execution Terminal (8 cols) */}
                     <div className="col-span-12 md:col-span-8 editorial-panel p-8 min-h-[400px] flex flex-col grid-item relative">
                         <CornerMarks />
@@ -295,11 +323,47 @@ export default function Dashboard() {
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 border border-white/20 p-6 bg-white/5">
                                 <div className="text-xs text-white/40 mb-4">API_RESPONSE</div>
                                 <div className="mb-2"><span className="text-white/40 w-24 inline-block">STATUS:</span> {lastResult.status?.toUpperCase()}</div>
+                                {paymentTx && (
+                                    <div className="mb-2">
+                                        <span className="text-white/40 w-24 inline-block">PAYMENT:</span>
+                                        <a
+                                            href={`https://testnet.cspr.live/transaction/${paymentTx}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-emerald-400 underline break-all hover:text-emerald-300"
+                                        >
+                                            {paymentTx.slice(0, 10)}…{paymentTx.slice(-8)} ↗
+                                        </a>
+                                    </div>
+                                )}
                                 {lastResult.executor && <div className="mb-2"><span className="text-white/40 w-24 inline-block">EXECUTOR:</span> {lastResult.executor}</div>}
                                 {lastResult.error && <div><span className="text-white/40 w-24 inline-block">ERROR:</span> {lastResult.error}</div>}
                                 {lastResult.result && <div className="mt-4 text-xs leading-relaxed text-white/60">{lastResult.result}</div>}
                             </motion.div>
                         )}
+
+                        {/* LIVE ON-CHAIN STATE — read straight from the Casper ledger */}
+                        <div className="editorial-panel p-6 mt-8 relative">
+                            <CornerMarks />
+                            <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
+                                <span>ON-CHAIN STATE · CASPER TESTNET</span>
+                                <span className={onchain ? "text-emerald-400" : "text-white/30"}>
+                                    {onchain ? "● LIVE" : "○ …"}
+                                </span>
+                            </div>
+                            {onchain ? (
+                                <div className="font-mono text-sm space-y-2">
+                                    <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
+                                    <div><span className="text-white/40 w-40 inline-block">AGENT REPUTATION:</span> {onchain.reputation ?? 0}</div>
+                                    {onchain.peg && (
+                                        <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-emerald-400">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
+                                    )}
+                                    <div className="text-white/30 text-xs mt-2">synced {new Date(onchain.fetchedAt).toLocaleTimeString()} · source: ledger (no mock)</div>
+                                </div>
+                            ) : (
+                                <div className="text-white/30 text-sm">querying Casper node…</div>
+                            )}
+                        </div>
                     </div>
 
                     {/* Telemetry & Nodes (4 cols) */}

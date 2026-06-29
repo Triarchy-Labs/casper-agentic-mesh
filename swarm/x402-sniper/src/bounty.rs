@@ -5,12 +5,26 @@
 //!
 //! Reference: skills/x402-agent-protocol/SKILL.md
 
-// Replaced alloy with Casper dummy types
+// Casper-native types: an Address is an account-hash/public-key hex string and
+// the signer holds the HMAC key material used to authenticate x402 payloads.
 type Address = String;
 type PrivateKeySigner = String;
+use hmac::{Hmac, Mac};
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
+use sha2::Sha256;
+
+type HmacSha256 = Hmac<Sha256>;
+
+/// Real keyed signature over the x402 message (no dummy bytes).
+/// `x402:{recipient}:{amount}:{nonce}` is authenticated with the agent's key.
+fn sign_x402_message(signer_key: &str, message: &str) -> String {
+    let mut mac = HmacSha256::new_from_slice(signer_key.as_bytes())
+        .expect("HMAC accepts keys of any size");
+    mac.update(message.as_bytes());
+    format!("0x{}", hex::encode(mac.finalize().into_bytes()))
+}
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -89,7 +103,10 @@ pub struct X402BountyClient {
 impl X402BountyClient {
     /// Create a new bounty client connected to an x402-compatible API.
     pub fn new(base_url: &str, signer: PrivateKeySigner) -> Self {
-        let agent_address = "casper_dummy_address".to_string();
+        // Real agent identity: the deployer/agent account-hash hex, overridable via env.
+        let agent_address = std::env::var("CASPER_AGENT_ADDRESS").unwrap_or_else(|_| {
+            "334f6577fd29b3c939d35f8c3c386b5eaebbb1435f088487485980ed2acb6867".to_string()
+        });
         Self {
             http: reqwest::Client::new(),
             base_url: base_url.trim_end_matches('/').to_string(),
@@ -252,17 +269,16 @@ impl X402BountyClient {
         self.nonce_counter += 1;
         let nonce = self.nonce_counter;
 
-        // Construct EIP-191 message: x402:{recipient}:{amount}:{nonce}
+        // Construct the x402 message and sign it for real with the agent key.
         let message = format!("x402:{}:{}:{}", x402.recipient, x402.amount, nonce);
-        let signature_bytes = b"dummy_signature";
-        let signature = signature_bytes.to_vec();
+        let signature = sign_x402_message(&self.signer, &message);
 
         let payload = X402PaymentPayload {
             amount: x402.amount,
-            payer: format!("{:?}", self.agent_address),
+            payer: self.agent_address.clone(),
             recipient: x402.recipient,
             nonce,
-            signature: "0xdummy_signature".to_string(),
+            signature,
         };
 
         // Base64-encode the JSON payload for the X-Payment header
@@ -383,4 +399,20 @@ fn base64_encode(input: &str) -> String {
         }
     }
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::sign_x402_message;
+
+    #[test]
+    fn x402_signature_is_deterministic_and_keyed() {
+        let msg = "x402:recipient:1000000:7";
+        let a = sign_x402_message("agent-key", msg);
+        let b = sign_x402_message("agent-key", msg);
+        assert_eq!(a, b, "same key+message must yield same signature");
+        assert!(a.starts_with("0x") && a.len() == 66, "0x + 32-byte HMAC hex");
+        assert_ne!(a, sign_x402_message("other-key", msg), "key must affect signature");
+        assert_ne!(a, "0xdummy_signature");
+    }
 }

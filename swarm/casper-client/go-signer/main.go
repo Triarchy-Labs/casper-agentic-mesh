@@ -121,6 +121,89 @@ func main() {
 			os.Exit(1)
 		}
 
+	} else if *mode == "session-wasm" {
+		if *wasmPath == "" {
+			fmt.Fprintf(os.Stderr, "Error: --wasm path is required for session-wasm mode\n")
+			os.Exit(1)
+		}
+		wasmBytes, err := os.ReadFile(*wasmPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading wasm: %v\n", err)
+			os.Exit(1)
+		}
+
+		args := types.Args{}
+		if *argsList != "" {
+			parts := strings.Split(*argsList, ",")
+			for _, part := range parts {
+				kvt := strings.Split(part, ":")
+				if len(kvt) != 3 {
+					fmt.Fprintf(os.Stderr, "Error: invalid argument format '%s', must be name:type:value\n", part)
+					os.Exit(1)
+				}
+				argName, argType, argVal := kvt[0], kvt[1], kvt[2]
+				switch strings.ToLower(argType) {
+				case "string":
+					args.AddArgument(argName, *clvalue.NewCLString(argVal))
+				case "u512":
+					valBig, ok := new(big.Int).SetString(argVal, 10)
+					if !ok {
+						fmt.Fprintf(os.Stderr, "Error: invalid U512 value '%s'\n", argVal)
+						os.Exit(1)
+					}
+					args.AddArgument(argName, *clvalue.NewCLUInt512(valBig))
+				case "uref":
+					parsedURef, err := key.NewURef(argVal)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "Error: invalid URef value '%s': %v\n", argVal, err)
+						os.Exit(1)
+					}
+					args.AddArgument(argName, clvalue.NewCLUref(parsedURef))
+				default:
+					fmt.Fprintf(os.Stderr, "Error: unsupported session arg type '%s'\n", argType)
+					os.Exit(1)
+				}
+			}
+		}
+		namedArgs := types.NewNamedArgs(&args)
+
+		v1Payload, err := types.NewTransactionV1Payload(
+			types.InitiatorAddr{PublicKey: &pubKey},
+			types.Timestamp(time.Now().UTC()),
+			900000000000,
+			*chainName,
+			types.PricingMode{
+				Limited: &types.LimitedMode{
+					GasPriceTolerance: 1,
+					StandardPayment:   true,
+					PaymentAmount:     paymentMotes,
+				},
+			},
+			namedArgs,
+			types.TransactionTarget{
+				Session: &types.SessionTarget{
+					IsInstallUpgrade: false,
+					ModuleBytes:      wasmBytes,
+					Runtime:          types.NewVmCasperV1TransactionRuntime(),
+				},
+			},
+			types.TransactionEntryPoint{
+				Call: &struct{}{},
+			},
+			types.TransactionScheduling{
+				Standard: &struct{}{},
+			},
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error creating payload: %v\n", err)
+			os.Exit(1)
+		}
+		deploy, err = types.MakeTransactionV1(v1Payload)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error making transaction: %v\n", err)
+			os.Exit(1)
+		}
+
 	} else if *mode == "call-entrypoint" {
 		if *contractHashStr == "" || *entrypoint == "" {
 			fmt.Fprintf(os.Stderr, "Error: --contract-hash and --entrypoint are required\n")

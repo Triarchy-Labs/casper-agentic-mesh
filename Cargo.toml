@@ -1,8 +1,9 @@
 [workspace]
 resolver = "2"
-exclude = ["contracts/casper-mesh-contract"]
+# Contracts build standalone (Casper wasm targets / nightly odra tooling) and are
+# kept out of the default workspace build so `cargo check --workspace` stays green.
+exclude = ["contracts/casper-mesh-contract", "contracts/casper_escrow", "contracts/deposit-proxy"]
 members = [
-    "contracts/casper_escrow",
     "swarm/casper-client",
     "swarm/ouroboros-brain",
     "swarm/titan-core",
@@ -14,6 +15,10 @@ members = [
     "swarm/x402-memory",
     "swarm/x402-sniper",
     "swarm/x402-liquidator",
+    "swarm/bounty-judge",
+    "swarm/rwa-oracle",
+    "swarm/tribunal",
+    "swarm/tower",
     "swarm/core-ipc",
 ]
 

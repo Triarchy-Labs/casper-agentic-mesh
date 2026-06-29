@@ -1,0 +1,11 @@
+[package]
+name = "rwa-oracle"
+version = "0.1.0"
+edition = "2021"
+description = "RWA oracle agent: fetch real off-chain asset price, post it on-chain with reputation"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }

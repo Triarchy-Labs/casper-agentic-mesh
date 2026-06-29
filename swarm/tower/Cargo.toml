@@ -1,0 +1,15 @@
+[package]
+name = "tower-overseer"
+version = "0.1.0"
+edition = "2021"
+description = "The Tower: overseer meta-agent that reads the on-chain world and dispatches sub-agents"
+
+[[bin]]
+name = "tower"
+path = "src/main.rs"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }

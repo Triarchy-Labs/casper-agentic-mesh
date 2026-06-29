@@ -1,0 +1,11 @@
+[package]
+name = "bounty-judge"
+version = "0.1.0"
+edition = "2021"
+description = "Autonomous agent: LLM verdict on a bounty proof, then real on-chain release"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }

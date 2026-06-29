@@ -5,7 +5,7 @@ use crate::{config, engine};
 pub async fn run_liquidator_loop() {
     let mut ipc = IpcBridge::new();
     
-    let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://rpc.testnet.casperlabs.io/rpc".to_string());
+    let rpc_str = std::env::var("CASPER_RPC_URL").unwrap_or_else(|_| "https://node.testnet.casper.network/rpc".to_string());
     println!("[Liquidator Daemon] Connected to Casper RPC: {}", rpc_str);
 
     loop {
