@@ -623,50 +623,48 @@ html.lenis, html.lenis body { height: auto; }
   position: fixed; inset: 0;
   z-index: 0; pointer-events: none;
   overflow: hidden;
-  background: #0a0306;
-  perspective: 1500px;
+  background: #050103;
+  perspective: 1200px;
 }
-/* Woven carbon twill — VISIBLE diagonal weave. Two strand tones over a darker
-   gap so the herringbone structure clearly reads as fabric under magnification. */
+/* BACKLIGHT — warm red/white light rising from below; this is what seeps up
+   through the gaps of the woven fabric and gives the whole thing depth. */
+.carbon-backlight {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(120% 78% at 48% 118%, rgba(255,150,160,0.55), rgba(186,42,58,0.32) 24%, rgba(96,20,30,0.16) 46%, transparent 70%),
+    radial-gradient(75% 95% at 6% 58%, rgba(241,50,66,0.22), transparent 56%);
+}
+/* WOVEN FABRIC — dark threads, transparent gaps, tilted so the plane recedes
+   into the dark at the top. The backlight glows through the weave; you read the
+   structure as silhouette, not as bright fibres. */
 .carbon-weave {
-  position: absolute; inset: -8% -8%;
-  width: 116%; height: 116%;
-  background-color: #120509;
+  position: absolute;
+  left: -35%; right: -35%; top: -70%; bottom: -12%;
+  transform-origin: 50% 100%;
   background-image:
-    linear-gradient(27deg,  #74182c 8px, transparent 8px) 0 8px,
-    linear-gradient(207deg, #74182c 8px, transparent 8px) 17px 0,
-    linear-gradient(27deg,  #94223a 8px, transparent 8px) 0 17px,
-    linear-gradient(207deg, #94223a 8px, transparent 8px) 17px 8px,
-    linear-gradient(90deg,  #320d18 17px, transparent 17px),
-    linear-gradient(180deg, #4a1426 25%, #2a0c16 25%, #2a0c16 50%, transparent 50%, transparent 75%, #5a1a2e 75%, #5a1a2e);
-  background-size: 34px 34px;
-  /* parallax + 3D tilt driven by JS via --px / --py / --scrolly */
-  transform: translate3d(calc(var(--px, 0) * -16px), calc(var(--py, 0) * -16px + var(--scrolly, 0) * 1px), 0)
-             rotateX(calc(var(--py, 0) * 1.6deg)) rotateY(calc(var(--px, 0) * -1.6deg));
-  transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1);
+    repeating-linear-gradient(48deg,  rgba(6,2,3,0.95) 0 7px, rgba(6,2,3,0) 7px 13px),
+    repeating-linear-gradient(-48deg, rgba(6,2,3,0.88) 0 7px, rgba(6,2,3,0) 7px 13px);
+  background-size: 24px 24px;
+  /* base tilt (depth) + mouse parallax + scroll, via JS --px/--py/--scrolly */
+  transform:
+    rotateX(32deg)
+    translate3d(calc(var(--px,0) * -12px), calc(var(--py,0) * -8px + var(--scrolly,0) * 1px), 0)
+    rotateY(calc(var(--px,0) * -1.1deg));
+  transition: transform 240ms cubic-bezier(0.2,0.8,0.2,1);
   will-change: transform;
 }
-/* always-on diagonal sheen so the fabric has volume/tilt even without the cursor */
-.carbon-weave::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(122deg,
-    rgba(255,150,165,0.10) 0%, rgba(241,50,66,0.05) 18%,
-    transparent 40%, transparent 64%, rgba(0,0,0,0.45) 100%);
-  mix-blend-mode: screen;
-}
-/* light catching the weave where the cursor is — the 'alive' touch */
+/* extra light that pools where the cursor is — light moving over the fabric */
 .carbon-sheen {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(380px 380px at var(--mx, 50%) var(--my, 40%),
-              rgba(255,120,140,0.30), rgba(241,50,66,0.14) 42%, transparent 68%);
+  background: radial-gradient(420px 420px at var(--mx, 50%) var(--my, 40%),
+              rgba(255,140,155,0.26), rgba(241,50,66,0.12) 44%, transparent 70%);
   transition: background-position 120ms linear;
 }
-/* gentle matte depth — vignette only, must NOT hide the weave */
+/* top vignette so the receding fabric fades cleanly into black */
 .carbon-depth {
   position: absolute; inset: 0;
-  background: radial-gradient(140% 120% at 50% 40%, transparent 55%, rgba(0,0,0,0.45) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 34%, transparent 78%, rgba(0,0,0,0.4) 100%);
 }
 
 /* All display headings use the premium geometric face (Sora / Aventa-class). */

@@ -62,6 +62,7 @@ export function CarbonFabric() {
 
 	return (
 		<div ref={stage} className="carbon-stage" aria-hidden>
+			<div className="carbon-backlight" />
 			<div ref={weave} className="carbon-weave" />
 			<div className="carbon-depth" />
 			<div ref={sheen} className="carbon-sheen" />
