@@ -4,10 +4,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Nav } from "@/components/Nav";
-import FluidBackground from "@/components/FluidBackground";
 import { AnimatePresence } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
+import { CarbonFabric } from "@/components/CarbonFabric";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -65,9 +65,9 @@ export default function Page() {
       </AnimatePresence>
 
       {booted && (
-        <main className="bg-[var(--background-100)] text-[var(--gray-1000)] min-h-screen relative" ref={containerRef}>
-          {/* LAYER 0: Fluid Three.js Tissue (Reacts to cursor) */}
-          <FluidBackground />
+        <main className="bg-transparent text-[var(--gray-1000)] min-h-screen relative" ref={containerRef}>
+          {/* Living carbon-fibre fabric — reacts to mouse + scroll */}
+          <CarbonFabric />
 
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
@@ -84,10 +84,10 @@ export default function Page() {
                     <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
                     <span className="nb-index">𝟐𝟎𝟐𝟔</span>
                   </div>
-                  <h1 className="nb-display text-[64px] md:text-[112px] mb-1">
+                  <h1 className="nb-display text-[clamp(56px,9vw,132px)] mb-1">
                     Agentic
                   </h1>
-                  <h1 className="nb-thin nb-outline text-[64px] md:text-[112px] mb-6">
+                  <h1 className="nb-thin nb-outline text-[clamp(56px,9vw,132px)] mb-6">
                     Infrastructure
                   </h1>
                   <div className="flex items-center gap-4 mb-9 w-full max-w-xl">

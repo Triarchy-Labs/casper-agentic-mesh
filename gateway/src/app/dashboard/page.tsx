@@ -9,6 +9,7 @@ import { AgentOrb, AgentState } from "@/components/AgentOrb";
 import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
 import { payForTask } from "@/lib/pay";
 import { MeshControl } from "@/components/MeshControl";
+import { CarbonFabric } from "@/components/CarbonFabric";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -250,7 +251,8 @@ export default function Dashboard() {
     }, [progress, agentState]);
 
 	return (
-		<main ref={mainRef} className="bg-black text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
+		<main ref={mainRef} className="bg-transparent text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
+			<CarbonFabric />
 			<Nav />
 			
             {/* Cinematic Hero Section (Pinned) */}
@@ -288,7 +290,7 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-black min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
+            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
                 <div className="max-w-7xl mx-auto editorial-grid">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
