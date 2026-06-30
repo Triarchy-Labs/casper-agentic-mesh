@@ -125,6 +125,17 @@
   --foreground: var(--gray-1000);
 }
 
+/* ─── MDX FLUID ROOT ─────────────────────────────────────────────
+   Rubber structure: every rem-based element (Tailwind spacing, sizes,
+   type) scales with the viewport. Calibrated so 1rem ≈ 16px at ~1540px
+   (Tailwind's baseline) and bounded so it stays readable on phones /
+   not gigantic on 4K. The MDX vw-root, adapted safely for Tailwind. */
+html {
+  font-size: clamp(13px, 1.04vw, 20px);
+}
+
+.font-display { font-family: var(--font-display), var(--font-sans), sans-serif; }
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -150,40 +161,41 @@ body {
   box-shadow: 0 0 0 2px #000000, 0 0 0 4px #47a8ff;
 }
 
-/* Geist Typography Scale */
-.heading-72 { font-size: 72px; font-weight: 600; line-height: 72px; letter-spacing: -4.32px; }
-.heading-64 { font-size: 64px; font-weight: 600; line-height: 64px; letter-spacing: -3.84px; }
-.heading-56 { font-size: 56px; font-weight: 600; line-height: 56px; letter-spacing: -3.36px; }
-.heading-48 { font-size: 48px; font-weight: 600; line-height: 48px; letter-spacing: -2.88px; }
-.heading-40 { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -2.4px; }
-.heading-32 { font-size: 32px; font-weight: 600; line-height: 40px; letter-spacing: -1.92px; }
-.heading-24 { font-size: 24px; font-weight: 600; line-height: 32px; letter-spacing: -0.96px; }
-.heading-20 { font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -0.8px; }
-.heading-16 { font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: -0.64px; }
-.heading-14 { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.56px; }
+/* Geist Typography Scale — REM-based so it flexes with the fluid root.
+   (1rem ≈ 16px at the calibrated desktop width; ls/lh in em/unitless to scale.) */
+.heading-72 { font-size: 4.5rem;   font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
+.heading-64 { font-size: 4rem;     font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
+.heading-56 { font-size: 3.5rem;   font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
+.heading-48 { font-size: 3rem;     font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
+.heading-40 { font-size: 2.5rem;   font-weight: 600; line-height: 1.2;  letter-spacing: -0.06em; }
+.heading-32 { font-size: 2rem;     font-weight: 600; line-height: 1.25; letter-spacing: -0.06em; }
+.heading-24 { font-size: 1.5rem;   font-weight: 600; line-height: 1.33; letter-spacing: -0.04em; }
+.heading-20 { font-size: 1.25rem;  font-weight: 600; line-height: 1.4;  letter-spacing: -0.04em; }
+.heading-16 { font-size: 1rem;     font-weight: 600; line-height: 1.5;  letter-spacing: -0.04em; }
+.heading-14 { font-size: 0.875rem; font-weight: 600; line-height: 1.43; letter-spacing: -0.04em; }
 
-.label-20 { font-size: 20px; font-weight: 400; line-height: 28px; }
-.label-18 { font-size: 18px; font-weight: 400; line-height: 24px; }
-.label-16 { font-size: 16px; font-weight: 400; line-height: 24px; }
-.label-14 { font-size: 14px; font-weight: 400; line-height: 20px; }
-.label-14-mono { font-family: var(--font-mono); font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
-.label-13 { font-size: 13px; font-weight: 400; line-height: 18px; }
-.label-13-mono { font-family: var(--font-mono); font-size: 13px; font-weight: 400; line-height: 18px; letter-spacing: 0.05em; text-transform: uppercase; }
-.label-12 { font-size: 12px; font-weight: 400; line-height: 16px; }
-.label-12-mono { font-family: var(--font-mono); font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-20 { font-size: 1.25rem;  font-weight: 400; line-height: 1.4; }
+.label-18 { font-size: 1.125rem; font-weight: 400; line-height: 1.33; }
+.label-16 { font-size: 1rem;     font-weight: 400; line-height: 1.5; }
+.label-14 { font-size: 0.875rem; font-weight: 400; line-height: 1.43; }
+.label-14-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; line-height: 1.43; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-13 { font-size: 0.8125rem; font-weight: 400; line-height: 1.38; }
+.label-13-mono { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 400; line-height: 1.38; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-12 { font-size: 0.75rem; font-weight: 400; line-height: 1.33; }
+.label-12-mono { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 400; line-height: 1.33; letter-spacing: 0.05em; text-transform: uppercase; }
 
-.copy-24 { font-size: 24px; font-weight: 400; line-height: 32px; color: var(--gray-900); }
-.copy-20 { font-size: 20px; font-weight: 400; line-height: 28px; color: var(--gray-900); }
-.copy-18 { font-size: 18px; font-weight: 400; line-height: 26px; color: var(--gray-900); }
-.copy-16 { font-size: 16px; font-weight: 400; line-height: 24px; color: var(--gray-900); }
-.copy-14 { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-900); }
-.copy-14-mono { font-family: var(--font-mono); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-900); }
-.copy-13 { font-size: 13px; font-weight: 400; line-height: 18px; color: var(--gray-900); }
-.copy-13-mono { font-family: var(--font-mono); font-size: 13px; font-weight: 400; line-height: 18px; color: var(--gray-900); }
+.copy-24 { font-size: 1.5rem;   font-weight: 400; line-height: 1.33; color: var(--gray-900); }
+.copy-20 { font-size: 1.25rem;  font-weight: 400; line-height: 1.4;  color: var(--gray-900); }
+.copy-18 { font-size: 1.125rem; font-weight: 400; line-height: 1.44; color: var(--gray-900); }
+.copy-16 { font-size: 1rem;     font-weight: 400; line-height: 1.5;  color: var(--gray-900); }
+.copy-14 { font-size: 0.875rem; font-weight: 400; line-height: 1.43; color: var(--gray-900); }
+.copy-14-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; line-height: 1.43; color: var(--gray-900); }
+.copy-13 { font-size: 0.8125rem; font-weight: 400; line-height: 1.38; color: var(--gray-900); }
+.copy-13-mono { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 400; line-height: 1.38; color: var(--gray-900); }
 
-.button-12 { font-size: 12px; font-weight: 500; line-height: 16px; }
-.button-14 { font-size: 14px; font-weight: 500; line-height: 20px; }
-.button-16 { font-size: 16px; font-weight: 500; line-height: 20px; }
+.button-12 { font-size: 0.75rem;  font-weight: 500; line-height: 1.33; }
+.button-14 { font-size: 0.875rem; font-weight: 500; line-height: 1.43; }
+.button-16 { font-size: 1rem;     font-weight: 500; line-height: 1.25; }
 
 /* Geist Components */
 .button-primary {
@@ -567,8 +579,8 @@ html.lenis, html.lenis body { height: auto; }
 /* ════════════════════════════════════════════════════════════════
    NEO-BRUTALIST type + cyberpunk HUD accents (racing/techwear refs)
    ════════════════════════════════════════════════════════════════ */
-.nb-display { font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
-.nb-thin    { font-weight: 200; letter-spacing: -0.03em; }
+.nb-display { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
+.nb-thin    { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 200; letter-spacing: -0.03em; }
 /* outlined stroke text — raw brutalist contrast */
 .nb-outline {
   color: transparent;
@@ -644,4 +656,9 @@ html.lenis, html.lenis body { height: auto; }
 .carbon-depth {
   position: absolute; inset: 0;
   background: linear-gradient(125deg, rgba(241,50,66,0.05), transparent 36%, transparent 72%, rgba(0,0,0,0.62));
+}
+
+/* All display headings use the premium geometric face (Sora / Aventa-class). */
+.heading-72,.heading-64,.heading-56,.heading-48,.heading-40,.heading-32,.heading-24,.heading-20,.heading-16 {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
 }
