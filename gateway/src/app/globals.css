@@ -544,17 +544,17 @@ body {
 .cursor-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: var(--red-900);
-  box-shadow: 0 0 10px 2px rgba(241,50,66,0.8);
+  background: #ffffff;
+  box-shadow: 0 0 10px 2px rgba(255,255,255,0.9), 0 0 20px 4px rgba(255,255,255,0.4);
 }
 .cursor-ring {
   width: 30px; height: 30px;
   border-radius: 50%;
-  border: 1px solid rgba(241,50,66,0.6);
-  box-shadow: 0 0 14px rgba(241,50,66,0.4), inset 0 0 10px rgba(241,50,66,0.15);
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 16px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.2);
   transition: width 160ms ease, height 160ms ease, border-color 160ms ease;
 }
-.cursor-ring.is-hot { width: 52px; height: 52px; border-color: var(--red-900); }
+.cursor-ring.is-hot { width: 52px; height: 52px; border-color: #ffffff; }
 
 /* Smooth scroll (Lenis) */
 html.lenis, html.lenis body { height: auto; }
