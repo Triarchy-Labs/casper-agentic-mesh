@@ -62,17 +62,10 @@ export function CarbonFabric() {
 
 	return (
 		<div ref={stage} className="carbon-stage" aria-hidden>
-			{/* SVG displacement that warps the flat weave into cloth folds */}
-			<svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
-				<filter id="carbonWarp" x="-20%" y="-20%" width="140%" height="140%">
-					<feTurbulence type="fractalNoise" baseFrequency="0.009 0.014" numOctaves={2} seed={7} result="noise" />
-					<feDisplacementMap in="SourceGraphic" in2="noise" scale={55} xChannelSelector="R" yChannelSelector="G" />
-				</filter>
-			</svg>
-			<div className="carbon-backlight" />
 			<div ref={weave} className="carbon-weave" />
+			<div className="carbon-tint" />
+			<div className="carbon-backlight" />
 			<div className="carbon-depth" />
-			<div ref={sheen} className="carbon-sheen" />
 		</div>
 	);
 }
