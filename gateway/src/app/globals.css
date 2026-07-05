@@ -619,52 +619,48 @@ html.lenis, html.lenis body { height: auto; }
    LIVING CARBON FABRIC — reactive background (mouse + scroll), matte
    weave that catches light near the cursor. Replaces the fluid 'jelly'.
    ════════════════════════════════════════════════════════════════ */
+/* Stage carries its OWN lit gradient, so the page is always fully covered
+   (no black gaps on any window size) even before the weave paints. */
 .carbon-stage {
   position: fixed; inset: 0;
   z-index: 0; pointer-events: none;
   overflow: hidden;
-  background: #050103;
-  perspective: 1200px;
+  background: radial-gradient(135% 95% at 50% 116%, #400e19 0%, #180510 42%, #070203 80%);
 }
 /* BACKLIGHT — warm red/white light rising from below; this is what seeps up
-   through the gaps of the woven fabric and gives the whole thing depth. */
+   through the gaps of the woven fabric. */
 .carbon-backlight {
   position: absolute; inset: 0;
   background:
-    radial-gradient(120% 78% at 48% 118%, rgba(255,150,160,0.55), rgba(186,42,58,0.32) 24%, rgba(96,20,30,0.16) 46%, transparent 70%),
-    radial-gradient(75% 95% at 6% 58%, rgba(241,50,66,0.22), transparent 56%);
+    radial-gradient(120% 82% at 50% 116%, rgba(255,150,160,0.62), rgba(205,48,64,0.38) 26%, rgba(112,24,34,0.20) 48%, transparent 74%),
+    radial-gradient(72% 92% at 8% 55%, rgba(241,50,66,0.24), transparent 56%);
 }
-/* WOVEN FABRIC — dark threads, transparent gaps, tilted so the plane recedes
-   into the dark at the top. The backlight glows through the weave; you read the
-   structure as silhouette, not as bright fibres. */
+/* WOVEN FABRIC — dark threads, TRANSPARENT gaps, warped into folds by an SVG
+   displacement filter so it drapes like real cloth and the backlight seeps
+   through the weave along the curves. Full-cover (inset -8%), no tilt. */
 .carbon-weave {
-  position: absolute;
-  left: -35%; right: -35%; top: -70%; bottom: -12%;
-  transform-origin: 50% 100%;
+  position: absolute; inset: -8%;
   background-image:
-    repeating-linear-gradient(48deg,  rgba(6,2,3,0.95) 0 7px, rgba(6,2,3,0) 7px 13px),
-    repeating-linear-gradient(-48deg, rgba(6,2,3,0.88) 0 7px, rgba(6,2,3,0) 7px 13px);
-  background-size: 24px 24px;
-  /* base tilt (depth) + mouse parallax + scroll, via JS --px/--py/--scrolly */
-  transform:
-    rotateX(32deg)
-    translate3d(calc(var(--px,0) * -12px), calc(var(--py,0) * -8px + var(--scrolly,0) * 1px), 0)
-    rotateY(calc(var(--px,0) * -1.1deg));
+    repeating-linear-gradient(48deg,  rgba(4,1,2,0.94) 0 6px, rgba(4,1,2,0) 6px 13px),
+    repeating-linear-gradient(-48deg, rgba(4,1,2,0.85) 0 6px, rgba(4,1,2,0) 6px 13px);
+  background-size: 22px 22px;
+  filter: url(#carbonWarp);
+  transform: translate3d(calc(var(--px,0) * -10px), calc(var(--py,0) * -8px + var(--scrolly,0) * 0.6px), 0);
   transition: transform 240ms cubic-bezier(0.2,0.8,0.2,1);
   will-change: transform;
 }
-/* extra light that pools where the cursor is — light moving over the fabric */
+/* extra light that pools where the cursor is — light moving over the cloth */
 .carbon-sheen {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(420px 420px at var(--mx, 50%) var(--my, 40%),
-              rgba(255,140,155,0.26), rgba(241,50,66,0.12) 44%, transparent 70%);
+  background: radial-gradient(440px 440px at var(--mx, 50%) var(--my, 40%),
+              rgba(255,140,155,0.28), rgba(241,50,66,0.13) 44%, transparent 70%);
   transition: background-position 120ms linear;
 }
-/* top vignette so the receding fabric fades cleanly into black */
+/* gentle top/bottom vignette — must NOT hide the weave */
 .carbon-depth {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.85) 0%, transparent 34%, transparent 78%, rgba(0,0,0,0.4) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 24%, transparent 84%, rgba(0,0,0,0.32) 100%);
 }
 
 /* All display headings use the premium geometric face (Sora / Aventa-class). */
