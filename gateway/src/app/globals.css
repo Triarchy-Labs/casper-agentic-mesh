@@ -636,11 +636,13 @@ html.lenis, html.lenis body { height: auto; }
   mix-blend-mode: screen;
   background: radial-gradient(120% 70% at 50% 118%, rgba(241,80,95,0.16), transparent 60%);
 }
-/* only a soft top/bottom fade for text legibility — no heavy vignette that
-   would look like the fabric is 'covered'. */
+/* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
+   (kicks in only near the corners, so the fabric centre stays fully visible). */
 .carbon-depth {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.42) 0%, transparent 15%, transparent 84%, rgba(0,0,0,0.4) 100%);
+  background:
+    radial-gradient(118% 118% at 50% 47%, transparent 58%, rgba(0,0,0,0.34) 86%, rgba(0,0,0,0.6) 100%),
+    linear-gradient(180deg, rgba(0,0,0,0.42) 0%, transparent 15%, transparent 84%, rgba(0,0,0,0.42) 100%);
 }
 
 /* All display headings use the premium geometric face (Sora / Aventa-class). */
