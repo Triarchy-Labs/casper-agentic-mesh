@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
+import { CarbonFabric } from "@/components/CarbonFabric";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -196,7 +197,8 @@ const BountiesPage = () => {
 	}, []);
 
 	return (
-		<div className="bg-[var(--background-100)] text-[var(--gray-1000)] min-h-screen font-sans">
+		<div className="bg-transparent text-[var(--gray-1000)] min-h-screen font-sans relative">
+			<CarbonFabric muted />
 			<Nav />
 
 			<div className="max-w-6xl mx-auto px-6 py-[120px]">

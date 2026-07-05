@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
  *
  * Pure CSS-vars + rAF lerp (no WebGL), so it is light and cannot crash the page.
  */
-export function CarbonFabric() {
+export function CarbonFabric({ muted = false }: { muted?: boolean }) {
 	const stage = useRef<HTMLDivElement>(null);
 	const weave = useRef<HTMLDivElement>(null);
 	const sheen = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ export function CarbonFabric() {
 	}, []);
 
 	return (
-		<div ref={stage} className="carbon-stage" aria-hidden>
+		<div ref={stage} className="carbon-stage" style={muted ? { opacity: 0.6 } : undefined} aria-hidden>
 			<div ref={weave} className="carbon-weave" />
 			<div className="carbon-tint" />
 			<div className="carbon-backlight" />

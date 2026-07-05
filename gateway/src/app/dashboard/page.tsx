@@ -252,7 +252,7 @@ export default function Dashboard() {
 
 	return (
 		<main ref={mainRef} className="bg-transparent text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
-			<CarbonFabric />
+			<CarbonFabric muted />
 			<Nav />
 			
             {/* Cinematic Hero Section (Pinned) */}
