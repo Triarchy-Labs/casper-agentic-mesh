@@ -104,7 +104,7 @@ export default function Page() {
 
               {/* Manifesto — anchored bottom-right of the hero, with a scrim for legibility */}
               <div className="absolute bottom-28 right-8 md:right-24 z-20 flex flex-col items-end text-right lowercase tracking-[0.14em] font-medium
-                              px-6 py-5 bg-black/35 backdrop-blur-md border border-white/10">
+                              px-6 py-5 bg-[rgba(6,3,4,0.72)] backdrop-blur-[18px] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_-24px_rgba(0,0,0,0.75)]">
                 <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
                 <p className="label-16 text-white/75">↳ to ship apps and agents</p>
                 <p className="label-16 text-white/75">↳ automated by agents</p>

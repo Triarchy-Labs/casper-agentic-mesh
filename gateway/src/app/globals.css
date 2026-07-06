@@ -260,12 +260,14 @@ input:focus, textarea:focus, select:focus {
    (not generic gray), an inner top highlight, and a soft ambient shadow instead
    of a harsh drop shadow. Sharp corners kept — that's our identity. */
 .editorial-panel {
-  background-color: rgba(9, 4, 6, 0.55);
+  /* darker, blacker tint (like the manifesto box) so text stays readable even
+     over the bright centre of the fabric — not a red wash. */
+  background-color: rgba(6, 3, 4, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 0px;
   /* frosted 'liquid glass' — keeps the carbon visible but restores legibility */
-  backdrop-filter: blur(14px) saturate(1.1);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.05);
+  -webkit-backdrop-filter: blur(18px) saturate(1.05);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 24px 48px -24px rgba(0, 0, 0, 0.75);
