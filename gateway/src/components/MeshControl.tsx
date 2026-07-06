@@ -75,7 +75,7 @@ export function MeshControl() {
 	};
 
 	return (
-		<div className="col-span-12 grid grid-cols-12 gap-8">
+		<div className="col-span-12 grid grid-cols-12 gap-8 focus-cards">
 			{/* THE TOWER */}
 			<div className="col-span-12 lg:col-span-5 editorial-panel p-8 relative">
 				<CornerMarks />
