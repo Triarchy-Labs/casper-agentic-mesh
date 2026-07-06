@@ -100,15 +100,16 @@ export default function Page() {
                   </div>
                 </div>
 
-                {/* Right: Mono manifesto tags */}
-                <div className="md:col-span-3 md:col-start-10 flex flex-col items-start md:items-end justify-center text-left md:text-right label-14-mono text-white/45 space-y-3 z-20 lowercase tracking-[0.18em] font-medium">
-                  <p className="text-white/70">◆ for coding agents</p>
-                  <p>↳ to ship apps and agents</p>
-                  <p>↳ automated by agents</p>
-                  <div className="tech-line w-24 my-2 self-end" />
-                  <p className="text-[var(--red-700)]">settled on casper · live on-chain</p>
-                </div>
+              </div>
 
+              {/* Manifesto — anchored bottom-right of the hero, with a scrim for legibility */}
+              <div className="absolute bottom-28 right-8 md:right-24 z-20 flex flex-col items-end text-right lowercase tracking-[0.14em] font-medium
+                              px-6 py-5 bg-black/35 backdrop-blur-md border border-white/10">
+                <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
+                <p className="label-16 text-white/75">↳ to ship apps and agents</p>
+                <p className="label-16 text-white/75">↳ automated by agents</p>
+                <div className="tech-line w-28 my-3 self-end" />
+                <p className="label-16 text-[var(--red-700)]">settled on casper · live on-chain</p>
               </div>
 
               {/* Bottom Partner Logos */}
@@ -126,92 +127,71 @@ export default function Page() {
             </section>
 
             {/* Synergy Dashboard Cinematic Chapters */}
-            <div ref={sectionsRef} className="w-full px-8 md:px-24 py-[96px] flex flex-col gap-[128px]">
+            <div ref={sectionsRef} className="w-full px-8 md:px-24 py-[120px] flex flex-col gap-12">
               
-              {/* TAB 1: ESCROW */}
-              <div className="synergy-section min-h-[60vh] flex items-center justify-start sticky top-[20vh]">
-                <div className="editorial-panel p-[40px] w-full max-w-lg relative">
+              {/* Section header */}
+              <div className="synergy-section flex flex-col gap-4 mb-2">
+                <span className="nb-tag w-max"><span className="text-[var(--red-700)]">◆</span> the mesh · four vectors</span>
+                <h2 className="nb-display text-[clamp(40px,6vw,84px)]">Absolute Synergy</h2>
+              </div>
+
+              {/* Three vectors — clean grid, hover-focus enabled */}
+              <div className="focus-cards grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* 01 ESCROW */}
+                <div className="synergy-section editorial-panel p-[32px] relative">
                   <CornerMarks />
-                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // Vector Alpha</p>
-                  <h2 className="heading-40 mb-[16px] z-10">Autonomous Escrow</h2>
+                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
+                  <h3 className="heading-32 mb-[16px] z-10">Autonomous Escrow</h3>
                   <p className="copy-16 mb-[24px] z-10">
-                    The zero-trust bedrock of the Agentic Mesh. Powered by the <strong>Odra Framework</strong> for high-security Rust/WASM smart contracts.
+                    The zero-trust bedrock of the mesh. Rust/WASM smart contracts with real on-chain settlement.
                   </p>
-                  <ul className="label-14-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> casper-eip-712 Meta-Transactions
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> Deterministic Payouts
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> Casper Wallet Override
-                    </li>
+                  <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deposit · release · refund</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> session deposit proxy</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deterministic payouts</li>
+                  </ul>
+                </div>
+                {/* 02 ORACLE */}
+                <div className="synergy-section editorial-panel p-[32px] relative">
+                  <CornerMarks />
+                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">02 // vector beta</p>
+                  <h3 className="heading-32 mb-[16px] z-10">RWA Risk Oracle</h3>
+                  <p className="copy-16 mb-[24px] z-10">
+                    The Sentinel. A live on-chain data feed with agent identity and accruing reputation.
+                  </p>
+                  <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> real CSPR/USD feed</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> on-chain reputation</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> event log</li>
+                  </ul>
+                </div>
+                {/* 03 TRIBUNAL */}
+                <div className="synergy-section editorial-panel p-[32px] relative">
+                  <CornerMarks />
+                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
+                  <h3 className="heading-32 mb-[16px] z-10">Agent Tribunal</h3>
+                  <p className="copy-16 mb-[24px] z-10">
+                    An adversarial court of real models that rules on work and moves CSPR on-chain.
+                  </p>
+                  <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> prosecutor · defender · jury</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> chief-judge verdict</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> on-chain release / refund</li>
                   </ul>
                 </div>
               </div>
 
-              {/* TAB 2: ORACLE */}
-              <div className="synergy-section min-h-[60vh] flex items-center justify-end sticky top-[30vh]">
-                <div className="editorial-panel p-[40px] w-full max-w-lg relative">
-                  <CornerMarks />
-                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">02 // Vector Beta</p>
-                  <h2 className="heading-40 mb-[16px] z-10">Pre-Trade Risk Oracle</h2>
-                  <p className="copy-16 mb-[24px] z-10">
-                    The Sentinel. An autonomous swarm evaluating risk, sentiment, and complexity prior to escrow lock.
+              {/* 04 OMNI-MESH — feature */}
+              <div className="synergy-section editorial-panel p-[48px] md:p-[64px] w-full text-center relative overflow-hidden border-[var(--red-900)]">
+                <CornerMarks />
+                <div className="absolute inset-0 bg-[var(--red-500)] opacity-5 z-0 pointer-events-none"></div>
+                <div className="relative z-10 flex flex-col items-center">
+                  <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 04 · absolute synergy · the tower</span>
+                  <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">The Omni-Mesh</h2>
+                  <p className="copy-18 text-[var(--gray-900)] mb-[36px] max-w-2xl">
+                    Escrow, oracle and tribunal converging into one organism, overseen by The Tower — the economic OS for AI agents, live on Casper.
                   </p>
-                  <ul className="label-14-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> Casper MCP Server
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> Live On-Chain Reconnaissance
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> LLM Consensus Engine
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* TAB 3: ARBITRAGE */}
-              <div className="synergy-section min-h-[60vh] flex items-center justify-start sticky top-[40vh]">
-                <div className="editorial-panel p-[40px] w-full max-w-lg relative">
-                  <CornerMarks />
-                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // Vector Gamma</p>
-                  <h2 className="heading-40 mb-[16px] z-10">Cognitive Arbitrage</h2>
-                  <p className="copy-16 mb-[24px] z-10">
-                    The Predator. Hunting mispriced high-value tasks across the mesh using autonomous M2M commerce.
-                  </p>
-                  <ul className="label-14-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> x402 Facilitator (Go Sidecar)
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> CEP-18 Micropayments
-                    </li>
-                    <li className="flex items-center gap-[8px]">
-                      <span className="text-[var(--red-700)]">→</span> Odra X402Liquidator WASM
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* TAB 4: SYNERGY */}
-              <div className="synergy-section min-h-screen flex items-center justify-center relative">
-                <div className="editorial-panel p-[48px] w-full max-w-3xl text-center border-[var(--red-900)] relative overflow-hidden">
-                  <CornerMarks />
-                  <div className="absolute inset-0 bg-[var(--red-500)] opacity-5 z-0 pointer-events-none"></div>
-                  <div className="relative z-10">
-                    <p className="label-14-mono text-[var(--red-700)] mb-[16px]">04 // Absolute Synergy</p>
-                    <h2 className="heading-56 mb-[24px] text-gradient-casper">The Omni-Mesh</h2>
-                    <p className="copy-16 text-[var(--gray-900)] mb-[32px] max-w-2xl mx-auto">
-                      Three distinct predators converging into a single, unstoppable biome. The ultimate M2M economy, completely built on Casper Network primitives.
-                    </p>
-                    <button className="button-primary" style={{ padding: '0 24px', height: '48px', fontSize: '16px' }}>
-                      INITIALIZE SYNERGY
-                    </button>
-                  </div>
+                  <button className="btn-neon">initialize synergy</button>
                 </div>
               </div>
 
