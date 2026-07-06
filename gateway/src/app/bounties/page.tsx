@@ -209,7 +209,11 @@ const BountiesPage = () => {
 					transition={{ duration: 0.8 }}
 					className="mb-[48px]"
 				>
-					<motion.h1 
+					<div className="flex items-center gap-3 mb-6 flex-wrap">
+						<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> x402 arbitrage mesh · live</span>
+						<span className="nb-index">/// escrow · proofs · zero-trust</span>
+					</div>
+					<motion.h1
 						initial={{ opacity: 0, x: -20 }}
 						animate={{ opacity: 1, x: 0 }}
 						transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
@@ -283,7 +287,7 @@ const BountiesPage = () => {
 									setDirective(`Execute ${bounty.title} under Triarchy protocol guidelines.\nRequire: ${bounty.skills.join(', ')} expertise.\nPriority: ${bounty.difficulty}`);
 									setReward(bounty.bounty.split(' ')[0].replace(/,/g, ''));
 								}}
-								className={`grid grid-cols-[2fr_1fr] md:grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[16px] md:p-[24px] border rounded-none cursor-pointer transition-all duration-300 relative ${hoverIndex === i ? 'bg-[var(--gray-200)] border-[var(--gray-500)]' : 'bg-transparent border-[var(--gray-400)]'}`}
+								className={`grid grid-cols-[2fr_1fr] md:grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[16px] md:p-[24px] border rounded-none cursor-pointer relative transition-[transform,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${hoverIndex === i ? 'bg-[rgba(241,50,66,0.06)] border-[rgba(241,50,66,0.4)] shadow-[0_0_24px_-6px_rgba(241,50,66,0.25)] translate-x-[2px]' : 'bg-[rgba(9,4,6,0.42)] border-[rgba(255,255,255,0.09)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]'}`}
 							>
 								<CornerMarks />
 								<span className="hidden md:inline label-14-mono text-[var(--gray-600)] z-10">{bounty.id}</span>
