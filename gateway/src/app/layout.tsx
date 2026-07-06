@@ -47,6 +47,7 @@ export default function RootLayout({
 			<head />
 			<body className="flex flex-col min-h-screen">
 				<div className="edge-aura" aria-hidden />
+				<div className="fx-overlay" aria-hidden />
 				<CursorAura />
 				<SmoothScroller>
 					<div className="flex flex-col min-h-screen">

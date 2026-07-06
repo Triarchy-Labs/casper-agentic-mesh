@@ -207,7 +207,7 @@ input:focus, textarea:focus, select:focus {
 .button-primary {
   background-color: var(--gray-1000);
   color: var(--background-100);
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 0 18px;
   height: 40px;
   display: inline-flex;
@@ -233,7 +233,7 @@ input:focus, textarea:focus, select:focus {
   background-color: rgba(255,255,255,0.03);
   color: var(--gray-1000);
   border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 6px;
+  border-radius: 0px;
   padding: 0 18px;
   height: 40px;
   display: inline-flex;
@@ -709,3 +709,20 @@ html.lenis, html.lenis body { height: auto; }
   transition: transform 300ms cubic-bezier(0.32,0.72,0,1);
 }
 .nav-pill:hover::after { transform: scaleX(1); }
+
+/* ── ANALOG DEGRADATION (industrial-brutalist skill): CRT scanlines + film grain.
+   Fixed, pointer-events-none, so it costs almost nothing. A whisper, not a filter. */
+.fx-overlay {
+  position: fixed; inset: 0;
+  z-index: 40; pointer-events: none;
+  background-image: repeating-linear-gradient(
+    0deg, rgba(0,0,0,0.16) 0px, rgba(0,0,0,0.16) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+.fx-overlay::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+}
