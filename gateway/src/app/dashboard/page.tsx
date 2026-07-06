@@ -374,7 +374,7 @@ export default function Dashboard() {
                         {/* Agent Stage */}
                         <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
                             <CornerMarks />
-                            <AgentOrb state={agentState} size={120} />
+                            <AgentOrb state={agentState} size={168} />
                             {agentState === "exhausted" && (
                                 <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
                             )}
