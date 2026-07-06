@@ -19,7 +19,7 @@ function lineClass(line: string): string {
 
 function Console({ lines }: { lines: string[] }) {
 	return (
-		<div className="mt-4 max-h-[420px] overflow-auto rounded-sm bg-black/60 border border-white/10 p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap">
+		<div className="mt-4 max-h-[420px] overflow-auto scroll-red rounded-sm bg-black/60 border border-white/10 p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap">
 			{lines.map((l, i) => (
 				<div key={i} className={lineClass(l)}>{l || " "}</div>
 			))}

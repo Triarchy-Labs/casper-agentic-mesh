@@ -746,3 +746,37 @@ html.lenis, html.lenis body { height: auto; }
   opacity: 0.05;
   mix-blend-mode: overlay;
 }
+
+/* ── FRONTIER MICRO-DETAILS (taste + brutalist) ── */
+/* underline sweep for text links */
+.link-sweep { position: relative; transition: color 220ms cubic-bezier(0.32,0.72,0,1); }
+.link-sweep::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
+  background: var(--red-700); transform: scaleX(0); transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.32,0.72,0,1);
+}
+.link-sweep:hover { color: #fff; }
+.link-sweep:hover::after { transform: scaleX(1); }
+
+/* thin red scrollbar for scroll containers that opt in */
+.scroll-red { scrollbar-width: thin; scrollbar-color: rgba(241,50,66,0.5) transparent; }
+.scroll-red::-webkit-scrollbar { display: block; width: 6px; height: 6px; }
+.scroll-red::-webkit-scrollbar-thumb { background: rgba(241,50,66,0.45); border-radius: 0; }
+.scroll-red::-webkit-scrollbar-thumb:hover { background: rgba(241,50,66,0.75); }
+.scroll-red::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+
+/* full-width brutalist divider (compartmentalization) */
+.hr-brutal {
+  border: 0; height: 1px; width: 100%;
+  background: linear-gradient(90deg, rgba(241,50,66,0.5), rgba(255,255,255,0.06) 40%, transparent);
+  margin: 0;
+}
+
+/* button-in-button trailing icon circle */
+.btn-icon-circle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; margin-left: 10px;
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms;
+}
+.btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }

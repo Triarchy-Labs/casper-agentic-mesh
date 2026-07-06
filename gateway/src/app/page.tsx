@@ -95,7 +95,7 @@ export default function Page() {
                     <span className="nb-index whitespace-nowrap">escrow · tribunal · oracle · the tower</span>
                   </div>
                   <div className="flex gap-4 flex-wrap">
-                    <button className="btn-neon">Deploy Now</button>
+                    <button className="btn-neon inline-flex items-center">Deploy Now<span className="btn-icon-circle">↗</span></button>
                     <button className="btn-ghost">Talk to Sales</button>
                   </div>
                 </div>
@@ -115,13 +115,13 @@ export default function Page() {
               {/* Bottom Partner Logos */}
               <div className="absolute bottom-8 left-0 right-0 w-full px-8 md:px-16 flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20">
                 <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 text-white/20 text-xs tracking-widest font-mono">
-                  <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair">BLACKBOX.AI</span>
-                  <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair">HH</span>
-                  <span className="font-sans font-semibold tracking-normal hover:text-white/40 transition-colors cursor-crosshair">OpenAI</span>
-                  <span className="font-sans italic font-bold tracking-tight hover:text-white/40 transition-colors cursor-crosshair">DOORDASH</span>
-                  <span className="font-serif italic font-normal tracking-wide hover:text-white/40 transition-colors cursor-crosshair">charles SCHWAB</span>
-                  <span className="font-sans font-medium tracking-tight hover:text-white/40 transition-colors cursor-crosshair">The Weather Company</span>
-                  <span className="font-sans font-bold hover:text-white/40 transition-colors cursor-crosshair">Polymarket</span>
+                  <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">BLACKBOX.AI</span>
+                  <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair link-sweep">HH</span>
+                  <span className="font-sans font-semibold tracking-normal hover:text-white/40 transition-colors cursor-crosshair link-sweep">OpenAI</span>
+                  <span className="font-sans italic font-bold tracking-tight hover:text-white/40 transition-colors cursor-crosshair link-sweep">DOORDASH</span>
+                  <span className="font-serif italic font-normal tracking-wide hover:text-white/40 transition-colors cursor-crosshair link-sweep">charles SCHWAB</span>
+                  <span className="font-sans font-medium tracking-tight hover:text-white/40 transition-colors cursor-crosshair link-sweep">The Weather Company</span>
+                  <span className="font-sans font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">Polymarket</span>
                 </div>
               </div>
             </section>
