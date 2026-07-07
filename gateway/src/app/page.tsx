@@ -141,6 +141,10 @@ export default function Page() {
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> session deposit proxy</li>
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deterministic payouts</li>
                   </ul>
+                  <div className="panel-cta z-10">
+                    <span className="panel-cta-square" />
+                    <span className="panel-cta-text">deploy escrow</span>
+                  </div>
                 </div>
                 {/* 02 ORACLE */}
                 <div className="synergy-section editorial-panel p-[32px] relative">
@@ -155,6 +159,10 @@ export default function Page() {
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> on-chain reputation</li>
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> event log</li>
                   </ul>
+                  <div className="panel-cta z-10">
+                    <span className="panel-cta-square" />
+                    <span className="panel-cta-text">query oracle</span>
+                  </div>
                 </div>
                 {/* 03 TRIBUNAL */}
                 <div className="synergy-section editorial-panel p-[32px] relative">
@@ -169,6 +177,10 @@ export default function Page() {
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> chief-judge verdict</li>
                     <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> on-chain release / refund</li>
                   </ul>
+                  <div className="panel-cta z-10">
+                    <span className="panel-cta-square" />
+                    <span className="panel-cta-text">view tribunal</span>
+                  </div>
                 </div>
               </div>
 

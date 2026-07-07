@@ -3,33 +3,41 @@ import React, { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
 	const dotRef = useRef<HTMLDivElement>(null);
+	const arrowRef = useRef<HTMLDivElement>(null);
+	const labelRef = useRef<HTMLDivElement>(null);
 	const [isHovering, setIsHovering] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [isTouch, setIsTouch] = useState(false);
 	const mousePos = useRef({ x: -100, y: -100 });
 	const currentPos = useRef({ x: -100, y: -100, scale: 1 });
+	// Slower-lerp positions for the drifting followers
+	const arrowPos = useRef({ x: -100, y: -100 });
+	const labelPos = useRef({ x: -100, y: -100 });
 	const rafId = useRef<number>(0);
 	const isHoveringRef = useRef(false);
+	const isOverCardRef = useRef(false);
+	const [isOverCard, setIsOverCard] = useState(false);
+	const cardOpacity = useRef(0);
 
-	// Lerp smoothing factor
 	const LERP = 0.15;
 	const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
-	// Check if this is a touch device on mound
 	useEffect(() => {
 		const isT = window.matchMedia("(pointer: coarse)").matches;
 		setTimeout(() => setIsTouch(isT), 0);
 	}, []);
 
-	// Keep hover ref in sync
 	useEffect(() => {
 		isHoveringRef.current = isHovering;
 	}, [isHovering]);
 
 	useEffect(() => {
+		isOverCardRef.current = isOverCard;
+	}, [isOverCard]);
+
+	useEffect(() => {
 		if (isTouch) return;
 
-		// Hide native cursor
 		const style = document.createElement("style");
 		style.id = "hide-native-cursor";
 		style.textContent = "*, *::before, *::after { cursor: none !important; }";
@@ -44,27 +52,49 @@ export default function CustomCursor() {
 			const target = e.target as HTMLElement;
 			if (!target) return;
 			const cs = window.getComputedStyle(target);
-			setIsHovering(
+			const hovering =
 				cs.cursor === "pointer" ||
 				cs.cursor === "crosshair" ||
 				!!target.closest("button") ||
-				!!target.closest("a")
-			);
+				!!target.closest("a");
+			setIsHovering(hovering);
+			// Check if over an editorial-panel card or interactive button
+			const overCard = !!target.closest(".editorial-panel") || !!target.closest(".btn-neon") || !!target.closest(".btn-ghost");
+			setIsOverCard(overCard);
 		};
 
-		// RAF loop — calculates physics
 		const tick = () => {
+			// Main cursor dot — fast lerp
 			currentPos.current.x = lerp(currentPos.current.x, mousePos.current.x, LERP);
 			currentPos.current.y = lerp(currentPos.current.y, mousePos.current.y, LERP);
-			
-			// Smoothly animate the scale instead of instant snapping
 			const targetScale = isHoveringRef.current ? 1.3 : 1;
-			currentPos.current.scale = lerp(currentPos.current.scale, targetScale, LERP * 0.4); 
+			currentPos.current.scale = lerp(currentPos.current.scale, targetScale, LERP * 0.4);
 
 			if (dotRef.current) {
-				// Offset is 10px because base width/height is 20
 				dotRef.current.style.transform = `translate(${currentPos.current.x - 10}px, ${currentPos.current.y - 10}px) scale(${currentPos.current.scale})`;
 			}
+
+			// Arrow square — slower drift, offset bottom-right
+			arrowPos.current.x = lerp(arrowPos.current.x, mousePos.current.x + 18, 0.08);
+			arrowPos.current.y = lerp(arrowPos.current.y, mousePos.current.y + 18, 0.08);
+
+			// Label pill — even slower drift, offset further right
+			labelPos.current.x = lerp(labelPos.current.x, mousePos.current.x + 42, 0.06);
+			labelPos.current.y = lerp(labelPos.current.y, mousePos.current.y + 20, 0.06);
+
+			// Smooth opacity for card followers
+			const targetOpacity = isOverCardRef.current ? 1 : 0;
+			cardOpacity.current = lerp(cardOpacity.current, targetOpacity, 0.1);
+
+			if (arrowRef.current) {
+				arrowRef.current.style.transform = `translate(${arrowPos.current.x}px, ${arrowPos.current.y}px) scale(${cardOpacity.current})`;
+				arrowRef.current.style.opacity = String(cardOpacity.current);
+			}
+			if (labelRef.current) {
+				labelRef.current.style.transform = `translate(${labelPos.current.x}px, ${labelPos.current.y}px) scale(${cardOpacity.current})`;
+				labelRef.current.style.opacity = String(cardOpacity.current);
+			}
+
 			rafId.current = requestAnimationFrame(tick);
 		};
 
@@ -84,36 +114,92 @@ export default function CustomCursor() {
 	if (isTouch || !isVisible) return null;
 
 	return (
-		<div
-			ref={dotRef}
-			style={{
-				position: "fixed",
-				top: 0,
-				left: 0,
-				width: 20,
-				height: 20,
-				borderRadius: "0px",
-				border: "1.5px solid var(--red-700)",
-				backgroundColor: isHovering ? "rgba(241, 50, 66, 0.08)" : "transparent",
-				pointerEvents: "none",
-				zIndex: 99999,
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				boxShadow: isHovering ? "0 0 10px rgba(241, 50, 66, 0.4)" : "none",
-				transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-				willChange: "transform",
-			}}
-		>
-			<div 
+		<>
+			{/* Main cursor dot */}
+			<div
+				ref={dotRef}
 				style={{
-					width: 4,
-					height: 4,
-					backgroundColor: "var(--red-700)",
-					transition: "transform 0.3s ease",
-					transform: isHovering ? "scale(1.5)" : "scale(1)"
+					position: "fixed",
+					top: 0,
+					left: 0,
+					width: 20,
+					height: 20,
+					borderRadius: "0px",
+					border: "1.5px solid var(--red-700)",
+					backgroundColor: isHovering ? "rgba(241, 50, 66, 0.08)" : "transparent",
+					pointerEvents: "none",
+					zIndex: 99999,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					boxShadow: isHovering ? "0 0 10px rgba(241, 50, 66, 0.4)" : "none",
+					transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
+					willChange: "transform",
 				}}
-			/>
-		</div>
+			>
+				<div
+					style={{
+						width: 4,
+						height: 4,
+						backgroundColor: "var(--red-700)",
+						transition: "transform 0.3s ease",
+						transform: isHovering ? "scale(1.5)" : "scale(1)"
+					}}
+				/>
+			</div>
+
+			{/* Drifting arrow square — appears on card/button hover */}
+			<div
+				ref={arrowRef}
+				style={{
+					position: "fixed",
+					top: 0,
+					left: 0,
+					width: 28,
+					height: 28,
+					background: "#fff",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					pointerEvents: "none",
+					zIndex: 99998,
+					opacity: 0,
+					willChange: "transform, opacity",
+				}}
+			>
+				<svg viewBox="0 0 10 10" fill="none" width={12} height={12} style={{ transform: "rotate(-45deg)" }}>
+					<path d="M3 8L7 4L3 0L4.5 0L8.5 4L4.5 8Z" fill="#000" />
+					<path d="M0 3.4h6v1.2H0z" fill="#000" />
+				</svg>
+			</div>
+
+			{/* VIEW PROJECT pill — drifts further right */}
+			<div
+				ref={labelRef}
+				style={{
+					position: "fixed",
+					top: 0,
+					left: 0,
+					background: "#fff",
+					padding: "5px 12px",
+					pointerEvents: "none",
+					zIndex: 99998,
+					opacity: 0,
+					willChange: "transform, opacity",
+					whiteSpace: "nowrap",
+				}}
+			>
+				<span style={{
+					fontFamily: "var(--font-mono, monospace)",
+					fontSize: 10,
+					fontWeight: 600,
+					letterSpacing: "0.1em",
+					color: "#000",
+					textTransform: "uppercase",
+				}}>
+					view project
+				</span>
+			</div>
+		</>
 	);
 }
