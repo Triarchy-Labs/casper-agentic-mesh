@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sora } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";
-import { CursorAura } from "@/components/CursorAura";
+import CustomCursor from "@/components/CustomCursor";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -15,21 +15,14 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-// Premium geometric display face (Aventa-class), full weight range.
-const sora = Sora({
-	variable: "--font-display",
-	subsets: ["latin"],
-	weight: ["200", "300", "400", "500", "600", "700", "800"],
-});
-
 export const metadata: Metadata = {
-	title: "Triarchy Agentic Mesh — the trust layer for the agent economy on Casper",
+	title: "x402 Arbitrage Mesh — Sovereign Agent Gateway",
 	description:
-		"An autonomous machine-to-machine bounty economy on Casper: agents escrow CSPR, an adversarial Tribunal rules on work, an RWA oracle feeds on-chain data, and The Tower oversees the swarm. Live on testnet.",
+		"Decentralized AI Agent Load Balancer and Payment Router on Casper Casper. WASM-sandboxed, L402-secured, zero-trust.",
 	openGraph: {
-		title: "Triarchy Agentic Mesh",
+		title: "x402 Arbitrage Mesh",
 		description:
-			"Escrow · adversarial Tribunal · RWA oracle · overseer — the economic OS for AI agents, live on Casper.",
+			"The world's first Agent-to-Agent Payment Router with WASM Quarantine, built on Casper.",
 		type: "website",
 	},
 };
@@ -42,13 +35,11 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 		>
 			<head />
 			<body className="flex flex-col min-h-screen">
-				<div className="edge-aura" aria-hidden />
-				<div className="fx-overlay" aria-hidden />
-				<CursorAura />
+				<CustomCursor />
 				<SmoothScroller>
 					<div className="flex flex-col min-h-screen">
 						<div className="flex-1">{children}</div>

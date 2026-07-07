@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 170" width="220" height="170" fill="none">
+  <defs>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="b1"/>
+      <feGaussianBlur stdDeviation="9" result="b2"/>
+      <feMerge>
+        <feMergeNode in="b2"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <linearGradient id="red" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff6070"/>
+      <stop offset="1" stop-color="#f13242"/>
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#glow)" stroke="url(#red)" stroke-width="15" stroke-linejoin="miter" stroke-linecap="butt" fill="none">
+    <!-- back peak (taller, right) -->
+    <path d="M64 128 L122 26 L180 128"/>
+    <!-- front peak (shorter, left) -->
+    <path d="M28 128 L78 56 L128 128"/>
+  </g>
+
+  <text x="110" y="158" text-anchor="middle"
+        font-family="ui-monospace, 'Geist Mono', monospace"
+        font-size="15" letter-spacing="7" fill="#ff8a97"
+        filter="url(#glow)">TRIARCHY</text>
+</svg>

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 		}
 
 		interface HireRequest {
-			bounty_usdc?: number | string;
+			bounty_cspr?: number | string;
 			description?: string;
 			client_id?: string;
 			task_id?: string;
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
 		const ctx: TransactorContext = {
 			txHash,
-			bountyUsdc: body.bounty_usdc !== undefined ? parseFloat(String(body.bounty_usdc)) : -1,
+			bountyCspr: body.bounty_cspr !== undefined ? parseFloat(String(body.bounty_cspr)) : -1,
 			description: body.description || "",
 			clientId: body.client_id || "",
 			taskId: body.task_id || ""
@@ -70,10 +70,10 @@ export async function POST(req: Request) {
 		}
 
 		// --- PIPELINE STAGE 1.6: SPENDING POLICY (Assimilated from Toll) ---
-		const policyViolation = spendingPolicy.check(ctx.clientId || "anonymous", ctx.bountyUsdc);
+		const policyViolation = spendingPolicy.check(ctx.clientId || "anonymous", ctx.bountyCspr);
 		if (policyViolation) {
 			return NextResponse.json(
-				{ error: "Spending policy violation", reason: policyViolation, price: ctx.bountyUsdc },
+				{ error: "Spending policy violation", reason: policyViolation, price: ctx.bountyCspr },
 				{ status: 429 }
 			);
 		}
@@ -87,8 +87,8 @@ export async function POST(req: Request) {
 					executor: "Security Node",
 					message: preclaim.error,
 					details: preclaim.details,
-					usdc_charged: 0,
-					usdc_refunded: preclaim.refundedUsdc || 0
+					cspr_charged: 0,
+					cspr_refunded: preclaim.refundedCspr || 0
 				}, 
 				{ status: 403 }
 			);
@@ -97,7 +97,7 @@ export async function POST(req: Request) {
 		// Mark txHash as used AFTER successful preclaim
 		replayGuard.mark(ctx.txHash);
 
-		const price = ctx.bountyUsdc;
+		const price = ctx.bountyCspr;
 		const description = ctx.description;
 		const client_id = ctx.clientId;
 
@@ -156,7 +156,7 @@ export async function POST(req: Request) {
 							status: "completed",
 							executor: OPENROUTER_KEY ? "OpenRouter Cloud" : "Local Micro-Node",
 							message: `Task completed synchronously via ${OPENROUTER_KEY ? "OpenRouter" : "Local LLM"}.`,
-							usdc_charged: price,
+							cspr_charged: price,
 							result,
 						},
 						{ status: 200 },
@@ -175,7 +175,7 @@ export async function POST(req: Request) {
 			const secretPayload = {
 				agent: "ENTERPRISE_NODE",
 				command: "x402_intercept",
-				bounty_usdc: price,
+				bounty_cspr: price,
 				origin: client_id || "openclaw_anon",
 				instruction: description,
 				timestamp: new Date().toISOString(),
@@ -199,7 +199,7 @@ export async function POST(req: Request) {
 						status: "accepted",
 						executor: "Enterprise Sovereign Node",
 						message: "Task accepted for priority local execution.",
-						usdc_charged: price,
+						cspr_charged: price,
 						fee: 0, // Zero routing fee for enterprise-tier tasks
 					},
 					{ status: 202 },
@@ -216,20 +216,21 @@ export async function POST(req: Request) {
 		const networkFee = price * activeFeePct;
 		const foreignPrice = price - networkFee;
 
-		// External bot call (Mock for video demo)
+		// Optional external P2P peer (set P2P_PEER_URL to a running peer agent).
 		let externalResult = "Awaiting response...";
-		try {
-			const resp = await fetch("http://127.0.0.1:3001/api/hire", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ task: description, amount: foreignPrice }),
-			});
-			const data = await resp.json();
-			externalResult = data.result;
-		} catch {
-			console.warn(
-				"Dummy bot at 3001 is offline. Run 'node dummy_external_bot.js' in a separate terminal.",
-			);
+		const P2P_PEER_URL = process.env.P2P_PEER_URL;
+		if (P2P_PEER_URL) {
+			try {
+				const resp = await fetch(`${P2P_PEER_URL}/api/hire`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ task: description, amount: foreignPrice }),
+				});
+				const data = await resp.json();
+				externalResult = data.result;
+			} catch {
+				console.warn("P2P peer unreachable; task held for the next available node.");
+			}
 		}
 
 		AgentRegistry.updateStats(client_id || "remote_mercenary", foreignPrice);
@@ -242,7 +243,7 @@ export async function POST(req: Request) {
 				message: isQueueFull
 					? "Network busy, routed via \u00dcber Arbitrage protocol."
 					: "Task delegated to idle network nodes.",
-				usdc_charged: price,
+				cspr_charged: price,
 				mercenary_paid: foreignPrice,
 				network_fee: networkFee,
 				external_agent_result: externalResult,

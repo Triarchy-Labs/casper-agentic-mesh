@@ -14,7 +14,7 @@ import * as fs from "node:fs";
 
 export interface TransactorContext {
     txHash: string;
-    bountyUsdc: number;
+    bountyCspr: number;
     description: string;
     clientId: string;
     taskId: string;
@@ -29,11 +29,11 @@ export class CasperTransactor {
         if (!ctx.txHash) {
             return { valid: false, error: "Payment Required. Please provide x-l402-txhash header." };
         }
-        if (!ctx.description || ctx.bountyUsdc === undefined || ctx.bountyUsdc < 0) {
+        if (!ctx.description || ctx.bountyCspr === undefined || ctx.bountyCspr < 0) {
             return { valid: false, error: "Malformed payload: missing definition or negative bounty." };
         }
         // Strict boundary checks
-        if (ctx.bountyUsdc > 1000000) {
+        if (ctx.bountyCspr > 1000000) {
             return { valid: false, error: "Bounty exceeds maximum gateway tier." };
         }
         return { valid: true };
@@ -42,11 +42,11 @@ export class CasperTransactor {
     /**
      * @brief Validates state and conditions (Casper RPC + WASM Sandbox).
      */
-    static async preclaim(ctx: TransactorContext): Promise<{ valid: boolean; error?: string; refundedUsdc?: number; details?: string }> {
+    static async preclaim(ctx: TransactorContext): Promise<{ valid: boolean; error?: string; refundedCspr?: number; details?: string }> {
         const expectedMemo = ctx.clientId || ctx.taskId || "demo";
         
         // 1. Casper Validation (Testnet validation)
-        const validation = await validateCasperPayment(ctx.txHash, ctx.bountyUsdc, expectedMemo);
+        const validation = await validateCasperPayment(ctx.txHash, ctx.bountyCspr, expectedMemo);
         if (!validation.valid) {
             return { valid: false, error: `x402 Payment Validation Failed: ${validation.error}` };
         }
@@ -60,7 +60,7 @@ export class CasperTransactor {
             return { 
                 valid: false, 
                 error: "Payload blocked by WASI Sandbox (Malicious Payload Detected)", 
-                refundedUsdc: ctx.bountyUsdc, 
+                refundedCspr: ctx.bountyCspr, 
                 details: sandboxResult.error 
             };
         }

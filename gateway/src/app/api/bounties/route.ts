@@ -22,9 +22,9 @@ async function getBounties(): Promise<Bounty[]> {
         return JSON.parse(data);
     } catch {
         const defaults: Bounty[] = [
-            { id: "Q-1049", title: "Delta Neutral Arbitrage Audit", bounty: "5,000 USDC", status: "OPEN", issuer: "Triarchy-Labs", skills: ["Rust", "Casper", "DeFi"], difficulty: "GOD-TIER" },
-            { id: "Q-1021", title: "WASM Payload Refactoring", bounty: "850 USDC", status: "IN PROGRESS", issuer: "Anonymous", skills: ["WebAssembly", "C++"], difficulty: "A-TIER" },
-            { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 USDC", status: "OPEN", issuer: "Casper Network", skills: ["Next.js", "React"], difficulty: "B-TIER" },
+            { id: "Q-1049", title: "Escrow Module Optimization", bounty: "5,000 CSPR", status: "OPEN", issuer: "Triarchy-Labs", skills: ["Rust", "Casper", "DeFi"], difficulty: "GOD-TIER" },
+            { id: "Q-1021", title: "WASM Payload Refactoring", bounty: "850 CSPR", status: "IN PROGRESS", issuer: "Anonymous", skills: ["WebAssembly", "C++"], difficulty: "A-TIER" },
+            { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 CSPR", status: "OPEN", issuer: "Casper Network", skills: ["Next.js", "React"], difficulty: "B-TIER" },
         ];
         await fs.writeFile(DB_FILE, JSON.stringify(defaults, null, 2));
         return defaults;
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         const newBounty: Bounty = {
             id: `Q-${Math.floor(Math.random() * 9000) + 1000}`,
             title: body.title || "Unknown Task",
-            bounty: body.usdc ? `${body.usdc} USDC` : "0 USDC",
+            bounty: body.cspr ? `${body.cspr} CSPR` : "0 CSPR",
             status: "OPEN",
             issuer: body.issuer || "Anonymous",
             skills: body.skills || ["General"],

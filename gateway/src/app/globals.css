@@ -125,17 +125,6 @@
   --foreground: var(--gray-1000);
 }
 
-/* ─── MDX FLUID ROOT ─────────────────────────────────────────────
-   Rubber structure: every rem-based element (Tailwind spacing, sizes,
-   type) scales with the viewport. Calibrated so 1rem ≈ 16px at ~1540px
-   (Tailwind's baseline) and bounded so it stays readable on phones /
-   not gigantic on 4K. The MDX vw-root, adapted safely for Tailwind. */
-html {
-  font-size: clamp(13px, 1.04vw, 20px);
-}
-
-.font-display { font-family: var(--font-display), var(--font-sans), sans-serif; }
-
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -155,74 +144,64 @@ body {
 ::-webkit-scrollbar { display: none; }
 * { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Focus visible — on-brand red ring (was off-brand blue) */
+/* Focus visible states with double outline ring */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #000000, 0 0 0 3px rgba(241,50,66,0.9), 0 0 16px rgba(241,50,66,0.35);
-}
-/* form controls get a red glow + border on focus, consistently */
-input:focus, textarea:focus, select:focus {
-  border-color: var(--red-700) !important;
-  box-shadow: 0 0 0 1px rgba(241,50,66,0.5), 0 0 18px rgba(241,50,66,0.15);
-  outline: none;
+  box-shadow: 0 0 0 2px #000000, 0 0 0 4px #47a8ff;
 }
 
-/* Geist Typography Scale — REM-based so it flexes with the fluid root.
-   (1rem ≈ 16px at the calibrated desktop width; ls/lh in em/unitless to scale.) */
-.heading-72 { font-size: 4.5rem;   font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
-.heading-64 { font-size: 4rem;     font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
-.heading-56 { font-size: 3.5rem;   font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
-.heading-48 { font-size: 3rem;     font-weight: 600; line-height: 1.0;  letter-spacing: -0.06em; }
-.heading-40 { font-size: 2.5rem;   font-weight: 600; line-height: 1.2;  letter-spacing: -0.06em; }
-.heading-32 { font-size: 2rem;     font-weight: 600; line-height: 1.25; letter-spacing: -0.06em; }
-.heading-24 { font-size: 1.5rem;   font-weight: 600; line-height: 1.33; letter-spacing: -0.04em; }
-.heading-20 { font-size: 1.25rem;  font-weight: 600; line-height: 1.4;  letter-spacing: -0.04em; }
-.heading-16 { font-size: 1rem;     font-weight: 600; line-height: 1.5;  letter-spacing: -0.04em; }
-.heading-14 { font-size: 0.875rem; font-weight: 600; line-height: 1.43; letter-spacing: -0.04em; }
+/* Geist Typography Scale */
+.heading-72 { font-size: 72px; font-weight: 600; line-height: 72px; letter-spacing: -4.32px; }
+.heading-64 { font-size: 64px; font-weight: 600; line-height: 64px; letter-spacing: -3.84px; }
+.heading-56 { font-size: 56px; font-weight: 600; line-height: 56px; letter-spacing: -3.36px; }
+.heading-48 { font-size: 48px; font-weight: 600; line-height: 48px; letter-spacing: -2.88px; }
+.heading-40 { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -2.4px; }
+.heading-32 { font-size: 32px; font-weight: 600; line-height: 40px; letter-spacing: -1.92px; }
+.heading-24 { font-size: 24px; font-weight: 600; line-height: 32px; letter-spacing: -0.96px; }
+.heading-20 { font-size: 20px; font-weight: 600; line-height: 28px; letter-spacing: -0.8px; }
+.heading-16 { font-size: 16px; font-weight: 600; line-height: 24px; letter-spacing: -0.64px; }
+.heading-14 { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.56px; }
 
-.label-20 { font-size: 1.25rem;  font-weight: 400; line-height: 1.4; }
-.label-18 { font-size: 1.125rem; font-weight: 400; line-height: 1.33; }
-.label-16 { font-size: 1rem;     font-weight: 400; line-height: 1.5; }
-.label-14 { font-size: 0.875rem; font-weight: 400; line-height: 1.43; }
-.label-14-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; line-height: 1.43; letter-spacing: 0.05em; text-transform: uppercase; }
-.label-13 { font-size: 0.8125rem; font-weight: 400; line-height: 1.38; }
-.label-13-mono { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 400; line-height: 1.38; letter-spacing: 0.05em; text-transform: uppercase; }
-.label-12 { font-size: 0.75rem; font-weight: 400; line-height: 1.33; }
-.label-12-mono { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 400; line-height: 1.33; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-20 { font-size: 20px; font-weight: 400; line-height: 28px; }
+.label-18 { font-size: 18px; font-weight: 400; line-height: 24px; }
+.label-16 { font-size: 16px; font-weight: 400; line-height: 24px; }
+.label-14 { font-size: 14px; font-weight: 400; line-height: 20px; }
+.label-14-mono { font-family: var(--font-mono); font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-13 { font-size: 13px; font-weight: 400; line-height: 18px; }
+.label-13-mono { font-family: var(--font-mono); font-size: 13px; font-weight: 400; line-height: 18px; letter-spacing: 0.05em; text-transform: uppercase; }
+.label-12 { font-size: 12px; font-weight: 400; line-height: 16px; }
+.label-12-mono { font-family: var(--font-mono); font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: 0.05em; text-transform: uppercase; }
 
-.copy-24 { font-size: 1.5rem;   font-weight: 400; line-height: 1.33; color: var(--gray-900); }
-.copy-20 { font-size: 1.25rem;  font-weight: 400; line-height: 1.4;  color: var(--gray-900); }
-.copy-18 { font-size: 1.125rem; font-weight: 400; line-height: 1.44; color: var(--gray-900); }
-.copy-16 { font-size: 1rem;     font-weight: 400; line-height: 1.5;  color: var(--gray-900); }
-.copy-14 { font-size: 0.875rem; font-weight: 400; line-height: 1.43; color: var(--gray-900); }
-.copy-14-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 400; line-height: 1.43; color: var(--gray-900); }
-.copy-13 { font-size: 0.8125rem; font-weight: 400; line-height: 1.38; color: var(--gray-900); }
-.copy-13-mono { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 400; line-height: 1.38; color: var(--gray-900); }
+.copy-24 { font-size: 24px; font-weight: 400; line-height: 32px; color: var(--gray-900); }
+.copy-20 { font-size: 20px; font-weight: 400; line-height: 28px; color: var(--gray-900); }
+.copy-18 { font-size: 18px; font-weight: 400; line-height: 26px; color: var(--gray-900); }
+.copy-16 { font-size: 16px; font-weight: 400; line-height: 24px; color: var(--gray-900); }
+.copy-14 { font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-900); }
+.copy-14-mono { font-family: var(--font-mono); font-size: 14px; font-weight: 400; line-height: 20px; color: var(--gray-900); }
+.copy-13 { font-size: 13px; font-weight: 400; line-height: 18px; color: var(--gray-900); }
+.copy-13-mono { font-family: var(--font-mono); font-size: 13px; font-weight: 400; line-height: 18px; color: var(--gray-900); }
 
-.button-12 { font-size: 0.75rem;  font-weight: 500; line-height: 1.33; }
-.button-14 { font-size: 0.875rem; font-weight: 500; line-height: 1.43; }
-.button-16 { font-size: 1rem;     font-weight: 500; line-height: 1.25; }
+.button-12 { font-size: 12px; font-weight: 500; line-height: 16px; }
+.button-14 { font-size: 14px; font-weight: 500; line-height: 20px; }
+.button-16 { font-size: 16px; font-weight: 500; line-height: 20px; }
 
 /* Geist Components */
 .button-primary {
   background-color: var(--gray-1000);
   color: var(--background-100);
-  border-radius: 0px;
-  padding: 0 18px;
+  border-radius: 6px;
+  padding: 0 10px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1);
+  transition: all 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
   font-weight: 500;
   border: 1px solid transparent;
-  box-shadow: 0 8px 24px -12px rgba(0,0,0,0.7);
 }
 .button-primary:hover {
-  background-color: #ffffff;
-  box-shadow: 0 12px 30px -12px rgba(0,0,0,0.75), 0 0 0 3px rgba(255,255,255,0.06);
+  background-color: var(--gray-900);
 }
-.button-primary:active { transform: scale(0.97); }
 .button-primary:disabled {
   background-color: var(--gray-200);
   color: var(--gray-700);
@@ -230,134 +209,67 @@ input:focus, textarea:focus, select:focus {
 }
 
 .button-secondary {
-  background-color: rgba(255,255,255,0.03);
+  background-color: var(--background-100);
   color: var(--gray-1000);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 0px;
-  padding: 0 18px;
+  border: 1px solid var(--gray-alpha-400);
+  border-radius: 6px;
+  padding: 0 10px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms cubic-bezier(0.32,0.72,0,1), border-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1);
+  transition: all 150ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
   font-weight: 500;
 }
 .button-secondary:hover {
-  background-color: rgba(241,50,66,0.08);
-  border-color: rgba(241,50,66,0.4);
-  box-shadow: 0 0 16px rgba(241,50,66,0.2);
+  background-color: var(--gray-alpha-200);
+  border-color: var(--gray-alpha-500);
 }
-.button-secondary:active { transform: scale(0.97); }
 .button-secondary:disabled {
   border-color: var(--gray-alpha-200);
   color: var(--gray-700);
   cursor: not-allowed;
 }
 
-/* Editorial Elevation */
-/* Premium brutalist panel (taste-skill applied to our carbon brand):
-   semi-opaque so the carbon fabric breathes behind it, a hairline WHITE border
-   (not generic gray), an inner top highlight, and a soft ambient shadow instead
-   of a harsh drop shadow. Sharp corners kept — that's our identity. */
+/* Editorial Elevation (Fable 5) */
 .editorial-panel {
-  /* darker, blacker tint (like the manifesto box) so text stays readable even
-     over the bright centre of the fabric — not a red wash. */
-  background-color: rgba(6, 3, 4, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background-color: var(--background-100);
+  border: 1px solid var(--gray-400);
+  /* Zero border-radius for raw authentic feel */
   border-radius: 0px;
-  /* frosted 'liquid glass' — keeps the carbon visible but restores legibility */
-  backdrop-filter: blur(18px) saturate(1.05);
-  -webkit-backdrop-filter: blur(18px) saturate(1.05);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 24px 48px -24px rgba(0, 0, 0, 0.75);
   position: relative;
   z-index: 10;
-  transition:
-    opacity 450ms cubic-bezier(0.32,0.72,0,1),
-    filter 450ms cubic-bezier(0.32,0.72,0,1),
-    background-color 320ms cubic-bezier(0.32,0.72,0,1),
-    border-color 320ms cubic-bezier(0.32,0.72,0,1),
-    box-shadow 320ms cubic-bezier(0.32,0.72,0,1),
-    transform 320ms cubic-bezier(0.32,0.72,0,1);
-}
-/* Hover: the focused card becomes near-solid (97%) and lifts. */
-.editorial-panel:hover {
-  background-color: rgba(9, 4, 6, 0.97);
-  border-color: rgba(241, 50, 66, 0.40);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    0 30px 70px -22px rgba(0, 0, 0, 0.85),
-    0 0 0 1px rgba(241, 50, 66, 0.14),
-    0 0 40px -8px rgba(241, 50, 66, 0.18);
-  transform: translateY(-2px);
-  z-index: 12;
-}
-/* Focus-the-rest-away: hovering any card in a group fades + blurs its siblings. */
-.editorial-grid:has(.editorial-panel:hover) .editorial-panel:not(:hover),
-.focus-cards:has(.editorial-panel:hover) .editorial-panel:not(:hover) {
-  opacity: 0.38;
-  filter: blur(3px) saturate(0.82);
 }
 
-/* Brutalist Aesthetics */
+/* Fable 5 Aesthetics */
 .editorial-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 16px; /* Geist spacing */
 }
 
-/* Volumetric Drifting Triangle (Cinematic Brutalism) */
-.drifting-hero-container {
-  position: relative;
-  width: 450px;
-  height: 450px;
+/* Giant Strobing Lamp (Preserved Casper Aesthetic) */
+.giant-strobing-lamp {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: black;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  animation: strobeNeon 4s ease-in-out infinite alternate;
 }
 
-.volumetric-light-cone {
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  background: conic-gradient(
-    from 150deg at 50% 25%,
-    rgba(255, 255, 255, 0.22) 0deg,
-    rgba(255, 255, 255, 0.12) 30deg,
-    rgba(255, 255, 255, 0) 90deg,
-    rgba(255, 255, 255, 0) 270deg,
-    rgba(255, 255, 255, 0.12) 330deg,
-    rgba(255, 255, 255, 0.22) 360deg
-  );
-  filter: blur(44px);
-  pointer-events: none;
-  z-index: 5;
-  animation: driftingLight 14s ease-in-out infinite alternate;
-}
-
-.silhouetted-triangle {
-  position: relative;
-  width: 250px;
-  height: 250px;
-  background: #000000;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  z-index: 10;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.95);
-}
-
-@keyframes driftingLight {
+@keyframes strobeNeon {
   0% {
-    transform: translate(-2.5%, -1.5%) scale(1.01) rotate(-1.5deg);
-    opacity: 0.75;
-  }
-  50% {
-    transform: translate(2.5%, 1%) scale(0.99) rotate(1deg);
-    opacity: 0.95;
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
   }
   100% {
-    transform: translate(-1%, 2.5%) scale(1.02) rotate(-0.5deg);
-    opacity: 0.8;
+    box-shadow: 0 0 100px var(--red-700), inset 0 0 50px var(--red-500);
+    border-color: var(--red-700);
   }
 }
 
@@ -379,8 +291,10 @@ input:focus, textarea:focus, select:focus {
     transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
-  .volumetric-light-cone {
+  .giant-strobing-lamp {
     animation: none !important;
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
   }
   .rare-snake-border::after {
     animation: none !important;
@@ -488,297 +402,3 @@ input:focus, textarea:focus, select:focus {
   transform: rotate(90deg);
 }
 
-
-/* ════════════════════════════════════════════════════════════════
-   PREMIUM OVERHAUL — carbon-fibre red, neon aura, frontier cursor
-   Racing DNA masked under serious web3 (Casper / Vercel-Geist).
-   ════════════════════════════════════════════════════════════════ */
-
-/* Background is the real woven-carbon photo layer (<CarbonFabric>). The old
-   CSS-gradient twill + body overlay were removed — they were the flat 'pattern'
-   look and a dark sheet sitting over the fabric. */
-body {
-  background-color: #060203;
-}
-
-/* Left-edge neon aura — the brand spine, replaces the hero triangle. */
-.edge-aura {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 38vw;
-  max-width: 560px;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1;
-  background:
-    radial-gradient(60% 50% at 0% 50%, rgba(241,50,66,0.30), transparent 70%),
-    linear-gradient(90deg, rgba(241,50,66,0.16) 0%, transparent 72%);
-  filter: blur(6px);
-  animation: edgeBreathe 7s ease-in-out infinite;
-}
-.edge-aura::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 2px; height: 100%;
-  background: linear-gradient(180deg, transparent, var(--red-700) 18%, var(--red-900) 50%, var(--red-700) 82%, transparent);
-  box-shadow: 0 0 22px 3px rgba(241,50,66,0.55), 0 0 60px 8px rgba(241,50,66,0.25);
-}
-@keyframes edgeBreathe {
-  0%, 100% { opacity: 0.75; }
-  50% { opacity: 1; }
-}
-
-/* Neon button — soft pulsing red aura, not flat. */
-.btn-neon {
-  position: relative;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 12px;
-  padding: 12px 22px;
-  color: var(--red-1000);
-  background: linear-gradient(180deg, rgba(241,50,66,0.10), rgba(0,0,0,0.4));
-  border: 1px solid rgba(241,50,66,0.55);
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0.2,0.8,0.2,1);
-  box-shadow: 0 0 0 0 rgba(241,50,66,0.0), inset 0 0 12px rgba(241,50,66,0.08);
-  animation: neonIdle 3.4s ease-in-out infinite;
-}
-.btn-neon:hover {
-  color: #fff;
-  border-color: var(--red-900);
-  box-shadow: 0 0 18px 2px rgba(241,50,66,0.55), 0 0 48px 8px rgba(241,50,66,0.28), inset 0 0 18px rgba(241,50,66,0.2);
-  transform: translateY(-1px);
-}
-.btn-neon:disabled { opacity: 0.4; cursor: not-allowed; animation: none; }
-@keyframes neonIdle {
-  0%, 100% { box-shadow: 0 0 6px 0 rgba(241,50,66,0.18), inset 0 0 12px rgba(241,50,66,0.08); }
-  50% { box-shadow: 0 0 14px 1px rgba(241,50,66,0.34), inset 0 0 14px rgba(241,50,66,0.12); }
-}
-
-.btn-ghost {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 12px;
-  padding: 12px 22px;
-  color: var(--gray-1000);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--gray-alpha-300);
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 180ms ease;
-}
-.btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: var(--gray-alpha-500); }
-
-/* Frontier custom cursor — dot + lerping ring with screen blend. */
-@media (hover: hover) and (pointer: fine) {
-  body { cursor: none; }
-  a, button, [role="button"], textarea, input { cursor: none; }
-}
-.cursor-dot, .cursor-ring {
-  position: fixed;
-  top: 0; left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: screen;
-  transform: translate(-50%, -50%);
-  will-change: transform;
-}
-.cursor-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 0 10px 2px rgba(255,255,255,0.9), 0 0 20px 4px rgba(255,255,255,0.4);
-}
-.cursor-ring {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.85);
-  box-shadow: 0 0 16px rgba(255,255,255,0.5), inset 0 0 10px rgba(255,255,255,0.2);
-  transition: width 160ms ease, height 160ms ease, border-color 160ms ease;
-}
-.cursor-ring.is-hot { width: 52px; height: 52px; border-color: #ffffff; }
-
-/* Smooth scroll (Lenis) */
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-
-/* ════════════════════════════════════════════════════════════════
-   NEO-BRUTALIST type + cyberpunk HUD accents (racing/techwear refs)
-   ════════════════════════════════════════════════════════════════ */
-.nb-display { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
-.nb-thin    { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 200; letter-spacing: -0.03em; }
-/* outlined stroke text — raw brutalist contrast */
-.nb-outline {
-  color: transparent;
-  -webkit-text-stroke: 1.4px rgba(255,233,237,0.5);
-  text-stroke: 1.4px rgba(255,233,237,0.5);
-}
-/* hard red highlight block behind a word */
-.nb-hl {
-  background: var(--red-700);
-  color: #0a0204;
-  padding: 0 0.22em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-/* mono HUD tag chip — [ 23 // MESH ] */
-.nb-tag {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--red-1000);
-  border: 1px solid rgba(241,50,66,0.5);
-  padding: 4px 10px;
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(241,50,66,0.06);
-}
-.nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
-/* diagonal slash motif from techwear refs */
-.hud-slashes::before { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-right: 12px; opacity: 0.9; }
-.hud-slashes::after  { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-left: 12px; opacity: 0.4; }
-/* thin technical connector lines */
-.tech-line   { height: 1px; background: linear-gradient(90deg, var(--red-700) 0%, rgba(241,50,66,0.0) 100%); }
-.tech-line-v { width: 1px;  background: linear-gradient(180deg, rgba(241,50,66,0.0), var(--red-700), rgba(241,50,66,0.0)); }
-/* small index counter like "+ 23 >" */
-.nb-index { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--gray-700); }
-
-/* ════════════════════════════════════════════════════════════════
-   LIVING CARBON FABRIC — reactive background (mouse + scroll), matte
-   weave that catches light near the cursor. Replaces the fluid 'jelly'.
-   ════════════════════════════════════════════════════════════════ */
-/* Stage — dark base, always fully covered. */
-.carbon-stage {
-  position: fixed; inset: 0;
-  z-index: 0; pointer-events: none;
-  overflow: hidden;
-  background: #060203;
-}
-/* REAL woven-carbon photo (macro fabric with true folds + depth-of-field).
-   Source: Unsplash (free license). Oversized + parallax so it feels alive. */
-.carbon-weave {
-  position: absolute; inset: -6%;
-  background-image: url(/carbon.jpg);
-  background-size: cover;
-  background-position: center;
-  /* lift the darker areas so the weave reads across the whole page */
-  filter: brightness(1.5) contrast(1.05) saturate(1.05);
-  transform: scale(1.06) translate3d(calc(var(--px,0) * -12px), calc(var(--py,0) * -10px + var(--scrolly,0) * 0.5px), 0);
-  transition: transform 260ms cubic-bezier(0.2,0.8,0.2,1);
-  will-change: transform;
-}
-/* recolor the grey fabric into deep racing red — keeps the weave/fold luminance */
-.carbon-tint {
-  position: absolute; inset: 0;
-  background: linear-gradient(160deg, #7a1020 0%, #b81e2e 45%, #5c0d18 100%);
-  mix-blend-mode: color;
-  opacity: 0.72;
-}
-/* gentle warm glow from below — static, no cursor lightbulb */
-.carbon-backlight {
-  position: absolute; inset: 0;
-  mix-blend-mode: screen;
-  background: radial-gradient(120% 70% at 50% 118%, rgba(241,80,95,0.16), transparent 60%);
-}
-/* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
-   (kicks in only near the corners, so the fabric centre stays fully visible). */
-.carbon-depth {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(118% 118% at 50% 47%, transparent 58%, rgba(0,0,0,0.34) 86%, rgba(0,0,0,0.6) 100%),
-    linear-gradient(180deg, rgba(0,0,0,0.42) 0%, transparent 15%, transparent 84%, rgba(0,0,0,0.42) 100%);
-}
-
-/* All display headings use the premium geometric face (Sora / Aventa-class). */
-.heading-72,.heading-64,.heading-56,.heading-48,.heading-40,.heading-32,.heading-24,.heading-20,.heading-16 {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
-}
-
-/* ── HEADER / NAV (taste-skill: floating island, magnetic hover) ── */
-.nav-island {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 7px;
-  background: rgba(9,4,6,0.52);
-  border: 1px solid rgba(255,255,255,0.10);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 18px 44px -24px rgba(0,0,0,0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-.nav-pill {
-  position: relative;
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(237,237,237,0.82);
-  padding: 9px 16px;
-  border: 1px solid transparent;
-  transition: color 240ms cubic-bezier(0.32,0.72,0,1),
-              background-color 240ms cubic-bezier(0.32,0.72,0,1),
-              border-color 240ms cubic-bezier(0.32,0.72,0,1),
-              box-shadow 240ms cubic-bezier(0.32,0.72,0,1);
-}
-.nav-pill:hover {
-  color: #fff;
-  border-color: rgba(241,50,66,0.45);
-  background: rgba(241,50,66,0.07);
-  box-shadow: 0 0 16px rgba(241,50,66,0.20);
-}
-.nav-pill::after {
-  content: ""; position: absolute; left: 16px; right: 16px; bottom: 6px; height: 1px;
-  background: var(--red-700); transform: scaleX(0); transform-origin: left;
-  transition: transform 300ms cubic-bezier(0.32,0.72,0,1);
-}
-.nav-pill:hover::after { transform: scaleX(1); }
-
-/* ── ANALOG DEGRADATION (industrial-brutalist skill): CRT scanlines + film grain.
-   Fixed, pointer-events-none, so it costs almost nothing. A whisper, not a filter. */
-.fx-overlay {
-  position: fixed; inset: 0;
-  z-index: 40; pointer-events: none;
-  background-image: repeating-linear-gradient(
-    0deg, rgba(0,0,0,0.16) 0px, rgba(0,0,0,0.16) 1px, transparent 1px, transparent 3px);
-  mix-blend-mode: multiply;
-  opacity: 0.35;
-}
-.fx-overlay::after {
-  content: ""; position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-}
-
-/* ── FRONTIER MICRO-DETAILS (taste + brutalist) ── */
-/* underline sweep for text links */
-.link-sweep { position: relative; transition: color 220ms cubic-bezier(0.32,0.72,0,1); }
-.link-sweep::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px;
-  background: var(--red-700); transform: scaleX(0); transform-origin: left;
-  transition: transform 300ms cubic-bezier(0.32,0.72,0,1);
-}
-.link-sweep:hover { color: #fff; }
-.link-sweep:hover::after { transform: scaleX(1); }
-
-/* thin red scrollbar for scroll containers that opt in */
-.scroll-red { scrollbar-width: thin; scrollbar-color: rgba(241,50,66,0.5) transparent; }
-.scroll-red::-webkit-scrollbar { display: block; width: 6px; height: 6px; }
-.scroll-red::-webkit-scrollbar-thumb { background: rgba(241,50,66,0.45); border-radius: 0; }
-.scroll-red::-webkit-scrollbar-thumb:hover { background: rgba(241,50,66,0.75); }
-.scroll-red::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
-
-/* full-width brutalist divider (compartmentalization) */
-.hr-brutal {
-  border: 0; height: 1px; width: 100%;
-  background: linear-gradient(90deg, rgba(241,50,66,0.5), rgba(255,255,255,0.06) 40%, transparent);
-  margin: 0;
-}
-
-/* button-in-button trailing icon circle */
-.btn-icon-circle {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; margin-left: 10px;
-  border: 1px solid rgba(255,255,255,0.25);
-  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms;
-}
-.btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }

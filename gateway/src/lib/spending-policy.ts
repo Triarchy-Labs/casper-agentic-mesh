@@ -13,11 +13,11 @@
  */
 
 export interface SpendingPolicyConfig {
-    /** Max USDC a single call can cost. Rejects tasks priced above this. */
+    /** Max CSPR a single call can cost. Rejects tasks priced above this. */
     maxPerCall?: number;
-    /** Max USDC a single caller can spend per day */
+    /** Max CSPR a single caller can spend per day */
     maxDailyPerCaller?: number;
-    /** Max USDC total across all callers per day */
+    /** Max CSPR total across all callers per day */
     maxDailyGlobal?: number;
     /** Casper addresses allowed to submit tasks (empty = allow all) */
     allowedCallers?: string[];

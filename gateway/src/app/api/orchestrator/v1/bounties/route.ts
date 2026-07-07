@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { bot_pubkey, action, quest_id, description, bounty_usdc, client_id } = body;
+        const { bot_pubkey, action, quest_id, description, bounty_cspr, client_id } = body;
 
         // Validate required fields
         if (!action) {
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
         const hirePayload = {
             task_id: quest_id || `auto_${Date.now()}`,
             description: description || `Bot claiming quest: ${quest_id}`,
-            bounty_usdc: bounty_usdc || 1.0,
+            bounty_cspr: bounty_cspr || 1.0,
             client_id: bot_pubkey || client_id || "autonomous_agent",
             payload_id: quest_id,
         };
@@ -80,10 +80,10 @@ export async function GET() {
         protocol: "x402/L402",
         description: "Autonomous bounty ingestion for AI agents (ElizaOS / OpenClaw / curl)",
         example: {
-            bot_pubkey: "01c0...",
+            bot_pubkey: "GXYZ...",
             action: "claim",
             quest_id: "Q-1049",
-            bounty_usdc: 5.0,
+            bounty_cspr: 5.0,
         },
     });
 }

@@ -7,10 +7,8 @@ export interface AgentRecord {
 	status: "active" | "quarantined" | "offline";
 	reputationScore: number; // 0 to 100
 	tasksCompleted: number;
-	usdcSettled: number;
+	csprSettled: number;
 	lastActiveTracker: string; // ISO timestamp
-	stakedCollateralCspr: number;
-	passportId: string;
 }
 
 class TriarchyAgentRegistry {
@@ -24,10 +22,8 @@ class TriarchyAgentRegistry {
 			status: "active",
 			reputationScore: 99,
 			tasksCompleted: 1042,
-			usdcSettled: 420.5,
+			csprSettled: 420.5,
 			lastActiveTracker: new Date().toISOString(),
-			stakedCollateralCspr: 150000,
-			passportId: "CEP78-SB-8902",
 		});
 
 		this.register({
@@ -36,10 +32,8 @@ class TriarchyAgentRegistry {
 			status: "active",
 			reputationScore: 95,
 			tasksCompleted: 450,
-			usdcSettled: 120.0,
+			csprSettled: 120.0,
 			lastActiveTracker: new Date().toISOString(),
-			stakedCollateralCspr: 250000,
-			passportId: "CEP78-SB-1104",
 		});
 
 		this.register({
@@ -48,10 +42,8 @@ class TriarchyAgentRegistry {
 			status: "quarantined",
 			reputationScore: 12,
 			tasksCompleted: 5,
-			usdcSettled: 0.0,
+			csprSettled: 0.0,
 			lastActiveTracker: new Date().toISOString(),
-			stakedCollateralCspr: 0,
-			passportId: "CEP78-SB-666D",
 		});
 	}
 
@@ -67,11 +59,11 @@ class TriarchyAgentRegistry {
 		return Array.from(this.baseAgents.values());
 	}
 
-	public updateStats(id: string, feeUsdc: number) {
+	public updateStats(id: string, feeCspr: number) {
 		const agent = this.baseAgents.get(id);
 		if (agent) {
 			agent.tasksCompleted += 1;
-			agent.usdcSettled += feeUsdc;
+			agent.csprSettled += feeCspr;
 			agent.lastActiveTracker = new Date().toISOString();
 			// Increase reputation slightly on successful task
 			if (agent.reputationScore < 100) {
@@ -85,10 +77,8 @@ class TriarchyAgentRegistry {
 				status: "active",
 				reputationScore: 80,
 				tasksCompleted: 1,
-				usdcSettled: feeUsdc,
+				csprSettled: feeCspr,
 				lastActiveTracker: new Date().toISOString(),
-				stakedCollateralCspr: 50000,
-				passportId: `CEP78-SB-${Math.floor(1000 + Math.random() * 9000)}`,
 			});
 		}
 	}

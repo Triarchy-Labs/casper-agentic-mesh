@@ -7,9 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Nav } from "@/components/Nav";
 import { AgentOrb, AgentState } from "@/components/AgentOrb";
 import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
-import { payForTask } from "@/lib/pay";
-import { MeshControl } from "@/components/MeshControl";
-import { CarbonFabric } from "@/components/CarbonFabric";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
@@ -63,15 +60,7 @@ export default function Dashboard() {
 	const [sysLoad, setSysLoad] = useState("0.00");
     const [inputValue, setInputValue] = useState("");
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
-    const [paymentTx, setPaymentTx] = useState<string | null>(null);
-    const [onchain, setOnchain] = useState<{asset: string; reading: string | null; reputation: number | null; priceUsd: number | null; peg: {usd: number; cspr: number} | null; fetchedAt: string} | null>(null);
     const [balance] = useState(140);
-
-	const [gasPrice, setGasPrice] = useState(0.002840);
-	const [gasHedged, setGasHedged] = useState(450000);
-	const [l402Console, setL402Console] = useState<string>("// Ready to challenge L402 gate");
-	const [l402Status, setL402Status] = useState<"IDLE" | "CHALLENGED" | "SUCCESS">("IDLE");
-	const [meshLoad, setMeshLoad] = useState<number[]>([12, 45, 89, 23, 67, 10, 34, 56, 88, 92, 14, 41]);
 
     const mainRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLElement>(null);
@@ -126,66 +115,28 @@ export default function Dashboard() {
         return () => clearInterval(int);
     }, []);
 
-	// Ticking gas price
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setGasPrice(prev => {
-				const change = (Math.random() - 0.5) * 0.00005;
-				return Math.max(0.001, prev + change);
-			});
-		}, 1500);
-		return () => clearInterval(interval);
-	}, []);
-
-	// Mesh Load variation
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setMeshLoad(prev => prev.map(val => {
-				const change = Math.floor((Math.random() - 0.5) * 15);
-				return Math.min(100, Math.max(5, val + change));
-			}));
-		}, 2000);
-		return () => clearInterval(interval);
-	}, []);
-
-    // Live on-chain snapshot (oracle reading + agent reputation) — polled from the ledger.
-    useEffect(() => {
-        let alive = true;
-        const pull = async () => {
-            try {
-                const r = await fetch("/api/onchain");
-                const d = await r.json();
-                if (alive && !d.error) setOnchain(d);
-            } catch { /* keep last snapshot */ }
-        };
-        pull();
-        const id = setInterval(pull, 30000);
-        return () => { alive = false; clearInterval(id); };
-    }, []);
-
     const handleExecute = async () => {
         if (!inputValue.trim()) return;
         setAgentState("working");
         setProgress(0);
         setLastResult(null);
-        setPaymentTx(null);
 
         try {
             const accessDetails = await requestAccess();
             if (accessDetails.error) throw new Error(accessDetails.error);
             const userPubKey = accessDetails.address || "GXYZ...";
 
-            // Real on-chain payment only — no mock/bypass.
-            // The L402 payment proof must be a real Casper transaction hash whose
-            // execution succeeded on the ledger (verified server-side in casper.ts).
-            if (typeof window === "undefined" || !window.casperWallet) {
-                throw new Error("CASPER_WALLET_REQUIRED");
+            // MOCK: Fallback unique signature identifier when window.casperWallet signature is simulated or bypassed
+            let txHashHeader = "mock_csprclick_" + userPubKey;
+            if (typeof window !== "undefined" && window.casperWallet) {
+                try {
+                    const message = `SIGN_INTENT: ${inputValue}`;
+                    const signature = await window.casperWallet.signMessage(message, userPubKey);
+                    txHashHeader = typeof signature === 'string' ? signature : JSON.stringify(signature);
+                } catch {
+                    throw new Error("USER_SIGNATURE_REQUIRED");
+                }
             }
-            const txHashHeader = await payForTask(inputValue, userPubKey);
-            if (!/^[0-9a-fA-F]{64}$/.test(txHashHeader)) {
-                throw new Error("PAYMENT_NOT_CONFIRMED");
-            }
-            setPaymentTx(txHashHeader);
 
             const res = await fetch("/api/hire", {
                 method: "POST",
@@ -195,7 +146,7 @@ export default function Dashboard() {
                 },
                 body: JSON.stringify({
                     description: inputValue,
-                    bounty_usdc: 1.0,
+                    bounty_cspr: 1.0,
                     client_id: userPubKey,
                     task_id: `ui_task_${Date.now()}`,
                 }),
@@ -251,8 +202,7 @@ export default function Dashboard() {
     }, [progress, agentState]);
 
 	return (
-		<main ref={mainRef} className="bg-transparent text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
-			<CarbonFabric muted />
+		<main ref={mainRef} className="bg-black text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
 			<Nav />
 			
             {/* Cinematic Hero Section (Pinned) */}
@@ -290,17 +240,9 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
+            <section ref={gridRef} className="relative z-10 bg-black min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
                 <div className="max-w-7xl mx-auto editorial-grid">
-
-                    {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
-                    <div className="col-span-12 mb-4">
-                        <div className="text-xs tracking-[0.3em] text-white/40 mb-6 pb-3 border-b border-white/10 flex items-center gap-3">
-                            <span className="text-[var(--red-700)]">◢◤</span> MESH_CONTROL <span className="text-white/25">// overseer · adversarial court</span>
-                        </div>
-                    </div>
-                    <MeshControl />
-
+                    
                     {/* Execution Terminal (8 cols) */}
                     <div className="col-span-12 md:col-span-8 editorial-panel p-8 min-h-[400px] flex flex-col grid-item relative">
                         <CornerMarks />
@@ -325,47 +267,11 @@ export default function Dashboard() {
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 border border-white/20 p-6 bg-white/5">
                                 <div className="text-xs text-white/40 mb-4">API_RESPONSE</div>
                                 <div className="mb-2"><span className="text-white/40 w-24 inline-block">STATUS:</span> {lastResult.status?.toUpperCase()}</div>
-                                {paymentTx && (
-                                    <div className="mb-2">
-                                        <span className="text-white/40 w-24 inline-block">PAYMENT:</span>
-                                        <a
-                                            href={`https://testnet.cspr.live/transaction/${paymentTx}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[var(--red-900)] underline break-all hover:text-white"
-                                        >
-                                            {paymentTx.slice(0, 10)}…{paymentTx.slice(-8)} ↗
-                                        </a>
-                                    </div>
-                                )}
                                 {lastResult.executor && <div className="mb-2"><span className="text-white/40 w-24 inline-block">EXECUTOR:</span> {lastResult.executor}</div>}
                                 {lastResult.error && <div><span className="text-white/40 w-24 inline-block">ERROR:</span> {lastResult.error}</div>}
                                 {lastResult.result && <div className="mt-4 text-xs leading-relaxed text-white/60">{lastResult.result}</div>}
                             </motion.div>
                         )}
-
-                        {/* LIVE ON-CHAIN STATE — read straight from the Casper ledger */}
-                        <div className="editorial-panel p-6 mt-8 relative">
-                            <CornerMarks />
-                            <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
-                                <span>ON-CHAIN STATE · CASPER TESTNET</span>
-                                <span className={onchain ? "text-[var(--red-700)]" : "text-white/30"}>
-                                    {onchain ? "● LIVE" : "○ …"}
-                                </span>
-                            </div>
-                            {onchain ? (
-                                <div className="font-mono text-sm space-y-2">
-                                    <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
-                                    <div><span className="text-white/40 w-40 inline-block">AGENT REPUTATION:</span> {onchain.reputation ?? 0}</div>
-                                    {onchain.peg && (
-                                        <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-[var(--red-1000)]">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
-                                    )}
-                                    <div className="text-white/30 text-xs mt-2">synced {new Date(onchain.fetchedAt).toLocaleTimeString()} · source: ledger (no mock)</div>
-                                </div>
-                            ) : (
-                                <div className="text-white/30 text-sm">querying Casper node…</div>
-                            )}
-                        </div>
                     </div>
 
                     {/* Telemetry & Nodes (4 cols) */}
@@ -374,7 +280,7 @@ export default function Dashboard() {
                         {/* Agent Stage */}
                         <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
                             <CornerMarks />
-                            <AgentOrb state={agentState} size={168} />
+                            <AgentOrb state={agentState} size={120} />
                             {agentState === "exhausted" && (
                                 <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
                             )}
@@ -405,149 +311,10 @@ export default function Dashboard() {
 
                 </div>
 
-				{/* 4. Scale Expansion Telemetry Section */}
-				<div className="max-w-7xl mx-auto mt-20 border-t border-white/20 pt-16">
-					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
-						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
-					</h2>
-
-					<div className="editorial-grid gap-8">
-						{/* Vector Gamma Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_GAMMA // COGNITIVE_ARBITRAGE</span>
-									<span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--red-700)] text-[var(--red-700)]">ACTIVE</span>
-								</div>
-
-								{/* Gas Futures Tracker */}
-								<div className="mb-8 p-4 bg-white/5 border border-white/10">
-									<div className="text-[10px] text-white/40 mb-2 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
-									<div className="text-3xl font-mono font-bold text-white tracking-tight">
-										{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
-									</div>
-									<div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-										<span className="text-xs text-white/60">Hedged Capacity: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas-units</span></span>
-										<div className="flex gap-2">
-											<button 
-												onClick={() => {
-													setGasHedged(prev => prev + 100000);
-													setGasPrice(p => p + 0.000120);
-												}}
-												className="px-2 py-1 bg-white text-black font-bold text-[9px] uppercase tracking-wider"
-											>
-												+ 100K HEDGE
-											</button>
-											<button 
-												onClick={() => {
-													setGasHedged(prev => Math.max(0, prev - 100000));
-													setGasPrice(p => Math.max(0.001, p - 0.000100));
-												}}
-												className="px-2 py-1 border border-white/20 text-white font-bold text-[9px] uppercase tracking-wider hover:bg-white/5"
-											>
-												RELEASE
-											</button>
-										</div>
-									</div>
-								</div>
-
-								{/* Arbitrage Delegation Tree */}
-								<div>
-									<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
-									<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
-										<div className="flex items-center gap-2">
-											<span className="text-[var(--red-700)]">[Orchestrator]</span>
-											<span className="text-white/40">mark_53_sarcophagus</span>
-										</div>
-										<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
-											<div className="flex items-center gap-2">
-												<span className="text-white/40">├── [Sub-Escrow A]</span>
-												<span className="text-white font-bold">credio_risk_monitor</span>
-												<span className="text-[var(--red-700)] text-[10px]">(Risk Analysis: SECURE)</span>
-											</div>
-											<div className="flex items-center gap-2">
-												<span className="text-white/40">├── [Sub-Escrow B]</span>
-												<span className="text-white font-bold">agent_alpha_arbitrage</span>
-												<span className="text-[var(--red-700)] text-[10px]">(Claiming: 420.5 USDC)</span>
-											</div>
-											<div className="flex items-center gap-2">
-												<span className="text-white/40">└── [Sub-Escrow C]</span>
-												<span className="text-white font-bold">liquidity_sniper</span>
-												<span className="text-yellow-500 text-[10px]">(MEV Flash-loan: PENDING)</span>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						{/* Vector Delta Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_DELTA // ABSOLUTE_SYNERGY</span>
-									<span className="text-[10px] font-mono px-2 py-0.5 border border-white/20 text-white/60">LOAD_BALANCER</span>
-								</div>
-
-								{/* P2P Load Balancer / Latency Map */}
-								<div className="mb-8">
-									<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
-									<div className="grid grid-cols-6 gap-2">
-										{meshLoad.map((val, idx) => {
-											let boxColor = "bg-white/10 border-white/10";
-											if (val > 80) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.3)] animate-pulse";
-											else if (val > 40) boxColor = "bg-white/40 border-white/40";
-											
-											return (
-												<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
-													<div className={`w-3 h-3 ${boxColor} rounded-none`} />
-													<span className="text-[9px] font-mono text-white/50">{val}%</span>
-												</div>
-											);
-										})}
-									</div>
-								</div>
-
-								{/* L402 Casper Gateway Challenge Console */}
-								<div>
-									<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
-									<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
-										<pre className="text-white/60 max-h-[80px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
-											<code>{l402Console}</code>
-										</pre>
-										<div className="flex justify-between items-center pt-2 border-t border-white/10">
-											<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
-											<button 
-												onClick={() => {
-													if (l402Status === "IDLE") {
-														setL402Status("CHALLENGED");
-														setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
-													} else if (l402Status === "CHALLENGED") {
-														setL402Status("SUCCESS");
-														setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
-													} else {
-														setL402Status("IDLE");
-														setL402Console("// Console reset. Ready to challenge L402 gate");
-													}
-												}}
-												className="px-3 py-1 bg-[var(--red-700)] text-white font-bold text-[9px] uppercase tracking-wider"
-											>
-												{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				{/* Live Agent Registry */}
-				<div className="max-w-7xl mx-auto mt-20">
-					<AgentNetworkGrid />
-				</div>
+                {/* Live Agent Registry */}
+                <div className="max-w-7xl mx-auto mt-20">
+                    <AgentNetworkGrid />
+                </div>
             </section>
 
             {/* Sticky Execution Input */}
@@ -574,8 +341,8 @@ export default function Dashboard() {
 
                     <div className="flex flex-col gap-3 min-w-[200px]">
                         <div className="flex justify-between text-xs text-white/40 border-b border-white/10 pb-2">
-                            <span>USDC_BAL</span>
-                            <span className="text-white">${balance.toFixed(2)}</span>
+                            <span>CSPR_BAL</span>
+                            <span className="text-white">{balance.toFixed(2)}</span>
                         </div>
                         <button 
                             onClick={handleExecute}

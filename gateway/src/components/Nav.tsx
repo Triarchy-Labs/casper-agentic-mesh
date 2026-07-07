@@ -107,12 +107,13 @@ export function Nav() {
 				top: 0,
 				left: 0,
 				width: "100%",
+				height: "80px",
 				display: "flex",
 				justifyContent: "space-between",
 				alignItems: "center",
-				padding: "18px 28px 0",
+				padding: "0 24px",
 				zIndex: 100,
-				background: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
+				background: "linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%)",
 				pointerEvents: "none",
 			}}
 		>
@@ -141,20 +142,25 @@ export function Nav() {
                 </motion.div>
 			</Link>
 
-			<div className="nav-island" style={{ pointerEvents: "auto", position: "relative" }}>
-				<Link href="/bounties" className="nav-pill">
-					[ bounties ]
+			<div style={{ pointerEvents: "auto", display: "flex", gap: "24px", alignItems: "center", position: "relative" }}>
+				<Link
+					href="/bounties"
+					className="button-secondary label-14-mono backdrop-blur-md"
+				>
+					[ BOUNTIES ]
 				</Link>
-				<Link href="/dashboard" className="nav-pill">
-					[ dashboard ]
+				<Link
+					href="/dashboard"
+					className="button-secondary label-14-mono backdrop-blur-md"
+				>
+					[ DASHBOARD ]
 				</Link>
                 <div style={{ position: "relative" }}>
                     <button
                         onClick={handleConnect}
-                        className="btn-neon active:scale-[0.97]"
-                        style={{ borderRadius: 0 }}
+                        className="button-primary label-14-mono transition-transform active:scale-95"
                     >
-                        {connecting ? "connecting…" : connected ? pubKey : walletMissing ? "get casper wallet" : "connect wallet"}
+                        <span>{connecting ? "[ CONNECTING... ]" : connected ? `[ ${pubKey} ]` : walletMissing ? "[ GET CASPER WALLET ]" : "[ CONNECT WALLET ]"}</span>
                     </button>
 
                     {/* Disconnect Bubble */}
