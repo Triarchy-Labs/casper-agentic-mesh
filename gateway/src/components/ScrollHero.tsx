@@ -1,6 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+
+// produx's signature scroll ease + scrub:1.5 smoothing, extracted from their bundle.
+const PX_EASE = [0.2, 0.6, 0.35, 1] as const;
 
 // Animated bracketed nav item — brackets spread out on hover.
 function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
@@ -25,14 +28,14 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 		>
 			<motion.span
 				animate={{ x: hovered ? -4 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
-				transition={{ duration: 0.25 }}
+				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				[
 			</motion.span>
 			{label}
 			<motion.span
 				animate={{ x: hovered ? 4 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
-				transition={{ duration: 0.25 }}
+				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				]
 			</motion.span>
@@ -42,6 +45,9 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 
 export function ScrollHero() {
 	const { scrollY } = useScroll();
+	// Emulate ScrollTrigger scrub:1.5 — a soft lag behind the raw scroll so the
+	// wordmark eases into the nav instead of tracking 1:1 (their cinematic feel).
+	const smoothY = useSpring(scrollY, { stiffness: 55, damping: 18, restDelta: 0.5 });
 	const [scrolled, setScrolled] = useState(false);
 	const [mouse, setMouse] = useState({ x: -200, y: -200 });
 
@@ -54,15 +60,15 @@ export function ScrollHero() {
 	}, []);
 
 	// Giant wordmark shrinks + rises + fades over the first ~520px of scroll.
-	const wmScale = useTransform(scrollY, [0, 520], [1, 0.24]);
-	const wmY = useTransform(scrollY, [0, 520], [0, -140]);
-	const wmOpacity = useTransform(scrollY, [0, 340, 520], [1, 0.2, 0]);
-	const blur = useTransform(scrollY, [300, 520], [0, 9]);
+	const wmScale = useTransform(smoothY, [0, 520], [1, 0.2]);
+	const wmY = useTransform(smoothY, [0, 520], [0, -140]);
+	const wmOpacity = useTransform(smoothY, [0, 340, 520], [1, 0.2, 0]);
+	const blur = useTransform(smoothY, [300, 520], [0, 9]);
 	const wmFilter = useTransform(blur, (b) => `blur(${b}px)`);
 
 	// Docked bracket nav fades in as the wordmark shrinks away.
-	const navOpacity = useTransform(scrollY, [140, 360], [0, 1]);
-	const navY = useTransform(scrollY, [140, 360], [-18, 0]);
+	const navOpacity = useTransform(smoothY, [140, 360], [0, 1]);
+	const navY = useTransform(smoothY, [140, 360], [-18, 0]);
 
 	return (
 		<>
