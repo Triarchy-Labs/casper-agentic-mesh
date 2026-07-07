@@ -613,6 +613,26 @@ html.lenis, html.lenis body { height: auto; }
    ════════════════════════════════════════════════════════════════ */
 .nb-display { font-family: "Clash Display", var(--font-display), var(--font-sans), sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
 .nb-thin    { font-family: "Clash Display", var(--font-display), var(--font-sans), sans-serif; font-weight: 200; letter-spacing: -0.03em; }
+
+/* soft neon white shimmer sweeping left -> right across dim text */
+.neon-sweep {
+  background: linear-gradient(100deg,
+    rgba(255,255,255,0.34) 0%,
+    rgba(255,255,255,0.34) 40%,
+    rgba(255,255,255,1) 50%,
+    rgba(255,255,255,0.34) 60%,
+    rgba(255,255,255,0.34) 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: neonSweep 4.5s linear infinite;
+}
+@keyframes neonSweep {
+  0%   { background-position: 160% center; }
+  100% { background-position: -60% center; }
+}
 /* outlined stroke text — raw brutalist contrast */
 .nb-outline {
   color: transparent;

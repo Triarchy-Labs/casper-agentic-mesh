@@ -207,16 +207,16 @@ export function ScrollHero() {
 						TRIARCHY
 					</div>
 					<div
+						className="neon-sweep"
 						style={{
 							marginTop: "1.4rem",
 							fontFamily: "ui-monospace, 'Geist Mono', monospace",
 							letterSpacing: "0.36em",
 							fontSize: "clamp(12px,1.5vw,64px)",
-							color: "rgba(255,255,255,0.6)",
 						}}
 					>
 						ECONOMIC OS FOR THE AGENT ECONOMY{" "}
-						<span style={{ color: "#f13242" }}>·</span> CASPER
+						<span style={{ WebkitTextFillColor: "#f13242", color: "#f13242" }}>·</span> CASPER
 					</div>
 				</motion.div>
 				</div>
