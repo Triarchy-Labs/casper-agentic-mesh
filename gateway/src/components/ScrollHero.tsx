@@ -128,7 +128,36 @@ export function ScrollHero() {
 				}}
 			>
 				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
-					TRIARCHY <span style={{ color: "#f13242" }}>//</span> MESH
+					TRIARCHY{" "}
+					<motion.span
+						style={{ color: "#f13242", display: "inline-block" }}
+						animate={{
+							scale: [1, 1.16, 1],
+							textShadow: [
+								"0 0 0px rgba(241,50,66,0)",
+								"0 0 11px rgba(241,50,66,0.8)",
+								"0 0 0px rgba(241,50,66,0)",
+							],
+						}}
+						transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+					>
+						/
+					</motion.span>
+					<motion.span
+						style={{ color: "#f13242", display: "inline-block" }}
+						animate={{
+							scale: [1, 1.16, 1],
+							textShadow: [
+								"0 0 0px rgba(241,50,66,0)",
+								"0 0 11px rgba(241,50,66,0.8)",
+								"0 0 0px rgba(241,50,66,0)",
+							],
+						}}
+						transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+					>
+						/
+					</motion.span>{" "}
+					MESH
 				</span>
 				<nav style={{ display: "flex", gap: "clamp(16px,2.6vw,90px)", alignItems: "center" }}>
 					<BracketLink label="BOUNTIES" href="/bounties" />
