@@ -138,17 +138,20 @@ export function ScrollHero() {
 			</motion.header>
 
 			{/* giant scroll-shrink wordmark — first screen */}
-			<section
-				style={{
-					minHeight: "100vh",
-					display: "flex",
-					flexDirection: "column",
-					alignItems: "center",
-					justifyContent: "center",
-					position: "relative",
-					overflow: "hidden",
-				}}
-			>
+			<section style={{ height: "220vh", position: "relative" }}>
+				{/* sticky pin: the hero holds in place while the wordmark shrinks (produx pin) */}
+				<div
+					style={{
+						position: "sticky",
+						top: 0,
+						height: "100vh",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "center",
+						justifyContent: "center",
+						overflow: "hidden",
+					}}
+				>
 				<motion.div
 					style={{
 						scale: wmScale,
@@ -187,20 +190,7 @@ export function ScrollHero() {
 						<span style={{ color: "#f13242" }}>·</span> CASPER
 					</div>
 				</motion.div>
-
-				{/* bottom hint bar echoing the loader */}
-				<div
-					style={{
-						position: "absolute",
-						bottom: 0,
-						left: 0,
-						right: 0,
-						height: 3,
-						background:
-							"linear-gradient(90deg, transparent, rgba(168,85,247,0.5) 30%, #f13242 60%, transparent)",
-						opacity: 0.7,
-					}}
-				/>
+				</div>
 			</section>
 		</>
 	);
