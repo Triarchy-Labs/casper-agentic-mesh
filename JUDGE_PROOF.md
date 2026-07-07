@@ -50,7 +50,7 @@ cargo build --release --target wasm32-unknown-unknown  # escrow + oracle
 We would rather state these than have you find them:
 
 - **Gateway payment check (v1 → now hardened):** `lib/casper.ts` verifies the payment tx **exists, executed, pays the platform account, and meets the minimum amount** — an unrelated or unsuccessful hash is rejected. (Earlier revisions only checked existence; this is fixed.) Task↔payment memo correlation is best-effort, not yet enforced.
-- **Escrow authorization:** `release_bounty`/`refund_bounty` require `caller == verifier` (real access control), but the payout `target_purse` is supplied by that caller — so it is **verifier-authorized**, not fully trustless purse-binding. A hardened variant binds payout to the registered hunter's account via `transfer_from_purse_to_account`.
+- **Escrow authorization (hardened in v2, deployed):** v1 required `caller == verifier` (real access control) but accepted a caller-supplied payout purse. **v2 removes that**: `release_bounty`/`refund_bounty` take no purse arg and pay the stored **hunter/creator account** directly via `transfer_from_purse_to_account`. Deployed on testnet as package [`e68eae90…`](https://testnet.cspr.live/contract-package/e68eae90f71f67851a3220e1cbe77844fbf1323a2ae5176a1ee03b9106a39449) — deploy [`3a74e651…`](https://testnet.cspr.live/transaction/3a74e65184966b02ef66419846554715498834b7960bce76040bae5c667ec66c), init + register `error None`. (v1 package `a7e6a383…` remains as the original lifecycle proof.)
 - **Oracle feed:** `post_reading` is an **open MVP feed** (any caller can post + accrue reputation); a permissioned variant restricts posting to registered oracles.
 
 ## Links

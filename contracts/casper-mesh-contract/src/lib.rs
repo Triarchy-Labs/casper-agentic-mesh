@@ -5,6 +5,7 @@ extern crate alloc;
 
 use alloc::string::{String, ToString};
 use alloc::vec;
+use alloc::format;
 use casper_contract::{
     contract_api::{runtime, storage, system},
     unwrap_or_revert::UnwrapOrRevert,
@@ -12,7 +13,7 @@ use casper_contract::{
 use casper_types::{
     ApiError, CLType, Key, URef, U512, CLTyped, bytesrepr::{FromBytes, ToBytes, Error},
     EntryPoints, EntityEntryPoint, EntryPointAccess, EntryPointType, EntryPointPayment,
-    Parameter, NamedKeys,
+    Parameter, NamedKeys, account::AccountHash,
 };
 
 #[global_allocator]
@@ -217,7 +218,6 @@ pub extern "C" fn create_bounty() {
 #[no_mangle]
 pub extern "C" fn release_bounty() {
     let task_id: String = runtime::get_named_arg("task_id");
-    let target_purse: URef = runtime::get_named_arg("target_purse");
 
     let dict_uref = get_dict_uref(BOUNTIES_DICT);
     let mut bounty: Bounty = storage::dictionary_get(dict_uref, &task_id)
@@ -233,8 +233,15 @@ pub extern "C" fn release_bounty() {
         runtime::revert(ApiError::User(2)); // Not locked
     }
 
+    // v2 hardening: payout is bound to the registered hunter's account. The
+    // verifier can no longer redirect funds to an arbitrary purse — the contract
+    // pays the hunter's main purse directly, by the account-hash stored at lock time.
+    let hunter_account = AccountHash::from_formatted_str(&format!("account-hash-{}", bounty.hunter))
+        .ok()
+        .unwrap_or_revert_with(ApiError::User(3)); // Malformed hunter account-hash
+
     let escrow_purse = get_escrow_purse();
-    system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None)
+    system::transfer_from_purse_to_account(escrow_purse, hunter_account, bounty.amount, None)
         .unwrap_or_revert();
 
     bounty.status = 1; // Completed
@@ -244,7 +251,6 @@ pub extern "C" fn release_bounty() {
 #[no_mangle]
 pub extern "C" fn refund_bounty() {
     let task_id: String = runtime::get_named_arg("task_id");
-    let target_purse: URef = runtime::get_named_arg("target_purse");
 
     let dict_uref = get_dict_uref(BOUNTIES_DICT);
     let mut bounty: Bounty = storage::dictionary_get(dict_uref, &task_id)
@@ -260,8 +266,14 @@ pub extern "C" fn refund_bounty() {
         runtime::revert(ApiError::User(2)); // Not locked
     }
 
+    // v2 hardening: refund is bound to the original creator's account, not an
+    // arbitrary caller-supplied purse.
+    let creator_account = AccountHash::from_formatted_str(&format!("account-hash-{}", bounty.creator))
+        .ok()
+        .unwrap_or_revert_with(ApiError::User(3)); // Malformed creator account-hash
+
     let escrow_purse = get_escrow_purse();
-    system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None)
+    system::transfer_from_purse_to_account(escrow_purse, creator_account, bounty.amount, None)
         .unwrap_or_revert();
 
     bounty.status = 2; // Refunded
@@ -324,7 +336,6 @@ fn build_entry_points() -> EntryPoints {
         "release_bounty",
         vec![
             Parameter::new("task_id", CLType::String),
-            Parameter::new("target_purse", CLType::URef),
         ],
         CLType::Unit,
         EntryPointAccess::Public,
@@ -336,7 +347,6 @@ fn build_entry_points() -> EntryPoints {
         "refund_bounty",
         vec![
             Parameter::new("task_id", CLType::String),
-            Parameter::new("target_purse", CLType::URef),
         ],
         CLType::Unit,
         EntryPointAccess::Public,
