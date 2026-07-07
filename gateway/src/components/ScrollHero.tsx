@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent } from "framer-motion";
 
 // produx's signature scroll ease + scrub:1.5 smoothing, extracted from their bundle.
@@ -7,13 +7,35 @@ const PX_EASE = [0.2, 0.6, 0.35, 1] as const;
 
 // Animated bracketed nav item — brackets spread out on hover.
 function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
+	const ref = useRef<HTMLAnchorElement>(null);
 	const [hovered, setHovered] = useState(false);
+	// Magnetic pull toward the cursor with a springy overshoot (their gsap back.out feel).
+	const mx = useSpring(0, { stiffness: 170, damping: 11, mass: 0.4 });
+	const my = useSpring(0, { stiffness: 170, damping: 11, mass: 0.4 });
+
+	const onMove = (e: React.MouseEvent) => {
+		const el = ref.current;
+		if (!el) return;
+		const r = el.getBoundingClientRect();
+		mx.set((e.clientX - (r.left + r.width / 2)) * 0.35);
+		my.set((e.clientY - (r.top + r.height / 2)) * 0.55);
+	};
+	const reset = () => {
+		mx.set(0);
+		my.set(0);
+		setHovered(false);
+	};
+
 	return (
-		<a
+		<motion.a
+			ref={ref}
 			href={href}
 			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
+			onMouseMove={onMove}
+			onMouseLeave={reset}
 			style={{
+				x: mx,
+				y: my,
 				display: "inline-flex",
 				alignItems: "center",
 				gap: 6,
@@ -22,24 +44,41 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 				letterSpacing: "0.18em",
 				color: hovered ? "#fff" : "rgba(255,255,255,0.66)",
 				textDecoration: "none",
-				transition: "color 0.25s ease",
 				whiteSpace: "nowrap",
 			}}
 		>
 			<motion.span
-				animate={{ x: hovered ? -4 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
+				animate={{ x: hovered ? -5 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
 				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				[
 			</motion.span>
-			{label}
+			{/* roller / drum: label rolls up, a duplicate rolls in from below */}
+			<span
+				style={{
+					position: "relative",
+					display: "inline-block",
+					overflow: "hidden",
+					height: "1.25em",
+					lineHeight: "1.25em",
+				}}
+			>
+				<motion.span
+					style={{ display: "block" }}
+					animate={{ y: hovered ? "-100%" : "0%" }}
+					transition={{ duration: 0.42, ease: PX_EASE }}
+				>
+					{label}
+					<span style={{ position: "absolute", left: 0, top: "100%" }}>{label}</span>
+				</motion.span>
+			</span>
 			<motion.span
-				animate={{ x: hovered ? 4 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
+				animate={{ x: hovered ? 5 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
 				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				]
 			</motion.span>
-		</a>
+		</motion.a>
 	);
 }
 
