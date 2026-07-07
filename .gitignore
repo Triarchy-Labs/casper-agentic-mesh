@@ -22,4 +22,8 @@ Thumbs.db
 
 # Casper
 casper-ai-toolkit/
-.agents/skills/
+
+# audit-flagged liabilities (do not track)
+gateway/docs/AUDIT_FINALIST_ASSIMILATION.md
+gateway/dummy_external_bot.js
+gateway/src/lib/xrpl-transactor.ts
