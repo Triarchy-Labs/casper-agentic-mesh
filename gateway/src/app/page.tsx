@@ -9,11 +9,13 @@ import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
 import { CinematicDim } from "@/components/CinematicDim";
+import { CardCTA } from "@/components/CardCTA";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Page() {
   const [booted, setBooted] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +106,7 @@ export default function Page() {
               </div>
 
               {/* Bottom Partner Logos */}
-              <div className="absolute bottom-8 left-0 right-0 w-full px-8 md:px-16 flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20">
+              <div className="absolute bottom-8 left-0 right-0 w-full px-8 md:px-16 flex flex-wrap justify-between items-center gap-6 border-t pt-6 z-20" style={{ borderColor: 'rgba(255,255,255,0.03)' }}>
                 <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 text-white/20 text-xs tracking-widest font-mono">
                   <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">BLACKBOX.AI</span>
                   <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair link-sweep">HH</span>
@@ -129,8 +131,13 @@ export default function Page() {
               {/* Three vectors — clean grid, hover-focus enabled */}
               <div className="focus-cards grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* 01 ESCROW */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+                <div
+                  className="synergy-section editorial-panel p-[32px] relative"
+                  onMouseEnter={() => setHoveredCard(0)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
                   <CornerMarks />
+                  <CardCTA label="DEPLOY" show={hoveredCard === 0} />
                   <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                   <h3 className="heading-32 mb-[16px] z-10">Autonomous Escrow</h3>
                   <p className="copy-16 mb-[24px] z-10">
@@ -143,8 +150,13 @@ export default function Page() {
                   </ul>
                 </div>
                 {/* 02 ORACLE */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+                <div
+                  className="synergy-section editorial-panel p-[32px] relative"
+                  onMouseEnter={() => setHoveredCard(1)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
                   <CornerMarks />
+                  <CardCTA label="QUERY" show={hoveredCard === 1} />
                   <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">02 // vector beta</p>
                   <h3 className="heading-32 mb-[16px] z-10">RWA Risk Oracle</h3>
                   <p className="copy-16 mb-[24px] z-10">
@@ -157,8 +169,13 @@ export default function Page() {
                   </ul>
                 </div>
                 {/* 03 TRIBUNAL */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+                <div
+                  className="synergy-section editorial-panel p-[32px] relative"
+                  onMouseEnter={() => setHoveredCard(2)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
                   <CornerMarks />
+                  <CardCTA label="ADJUDICATE" show={hoveredCard === 2} />
                   <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
                   <h3 className="heading-32 mb-[16px] z-10">Agent Tribunal</h3>
                   <p className="copy-16 mb-[24px] z-10">
