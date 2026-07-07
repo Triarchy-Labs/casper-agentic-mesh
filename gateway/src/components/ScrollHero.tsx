@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent } from "framer-motion";
 
 // produx's signature scroll ease + scrub:1.5 smoothing, extracted from their bundle.
 const PX_EASE = [0.2, 0.6, 0.35, 1] as const;
@@ -45,30 +45,38 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 
 export function ScrollHero() {
 	const { scrollY } = useScroll();
-	// Emulate ScrollTrigger scrub:1.5 — a soft lag behind the raw scroll so the
-	// wordmark eases into the nav instead of tracking 1:1 (their cinematic feel).
-	const smoothY = useSpring(scrollY, { stiffness: 55, damping: 18, restDelta: 0.5 });
+	// Emulate ScrollTrigger scrub:1.5 — a soft, slightly longer lag behind the raw
+	// scroll so the wordmark eases into the nav gradually, never in jerks.
+	const smoothY = useSpring(scrollY, { stiffness: 38, damping: 24, restDelta: 0.5 });
 	const [scrolled, setScrolled] = useState(false);
-	const [mouse, setMouse] = useState({ x: -200, y: -200 });
+
+	// Cursor-follow with lag + spring bump (their gsap.quickTo/lerp equivalent).
+	const rawX = useMotionValue(-200);
+	const rawY = useMotionValue(-200);
+	const cursorX = useSpring(rawX, { stiffness: 140, damping: 15, mass: 0.5 });
+	const cursorY = useSpring(rawY, { stiffness: 140, damping: 15, mass: 0.5 });
 
 	useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 14));
 
 	useEffect(() => {
-		const onMove = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
+		const onMove = (e: MouseEvent) => {
+			rawX.set(e.clientX + 20);
+			rawY.set(e.clientY + 12);
+		};
 		window.addEventListener("mousemove", onMove);
 		return () => window.removeEventListener("mousemove", onMove);
-	}, []);
+	}, [rawX, rawY]);
 
 	// Giant wordmark shrinks + rises + fades over the first ~520px of scroll.
-	const wmScale = useTransform(smoothY, [0, 520], [1, 0.2]);
-	const wmY = useTransform(smoothY, [0, 520], [0, -140]);
-	const wmOpacity = useTransform(smoothY, [0, 340, 520], [1, 0.2, 0]);
-	const blur = useTransform(smoothY, [300, 520], [0, 9]);
+	const wmScale = useTransform(smoothY, [0, 740], [1, 0.2]);
+	const wmY = useTransform(smoothY, [0, 740], [0, -160]);
+	const wmOpacity = useTransform(smoothY, [0, 480, 740], [1, 0.2, 0]);
+	const blur = useTransform(smoothY, [420, 740], [0, 9]);
 	const wmFilter = useTransform(blur, (b) => `blur(${b}px)`);
 
 	// Docked bracket nav fades in as the wordmark shrinks away.
-	const navOpacity = useTransform(smoothY, [140, 360], [0, 1]);
-	const navY = useTransform(smoothY, [140, 360], [-18, 0]);
+	const navOpacity = useTransform(smoothY, [220, 520], [0, 1]);
+	const navY = useTransform(smoothY, [220, 520], [-18, 0]);
 
 	return (
 		<>
@@ -79,16 +87,23 @@ export function ScrollHero() {
 				transition={{ duration: 0.3 }}
 				style={{
 					position: "fixed",
-					left: mouse.x + 22,
-					top: mouse.y + 8,
+					left: 0,
+					top: 0,
+					x: cursorX,
+					y: cursorY,
 					zIndex: 60,
 					pointerEvents: "none",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
-					fontSize: 11,
-					letterSpacing: "0.24em",
-					color: "rgba(255,255,255,0.8)",
+					fontSize: "clamp(11px,0.97vw,34px)",
+					letterSpacing: "0.22em",
+					color: "rgba(255,255,255,0.88)",
 					whiteSpace: "nowrap",
-					textShadow: "0 0 10px rgba(0,0,0,0.6)",
+					padding: "0.5em 0.85em",
+					borderRadius: 6,
+					background: "rgba(10,6,8,0.25)",
+					backdropFilter: "blur(17px)",
+					WebkitBackdropFilter: "blur(17px)",
+					border: "1px solid rgba(255,255,255,0.1)",
 				}}
 			>
 				<span style={{ color: "#f13242" }}>[</span> scroll down{" "}
@@ -110,8 +125,6 @@ export function ScrollHero() {
 					justifyContent: "space-between",
 					padding: "16px clamp(20px,4vw,56px)",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
-					backdropFilter: "blur(10px)",
-					background: "linear-gradient(to bottom, rgba(4,2,3,0.6), transparent)",
 				}}
 			>
 				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
