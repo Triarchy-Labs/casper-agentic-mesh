@@ -91,23 +91,19 @@ export function ScrollHero() {
 					top: 0,
 					x: cursorX,
 					y: cursorY,
-					zIndex: 60,
+					zIndex: 9999,
 					pointerEvents: "none",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
-					fontSize: "clamp(11px,0.97vw,34px)",
-					letterSpacing: "0.22em",
-					color: "rgba(255,255,255,0.88)",
+					fontSize: "clamp(11px,0.95vw,30px)",
+					letterSpacing: "0.18em",
+					textTransform: "uppercase",
+					color: "#fff",
+					mixBlendMode: "difference", // reactive color inversion vs background (produx)
 					whiteSpace: "nowrap",
-					padding: "0.5em 0.85em",
-					borderRadius: 6,
-					background: "rgba(10,6,8,0.25)",
-					backdropFilter: "blur(17px)",
-					WebkitBackdropFilter: "blur(17px)",
-					border: "1px solid rgba(255,255,255,0.1)",
+					padding: "0.23vw 0.55vw",
 				}}
 			>
-				<span style={{ color: "#f13242" }}>[</span> scroll down{" "}
-				<span style={{ color: "#f13242" }}>]</span>
+				[ scroll down ]
 			</motion.div>
 
 			{/* fixed top bar: docked logo + animated bracket nav (fades in on scroll) */}
