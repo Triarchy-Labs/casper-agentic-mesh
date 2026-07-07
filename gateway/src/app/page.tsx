@@ -126,10 +126,11 @@ export default function Page() {
                 <h2 className="nb-display text-[clamp(40px,6vw,84px)]">Absolute Synergy</h2>
               </div>
 
-              {/* Three vectors — clean grid, hover-focus enabled */}
-              <div className="focus-cards grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* 01 ESCROW */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+              {/* Produx-style asymmetric 12-col grid (from dump: single-project-card col-spans) */}
+              <div className="focus-cards grid grid-cols-12 gap-[1.67vw] max-sm:gap-[3.48vh]">
+
+                {/* 01 ESCROW — col-span-7, big left */}
+                <div className="synergy-section editorial-panel p-[32px] relative col-span-12 md:col-span-7">
                   <CornerMarks />
                   <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                   <h3 className="heading-32 mb-[16px] z-10">Autonomous Escrow</h3>
@@ -146,8 +147,9 @@ export default function Page() {
                     <span className="panel-cta-text">deploy escrow</span>
                   </div>
                 </div>
-                {/* 02 ORACLE */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+
+                {/* 02 ORACLE — col-span-4, right, pushed down (mt-auto) */}
+                <div className="synergy-section editorial-panel p-[32px] relative col-span-12 md:col-span-4 md:col-end-13 md:mt-auto md:h-fit">
                   <CornerMarks />
                   <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">02 // vector beta</p>
                   <h3 className="heading-32 mb-[16px] z-10">RWA Risk Oracle</h3>
@@ -164,10 +166,25 @@ export default function Page() {
                     <span className="panel-cta-text">query oracle</span>
                   </div>
                 </div>
-                {/* 03 TRIBUNAL */}
-                <div className="synergy-section editorial-panel p-[32px] relative">
+
+                {/* 03 OMNI-MESH — col-span-10, centered wide (the tower) */}
+                <div className="synergy-section editorial-panel p-[48px] md:p-[64px] relative overflow-hidden border-[var(--red-900)] col-span-12 md:col-span-10 md:col-start-2 text-center">
                   <CornerMarks />
-                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
+                  <div className="absolute inset-0 bg-[var(--red-500)] opacity-5 z-0 pointer-events-none"></div>
+                  <div className="relative z-10 flex flex-col items-center">
+                    <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 03 · absolute synergy · the tower</span>
+                    <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">The Omni-Mesh</h2>
+                    <p className="copy-18 text-[var(--gray-900)] mb-[36px] max-w-2xl">
+                      Escrow, oracle and tribunal converging into one organism, overseen by The Tower — the economic OS for AI agents, live on Casper.
+                    </p>
+                    <button className="btn-neon">initialize synergy</button>
+                  </div>
+                </div>
+
+                {/* 04 TRIBUNAL — col-span-4, small left */}
+                <div className="synergy-section editorial-panel p-[32px] relative col-span-12 md:col-span-4 md:h-fit">
+                  <CornerMarks />
+                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                   <h3 className="heading-32 mb-[16px] z-10">Agent Tribunal</h3>
                   <p className="copy-16 mb-[24px] z-10">
                     An adversarial court of real models that rules on work and moves CSPR on-chain.
@@ -182,20 +199,26 @@ export default function Page() {
                     <span className="panel-cta-text">view tribunal</span>
                   </div>
                 </div>
-              </div>
 
-              {/* 04 OMNI-MESH — feature */}
-              <div className="synergy-section editorial-panel p-[48px] md:p-[64px] w-full text-center relative overflow-hidden border-[var(--red-900)]">
-                <CornerMarks />
-                <div className="absolute inset-0 bg-[var(--red-500)] opacity-5 z-0 pointer-events-none"></div>
-                <div className="relative z-10 flex flex-col items-center">
-                  <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 04 · absolute synergy · the tower</span>
-                  <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">The Omni-Mesh</h2>
-                  <p className="copy-18 text-[var(--gray-900)] mb-[36px] max-w-2xl">
-                    Escrow, oracle and tribunal converging into one organism, overseen by The Tower — the economic OS for AI agents, live on Casper.
+                {/* 05 x402 PAYMENT — col-span-7, big right */}
+                <div className="synergy-section editorial-panel p-[32px] relative col-span-12 md:col-span-7 md:col-end-13">
+                  <CornerMarks />
+                  <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
+                  <h3 className="heading-32 mb-[16px] z-10">x402 Payment Layer</h3>
+                  <p className="copy-16 mb-[24px] z-10">
+                    HTTP 402 native. Agents pay per API call with real CSPR — no subscriptions, no keys, just value for value.
                   </p>
-                  <button className="btn-neon">initialize synergy</button>
+                  <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10">
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> pay-per-call micro-settlements</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> HTTP 402 protocol gateway</li>
+                    <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> agent wallet abstraction</li>
+                  </ul>
+                  <div className="panel-cta z-10">
+                    <span className="panel-cta-square" />
+                    <span className="panel-cta-text">explore x402</span>
+                  </div>
                 </div>
+
               </div>
 
             </div>
