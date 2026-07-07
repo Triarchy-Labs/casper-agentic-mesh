@@ -536,8 +536,8 @@ body {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: clamp(13px, 1.05vw, 17px);
-  padding: clamp(14px,1vw,20px) clamp(24px,1.8vw,40px);
+  font-size: clamp(13px, 1.05vw, 44px);
+  padding: clamp(14px,1vw,46px) clamp(24px,1.8vw,90px);
   color: var(--red-1000);
   background: linear-gradient(180deg, rgba(241,50,66,0.10), rgba(0,0,0,0.4));
   border: 1px solid rgba(241,50,66,0.55);
@@ -563,8 +563,8 @@ body {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-size: clamp(13px, 1.05vw, 17px);
-  padding: clamp(14px,1vw,20px) clamp(24px,1.8vw,40px);
+  font-size: clamp(13px, 1.05vw, 44px);
+  padding: clamp(14px,1vw,46px) clamp(24px,1.8vw,90px);
   color: var(--gray-1000);
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--gray-alpha-300);

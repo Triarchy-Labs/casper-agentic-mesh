@@ -18,7 +18,7 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 				alignItems: "center",
 				gap: 6,
 				fontFamily: "ui-monospace, 'Geist Mono', monospace",
-				fontSize: "clamp(12px,1.15vw,19px)",
+				fontSize: "clamp(13px,1.2vw,58px)",
 				letterSpacing: "0.18em",
 				color: hovered ? "#fff" : "rgba(255,255,255,0.66)",
 				textDecoration: "none",
@@ -114,10 +114,10 @@ export function ScrollHero() {
 					background: "linear-gradient(to bottom, rgba(4,2,3,0.6), transparent)",
 				}}
 			>
-				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(14px,1.3vw,22px)" }}>
+				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
 					TRIARCHY <span style={{ color: "#f13242" }}>//</span> MESH
 				</span>
-				<nav style={{ display: "flex", gap: "clamp(14px,2.4vw,40px)", alignItems: "center" }}>
+				<nav style={{ display: "flex", gap: "clamp(16px,2.6vw,90px)", alignItems: "center" }}>
 					<BracketLink label="BOUNTIES" href="/bounties" />
 					<BracketLink label="DASHBOARD" href="/dashboard" />
 					<BracketLink label="CONNECT WALLET" />
@@ -152,7 +152,7 @@ export function ScrollHero() {
 						style={{
 							fontFamily: "'Sora', ui-sans-serif, sans-serif",
 							fontWeight: 800,
-							fontSize: "clamp(72px, 11.9vw, 640px)", // produx hero = 11.9vw
+							fontSize: "clamp(72px, 11.9vw, 900px)", // produx hero = 11.9vw pure (no low cap on 4K)
 							lineHeight: 0.88,
 							letterSpacing: "-0.035em",
 							color: "#fff",
@@ -166,7 +166,7 @@ export function ScrollHero() {
 							marginTop: "1.4rem",
 							fontFamily: "ui-monospace, 'Geist Mono', monospace",
 							letterSpacing: "0.36em",
-							fontSize: "clamp(12px,1.5vw,26px)",
+							fontSize: "clamp(12px,1.5vw,64px)",
 							color: "rgba(255,255,255,0.6)",
 						}}
 					>
