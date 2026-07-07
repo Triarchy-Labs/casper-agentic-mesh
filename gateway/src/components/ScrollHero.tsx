@@ -132,28 +132,28 @@ export function ScrollHero() {
 					<motion.span
 						style={{ color: "#f13242", display: "inline-block" }}
 						animate={{
-							scale: [1, 1.16, 1],
+							scale: [1, 1.09, 1],
 							textShadow: [
 								"0 0 0px rgba(241,50,66,0)",
 								"0 0 11px rgba(241,50,66,0.8)",
 								"0 0 0px rgba(241,50,66,0)",
 							],
 						}}
-						transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
 					>
 						/
 					</motion.span>
 					<motion.span
 						style={{ color: "#f13242", display: "inline-block" }}
 						animate={{
-							scale: [1, 1.16, 1],
+							scale: [1, 1.09, 1],
 							textShadow: [
 								"0 0 0px rgba(241,50,66,0)",
 								"0 0 11px rgba(241,50,66,0.8)",
 								"0 0 0px rgba(241,50,66,0)",
 							],
 						}}
-						transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2.4 }}
 					>
 						/
 					</motion.span>{" "}
