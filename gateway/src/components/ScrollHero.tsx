@@ -18,7 +18,7 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 				alignItems: "center",
 				gap: 6,
 				fontFamily: "ui-monospace, 'Geist Mono', monospace",
-				fontSize: "clamp(10px,0.85vw,13px)",
+				fontSize: "clamp(12px,1.15vw,19px)",
 				letterSpacing: "0.18em",
 				color: hovered ? "#fff" : "rgba(255,255,255,0.66)",
 				textDecoration: "none",
@@ -114,7 +114,7 @@ export function ScrollHero() {
 					background: "linear-gradient(to bottom, rgba(4,2,3,0.6), transparent)",
 				}}
 			>
-				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: 15 }}>
+				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(14px,1.3vw,22px)" }}>
 					TRIARCHY <span style={{ color: "#f13242" }}>//</span> MESH
 				</span>
 				<nav style={{ display: "flex", gap: "clamp(14px,2.4vw,40px)", alignItems: "center" }}>
@@ -152,7 +152,7 @@ export function ScrollHero() {
 						style={{
 							fontFamily: "'Sora', ui-sans-serif, sans-serif",
 							fontWeight: 800,
-							fontSize: "clamp(64px, 18vw, 340px)",
+							fontSize: "clamp(72px, 11.9vw, 640px)", // produx hero = 11.9vw
 							lineHeight: 0.88,
 							letterSpacing: "-0.035em",
 							color: "#fff",
@@ -166,7 +166,7 @@ export function ScrollHero() {
 							marginTop: "1.4rem",
 							fontFamily: "ui-monospace, 'Geist Mono', monospace",
 							letterSpacing: "0.36em",
-							fontSize: "clamp(10px,1.05vw,15px)",
+							fontSize: "clamp(12px,1.5vw,26px)",
 							color: "rgba(255,255,255,0.6)",
 						}}
 					>

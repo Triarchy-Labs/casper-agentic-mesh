@@ -73,10 +73,10 @@ export default function Page() {
                     <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
                     <span className="nb-index">𝟐𝟎𝟐𝟔</span>
                   </div>
-                  <h1 className="nb-display text-[clamp(56px,9vw,132px)] mb-1">
+                  <h1 className="nb-display text-[clamp(64px,11vw,240px)] mb-1">
                     Agentic
                   </h1>
-                  <h1 className="nb-thin nb-outline text-[clamp(56px,9vw,132px)] mb-6">
+                  <h1 className="nb-thin nb-outline text-[clamp(64px,11vw,240px)] mb-6">
                     Infrastructure
                   </h1>
                   <div className="flex items-center gap-4 mb-9 w-full max-w-xl">
