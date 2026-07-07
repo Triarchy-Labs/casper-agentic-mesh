@@ -73,9 +73,6 @@ trust every claim.
   only if its transaction is found on the ledger and executed successfully.
   Browser payments are real transfers signed by Casper Wallet via `casper-js-sdk`
   ([`gateway/src/lib/pay.ts`](gateway/src/lib/pay.ts)).
-- **Swarm agents** — `x402-sniper` and `swarm-engine` submit **real signed
-  transactions** through the signer (no fabricated hashes); `x402-liquidator`
-  derives its health factor from **live on-chain balances** via RPC.
 - **Bounty Judge agent** — the core agentic loop
   ([`swarm/bounty-judge`](swarm/bounty-judge/src/main.rs)): it asks an LLM (via
   OpenRouter) to APPROVE/REJECT a submitted proof, and **on approval autonomously
@@ -113,9 +110,7 @@ trust every claim.
 ### Roadmap (clearly not yet on-chain)
 Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution
 safety, flash-loan-funded snipers, soulbound (CEP-78) reputation, and an
-L402-Casper gateway spec. See the bottom of this file. The `swarm-engine`
-trading/decision core is ported intelligence and uses market-data feeds (live
-DexScreener, or `MOCK_DATA=1` for offline runs) — its **Casper writes are real**.
+L402-Casper gateway spec. See the bottom of this file.
 
 ────────────────────────────────────────────────────────────────
 

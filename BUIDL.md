@@ -73,7 +73,6 @@ We separate shipped reality from vision on purpose — judges should be able to 
 - **Session deposit proxy** — the canonical Casper escrow-funding pattern (a stored contract cannot withdraw from a caller's main purse), at [`contracts/deposit-proxy/src/lib.rs`](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/contracts/deposit-proxy/src/lib.rs).
 - **Signer / RPC client** — a Go-backed `TransactionV1` signer (`swarm/casper-client/go-signer`) and a Rust JSON-RPC client (`swarm/casper-client`): deploy-wasm, call-entrypoint, session-wasm, balance/dictionary queries.
 - **Gateway (Next.js)** — [`gateway`](https://github.com/Triarchy-Labs/casper-agentic-mesh/tree/main/gateway): 4-tab dashboard, Casper Wallet connection, and **server-side payment verification with no bypass** — a payment is valid only if its transaction is found on the ledger and executed successfully. Browser payments are real transfers signed by Casper Wallet via `casper-js-sdk`.
-- **Swarm agents** — `x402-sniper` and `swarm-engine` submit **real signed transactions** through the signer (no fabricated hashes); `x402-liquidator` derives its health factor from **live on-chain balances** via RPC.
 - **Bounty Judge agent** — the core agentic loop ([`swarm/bounty-judge`](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/swarm/bounty-judge/src/main.rs)): it asks an LLM (via OpenRouter) to APPROVE/REJECT a submitted proof, and on approval autonomously submits a real `release_bounty` transaction that pays the hunter. The verdict is a real model call and the payout is a real signed tx — with no key or a failed call it aborts, never inventing a verdict or a hash.
 
   ```bash
@@ -91,7 +90,7 @@ We separate shipped reality from vision on purpose — judges should be able to 
 
 ### Roadmap (clearly not yet on-chain)
 
-Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution safety, flash-loan-funded snipers, soulbound (CEP-78) reputation, and an L402-Casper gateway spec. The `swarm-engine` trading/decision core is ported intelligence and uses market-data feeds (live DexScreener, or `MOCK_DATA=1` for offline runs) — its **Casper writes are real**.
+Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution safety, soulbound (CEP-78) reputation, and an L402-Casper gateway spec.
 
 ---
 

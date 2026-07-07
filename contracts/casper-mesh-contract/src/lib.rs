@@ -126,33 +126,17 @@ impl FromBytes for Bounty {
 // ───────────────────────── Helpers ─────────────────────────
 
 fn get_dict_uref(name: &str) -> URef {
-    let key_opt = runtime::get_key(name);
-    if key_opt.is_none() {
-        runtime::revert(ApiError::User(20)); // Dict not found
-    }
-    let uref_opt = key_opt.unwrap_or_revert().into_uref();
-    if uref_opt.is_none() {
-        runtime::revert(ApiError::User(21)); // Key is not a URef
-    }
-    match uref_opt {
-        Some(uref) => uref,
-        None => runtime::revert(ApiError::User(21)), // Key is not a URef
-    }
+    runtime::get_key(name)
+        .unwrap_or_revert()
+        .into_uref()
+        .unwrap_or_revert()
 }
 
 fn get_escrow_purse() -> URef {
-    let key_opt = runtime::get_key(ESCROW_PURSE);
-    if key_opt.is_none() {
-        runtime::revert(ApiError::User(22)); // Escrow purse not found
-    }
-    let uref_opt = key_opt.unwrap_or_revert().into_uref();
-    if uref_opt.is_none() {
-        runtime::revert(ApiError::User(23)); // Key is not a URef
-    }
-    match uref_opt {
-        Some(uref) => uref,
-        None => runtime::revert(ApiError::User(23)), // Key is not a URef
-    }
+    runtime::get_key(ESCROW_PURSE)
+        .unwrap_or_revert()
+        .into_uref()
+        .unwrap_or_revert()
 }
 
 // ───────────────────────── Entry Points ─────────────────────────
@@ -216,9 +200,8 @@ pub extern "C" fn create_bounty() {
     let escrow_purse = get_escrow_purse();
 
     // Transfer from caller's purse to the contract's escrow purse
-    if system::transfer_from_purse_to_purse(source_purse, escrow_purse, amount, None).is_err() {
-        runtime::revert(ApiError::User(30)); // Transfer failed
-    }
+    system::transfer_from_purse_to_purse(source_purse, escrow_purse, amount, None)
+        .unwrap_or_revert();
 
     let bounty = Bounty {
         creator: runtime::get_caller().to_string(),
@@ -237,14 +220,9 @@ pub extern "C" fn release_bounty() {
     let target_purse: URef = runtime::get_named_arg("target_purse");
 
     let dict_uref = get_dict_uref(BOUNTIES_DICT);
-    let bounty_opt: Option<Bounty> = match storage::dictionary_get(dict_uref, &task_id) {
-        Ok(opt) => opt,
-        Err(_) => runtime::revert(ApiError::User(40)), // Failed to read dictionary
-    };
-    if bounty_opt.is_none() {
-        runtime::revert(ApiError::User(41)); // Bounty not found
-    }
-    let mut bounty = bounty_opt.unwrap();
+    let mut bounty: Bounty = storage::dictionary_get(dict_uref, &task_id)
+        .unwrap_or_revert()
+        .unwrap_or_revert();
 
     let caller = runtime::get_caller().to_string();
     if caller != bounty.verifier {
@@ -256,9 +234,8 @@ pub extern "C" fn release_bounty() {
     }
 
     let escrow_purse = get_escrow_purse();
-    if system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None).is_err() {
-        runtime::revert(ApiError::User(30)); // Transfer failed
-    }
+    system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None)
+        .unwrap_or_revert();
 
     bounty.status = 1; // Completed
     storage::dictionary_put(dict_uref, &task_id, bounty);
@@ -270,14 +247,9 @@ pub extern "C" fn refund_bounty() {
     let target_purse: URef = runtime::get_named_arg("target_purse");
 
     let dict_uref = get_dict_uref(BOUNTIES_DICT);
-    let bounty_opt: Option<Bounty> = match storage::dictionary_get(dict_uref, &task_id) {
-        Ok(opt) => opt,
-        Err(_) => runtime::revert(ApiError::User(40)), // Failed to read dictionary
-    };
-    if bounty_opt.is_none() {
-        runtime::revert(ApiError::User(41)); // Bounty not found
-    }
-    let mut bounty = bounty_opt.unwrap();
+    let mut bounty: Bounty = storage::dictionary_get(dict_uref, &task_id)
+        .unwrap_or_revert()
+        .unwrap_or_revert();
 
     let caller = runtime::get_caller().to_string();
     if caller != bounty.verifier && caller != bounty.creator {
@@ -289,9 +261,8 @@ pub extern "C" fn refund_bounty() {
     }
 
     let escrow_purse = get_escrow_purse();
-    if system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None).is_err() {
-        runtime::revert(ApiError::User(30)); // Transfer failed
-    }
+    system::transfer_from_purse_to_purse(escrow_purse, target_purse, bounty.amount, None)
+        .unwrap_or_revert();
 
     bounty.status = 2; // Refunded
     storage::dictionary_put(dict_uref, &task_id, bounty);
@@ -386,13 +357,13 @@ pub extern "C" fn call() {
     let (contract_hash, _contract_version) = storage::new_contract(
         entry_points,
         None, // ← empty named_keys; init() creates them in contract context
-        Some("casper_agentic_mesh_package_v2".to_string()),
-        Some("casper_agentic_mesh_access_v2".to_string()),
+        Some("casper_agentic_mesh_package".to_string()),
+        Some("casper_agentic_mesh_access".to_string()),
         None,
     );
 
     // Store the contract hash for external reference
-    runtime::put_key("casper_agentic_mesh_contract_v2", Key::from(contract_hash));
+    runtime::put_key("casper_agentic_mesh_contract", Key::from(contract_hash));
 
     // NOTE: init() must be called as a SEPARATE transaction after deployment.
     // runtime::call_contract from session context is not reliable in Casper 2.0.

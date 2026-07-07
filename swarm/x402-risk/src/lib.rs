@@ -1,5 +1,5 @@
 //! x402-risk: Regime-aware Kelly sizing, KillSwitch, ATR stops, BucketCap.
-//! Pending integration into swarm-engine pipeline.
+//! Standalone risk-scoring crate (Casper submission).
 #![allow(dead_code)]
 
 pub mod config;

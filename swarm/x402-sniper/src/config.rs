@@ -1,1 +1,0 @@
-pub const IPC_POLL_INTERVAL_MS: u64 = 500;

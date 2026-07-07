@@ -13,7 +13,7 @@ pub mod entry;
 pub mod indicators;
 pub mod shield;
 pub mod trailing;
-// pub mod execution;   // Bybit-specific — will be replaced by mantle-chain adapter
+// pub mod execution;   // (external market adapter — removed from Casper submission)
 pub mod confidence;
 pub mod calibration;
 pub mod types;
@@ -26,4 +26,4 @@ pub mod deallow;
 pub mod scanner;
 pub mod logger;
 pub mod unstuck;
-// pub mod orchestrator; // Bybit-specific — replaced by swarm-engine
+// pub mod orchestrator; // (external orchestrator — removed from Casper submission)

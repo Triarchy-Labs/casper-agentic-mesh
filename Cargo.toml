@@ -1,24 +1,15 @@
 [workspace]
 resolver = "2"
-# Contracts build standalone (Casper wasm targets / nightly odra tooling) and are
-# kept out of the default workspace build so `cargo check --workspace` stays green.
-exclude = ["contracts/casper-mesh-contract", "contracts/casper_escrow", "contracts/deposit-proxy"]
+exclude = ["contracts/casper-mesh-contract"]
 members = [
     "swarm/casper-client",
     "swarm/ouroboros-brain",
     "swarm/titan-core",
     "swarm/hive-intel",
-    "swarm/swarm-engine",
     "swarm/x402-consensus",
     "swarm/x402-risk",
     "swarm/x402-polymarket",
     "swarm/x402-memory",
-    "swarm/x402-sniper",
-    "swarm/x402-liquidator",
-    "swarm/bounty-judge",
-    "swarm/rwa-oracle",
-    "swarm/tribunal",
-    "swarm/tower",
     "swarm/core-ipc",
 ]
 
@@ -64,6 +55,9 @@ regex = "1"
 hmac = "0.12"
 sha2 = "0.10"
 hex = "0.4"
+
+# On-chain (Mantle) - kept for reference if needed
+alloy = { version = "2.0", features = ["full"] }
 
 [profile.release]
 opt-level = 3
