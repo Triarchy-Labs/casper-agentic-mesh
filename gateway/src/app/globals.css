@@ -300,10 +300,6 @@ input:focus, textarea:focus, select:focus {
   opacity: 0.38;
   filter: blur(3px) saturate(0.82);
 }
-/* Produx-style extra depth: subtle blur on non-hovered siblings in focus-cards */
-.focus-cards:has(.editorial-panel:hover) .editorial-panel:not(:hover) {
-  filter: blur(1px) saturate(0.82);
-}
 
 /* Brutalist Aesthetics */
 .editorial-grid {
@@ -493,31 +489,6 @@ input:focus, textarea:focus, select:focus {
   transform: rotate(90deg);
 }
 
-/* Hover-reveal: editorial bullet lists start faded / blurred, slide in on hover */
-.editorial-panel ul {
-  opacity: 0.5;
-  transform: translateY(4px);
-  filter: blur(1px);
-  transition: all 350ms cubic-bezier(0.32,0.72,0,1);
-}
-.editorial-panel:hover ul {
-  opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
-}
-
-/* Hover-reveal: nb-tag chips inside editorial panels tilt-in */
-.editorial-panel .nb-tag {
-  transform: translateY(2px) rotate(-1deg);
-  opacity: 0.7;
-  transition: transform 350ms cubic-bezier(0.32,0.72,0,1),
-              opacity 350ms cubic-bezier(0.32,0.72,0,1);
-}
-.editorial-panel:hover .nb-tag {
-  transform: translateY(0) rotate(0);
-  opacity: 1;
-}
-
 
 /* ════════════════════════════════════════════════════════════════
    PREMIUM OVERHAUL — carbon-fibre red, neon aura, frontier cursor
@@ -681,19 +652,17 @@ html.lenis, html.lenis body { height: auto; }
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--red-1000);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(241,50,66,0.5);
   padding: 4px 10px;
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.02);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(241,50,66,0.06);
 }
 .nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
 /* diagonal slash motif from techwear refs */
 .hud-slashes::before { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-right: 12px; opacity: 0.9; }
 .hud-slashes::after  { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-left: 12px; opacity: 0.4; }
 /* thin technical connector lines */
-.tech-line   { height: 1px; opacity: 0.15; background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent); }
+.tech-line   { height: 1px; background: linear-gradient(90deg, var(--red-700) 0%, rgba(241,50,66,0.0) 100%); }
 .tech-line-v { width: 1px;  background: linear-gradient(180deg, rgba(241,50,66,0.0), var(--red-700), rgba(241,50,66,0.0)); }
 /* small index counter like "+ 23 >" */
 .nb-index { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--gray-700); }
@@ -834,25 +803,3 @@ html.lenis, html.lenis body { height: auto; }
   transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms;
 }
 .btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }
-
-/* ── PRODUX CLEAN UNDERLINE — static line that retracts on hover ── */
-.link-underline {
-  position: relative;
-  text-decoration: none;
-}
-.link-underline::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(1);
-  transform-origin: left;
-  transition: transform 350ms cubic-bezier(0.32,0.72,0,1);
-}
-.link-underline:hover::after {
-  transform: scaleX(0);
-  transform-origin: right;
-}
