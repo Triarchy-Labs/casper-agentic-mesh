@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Nav } from "@/components/Nav";
+import { ScrollHero } from "@/components/ScrollHero";
 import { AnimatePresence } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -60,7 +60,7 @@ export default function Page() {
 
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
-            <Nav />
+            <ScrollHero />
 
             {/* Hero Section */}
             <section className="relative h-screen flex items-center px-8 md:px-24 overflow-hidden">
