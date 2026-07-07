@@ -4,6 +4,7 @@ import "./fonts.css";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";
+import CursorProvider from "@/components/CursorProvider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -55,6 +56,7 @@ export default function RootLayout({
 			<body className="flex flex-col min-h-screen">
 				<div className="edge-aura" aria-hidden />
 				<div className="fx-overlay" aria-hidden />
+				<CursorProvider />
 				<SmoothScroller>
 					<div className="flex flex-col min-h-screen">
 						<div className="flex-1">{children}</div>
