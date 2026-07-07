@@ -36,13 +36,15 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 
 	return (
 		<motion.div
-			exit={{ opacity: 0, filter: "blur(14px)", scale: 1.04 }}
-			transition={{ duration: 0.7, ease: "easeIn" }}
+			// Cinematic push-in toward the "casper" badge, darkening as it dissolves.
+			exit={{ opacity: 0, scale: 1.85, filter: "brightness(0.12)" }}
+			transition={{ duration: 0.5, ease: [0.7, 0, 0.84, 0] }}
 			style={{
 				position: "fixed",
 				inset: 0,
 				zIndex: 99999,
 				overflow: "hidden",
+				transformOrigin: "50% 40%",
 				fontFamily: "ui-monospace, 'Geist Mono', monospace",
 				color: "#fff",
 			}}
