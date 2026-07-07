@@ -197,7 +197,7 @@ export default function CustomCursor() {
 					color: "#000",
 					textTransform: "uppercase",
 				}}>
-					view project
+					view
 				</span>
 			</div>
 		</>
