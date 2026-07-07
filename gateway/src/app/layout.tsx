@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
+import "./fonts.css";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";

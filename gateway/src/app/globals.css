@@ -6,7 +6,8 @@
   --color-casper-red: #f13242;
   --color-casper-darkred: #88151f;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "General Sans", var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-array: "Array", var(--font-sans);
 }
 
 :root {
@@ -610,8 +611,8 @@ html.lenis, html.lenis body { height: auto; }
 /* ════════════════════════════════════════════════════════════════
    NEO-BRUTALIST type + cyberpunk HUD accents (racing/techwear refs)
    ════════════════════════════════════════════════════════════════ */
-.nb-display { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
-.nb-thin    { font-family: var(--font-display), var(--font-sans), sans-serif; font-weight: 200; letter-spacing: -0.03em; }
+.nb-display { font-family: "Clash Display", var(--font-display), var(--font-sans), sans-serif; font-weight: 800; letter-spacing: -0.045em; line-height: 0.9; }
+.nb-thin    { font-family: "Clash Display", var(--font-display), var(--font-sans), sans-serif; font-weight: 200; letter-spacing: -0.03em; }
 /* outlined stroke text — raw brutalist contrast */
 .nb-outline {
   color: transparent;
