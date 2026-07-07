@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
+import { CinematicDim } from "@/components/CinematicDim";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -57,6 +58,7 @@ export default function Page() {
         <main className="bg-transparent text-[var(--gray-1000)] min-h-screen relative" ref={containerRef}>
           {/* Living carbon-fibre fabric — reacts to mouse + scroll */}
           <CarbonFabric />
+          <CinematicDim />
 
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
