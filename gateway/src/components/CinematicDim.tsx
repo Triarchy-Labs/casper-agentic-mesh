@@ -19,8 +19,9 @@ export function CinematicDim() {
 		return () => window.removeEventListener("resize", read);
 	}, []);
 
-	// Full dim at top → half by ~1.3 screens → gone by ~2.7 screens (viewport-relative).
-	const opacity = useTransform(scrollY, [0, vh * 1.3, vh * 2.7], [1, 0.5, 0]);
+	// Full dim at top → eases down over a longer run and settles at a permanent
+	// floor (~0.55) so brightness never exceeds ~65% of raw. Viewport-relative.
+	const opacity = useTransform(scrollY, [0, vh * 1.5, vh * 3.4], [1, 0.75, 0.55]);
 
 	return (
 		<motion.div
