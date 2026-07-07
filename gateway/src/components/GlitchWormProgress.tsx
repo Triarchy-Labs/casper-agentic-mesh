@@ -40,8 +40,8 @@ export function GlitchWormProgress({ progress }: GlitchWormProps) {
                         initial={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
                         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 flex items-center justify-center z-50 text-[#00ff41] font-bold text-center tracking-widest text-[14px]"
-                        style={{ textShadow: "0 0 20px #00ff41, 0 0 10px #00ff41" }}
+                        className="absolute inset-0 flex items-center justify-center z-50 text-[var(--red-700)] font-bold text-center tracking-widest text-[14px]"
+                        style={{ textShadow: "0 0 20px var(--red-700), 0 0 10px var(--red-700)" }}
                     >
                         <motion.span
                             animate={{ x: [-2, 2, -2, 0], y: [1, -1, 1, 0] }}
@@ -58,7 +58,7 @@ export function GlitchWormProgress({ progress }: GlitchWormProps) {
                     >
                         <div className="text-[10px] text-white/30 uppercase tracking-[0.2em] flex justify-between w-full pb-1 border-b border-white/5">
                             <span>Ingestion Worm</span>
-                            <span className="text-[#00ff41] drop-shadow-[0_0_5px_#00ff41]">{Math.round(safeProgress)}%</span>
+                            <span className="text-[var(--red-700)] drop-shadow-[0_0_5px_var(--red-700)]">{Math.round(safeProgress)}%</span>
                         </div>
                         <div className="flex gap-1 justify-between w-full relative">
                             {Array.from({ length: TOTAL_CUBES }).map((_, i) => {
@@ -69,7 +69,7 @@ export function GlitchWormProgress({ progress }: GlitchWormProps) {
                                     <div 
                                         key={i} 
                                         className={`w-full max-w-[12px] h-4 rounded-[1px] relative overflow-hidden ${
-                                            isFilled ? "bg-[#00ff41] shadow-[0_0_10px_rgba(0,255,65,0.6)]" : "bg-white/5 border border-white/10"
+                                            isFilled ? "bg-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.6)]" : "bg-white/5 border border-white/10"
                                         }`}
                                     >
                                         {/* The Glitch Head Eating Effect — CSS animation, not Framer */}

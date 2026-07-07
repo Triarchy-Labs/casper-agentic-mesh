@@ -27,7 +27,17 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 			"P2P_NODE_DISCOVERY: SCANNING",
 			"CASPER_RPC_LATENCY: ",
 			"EXTISM_PLUGIN_LIFECYCLE: ",
-			"SOVEREIGN_ROUTING_HOP: "
+			"SOVEREIGN_ROUTING_HOP: ",
+			"SENTINEL_GOSSIP_WARN: Malicious WASM signature detected: 0x",
+			"MEV_FLASH_LOAN_ARBITRAGE: Borrowed 1,500,000 CSPR from flash-escrow block #1,809,202",
+			"GAS_FUTURES_HEDGING: Purchased gas voucher at 0.0028 CSPR/gas-unit",
+			"SUB_ESCROW_DELEGATION: Split bounty #1049 into 3 sub-escrow nodes",
+			"P2P_LOAD_BALANCER: Latency spike >450ms, spawning replica agent instances",
+			"L402_AUTH_KEY_VERIFICATION: Handshake OK. Invoice payment verified",
+			"SHADOW_SIMULATOR: Pre-execution dry-run OK. Gas: ",
+			"CEP78_REPUTATION_UPDATE: Updated Agent Passport 01c0... with proof: 0x",
+			"DECISION_TREE: Spawned child agent_executor_",
+			"COLLATERAL_LOCKED: Agent 01c0... staked 50,000 CEP-18 in Escrow"
 		];
 
 		let i = 0;
@@ -59,17 +69,17 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 
 	// Lusion palette — always dark (only canvas inverts)
 	const borderColor = hovered 
-		? "rgba(0,255,65,0.4)"
+		? "rgba(241,50,66,0.4)"
 		: "rgba(255,255,255,0.1)";
 	// bgColor removed — Peachworlds glass uses inline values
 	const textColor = hovered
-		? "#00ff41"
+		? "#f13242"
 		: "rgba(255,255,255,0.6)";
 	const headerColor = hovered
-		? "#00ff41"
+		? "#f13242"
 		: "rgba(255,255,255,0.8)";
 	const glowShadow = hovered
-		? "0 0 25px rgba(0,255,65,0.2)"
+		? "0 0 25px rgba(241,50,66,0.2)"
 		: "none";
 
 	return (
@@ -83,7 +93,7 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 				width: 400,
 				height: 220,
 				background: hovered 
-					? (theme === "dark" ? "rgba(0,15,0,0.4)" : "rgba(5,15,5,0.95)")
+					? (theme === "dark" ? "rgba(241,50,66,0.06)" : "rgba(241,50,66,0.15)")
 					: (theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(8,8,8,0.95)"),
 				border: `1px solid ${borderColor}`,
 				borderRadius: 12,

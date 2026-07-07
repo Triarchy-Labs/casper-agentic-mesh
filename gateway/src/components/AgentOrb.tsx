@@ -77,12 +77,12 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 	// Pure White Eye shapes without black UI masks
     // IMPORTANT: ALL borderRadius values MUST have 4 explicit values so framer-motion interpolates without snapping!
 	const leftEyeVariants = {
-		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" }, 
-		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#00ff41" }, 
+		idle: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		typing: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		thinking: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#fff" }, 
 		sneaky: { height: 27, width: 18, rotate: -5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" },
-		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#00ff41" },
+		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
 		error: { height: 15, width: 27, rotate: 30, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" }, 
 		sad: { height: 27, width: 24, rotate: -15, borderRadius: "6px 6px 18px 3px", backgroundColor: "#fff" }, 
 		exhausted: { height: blink ? 2 : 12, width: 21, rotate: 0, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" },
@@ -91,12 +91,12 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 	};
     
 	const rightEyeVariants = {
-		idle: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		typing: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		thinking: { height: blink ? 2 : 39, width: 21, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
-		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#00ff41" }, 
+		idle: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		typing: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		thinking: { height: blink ? 2 : 11, width: 34, rotate: 0, borderRadius: "6px", backgroundColor: "#fff" },
+		working: { height: 9, width: 24, rotate: 0, borderRadius: "4px", backgroundColor: "#fff" }, 
 		sneaky: { height: 36, width: 21, rotate: 5, borderRadius: "12px 12px 12px 12px", backgroundColor: "#fff" }, 
-		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#00ff41" },
+		success: { height: blink ? 2 : 33, width: 24, rotate: 0, borderRadius: "15px 15px 15px 15px", backgroundColor: "#fff" },
 		error: { height: 15, width: 27, rotate: -30, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" }, 
 		sad: { height: 27, width: 24, rotate: 15, borderRadius: "6px 6px 3px 18px", backgroundColor: "#fff" }, 
 		exhausted: { height: blink ? 2 : 12, width: 21, rotate: 0, borderRadius: "6px 6px 15px 15px", backgroundColor: "#fff" },
@@ -138,7 +138,11 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 							transition={{ repeat: Infinity, duration: 0.4, ease: "easeInOut" }}
 							className="w-14 h-10 bg-black border border-white/20 absolute right-1.5 top-0 rounded-l-md shadow-[0_0_20px_#ff003c] flex items-center justify-center text-[10px]"
 						>
-							☠️
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff003c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-pulse">
+								<path d="M12 2a5 5 0 0 0-5 5v4a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V7a5 5 0 0 0-5-5z" />
+								<path d="M9 10h.01M15 10h.01M12 13h.01" strokeWidth="2.5" />
+								<path d="M10 17h4M12 17v2" />
+							</svg>
 						</motion.div>
 					</motion.div>
 				)}
@@ -172,35 +176,49 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
                 )}
 			</AnimatePresence>
 
-			<motion.div 
+			<motion.div
 				ref={orbRef}
-				style={{ width: 120, height: 120 }} 
-				className="relative z-10 rounded-full shadow-[inset_0_-10px_20px_rgba(0,0,0,0.8),_0_0_15px_rgba(0,0,0,0.5)] border border-white/5 overflow-hidden flex items-center justify-center bg-[#0a0a0a]"
-                animate={{ 
-                    boxShadow: state === "success" 
-                        ? "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 30px rgba(0, 255, 65, 0.4), 0 0 0 2px rgba(0, 255, 65, 0.5)" 
-                        : "inset 0 -10px 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)"
+				style={{ width: 120, height: 120, background: "radial-gradient(circle at 38% 30%, rgba(70,16,28,0.45) 0%, rgba(20,5,10,0.82) 56%, rgba(8,2,5,0.95) 100%)" }}
+				className="relative z-10 rounded-full border border-white/15 overflow-hidden flex items-center justify-center"
+                animate={{
+                    boxShadow: state === "success"
+                        ? "inset 0 -16px 26px rgba(0,0,0,0.6), inset 0 10px 22px rgba(255,180,190,0.28), inset 0 0 26px rgba(0,0,0,0.5), 0 0 44px rgba(241,50,66,0.55), 0 0 0 1px rgba(255,255,255,0.18)"
+                        : "inset 0 -16px 26px rgba(0,0,0,0.62), inset 0 10px 22px rgba(255,180,190,0.22), inset 0 0 26px rgba(0,0,0,0.5), 0 0 30px rgba(241,50,66,0.32), 0 0 0 1px rgba(255,255,255,0.16)"
                 }}
 			>
-				<div className="absolute top-[10%] left-[20%] w-[40%] h-[20%] bg-white/10 rounded-full blur-[2px] rotate-[-20deg] pointer-events-none z-20" />
+				{/* red aura core — glows from inside the glass */}
+				<motion.div
+					className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0"
+					style={{ width: "72%", height: "72%", background: "radial-gradient(circle, rgba(255,70,90,0.9) 0%, rgba(241,50,66,0.55) 32%, rgba(136,21,31,0.15) 60%, transparent 72%)", filter: "blur(6px)" }}
+					animate={{ opacity: [0.7, 1, 0.7], scale: [0.92, 1.02, 0.92] }}
+					transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+				/>
+				{/* glass gloss — sharp top-left specular highlight */}
+				<div className="absolute top-[8%] left-[16%] w-[46%] h-[24%] rounded-full pointer-events-none z-20"
+					style={{ background: "linear-gradient(150deg, rgba(255,255,255,0.55), rgba(255,255,255,0.05) 70%, transparent)", filter: "blur(1px)", transform: "rotate(-18deg)" }} />
+				{/* thin lower rim reflection */}
+				<div className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[55%] h-[10%] rounded-full pointer-events-none z-20"
+					style={{ background: "radial-gradient(ellipse, rgba(255,150,165,0.22), transparent 70%)", filter: "blur(2px)" }} />
 
 				<motion.div
 					className="absolute inset-0 flex items-center justify-center z-10"
 					animate={{ x: mousePos.x, y: mousePos.y }}
 					transition={{ type: "spring", stiffness: 100, damping: 25 }}
 				>
-					<motion.div className="flex gap-8 z-10" variants={containerVariants} animate={state} style={{ transformStyle: 'preserve-3d' }}>
+					<motion.div className="flex gap-5 z-10" variants={containerVariants} animate={state} style={{ transformStyle: 'preserve-3d' }}>
 						{/* Left Eye */}
-						<motion.div variants={leftEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }} />
-						
+						<motion.div variants={leftEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }}
+							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(241,50,66,0.7)" }} />
+
 						{/* Right Eye */}
-						<motion.div variants={rightEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+						<motion.div variants={rightEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }}
+							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(241,50,66,0.7)" }} />
 					</motion.div>
 				</motion.div>
 				
 				<AnimatePresence>
 					{state === "working" && (
-						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#00ff41]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
+						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#f13242]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
 					)}
 					{state === "error" && (
 						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 shadow-[inset_0_0_20px_#ff003c] mix-blend-overlay pointer-events-none z-30" />

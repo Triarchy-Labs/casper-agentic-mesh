@@ -32,7 +32,7 @@ export default function FPSCounter() {
 				position: "absolute",
 				top: 40,
 				right: 40,
-				background: "rgba(0, 10, 0, 0.85)",
+				background: "rgba(0, 0, 0, 0.85)",
 				border: "1px solid rgba(255,255,255,0.85)",
 				padding: "10px 15px",
 				fontFamily: "'Helvetica Now Display', 'Inter', sans-serif",

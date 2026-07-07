@@ -38,9 +38,9 @@ export default function GlitchText({ text, theme = "dark" }: { text: string; the
 			opacity: [1, 0.5, 1, 0.8, 1],
 			filter: theme === "dark" 
 				? [
-					"drop-shadow(0 0 40px rgba(0, 255, 65, 0.9))",
+					"drop-shadow(0 0 40px rgba(241, 50, 66, 0.9))",
 					"drop-shadow(-5px 0 0 red) drop-shadow(5px 0 0 blue)",
-					"drop-shadow(0 0 40px rgba(0, 255, 65, 0.9))",
+					"drop-shadow(0 0 40px rgba(241, 50, 66, 0.9))",
 				]
 				: [
 					"drop-shadow(0 0 40px rgba(0, 0, 0, 0.2))",
@@ -73,7 +73,7 @@ export default function GlitchText({ text, theme = "dark" }: { text: string; the
 						fontSize: "5rem",
 						letterSpacing: char === " " ? "1rem" : "0.15em",
 						fontFamily: "monospace",
-						textShadow: theme === "dark" ? "0 0 40px rgba(0, 255, 65, 0.9)" : "0 0 40px rgba(0, 0, 0, 0.2)",
+						textShadow: theme === "dark" ? "0 0 40px rgba(241, 50, 66, 0.9)" : "0 0 40px rgba(0, 0, 0, 0.2)",
 						display: "inline-block",
 					}}
 				>
