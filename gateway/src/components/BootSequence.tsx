@@ -73,6 +73,15 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 						"linear-gradient(to bottom, rgba(2,1,3,0.55) 0%, rgba(2,1,3,0.12) 40%, rgba(2,1,3,0.88) 100%)",
 				}}
 			/>
+			{/* soft vignette — depth, darker edges */}
+			<div
+				style={{
+					position: "absolute",
+					inset: 0,
+					background:
+						"radial-gradient(ellipse at 50% 44%, transparent 32%, rgba(0,0,0,0.30) 72%, rgba(0,0,0,0.66) 100%)",
+				}}
+			/>
 			{/* subtle scanlines */}
 			<div
 				style={{
