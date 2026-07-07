@@ -51,15 +51,16 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 		>
 			{/* 4K crafted background — slow ken-burns (auto camera push + drift) */}
 			<motion.div
-				initial={{ scale: 1.02, x: "0%", y: "0%" }}
-				animate={{ scale: 1.09, x: "-1.2%", y: "-1.6%" }}
+				initial={{ scale: 1, x: "0%", y: "0%" }}
+				animate={{ scale: 1.09, x: "-1.1%", y: "-1.4%" }}
 				transition={{ duration: 3, ease: "easeOut" }}
 				style={{
 					position: "absolute",
-					inset: "-4%", // overscan so the drift never reveals edges
+					inset: 0, // starts at the original framing; scale-up provides its own overscan
 					backgroundImage: "url(/boot.webp)",
 					backgroundSize: "cover",
 					backgroundPosition: "center",
+					transformOrigin: "center center",
 					willChange: "transform",
 				}}
 			/>
