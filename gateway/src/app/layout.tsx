@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sora } from "next/font/google";
+import { Geist, Geist_Mono, Sora, Orbitron } from "next/font/google";
 import "./fonts.css";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
@@ -23,6 +23,13 @@ const sora = Sora({
 	weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
+// Sharp geometric techno face for the logo / accent wordmark.
+const orbitron = Orbitron({
+	variable: "--font-tech",
+	subsets: ["latin"],
+	weight: ["500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
 	title: "Triarchy Agentic Mesh — the trust layer for the agent economy on Casper",
 	description:
@@ -43,7 +50,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} ${orbitron.variable} antialiased`}
 		>
 			<head />
 			<body className="flex flex-col min-h-screen">

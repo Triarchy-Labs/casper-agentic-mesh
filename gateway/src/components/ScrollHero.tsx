@@ -166,8 +166,8 @@ export function ScrollHero() {
 				>
 					<div
 						style={{
-							fontFamily: "'Array', 'Sora', ui-sans-serif, sans-serif",
-							fontWeight: 700,
+							fontFamily: "var(--font-tech), 'Sora', sans-serif",
+							fontWeight: 800,
 							fontSize: "clamp(72px, 11.9vw, 900px)", // produx hero = 11.9vw pure (no low cap on 4K)
 							lineHeight: 0.88,
 							letterSpacing: "-0.035em",
