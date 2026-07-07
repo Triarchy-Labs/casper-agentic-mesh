@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -16,20 +16,9 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const isBooted = sessionStorage.getItem("x402_booted") === "true";
-      if (isBooted) {
-        setTimeout(() => setBooted(true), 0);
-      }
-    }
-  }, []);
-
+  // Always run the full 2.5s boot loader on every visit (no session skip).
   const handleBootComplete = () => {
     setBooted(true);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("x402_booted", "true");
-    }
   };
 
 
