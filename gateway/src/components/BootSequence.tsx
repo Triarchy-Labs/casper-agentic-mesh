@@ -49,14 +49,18 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 				color: "#fff",
 			}}
 		>
-			{/* 4K crafted background */}
-			<div
+			{/* 4K crafted background — slow ken-burns (auto camera push + drift) */}
+			<motion.div
+				initial={{ scale: 1.02, x: "0%", y: "0%" }}
+				animate={{ scale: 1.09, x: "-1.2%", y: "-1.6%" }}
+				transition={{ duration: 3, ease: "easeOut" }}
 				style={{
 					position: "absolute",
-					inset: 0,
+					inset: "-4%", // overscan so the drift never reveals edges
 					backgroundImage: "url(/boot.webp)",
 					backgroundSize: "cover",
 					backgroundPosition: "center",
+					willChange: "transform",
 				}}
 			/>
 			{/* legibility scrim */}
