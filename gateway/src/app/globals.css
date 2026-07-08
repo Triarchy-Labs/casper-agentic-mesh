@@ -556,8 +556,8 @@ body {
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(60% 50% at 0% 50%, rgba(224,53,41,0.18), transparent 70%),
-    linear-gradient(90deg, rgba(224,53,41,0.08) 0%, transparent 72%);
+    radial-gradient(60% 50% at 0% 50%, rgba(241,50,66,0.30), transparent 70%),
+    linear-gradient(90deg, rgba(241,50,66,0.16) 0%, transparent 72%);
   filter: blur(6px);
   animation: edgeBreathe 7s ease-in-out infinite;
 }
@@ -566,8 +566,8 @@ body {
   position: absolute;
   top: 0; left: 0;
   width: 2px; height: 100%;
-  background: linear-gradient(180deg, transparent, rgba(224,53,41,0.4) 18%, rgba(224,53,41,0.8) 50%, rgba(224,53,41,0.4) 82%, transparent);
-  box-shadow: 0 0 22px 3px rgba(224,53,41,0.25), 0 0 60px 8px rgba(224,53,41,0.15);
+  background: linear-gradient(180deg, transparent, var(--red-700) 18%, var(--red-900) 50%, var(--red-700) 82%, transparent);
+  box-shadow: 0 0 22px 3px rgba(241,50,66,0.55), 0 0 60px 8px rgba(241,50,66,0.25);
 }
 @keyframes edgeBreathe {
   0%, 100% { opacity: 0.75; }
@@ -711,15 +711,15 @@ html.lenis, html.lenis body { height: auto; }
 /* recolor the grey fabric into deep racing red — keeps the weave/fold luminance */
 .carbon-tint {
   position: absolute; inset: 0;
-  background: linear-gradient(160deg, #e03529 0%, #782024 45%, #050202 100%);
+  background: linear-gradient(160deg, #7a1020 0%, #b81e2e 45%, #5c0d18 100%);
   mix-blend-mode: color;
-  opacity: 0.65;
+  opacity: 0.72;
 }
 /* gentle warm glow from below — static, no cursor lightbulb */
 .carbon-backlight {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(120% 70% at 50% 118%, rgba(224,53,41,0.15), transparent 60%);
+  background: radial-gradient(120% 70% at 50% 118%, rgba(241,80,95,0.16), transparent 60%);
 }
 /* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
    (kicks in only near the corners, so the fabric centre stays fully visible). */
