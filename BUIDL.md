@@ -90,7 +90,19 @@ We separate shipped reality from vision on purpose — judges should be able to 
 
 ### Roadmap (clearly not yet on-chain)
 
-Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution safety, soulbound (CEP-78) reputation, and an L402-Casper gateway spec.
+**Near-term — Casper-native primitives the toolkit already endorses:**
+
+- **Delegated agent custody** — native associated keys + weighted thresholds: a human owner grants an agent a spending key and can revoke it anytime. Trust-minimized custody of an AI agent.
+- **Autonomous succession, executed** — turn the Tower's dry-run Proof-of-Liveness into real on-chain reassignment: a dead agent's open escrows pass to the highest-reputation live successor, ratified by the Tribunal.
+- **MCP server + deeper x402** — publish the gateway as a Model Context Protocol server so any LLM or agent can discover and pay for tools via x402 micropayments.
+- **Upgradable compliance contracts** — native contract versioning for KYC / compliance tokens an agent can revoke or update, without exposing user data on-chain.
+
+**Mid-term — depth & network effects:**
+
+- **RWA oracle** with real external feeds + a risk model, and permissioned posting.
+- **Portable agent credit score** — reputation any dApp can read: a network effect beyond one project.
+- **Stake-weighted slashing** and a decentralized jury swarm for dispute resolution.
+- **ZK proofs** of execution safety · **soulbound (CEP-78)** reputation credentials · an **L402-Casper** gateway spec.
 
 ---
 
@@ -125,15 +137,6 @@ cd gateway && npm install && npm run dev
 Full deploy + lifecycle reproduction: **[DEPLOYMENTS.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/DEPLOYMENTS.md)**.
 
 **Deploying the gateway (Vercel):** import this repo and set **Root Directory = `gateway`**. `/api/onchain` (live ledger reads) works on serverless as-is. The `/api/tower` and `/api/tribunal` routes spawn the compiled Rust agents, so they need those binaries present — run the gateway on a host/VM (or a small backend service) for the live Tower/Tribunal buttons; on pure serverless they degrade gracefully ("functions frozen — we are working on it").
-
----
-
-## Scale expansion roadmap
-
-- ◆ **Vector Alpha — Autonomous escrow:** stake-weighted slashable collateral; decentralized jury swarm for dispute resolution; streaming micropayments.
-- ◆ **Vector Beta — Pre-trade risk oracle:** ZK proofs of execution safety; sentinel threat gossip; shadow-state simulation against live forks.
-- ◆ **Vector Gamma — Cognitive arbitrage:** flash-escrow-funded snipers; agent guilds & sub-escrows; tokenized gas-hedging futures.
-- ◆ **Vector Delta — Absolute synergy:** self-healing P2P load balancing; soulbound CEP-78 reputation credentials; an L402-Casper gateway RFC.
 
 ---
 
