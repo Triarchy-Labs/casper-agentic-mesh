@@ -90,6 +90,18 @@ export default function Dashboard() {
                 pinSpacing: false,
             });
 
+            // Fade out hero text on scroll
+            gsap.to(".hero-content", {
+                opacity: 0,
+                y: -30,
+                scrollTrigger: {
+                    trigger: gridRef.current,
+                    start: "top 95%", // start fading as soon as grid appears
+                    end: "top 20%",   // fully hidden when grid is high up
+                    scrub: true,
+                }
+            });
+
             // Fade in grid items sequentially
             gsap.from(".grid-item", {
                 y: 100,
@@ -257,7 +269,7 @@ export default function Dashboard() {
 			
             {/* Cinematic Hero Section (Pinned) */}
             <section ref={heroRef} className="h-screen w-full flex flex-col justify-center px-8 md:px-16 pt-24 relative z-0">
-                <div className="w-full relative">
+                <div className="w-full relative hero-content">
                     <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}>
                         <h1 className="text-[10vw] md:text-[8vw] font-mono leading-none tracking-tighter uppercase mb-8">
                             Sovereign<br />
