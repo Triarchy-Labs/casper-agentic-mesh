@@ -195,10 +195,10 @@ export default function AgentNetworkGrid() {
 
 			<div className="w-full grid grid-cols-12 gap-x-[4vw] gap-y-[15vh] px-[2vw] max-sm:gap-y-[10vh] mb-[15vh]">
 				{agents.length > 0 && (
-					<ProduxCard agent={agents[0]} spanClass="col-span-12 md:col-span-7" />
+					<ProduxCard agent={agents[agents.length > 1 ? 1 : 0]} spanClass="col-span-12 md:col-span-7" />
 				)}
 				{agents.length > 1 && (
-					<ProduxCard agent={agents[1]} spanClass="col-span-12 md:col-span-4 md:col-end-13 md:mt-[10vh]" />
+					<ProduxCard agent={agents[0]} spanClass="col-span-12 md:col-span-4 md:col-end-13 md:mt-[10vh]" />
 				)}
 			</div>
 

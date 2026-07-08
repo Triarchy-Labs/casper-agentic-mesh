@@ -476,7 +476,10 @@ export default function Dashboard() {
 				{/* 4. Scale Expansion Telemetry Section */}
 				<div className="w-full mt-20 pt-16">
 					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
-						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA 					<div className="flex flex-col md:flex-row gap-[12%] items-end focus-cards">
+						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
+					</h2>
+
+					<div className="flex flex-col md:flex-row gap-[12%] items-end focus-cards">
 						{/* Vector Gamma Panel (Left 30% Square) */}
 						<div className="w-full md:w-[30%] flex flex-col">
 							<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
