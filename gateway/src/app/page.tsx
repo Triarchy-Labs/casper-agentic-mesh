@@ -85,7 +85,8 @@ export default function Page() {
       scrollTrigger: {
         trigger: "#assembly-sticky-trigger",
         start: "top top",
-        end: "bottom bottom",
+        end: "+=150%",
+        pin: true,
         scrub: 0.5,
       }
     });
@@ -152,108 +153,103 @@ export default function Page() {
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
             <ScrollHero />
-
             {/* Redesigned Pinned Second Section with Image Assembly */}
-            <section id="assembly-sticky-trigger" className="relative w-full h-[220vh] bg-transparent">
+            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
               
-              {/* Sticky top content holder */}
-              <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden pointer-events-none z-10">
+              {/* Left: Heading and CTAs (positioned absolute to float over background) */}
+              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
+                <div className="flex items-center gap-3 mb-6 flex-wrap">
+                  <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
+                  <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
+                  <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
+                </div>
+                <h1 className="nb-display text-[clamp(40px,5.5vw,64px)] mb-1 leading-none">
+                  <span className="relative inline-block overflow-hidden py-2 -my-2">
+                    <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
+                  </span>
+                </h1>
+                <h1 className="nb-thin nb-outline text-[clamp(40px,5.5vw,64px)] mb-6 leading-none">
+                  <span className="relative inline-block overflow-hidden py-2 -my-2">
+                    <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
+                  </span>
+                </h1>
+                <div className="flex items-center gap-4 mb-8 w-full">
+                  <div className="tech-line flex-1 hero-sub-line origin-left" />
+                  <span className="nb-index whitespace-nowrap hero-sub-text">escrow · oracle · the tower</span>
+                </div>
+                <div className="flex gap-4 flex-wrap">
+                  <button className="button-primary inline-flex items-center hero-btn-animate">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
+                  <button className="btn-ghost hero-btn-animate">Talk to Sales</button>
+                </div>
+              </div>
+
+              {/* Center/Bottom: Image Assembly Box */}
+              <div className="assembly-image-container relative w-[65vw] max-w-[1000px] aspect-[1.784/1] z-10 pointer-events-auto max-lg:w-[90vw] max-lg:max-w-none">
                 
-                {/* Left: Heading and CTAs (positioned absolute to float over background) */}
-                <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
-                  <div className="flex items-center gap-3 mb-6 flex-wrap">
-                    <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
-                    <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
-                    <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
-                  </div>
-                  <h1 className="nb-display text-[clamp(40px,5.5vw,64px)] mb-1 leading-none">
-                    <span className="relative inline-block overflow-hidden py-2 -my-2">
-                      <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
-                    </span>
-                  </h1>
-                  <h1 className="nb-thin nb-outline text-[clamp(40px,5.5vw,64px)] mb-6 leading-none">
-                    <span className="relative inline-block overflow-hidden py-2 -my-2">
-                      <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
-                    </span>
-                  </h1>
-                  <div className="flex items-center gap-4 mb-8 w-full">
-                    <div className="tech-line flex-1 hero-sub-line origin-left" />
-                    <span className="nb-index whitespace-nowrap hero-sub-text">escrow · oracle · the tower</span>
-                  </div>
-                  <div className="flex gap-4 flex-wrap">
-                    <button className="button-primary inline-flex items-center hero-btn-animate">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
-                    <button className="btn-ghost hero-btn-animate">Talk to Sales</button>
-                  </div>
+                {/* Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
+                {/* Slice 1: Top 25% */}
+                <div 
+                  className="absolute inset-0 assembly-slice assembly-slice-1" 
+                  style={{ 
+                    backgroundImage: "url(/anime_robot.jpeg)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    clipPath: "inset(0% 0% 75% 0%)"
+                  }} 
+                />
+                {/* Slice 2: Upper Middle 25% */}
+                <div 
+                  className="absolute inset-0 assembly-slice assembly-slice-2" 
+                  style={{ 
+                    backgroundImage: "url(/anime_robot.jpeg)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    clipPath: "inset(25% 0% 50% 0%)"
+                  }} 
+                />
+                {/* Slice 3: Lower Middle 25% */}
+                <div 
+                  className="absolute inset-0 assembly-slice assembly-slice-3" 
+                  style={{ 
+                    backgroundImage: "url(/anime_robot.jpeg)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    clipPath: "inset(50% 0% 25% 0%)"
+                  }} 
+                />
+                {/* Slice 4: Bottom 25% */}
+                <div 
+                  className="absolute inset-0 assembly-slice assembly-slice-4" 
+                  style={{ 
+                    backgroundImage: "url(/anime_robot.jpeg)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    clipPath: "inset(75% 0% 0% 0%)"
+                  }} 
+                />
+
+                {/* Clean gradient overlay on the image instead of solid dark scrim */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30 z-10 pointer-events-none" />
+
+                {/* Integrated Manifesto Text Overlaid on Image */}
+                <div 
+                  className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                >
+                  <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
+                  <p className="label-14 text-white/80">↳ to ship apps and agents</p>
+                  <p className="label-14 text-white/80">↳ automated by agents</p>
                 </div>
 
-                {/* Center/Bottom: Image Assembly Box */}
-                <div className="assembly-image-container relative w-[65vw] max-w-[1000px] aspect-[1.784/1] z-10 pointer-events-auto max-lg:w-[90vw] max-lg:max-w-none">
-                  
-                  {/* Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
-                  {/* Slice 1: Top 25% */}
-                  <div 
-                    className="absolute inset-0 assembly-slice assembly-slice-1" 
-                    style={{ 
-                      backgroundImage: "url(/anime_robot.jpeg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      clipPath: "inset(0% 0% 75% 0%)"
-                    }} 
-                  />
-                  {/* Slice 2: Upper Middle 25% */}
-                  <div 
-                    className="absolute inset-0 assembly-slice assembly-slice-2" 
-                    style={{ 
-                      backgroundImage: "url(/anime_robot.jpeg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      clipPath: "inset(25% 0% 50% 0%)"
-                    }} 
-                  />
-                  {/* Slice 3: Lower Middle 25% */}
-                  <div 
-                    className="absolute inset-0 assembly-slice assembly-slice-3" 
-                    style={{ 
-                      backgroundImage: "url(/anime_robot.jpeg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      clipPath: "inset(50% 0% 25% 0%)"
-                    }} 
-                  />
-                  {/* Slice 4: Bottom 25% */}
-                  <div 
-                    className="absolute inset-0 assembly-slice assembly-slice-4" 
-                    style={{ 
-                      backgroundImage: "url(/anime_robot.jpeg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      clipPath: "inset(75% 0% 0% 0%)"
-                    }} 
-                  />
-
-                  {/* Clean gradient overlay on the image instead of solid dark scrim */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30 z-10 pointer-events-none" />
-
-                  {/* Integrated Manifesto Text Overlaid on Image */}
-                  <div 
-                    className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0"
-                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                  >
-                    <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
-                    <p className="label-14 text-white/80">↳ to ship apps and agents</p>
-                    <p className="label-14 text-white/80">↳ automated by agents</p>
-                  </div>
-
-                  <div 
-                    className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0"
-                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                  >
-                    <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
-                  </div>
-
+                <div 
+                  className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0"
+                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                >
+                  <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
                 </div>
 
               </div>
+
             </section>
 
             {/* Synergy Dashboard Cinematic Chapters */}
