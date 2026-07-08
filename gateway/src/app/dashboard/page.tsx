@@ -322,7 +322,7 @@ export default function Dashboard() {
                             <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
                             <div className="absolute inset-0 flex items-center justify-center z-10">
-                                <AgentOrb state={agentState} size={180} />
+                                <AgentOrb state={agentState} size={360} />
                                 {agentState === "exhausted" && (
                                     <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
                                 )}
