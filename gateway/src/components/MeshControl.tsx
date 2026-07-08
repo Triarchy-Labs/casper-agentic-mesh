@@ -75,9 +75,9 @@ export function MeshControl() {
 	};
 
 	return (
-		<div className="col-span-12 flex flex-col md:flex-row gap-[3vw] items-end focus-cards mb-[10vh]">
+		<div className="col-span-12 flex flex-col md:flex-row gap-[4%] items-end focus-cards mb-[10vh]">
 			{/* THE TOWER */}
-			<div className="w-full md:w-[54%] flex flex-col">
+			<div className="w-full md:w-[64%] flex flex-col">
 				<div className="editorial-panel block relative w-full aspect-[5/4] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
@@ -108,7 +108,7 @@ export function MeshControl() {
 			</div>
 
 			{/* AGENT TRIBUNAL / ARENA */}
-			<div className="w-full md:w-[28%] flex flex-col">
+			<div className="w-full md:w-[32%] flex flex-col">
 				<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[60vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
