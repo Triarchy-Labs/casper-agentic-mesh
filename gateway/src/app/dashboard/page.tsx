@@ -302,105 +302,123 @@ export default function Dashboard() {
                     <MeshControl />
 
                     {/* Execution Terminal (8 cols) */}
-                    <div className="col-span-12 md:col-span-8 editorial-panel p-8 min-h-[400px] flex flex-col grid-item relative">
-                        <CornerMarks />
-                        <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
-                            <span>L1_TERMINAL</span>
-                            <span>SYS_LOG</span>
-                        </div>
-                        
-                        <div className="flex-1 flex flex-col justify-end text-sm leading-loose text-white/70 font-mono">
-                            <div>{">"} BOOTSTRAPPING NEURAL LINK...</div>
-                            <div>{">"} LOADED 42 SKILLS...</div>
-                            <div className="text-white/40">{">"} WAITING FOR INPUT_</div>
-                            {(agentState === "working" || agentState === "success") && (
-                                <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white">
-                                    {">"} DEPLOYING PAYLOAD... {Math.round(progress)}%
-                                </motion.span>
-                            )}
-                        </div>
-
-                        {/* Result Display */}
-                        {lastResult && (
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 border border-white/20 p-6 bg-white/5">
-                                <div className="text-xs text-white/40 mb-4">API_RESPONSE</div>
-                                <div className="mb-2"><span className="text-white/40 w-24 inline-block">STATUS:</span> {lastResult.status?.toUpperCase()}</div>
-                                {paymentTx && (
-                                    <div className="mb-2">
-                                        <span className="text-white/40 w-24 inline-block">PAYMENT:</span>
-                                        <a
-                                            href={`https://testnet.cspr.live/transaction/${paymentTx}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[var(--red-900)] underline break-all hover:text-white"
-                                        >
-                                            {paymentTx.slice(0, 10)}…{paymentTx.slice(-8)} ↗
-                                        </a>
-                                    </div>
-                                )}
-                                {lastResult.executor && <div className="mb-2"><span className="text-white/40 w-24 inline-block">EXECUTOR:</span> {lastResult.executor}</div>}
-                                {lastResult.error && <div><span className="text-white/40 w-24 inline-block">ERROR:</span> {lastResult.error}</div>}
-                                {lastResult.result && <div className="mt-4 text-xs leading-relaxed text-white/60">{lastResult.result}</div>}
-                            </motion.div>
-                        )}
-
-                        {/* LIVE ON-CHAIN STATE — read straight from the Casper ledger */}
-                        <div className="editorial-panel p-6 mt-8 relative">
+                    <div className="col-span-12 md:col-span-8 flex flex-col gap-[1.67vw] grid-item relative">
+                        <div className="editorial-panel p-8 min-h-[400px] flex flex-col flex-1">
                             <CornerMarks />
-                            <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
-                                <span>ON-CHAIN STATE · CASPER TESTNET</span>
-                                <span className={onchain ? "text-[var(--red-700)]" : "text-white/30"}>
-                                    {onchain ? "● LIVE" : "○ …"}
-                                </span>
+                            <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
+                                <span>L1_TERMINAL</span>
+                                <span>SYS_LOG</span>
                             </div>
-                            {onchain ? (
-                                <div className="font-mono text-sm space-y-2">
-                                    <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
-                                    <div><span className="text-white/40 w-40 inline-block">AGENT REPUTATION:</span> {onchain.reputation ?? 0}</div>
-                                    {onchain.peg && (
-                                        <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-[var(--red-1000)]">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
+                            
+                            <div className="flex-1 flex flex-col justify-end text-sm leading-loose text-white/70 font-mono">
+                                <div>{">"} BOOTSTRAPPING NEURAL LINK...</div>
+                                <div>{">"} LOADED 42 SKILLS...</div>
+                                <div className="text-white/40">{">"} WAITING FOR INPUT_</div>
+                                {(agentState === "working" || agentState === "success") && (
+                                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white">
+                                        {">"} DEPLOYING PAYLOAD... {Math.round(progress)}%
+                                    </motion.span>
+                                )}
+                            </div>
+
+                            {/* Result Display */}
+                            {lastResult && (
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 border border-white/20 p-6 bg-white/5">
+                                    <div className="text-xs text-white/40 mb-4">API_RESPONSE</div>
+                                    <div className="mb-2"><span className="text-white/40 w-24 inline-block">STATUS:</span> {lastResult.status?.toUpperCase()}</div>
+                                    {paymentTx && (
+                                        <div className="mb-2">
+                                            <span className="text-white/40 w-24 inline-block">PAYMENT:</span>
+                                            <a
+                                                href={`https://testnet.cspr.live/transaction/${paymentTx}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[var(--red-900)] underline break-all hover:text-white"
+                                            >
+                                                {paymentTx.slice(0, 10)}…{paymentTx.slice(-8)} ↗
+                                            </a>
+                                        </div>
                                     )}
-                                    <div className="text-white/30 text-xs mt-2">synced {new Date(onchain.fetchedAt).toLocaleTimeString()} · source: ledger (no mock)</div>
-                                </div>
-                            ) : (
-                                <div className="text-white/30 text-sm">querying Casper node…</div>
+                                    {lastResult.executor && <div className="mb-2"><span className="text-white/40 w-24 inline-block">EXECUTOR:</span> {lastResult.executor}</div>}
+                                    {lastResult.error && <div><span className="text-white/40 w-24 inline-block">ERROR:</span> {lastResult.error}</div>}
+                                    {lastResult.result && <div className="mt-4 text-xs leading-relaxed text-white/60">{lastResult.result}</div>}
+                                </motion.div>
                             )}
+
+                            {/* LIVE ON-CHAIN STATE — read straight from the Casper ledger */}
+                            <div className="editorial-panel p-6 mt-8 relative">
+                                <CornerMarks />
+                                <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
+                                    <span>ON-CHAIN STATE · CASPER TESTNET</span>
+                                    <span className={onchain ? "text-[var(--red-700)]" : "text-white/30"}>
+                                        {onchain ? "● LIVE" : "○ …"}
+                                    </span>
+                                </div>
+                                {onchain ? (
+                                    <div className="font-mono text-sm space-y-2">
+                                        <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
+                                        <div><span className="text-white/40 w-40 inline-block">AGENT REPUTATION:</span> {onchain.reputation ?? 0}</div>
+                                        {onchain.peg && (
+                                            <div><span className="text-white/40 w-40 inline-block">RWA-PEGGED BOUNTY:</span> <span className="text-[var(--red-1000)]">${onchain.peg.usd} = {onchain.peg.cspr.toLocaleString()} CSPR</span> <span className="text-white/30">@ live oracle</span></div>
+                                        )}
+                                        <div className="text-white/30 text-xs mt-2">synced {new Date(onchain.fetchedAt).toLocaleTimeString()} · source: ledger (no mock)</div>
+                                    </div>
+                                ) : (
+                                    <div className="text-white/30 text-sm">querying Casper node…</div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                            <div className="flex flex-col gap-[0.73vw]">
+                                <h3 className="heading-32 leading-tight">L1 Execution Terminal</h3>
+                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Central command interface. Live on-chain state and agent deployment logs.</p>
+                            </div>
                         </div>
                     </div>
 
                     {/* Telemetry & Nodes (4 cols) */}
-                    <div className="col-span-12 md:col-span-4 flex flex-col gap-8 grid-item">
-                        
-                        {/* Agent Stage */}
-                        <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
-                            <CornerMarks />
-                            <AgentOrb state={agentState} size={168} />
-                            {agentState === "exhausted" && (
-                                <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
-                            )}
-                        </div>
-
-                        {/* WASI Nodes */}
-                        <div className="editorial-panel p-8 flex-1 relative">
-                            <CornerMarks />
-                            <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
-                                ACTIVE_NODES
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                {wasiNodes.length > 0 ? wasiNodes.map((node) => (
-                                    <div key={node.id} className="flex justify-between items-center text-xs">
-                                        <div className="flex items-center gap-3">
-                                            <div className={`w-1.5 h-1.5 ${node.status === "COMPUTING" ? "bg-white animate-pulse" : node.status === "BREACHED" ? "bg-red-500" : "bg-white/20"}`} />
-                                            <span className="text-white/60">{node.cluster}</span>
-                                        </div>
-                                        <span className="text-white/40">{node.latency}MS</span>
-                                    </div>
-                                )) : (
-                                    <div className="text-xs text-white/30 animate-pulse">POLLING TELEMETRY...</div>
+                    <div className="col-span-12 md:col-span-4 flex flex-col gap-[1.67vw] grid-item">
+                        <div className="flex flex-col gap-8 flex-1">
+                            {/* Agent Stage */}
+                            <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
+                                <CornerMarks />
+                                <AgentOrb state={agentState} size={168} />
+                                {agentState === "exhausted" && (
+                                    <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
                                 )}
                             </div>
-                        </div>
 
+                            {/* WASI Nodes */}
+                            <div className="editorial-panel p-8 flex-1 relative">
+                                <CornerMarks />
+                                <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
+                                    ACTIVE_NODES
+                                </div>
+                                <div className="flex flex-col gap-4">
+                                    {wasiNodes.length > 0 ? wasiNodes.map((node) => (
+                                        <div key={node.id} className="flex justify-between items-center text-xs">
+                                            <div className="flex items-center gap-3">
+                                                <div className={`w-1.5 h-1.5 ${node.status === "COMPUTING" ? "bg-white animate-pulse" : node.status === "BREACHED" ? "bg-red-500" : "bg-white/20"}`} />
+                                                <span className="text-white/60">{node.cluster}</span>
+                                            </div>
+                                            <span className="text-white/40">{node.latency}MS</span>
+                                        </div>
+                                    )) : (
+                                        <div className="text-xs text-white/30 animate-pulse">POLLING TELEMETRY...</div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                            <div className="flex flex-col gap-[0.73vw]">
+                                <h3 className="heading-32 leading-tight">Swarm Telemetry</h3>
+                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Agent emotional state and active WASI Nodes cluster ping.</p>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -413,131 +431,151 @@ export default function Dashboard() {
 
 					<div className="editorial-grid gap-8">
 						{/* Vector Gamma Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_GAMMA // COGNITIVE_ARBITRAGE</span>
-									<span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--red-700)] text-[var(--red-700)]">ACTIVE</span>
-								</div>
-
-								{/* Gas Futures Tracker */}
-								<div className="mb-8 p-4 bg-white/5 border border-white/10">
-									<div className="text-[10px] text-white/40 mb-2 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
-									<div className="text-3xl font-mono font-bold text-white tracking-tight">
-										{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
+							<div className="editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
+								<CornerMarks />
+								<div className="z-10">
+									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+										<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
+										<span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--red-700)] text-[var(--red-700)]">ACTIVE</span>
 									</div>
-									<div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-										<span className="text-xs text-white/60">Hedged Capacity: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas-units</span></span>
-										<div className="flex gap-2">
-											<button 
-												onClick={() => {
-													setGasHedged(prev => prev + 100000);
-													setGasPrice(p => p + 0.000120);
-												}}
-												className="px-2 py-1 bg-white text-black font-bold text-[9px] uppercase tracking-wider"
-											>
-												+ 100K HEDGE
-											</button>
-											<button 
-												onClick={() => {
-													setGasHedged(prev => Math.max(0, prev - 100000));
-													setGasPrice(p => Math.max(0.001, p - 0.000100));
-												}}
-												className="px-2 py-1 border border-white/20 text-white font-bold text-[9px] uppercase tracking-wider hover:bg-white/5"
-											>
-												RELEASE
-											</button>
+
+									{/* Gas Futures Tracker */}
+									<div className="mb-8 p-4 bg-white/5 border border-white/10">
+										<div className="text-[10px] text-white/40 mb-2 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
+										<div className="text-3xl font-mono font-bold text-white tracking-tight">
+											{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+										</div>
+										<div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+											<span className="text-xs text-white/60">Hedged Capacity: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas-units</span></span>
+											<div className="flex gap-2">
+												<button 
+													onClick={() => {
+														setGasHedged(prev => prev + 100000);
+														setGasPrice(p => p + 0.000120);
+													}}
+													className="px-2 py-1 bg-white text-black font-bold text-[9px] uppercase tracking-wider"
+												>
+													+ 100K HEDGE
+												</button>
+												<button 
+													onClick={() => {
+														setGasHedged(prev => Math.max(0, prev - 100000));
+														setGasPrice(p => Math.max(0.001, p - 0.000100));
+													}}
+													className="px-2 py-1 border border-white/20 text-white font-bold text-[9px] uppercase tracking-wider hover:bg-white/5"
+												>
+													RELEASE
+												</button>
+											</div>
 										</div>
 									</div>
-								</div>
 
-								{/* Arbitrage Delegation Tree */}
-								<div>
-									<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
-									<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
-										<div className="flex items-center gap-2">
-											<span className="text-[var(--red-700)]">[Orchestrator]</span>
-											<span className="text-white/40">mark_53_sarcophagus</span>
-										</div>
-										<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
+									{/* Arbitrage Delegation Tree */}
+									<div>
+										<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
+										<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
 											<div className="flex items-center gap-2">
-												<span className="text-white/40">├── [Sub-Escrow A]</span>
-												<span className="text-white font-bold">credio_risk_monitor</span>
-												<span className="text-[var(--red-700)] text-[10px]">(Risk Analysis: SECURE)</span>
+												<span className="text-[var(--red-700)]">[Orchestrator]</span>
+												<span className="text-white/40">mark_53_sarcophagus</span>
 											</div>
-											<div className="flex items-center gap-2">
-												<span className="text-white/40">├── [Sub-Escrow B]</span>
-												<span className="text-white font-bold">agent_alpha_arbitrage</span>
-												<span className="text-[var(--red-700)] text-[10px]">(Claiming: 420.5 CSPR)</span>
-											</div>
-											<div className="flex items-center gap-2">
-												<span className="text-white/40">└── [Sub-Escrow C]</span>
-												<span className="text-white font-bold">liquidity_sniper</span>
-												<span className="text-yellow-500 text-[10px]">(MEV Flash-loan: PENDING)</span>
+											<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
+												<div className="flex items-center gap-2">
+													<span className="text-white/40">├── [Sub-Escrow A]</span>
+													<span className="text-white font-bold">credio_risk_monitor</span>
+													<span className="text-[var(--red-700)] text-[10px]">(Risk Analysis: SECURE)</span>
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="text-white/40">├── [Sub-Escrow B]</span>
+													<span className="text-white font-bold">agent_alpha_arbitrage</span>
+													<span className="text-[var(--red-700)] text-[10px]">(Claiming: 420.5 CSPR)</span>
+												</div>
+												<div className="flex items-center gap-2">
+													<span className="text-white/40">└── [Sub-Escrow C]</span>
+													<span className="text-white font-bold">liquidity_sniper</span>
+													<span className="text-yellow-500 text-[10px]">(MEV Flash-loan: PENDING)</span>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+							
+							<div className="project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+								<div className="flex flex-col gap-[0.73vw]">
+									<h3 className="heading-32 leading-tight">Agent Tribunal</h3>
+									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Gamma. Cognitive Arbitrage and Gas Hedging Futures.</p>
+								</div>
+							</div>
 						</div>
 
 						{/* Vector Delta Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-									<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">VECTOR_DELTA // ABSOLUTE_SYNERGY</span>
-									<span className="text-[10px] font-mono px-2 py-0.5 border border-white/20 text-white/60">LOAD_BALANCER</span>
-								</div>
-
-								{/* P2P Load Balancer / Latency Map */}
-								<div className="mb-8">
-									<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
-									<div className="grid grid-cols-6 gap-2">
-										{meshLoad.map((val, idx) => {
-											let boxColor = "bg-white/10 border-white/10";
-											if (val > 80) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.3)] animate-pulse";
-											else if (val > 40) boxColor = "bg-white/40 border-white/40";
-											
-											return (
-												<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
-													<div className={`w-3 h-3 ${boxColor} rounded-none`} />
-													<span className="text-[9px] font-mono text-white/50">{val}%</span>
-												</div>
-											);
-										})}
+						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
+							<div className="editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
+								<CornerMarks />
+								<div className="z-10">
+									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+										<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">ABSOLUTE_SYNERGY</span>
+										<span className="text-[10px] font-mono px-2 py-0.5 border border-white/20 text-white/60">LOAD_BALANCER</span>
 									</div>
-								</div>
 
-								{/* L402 Casper Gateway Challenge Console */}
-								<div>
-									<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
-									<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
-										<pre className="text-white/60 max-h-[80px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
-											<code>{l402Console}</code>
-										</pre>
-										<div className="flex justify-between items-center pt-2 border-t border-white/10">
-											<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
-											<button 
-												onClick={() => {
-													if (l402Status === "IDLE") {
-														setL402Status("CHALLENGED");
-														setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
-													} else if (l402Status === "CHALLENGED") {
-														setL402Status("SUCCESS");
-														setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
-													} else {
-														setL402Status("IDLE");
-														setL402Console("// Console reset. Ready to challenge L402 gate");
-													}
-												}}
-												className="px-3 py-1 bg-[var(--red-700)] text-white font-bold text-[9px] uppercase tracking-wider"
-											>
-												{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
-											</button>
+									{/* P2P Load Balancer / Latency Map */}
+									<div className="mb-8">
+										<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
+										<div className="grid grid-cols-6 gap-2">
+											{meshLoad.map((val, idx) => {
+												let boxColor = "bg-white/10 border-white/10";
+												if (val > 80) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.3)] animate-pulse";
+												else if (val > 40) boxColor = "bg-white/40 border-white/40";
+												
+												return (
+													<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
+														<div className={`w-3 h-3 ${boxColor} rounded-none`} />
+														<span className="text-[9px] font-mono text-white/50">{val}%</span>
+													</div>
+												);
+											})}
 										</div>
 									</div>
+
+									{/* L402 Casper Gateway Challenge Console */}
+									<div>
+										<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
+										<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
+											<pre className="text-white/60 max-h-[80px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
+												<code>{l402Console}</code>
+											</pre>
+											<div className="flex justify-between items-center pt-2 border-t border-white/10">
+												<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
+												<button 
+													onClick={() => {
+														if (l402Status === "IDLE") {
+															setL402Status("CHALLENGED");
+															setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
+														} else if (l402Status === "CHALLENGED") {
+															setL402Status("SUCCESS");
+															setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
+														} else {
+															setL402Status("IDLE");
+															setL402Console("// Console reset. Ready to challenge L402 gate");
+														}
+													}}
+													className="px-3 py-1 bg-[var(--red-700)] text-white font-bold text-[9px] uppercase tracking-wider"
+												>
+													{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div className="project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+								<div className="flex flex-col gap-[0.73vw]">
+									<h3 className="heading-32 leading-tight">x402 Payment Layer</h3>
+									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Delta. Absolute Synergy and L402 HTTP Gateway.</p>
 								</div>
 							</div>
 						</div>

@@ -242,16 +242,23 @@ const BountiesPage = () => {
 						{[
 							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
 							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false },
-							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "(Fastest: 45ms)", isFloat: true },
+							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "Fastest: 45ms", isFloat: true },
 							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "Agent-to-Agent" }
 						].map((kpi, idx) => (
-							<div key={idx} className="col-span-12 md:col-span-3 editorial-panel p-[24px] relative">
-								<CornerMarks />
-								<div className="label-14-mono text-[var(--gray-600)] mb-[8px] z-10">{kpi.label}</div>
-								<div className="heading-40 text-[var(--gray-1000)] z-10">
-									{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
+							<div key={idx} className="flex flex-col gap-[1.2vw] col-span-12 md:col-span-3">
+								<div className="editorial-panel p-[24px] relative flex flex-col justify-center min-h-[120px]">
+									<CornerMarks />
+									<div className="heading-40 text-[var(--gray-1000)] z-10">
+										{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
+									</div>
 								</div>
-								{kpi.sub && <div className="label-14 text-[var(--gray-700)] mt-[4px] z-10">{kpi.sub}</div>}
+								<div className="project-info-trigger relative flex w-full">
+									<div className="my-[0.5vh] mr-[0.5vw] size-[0.4vw] border border-[#303030] max-sm:hidden shrink-0 mt-[6px]"></div>
+									<div className="flex flex-col gap-[4px]">
+										<h3 className="label-14-mono text-[var(--gray-1000)] leading-tight">{kpi.label}</h3>
+										{kpi.sub && <p className="label-12-mono text-[var(--gray-800)] uppercase">{kpi.sub}</p>}
+									</div>
+								</div>
 							</div>
 						))}
 					</div>
@@ -314,15 +321,16 @@ const BountiesPage = () => {
 					</div>
 
 					{/* 3. Right Column: Ingestion Terminal (Sticky layout) */}
-					<div className="col-span-12 md:col-span-4 sticky-section" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
+					<div className="col-span-12 md:col-span-4 sticky-section flex flex-col gap-[1.67vw]" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
 						<div className="editorial-panel p-[24px] w-full relative">
 							<CornerMarks />
-							<h3 className="label-14-mono text-[var(--red-700)] mb-[24px] z-10">_INGESTION_TERMINAL</h3>
 							
 							{/* Human UI vs Bot API toggle */}
-							<div className="flex gap-[8px] mb-[24px] z-10">
-								<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-[2px]">HUMAN_UI</span>
-								<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-[2px]">BOT_API / WASM</span>
+							<div className="flex justify-between items-start mb-[24px] z-10">
+								<div className="flex gap-[8px]">
+									<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-[2px]">HUMAN_UI</span>
+									<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-[2px]">BOT_API / WASM</span>
+								</div>
 							</div>
 
 							<textarea 
@@ -363,6 +371,14 @@ const BountiesPage = () => {
 								</pre>
 							</div>
 						</div>
+						
+						<div className="project-info-trigger relative flex w-full">
+							<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+							<div className="flex flex-col gap-[0.73vw]">
+								<h3 className="heading-32 leading-tight">Ingestion Terminal</h3>
+								<p className="label-13-mono text-[var(--gray-800)] uppercase">Issue directives to the agentic mesh. Secured by Casper Escrow.</p>
+							</div>
+						</div>
 					</div>
 
 				</div>
@@ -375,87 +391,107 @@ const BountiesPage = () => {
 
 					<div className="editorial-grid gap-[32px]">
 						{/* Vector Alpha Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-[20px]">
-									<span className="label-14-mono text-[var(--red-700)] font-bold">VECTOR_ALPHA // AUTONOMOUS_ESCROW</span>
-									<span className="label-12-mono px-[8px] py-[2px] bg-red-950/40 text-[var(--red-700)] border border-[var(--red-700)]">LIVE STREAM</span>
-								</div>
-
-								{/* Streaming Counter */}
-								<div className="mb-[24px] p-[16px] bg-[var(--background-200)] border border-[var(--gray-400)]">
-									<div className="label-12-mono text-[var(--gray-600)] mb-[4px]">REAL-TIME MICROPAYMENTS STREAM (CSPR/SEC)</div>
-									<div className="heading-40 font-mono text-[var(--gray-1000)] tracking-tight">
-										{streamedTokens.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
+							<div className="editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
+								<CornerMarks />
+								<div className="z-10">
+									<div className="flex justify-between items-center mb-[20px]">
+										<span className="label-14-mono text-[var(--red-700)] font-bold">LIVE STREAM</span>
+										<span className="label-12-mono px-[8px] py-[2px] bg-red-950/40 text-[var(--red-700)] border border-[var(--red-700)]">ACTIVE</span>
 									</div>
-									<div className="label-12-mono text-[var(--red-700)] mt-[4px]">▲ FLOW RATE: 0.000185 CSPR/sec</div>
-								</div>
 
-								{/* Jury Swarm Disputes */}
-								<div>
-									<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">ACTIVE JURY SWARM DISPUTES:</h4>
-									<div className="flex flex-col gap-[12px]">
-										{[
-											{ id: "DISPUTE_C-8902", desc: "WASM mismatch on cargo-run hash", status: "8/12 SENTINELS", votes: "YES (Slash Operator): 78% | NO (Pay): 22%", border: "border-[var(--gray-400)]" },
-											{ id: "DISPUTE_C-1104", desc: "Double-claim signature breach", status: "11/12 SENTINELS", votes: "YES (Slash Operator): 100% | NO: 0%", border: "border-[var(--red-700)]" }
-										].map((dispute, idx) => (
-											<div key={idx} className={`p-[16px] border ${dispute.border} bg-transparent flex flex-col gap-[4px]`}>
-												<div className="flex justify-between items-center label-12-mono">
-													<span className="text-[var(--gray-1000)] font-bold">{dispute.id}</span>
-													<span className="text-[var(--red-700)]">{dispute.status}</span>
+									{/* Streaming Counter */}
+									<div className="mb-[24px] p-[16px] bg-[var(--background-200)] border border-[var(--gray-400)]">
+										<div className="label-12-mono text-[var(--gray-600)] mb-[4px]">REAL-TIME MICROPAYMENTS STREAM (CSPR/SEC)</div>
+										<div className="heading-40 font-mono text-[var(--gray-1000)] tracking-tight">
+											{streamedTokens.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+										</div>
+										<div className="label-12-mono text-[var(--red-700)] mt-[4px]">▲ FLOW RATE: 0.000185 CSPR/sec</div>
+									</div>
+
+									{/* Jury Swarm Disputes */}
+									<div>
+										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">ACTIVE JURY SWARM DISPUTES:</h4>
+										<div className="flex flex-col gap-[12px]">
+											{[
+												{ id: "DISPUTE_C-8902", desc: "WASM mismatch on cargo-run hash", status: "8/12 SENTINELS", votes: "YES (Slash Operator): 78% | NO (Pay): 22%", border: "border-[var(--gray-400)]" },
+												{ id: "DISPUTE_C-1104", desc: "Double-claim signature breach", status: "11/12 SENTINELS", votes: "YES (Slash Operator): 100% | NO: 0%", border: "border-[var(--red-700)]" }
+											].map((dispute, idx) => (
+												<div key={idx} className={`p-[16px] border ${dispute.border} bg-transparent flex flex-col gap-[4px]`}>
+													<div className="flex justify-between items-center label-12-mono">
+														<span className="text-[var(--gray-1000)] font-bold">{dispute.id}</span>
+														<span className="text-[var(--red-700)]">{dispute.status}</span>
+													</div>
+													<div className="copy-14 text-[var(--gray-700)]">{dispute.desc}</div>
+													<div className="label-12-mono text-[var(--gray-600)] mt-[4px]">{dispute.votes}</div>
 												</div>
-												<div className="copy-14 text-[var(--gray-700)]">{dispute.desc}</div>
-												<div className="label-12-mono text-[var(--gray-600)] mt-[4px]">{dispute.votes}</div>
-											</div>
-										))}
+											))}
+										</div>
 									</div>
+								</div>
+
+								<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
+									CEP-18 Escrow Contract: <span className="text-[var(--gray-900)]">01b4c...f201</span>
 								</div>
 							</div>
-
-							<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
-								CEP-18 Escrow Contract: <span className="text-[var(--gray-900)]">01b4c...f201</span>
+							
+							<div className="project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+								<div className="flex flex-col gap-[0.73vw]">
+									<h3 className="heading-32 leading-tight">Autonomous Escrow</h3>
+									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Alpha. Trustless micropayments and agentic slash voting.</p>
+								</div>
 							</div>
 						</div>
 
 						{/* Vector Beta Panel */}
-						<div className="col-span-12 md:col-span-6 editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
-							<CornerMarks />
-							<div className="z-10">
-								<div className="flex justify-between items-center mb-[20px]">
-									<span className="label-14-mono text-[var(--red-700)] font-bold">VECTOR_BETA // PRE-TRADE_RISK_ORACLE</span>
-									<span className={`label-12-mono px-[8px] py-[2px] border ${sandboxStatus === "SUCCESS" ? "bg-green-950/20 text-white border-white" : "bg-red-950/20 text-[var(--red-700)] border-[var(--red-700)]"}`}>
-										{sandboxStatus}
-									</span>
-								</div>
+						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
+							<div className="editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
+								<CornerMarks />
+								<div className="z-10">
+									<div className="flex justify-between items-center mb-[20px]">
+										<span className="label-14-mono text-[var(--red-700)] font-bold">PRE-TRADE_RISK_ORACLE</span>
+										<span className={`label-12-mono px-[8px] py-[2px] border ${sandboxStatus === "SUCCESS" ? "bg-green-950/20 text-white border-white" : "bg-red-950/20 text-[var(--red-700)] border-[var(--red-700)]"}`}>
+											{sandboxStatus}
+										</span>
+									</div>
 
-								{/* ZK Sandbox Log Console */}
-								<div className="mb-[24px]">
-									<div className="label-12-mono text-[var(--gray-600)] mb-[8px]">SANDBOX SIMULATION CONSOLE</div>
-									<div className="bg-black/80 p-[16px] font-mono text-[11px] leading-relaxed text-white border border-[var(--gray-400)] overflow-y-auto h-[140px] flex flex-col gap-[6px]">
-										{sandboxLog.map((log, idx) => (
-											<div key={idx} className={`${idx === sandboxLog.length - 1 ? "text-[var(--red-700)] font-bold" : "text-white"}`}>
-												{log}
-											</div>
-										))}
+									{/* ZK Sandbox Log Console */}
+									<div className="mb-[24px]">
+										<div className="label-12-mono text-[var(--gray-600)] mb-[8px]">SANDBOX SIMULATION CONSOLE</div>
+										<div className="bg-black/80 p-[16px] font-mono text-[11px] leading-relaxed text-white border border-[var(--gray-400)] overflow-y-auto h-[140px] flex flex-col gap-[6px]">
+											{sandboxLog.map((log, idx) => (
+												<div key={idx} className={`${idx === sandboxLog.length - 1 ? "text-[var(--red-700)] font-bold" : "text-white"}`}>
+													{log}
+												</div>
+											))}
+										</div>
+									</div>
+
+									{/* Sentinel Threat Gossip */}
+									<div>
+										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">SENTINEL THREAT GOSSIP (P2P):</h4>
+										<div className="bg-[var(--background-200)] border border-[var(--gray-400)] p-[16px] flex flex-col gap-[8px]">
+											{gossipLogs.map((log, idx) => (
+												<div key={idx} className="label-12-mono text-[var(--gray-800)] truncate">
+													{log}
+												</div>
+											))}
+										</div>
 									</div>
 								</div>
 
-								{/* Sentinel Threat Gossip */}
-								<div>
-									<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">SENTINEL THREAT GOSSIP (P2P):</h4>
-									<div className="bg-[var(--background-200)] border border-[var(--gray-400)] p-[16px] flex flex-col gap-[8px]">
-										{gossipLogs.map((log, idx) => (
-											<div key={idx} className="label-12-mono text-[var(--gray-800)] truncate">
-												{log}
-											</div>
-										))}
-									</div>
+								<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
+									Sentinel Node Quorum: <span className="text-[var(--gray-900)]">99.8% Exec Safety Verify</span>
 								</div>
 							</div>
-
-							<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
-								Sentinel Node Quorum: <span className="text-[var(--gray-900)]">99.8% Exec Safety Verify</span>
+							
+							<div className="project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+								<div className="flex flex-col gap-[0.73vw]">
+									<h3 className="heading-32 leading-tight">Risk Oracle</h3>
+									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Beta. On-chain validation of agent zero-knowledge proofs.</p>
+								</div>
 							</div>
 						</div>
 					</div>
