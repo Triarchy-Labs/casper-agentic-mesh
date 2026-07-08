@@ -111,14 +111,19 @@ export default function Page() {
       }
     });
 
-    // Text box stays still for a bit, then fades out and moves up (duration: 1.2)
+    // Text box entrance (0.0 to 0.8) and exit (2.4 to 3.2)
+    assemblyTl.fromTo(".assembly-text-box",
+      { opacity: 0, y: "60px", filter: "blur(4px)" },
+      { opacity: 1, y: "0px", filter: "blur(0px)", duration: 0.8, ease: "power2.out" },
+      0.0
+    );
     assemblyTl.to(".assembly-text-box", {
-      y: "-120px",
       opacity: 0,
+      y: "-100px",
       filter: "blur(6px)",
-      duration: 1.2,
-      ease: "power2.inOut",
-    }, 0.2); // starts at 0.2, ends at 1.4
+      duration: 0.8,
+      ease: "power2.in",
+    }, 2.4);
 
     // 12 Slices slide in from scattered positions and merge (duration: 2.2)
     pieces.forEach((p) => {
@@ -143,12 +148,14 @@ export default function Page() {
       2.6 // starts at 2.6, ends at 3.4
     );
 
-    // Zoom out at the end for clean exit transition
+    // Image container exit (3.4 to 4.0) - disappears completely ~2 scrolls after text
     assemblyTl.to(".assembly-image-container", {
+      y: "-120px",
+      opacity: 0,
       scale: 0.95,
-      opacity: 0.9,
+      filter: "blur(8px)",
       duration: 0.6,
-      ease: "power2.inOut",
+      ease: "power2.in",
     }, 3.4); // starts at 3.4, ends at 4.0
   }, { dependencies: [booted], scope: containerRef });
 
@@ -171,7 +178,7 @@ export default function Page() {
             <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
               
               {/* Left: Heading and CTAs (positioned absolute to float over background) */}
-              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
+              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl" style={{ opacity: 0 }}>
                 <div className="flex items-center gap-3 mb-6 flex-wrap">
                   <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
                   <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
