@@ -58,7 +58,7 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 
 	return (
 		<motion.div
-			className={`editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
+			className={`col-span-12 lg:col-span-6 editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
 			initial={{ opacity: 0, y: 50, rotateX: 5, scale: 0.98 }}
 			whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
 			whileHover={{ y: -8, scale: 1.015, zIndex: 10 }}
@@ -233,7 +233,8 @@ export default function AgentNetworkGrid() {
 
 	return (
 		<div
-			className="w-full max-w-7xl mx-auto px-8 md:px-24"
+			id="agent-network"
+			className="w-full"
 			style={{
 				paddingTop: "40px",
 				paddingBottom: "40px",
