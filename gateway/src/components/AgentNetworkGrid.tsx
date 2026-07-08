@@ -56,9 +56,19 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 		borderColor = "transparent"; // Handled by rare-snake-border pseudo-element
 	}
 
+	let layoutClass = "col-span-12 lg:col-span-6";
+	const pattern = index % 7;
+	if (pattern === 0) layoutClass = "col-span-12 md:col-span-7";
+	if (pattern === 1) layoutClass = "col-span-12 md:col-span-4 md:col-end-13 md:mt-[10vh]";
+	if (pattern === 2) layoutClass = "col-span-12 md:col-span-10 md:col-start-2";
+	if (pattern === 3) layoutClass = "col-span-12 md:col-span-4";
+	if (pattern === 4) layoutClass = "col-span-12 md:col-span-7 md:col-end-13 md:mt-[6vh]";
+	if (pattern === 5) layoutClass = "col-span-12 md:col-span-5";
+	if (pattern === 6) layoutClass = "col-span-12 md:col-span-5 md:col-end-13 md:mt-[8vh]";
+
 	return (
 		<motion.div
-			className={`col-span-12 lg:col-span-6 editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
+			className={`${layoutClass} editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
 			initial={{ opacity: 0, y: 50, rotateX: 5, scale: 0.98 }}
 			whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
 			whileHover={{ y: -8, scale: 1.015, zIndex: 10 }}
@@ -270,7 +280,7 @@ export default function AgentNetworkGrid() {
 				</div>
 			</motion.div>
 
-			<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[1.39vw] gap-y-[13.67vh] max-sm:gap-[6vh]">
 				{agents.map((agent: AgentDisplay, i: number) => (
 					<AgentCard key={agent.id} agent={agent} index={i} />
 				))}
