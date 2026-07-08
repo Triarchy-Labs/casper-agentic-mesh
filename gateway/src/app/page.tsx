@@ -213,6 +213,7 @@ export default function Page() {
                       backgroundPosition: "center",
                       clipPath: p.inset,
                       opacity: 0,
+                      mixBlendMode: "screen",
                     }} 
                   />
                 ))}
