@@ -129,7 +129,7 @@ export default function CustomCursor() {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					gap: isHovering ? "12px" : "6px",
+					gap: isHovering ? "28px" : "10px",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
 					fontSize: "21px",
 					fontWeight: "bold",
@@ -140,9 +140,9 @@ export default function CustomCursor() {
 					willChange: "transform, gap",
 				}}
 			>
-				<span style={{ transform: "translateY(-1px)" }}>[</span>
-				<div style={{ width: 6, height: 6, minWidth: 6, minHeight: 6, flexShrink: 0, backgroundColor: '#ffffff', borderRadius: '50%', transform: isHovering ? 'scale(1.5)' : 'scale(1)', transition: 'transform 0.3s ease' }} />
-				<span style={{ transform: "translateY(-1px)" }}>]</span>
+				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>[</span>
+				<div style={{ position: "absolute", width: "22px", height: "22px", backgroundColor: "#ffffff", filter: "blur(3px)", opacity: isHovering ? 0 : 0.8, transform: isHovering ? "scale(0.5)" : "scale(1)", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", zIndex: 1, pointerEvents: "none" }} />
+				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>]</span>
 			</div>
 
 			{/* Drifting arrow square — appears on card/button hover */}
