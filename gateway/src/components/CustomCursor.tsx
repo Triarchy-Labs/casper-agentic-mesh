@@ -135,11 +135,13 @@ export default function CustomCursor() {
 					fontWeight: "bold",
 					color: "#ffffff",
 					textShadow: isHovering ? "0 0 8px rgba(255,255,255,0.6)" : "none",
+					mixBlendMode: "difference",
 					transition: "gap 0.3s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.3s ease",
 					willChange: "transform, gap",
 				}}
 			>
 				<span style={{ transform: "translateY(-1px)" }}>[</span>
+				<div style={{ width: 4, height: 4, backgroundColor: '#ffffff', borderRadius: '50%', transform: isHovering ? 'scale(1.5)' : 'scale(1)', transition: 'transform 0.3s ease' }} />
 				<span style={{ transform: "translateY(-1px)" }}>]</span>
 			</div>
 
