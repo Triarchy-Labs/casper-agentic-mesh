@@ -257,7 +257,7 @@ export default function Dashboard() {
 			
             {/* Cinematic Hero Section (Pinned) */}
             <section ref={heroRef} className="h-screen w-full flex flex-col justify-center px-8 md:px-16 pt-24 relative z-0">
-                <div className="max-w-7xl mx-auto w-full relative">
+                <div className="w-full relative">
                     <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}>
                         <h1 className="text-[10vw] md:text-[8vw] font-mono leading-none tracking-tighter uppercase mb-8">
                             Sovereign<br />
@@ -424,7 +424,7 @@ export default function Dashboard() {
                 </div>
 
 				{/* 4. Scale Expansion Telemetry Section */}
-				<div className="max-w-7xl mx-auto mt-20 border-t border-white/20 pt-16">
+				<div className="w-full mt-20 border-t border-white/20 pt-16">
 					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
 						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
 					</h2>
@@ -583,14 +583,14 @@ export default function Dashboard() {
 				</div>
 
 				{/* Live Agent Registry */}
-				<div className="max-w-7xl mx-auto mt-20">
+				<div className="w-full mt-20">
 					<AgentNetworkGrid />
 				</div>
             </section>
 
             {/* Sticky Execution Input */}
             <section className="sticky bottom-0 z-50 w-full bg-black border-t border-white/20 px-8 md:px-16 py-6">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6 items-end">
+                <div className="w-full flex flex-col md:flex-row gap-6 items-end">
                     
                     <div className="flex-1 w-full">
                         <div className="text-[10px] tracking-widest text-white/40 uppercase mb-3">Bounty Input Stream</div>
