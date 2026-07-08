@@ -77,8 +77,8 @@ export function MeshControl() {
 	return (
 		<div className="col-span-12 grid grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] items-end focus-cards mb-[10vh]">
 			{/* THE TOWER */}
-			<div className="col-span-12 lg:col-span-7 flex flex-col">
-				<div className="editorial-panel relative w-full aspect-square max-sm:aspect-[4/5] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+			<div className="col-span-12 lg:col-span-8 flex flex-col">
+				<div className="editorial-panel relative w-full aspect-[5/4] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
@@ -108,8 +108,8 @@ export function MeshControl() {
 			</div>
 
 			{/* AGENT TRIBUNAL / ARENA */}
-			<div className="col-span-12 lg:col-span-5 flex flex-col">
-				<div className="editorial-panel relative w-full aspect-[4/5] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+			<div className="col-span-12 lg:col-span-4 flex flex-col">
+				<div className="editorial-panel relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[60vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
