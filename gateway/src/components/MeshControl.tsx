@@ -75,16 +75,16 @@ export function MeshControl() {
 	};
 
 	return (
-		<div className="col-span-12 grid grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] focus-cards mb-[10vh]">
+		<div className="col-span-12 grid grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] items-end focus-cards mb-[10vh]">
 			{/* THE TOWER */}
-			<div className="col-span-12 lg:col-span-5 flex flex-col">
-				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+			<div className="col-span-12 lg:col-span-7 flex flex-col">
+				<div className="editorial-panel relative w-full aspect-square max-sm:aspect-[4/5] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="p-[2.22vw] relative z-10 h-full flex flex-col">
+					<div className="p-[2.22vw] relative z-10 h-full flex flex-col overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
@@ -108,14 +108,14 @@ export function MeshControl() {
 			</div>
 
 			{/* AGENT TRIBUNAL / ARENA */}
-			<div className="col-span-12 lg:col-span-7 flex flex-col">
-				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+			<div className="col-span-12 lg:col-span-5 flex flex-col">
+				<div className="editorial-panel relative w-full aspect-[4/5] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="p-[2.22vw] relative z-10 h-full flex flex-col">
+					<div className="p-[2.22vw] relative z-10 h-full flex flex-col overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
