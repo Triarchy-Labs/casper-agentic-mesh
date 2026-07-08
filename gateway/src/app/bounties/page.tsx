@@ -291,7 +291,7 @@ const BountiesPage = () => {
 					<div className="col-span-12 md:col-span-8 flex flex-col gap-[16px]">
 						<div className="flex justify-between items-end mb-[16px]">
 							<h3 className="label-14-mono text-[var(--gray-900)]">{"// ACTIVE CONTRACTS"}</h3>
-							<button className="button-secondary" style={{ height: '32px', fontSize: '12px' }}>FILTER: OPEN</button>
+							<button className="button-secondary">FILTER: OPEN</button>
 						</div>
 
 						{/* Table Headers */}
@@ -354,8 +354,8 @@ const BountiesPage = () => {
 								{/* Human UI vs Bot API toggle */}
 								<div className="flex justify-between items-start mb-[24px] z-10">
 									<div className="flex gap-[8px]">
-										<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-none">HUMAN_UI</span>
-										<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-none">BOT_API / WASM</span>
+										<span className="font-DM-mono border border-white/10 bg-white/10 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none text-white">HUMAN_UI</span>
+										<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none text-white/40">BOT_API / WASM</span>
 									</div>
 								</div>
 
@@ -367,8 +367,8 @@ const BountiesPage = () => {
 								/>
 								
 								<div className="flex justify-between mb-[24px] gap-[8px] z-10">
-									<button className="button-secondary w-full label-14-mono" style={{ height: '32px', fontSize: '10px' }}>+ FILES</button>
-									<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-black/60 border border-[var(--gray-700)] text-white/80 px-[8px] rounded-none label-14-mono text-right outline-none focus:border-[var(--gray-1000)]" />
+									<button className="font-DM-mono border border-white/5 bg-black/25 w-full uppercase backdrop-blur-md text-[0.69vw] py-[0.69vw] max-lg:text-[0.97vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:py-2 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80">+ FILES</button>
+									<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-black/40 border border-white/5 text-white/80 px-[8px] rounded-none font-DM-mono text-[0.69vw] max-lg:text-[0.97vw] max-sm:text-[9px] text-right outline-none focus:border-white/20 transition-all backdrop-blur-md" />
 								</div>
 
 							<button 
