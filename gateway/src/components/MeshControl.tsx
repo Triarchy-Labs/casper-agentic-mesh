@@ -84,7 +84,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="p-[2.22vw] relative z-10 h-full flex flex-col overflow-y-auto">
+					<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
@@ -115,7 +115,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="p-[2.22vw] relative z-10 h-full flex flex-col overflow-y-auto">
+					<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
