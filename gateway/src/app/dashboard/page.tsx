@@ -302,8 +302,8 @@ export default function Dashboard() {
                     <MeshControl />
 
                     {/* Execution Terminal (8 cols) */}
-                    <div className="col-span-12 md:col-span-8 flex flex-col gap-[1.67vw] grid-item relative">
-                        <div className="editorial-panel p-8 min-h-[400px] flex flex-col flex-1">
+                    <div className="col-span-12 md:col-span-8 flex flex-col gap-[1.39vw] grid-item relative">
+                        <div className="editorial-panel p-[2.22vw] min-h-[48.8vh] flex flex-col flex-1">
                             <CornerMarks />
                             <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
                                 <span>L1_TERMINAL</span>
@@ -379,10 +379,10 @@ export default function Dashboard() {
                     </div>
 
                     {/* Telemetry & Nodes (4 cols) */}
-                    <div className="col-span-12 md:col-span-4 flex flex-col gap-[1.67vw] grid-item">
+                    <div className="col-span-12 md:col-span-4 flex flex-col gap-[1.39vw] grid-item">
                         <div className="flex flex-col gap-8 flex-1">
                             {/* Agent Stage */}
-                            <div className="editorial-panel p-8 h-[250px] flex items-center justify-center relative overflow-hidden">
+                            <div className="editorial-panel p-[2.22vw] h-[250px] flex items-center justify-center relative overflow-hidden">
                                 <CornerMarks />
                                 <AgentOrb state={agentState} size={168} />
                                 {agentState === "exhausted" && (
@@ -391,7 +391,7 @@ export default function Dashboard() {
                             </div>
 
                             {/* WASI Nodes */}
-                            <div className="editorial-panel p-8 flex-1 relative">
+                            <div className="editorial-panel p-[2.22vw] flex-1 relative">
                                 <CornerMarks />
                                 <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
                                     ACTIVE_NODES

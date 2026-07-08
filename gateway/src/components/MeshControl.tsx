@@ -75,10 +75,10 @@ export function MeshControl() {
 	};
 
 	return (
-		<div className="col-span-12 grid grid-cols-12 gap-[1.67vw] focus-cards">
+		<div className="col-span-12 grid grid-cols-12 gap-[1.39vw] focus-cards">
 			{/* THE TOWER */}
-			<div className="col-span-12 lg:col-span-5 flex flex-col gap-[1.67vw]">
-				<div className="editorial-panel p-8 relative flex-1">
+			<div className="col-span-12 lg:col-span-5 flex flex-col gap-[1.39vw]">
+				<div className="editorial-panel p-[2.22vw] relative flex-1">
 					<CornerMarks />
 					<div className="flex items-center justify-between mb-2">
 						<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
@@ -101,8 +101,8 @@ export function MeshControl() {
 			</div>
 
 			{/* AGENT TRIBUNAL / ARENA */}
-			<div className="col-span-12 lg:col-span-7 flex flex-col gap-[1.67vw]">
-				<div className="editorial-panel p-8 relative flex-1">
+			<div className="col-span-12 lg:col-span-7 flex flex-col gap-[1.39vw]">
+				<div className="editorial-panel p-[2.22vw] relative flex-1">
 					<CornerMarks />
 					<div className="flex items-center justify-between mb-2">
 						<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>

@@ -321,8 +321,8 @@ const BountiesPage = () => {
 					</div>
 
 					{/* 3. Right Column: Ingestion Terminal (Sticky layout) */}
-					<div className="col-span-12 md:col-span-4 sticky-section flex flex-col gap-[1.67vw]" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
-						<div className="editorial-panel p-[24px] w-full relative">
+					<div className="col-span-12 md:col-span-4 sticky-section flex flex-col gap-[1.39vw]" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
+						<div className="editorial-panel p-[2.22vw] w-full relative min-h-[48.8vh] flex flex-col justify-between">
 							<CornerMarks />
 							
 							{/* Human UI vs Bot API toggle */}
