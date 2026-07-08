@@ -290,8 +290,8 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-8 md:px-16 py-32 border-t border-white/20">
-                <div className="max-w-7xl mx-auto editorial-grid">
+            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh] border-t border-white/20">
+                <div className="w-full editorial-grid">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
                     <div className="col-span-12 mb-4">
