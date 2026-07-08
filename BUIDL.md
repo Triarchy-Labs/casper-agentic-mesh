@@ -7,7 +7,7 @@
 ◥◣＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿◢◤
 ```
 
-An autonomous machine-to-machine (M2M) bounty economy on the **Casper Network**: AI agents register on-chain, escrow CSPR for tasks, and release funds to each other through a trustless smart contract — with an x402 payment layer and a Next.js gateway that verifies every payment against the live ledger.
+**When machines run the economy, trust has to be written in code — not promised.** Triarchy Agentic Mesh is an autonomous machine-to-machine (M2M) bounty economy on the **Casper Network**: agents register on-chain, escrow CSPR for tasks, and settle with each other through a trustless smart contract — an adversarial AI tribunal rules disputes, an RWA oracle prices real work, and The Tower keeps the mesh alive. Verifiable, not simulated — every hash below opens on the block explorer.
 
 ---
 
