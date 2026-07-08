@@ -236,33 +236,44 @@ input:focus, textarea:focus, select:focus {
 }
 
 .button-secondary {
-  background-color: rgba(255,255,255,0.05);
+  background-color: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  color: var(--gray-1000);
-  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0px;
-  padding: 0 18px;
-  height: 40px;
+  padding: 0.69vw 2.5vw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   transition: all 220ms cubic-bezier(0.32,0.72,0,1);
-  font-family: var(--font-mono);
-  font-weight: 500;
+  font-family: var(--font-DM-mono), var(--font-mono), monospace;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.15em;
+  font-size: 0.69vw;
+}
+@media (max-width: 1024px) {
+  .button-secondary {
+    font-size: 0.97vw;
+    padding: 0.97vw 3.5vw;
+  }
+}
+@media (max-width: 640px) {
+  .button-secondary {
+    font-size: 9px;
+    padding: 8px 16px;
+  }
 }
 .button-secondary:hover {
-  background-color: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
 }
-.button-secondary:active { transform: scale(0.97); }
+.button-secondary:active { transform: scale(0.95); }
 .button-secondary:disabled {
-  border-color: var(--gray-alpha-200);
+  border-color: rgba(255, 255, 255, 0.02);
   color: var(--gray-700);
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* Editorial Elevation */
@@ -577,19 +588,33 @@ body {
 
 
 .btn-ghost {
-  font-family: var(--font-mono);
+  font-family: var(--font-DM-mono), var(--font-mono), monospace;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: clamp(13px, 1.05vw, 44px);
-  padding: clamp(14px,1vw,46px) clamp(24px,1.8vw,90px);
-  color: var(--gray-1000);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--gray-alpha-300);
-  border-radius: 2px;
+  letter-spacing: 0.15em;
+  font-size: 0.69vw;
+  padding: 0.69vw 2.5vw;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0px;
   cursor: pointer;
   transition: all 180ms ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
-.btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: var(--gray-alpha-500); }
+@media (max-width: 1024px) {
+  .btn-ghost {
+    font-size: 0.97vw;
+    padding: 0.97vw 3.5vw;
+  }
+}
+@media (max-width: 640px) {
+  .btn-ghost {
+    font-size: 9px;
+    padding: 8px 16px;
+  }
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
 
 /* Frontier custom cursor — dot + lerping ring with screen blend. */
 @media (hover: hover) and (pointer: fine) {
@@ -665,15 +690,28 @@ html.lenis, html.lenis body { height: auto; }
 }
 /* mono HUD tag chip / acrylic tag */
 .nb-tag {
-  font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 4px 12px;
+  font-family: var(--font-DM-mono), var(--font-mono), monospace;
+  font-size: 0.69vw; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 0.69vw;
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 0px;
+}
+@media (max-width: 1024px) {
+  .nb-tag {
+    font-size: 0.97vw;
+    padding: 0.97vw;
+  }
+}
+@media (max-width: 640px) {
+  .nb-tag {
+    font-size: 9px;
+    padding: 8px;
+  }
 }
 .nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
 /* diagonal slash motif from techwear refs */

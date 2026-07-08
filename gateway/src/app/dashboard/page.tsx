@@ -492,7 +492,7 @@ export default function Dashboard() {
 									<div className="z-10">
 										<div className="flex justify-between items-center mb-6 pb-3 border-b border-white/10">
 											<span className="text-[10px] font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
-											<span className="nb-tag text-[9px] px-1.5 py-0.5">ACTIVE</span>
+											<span className="nb-tag">ACTIVE</span>
 										</div>
 
 										{/* Gas Futures Tracker */}
@@ -503,13 +503,13 @@ export default function Dashboard() {
 											</div>
 											<div className="flex flex-col gap-2 mt-2 pt-2 border-t border-white/5">
 												<span className="text-[10px] text-white/60">Hedged: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas</span></span>
-												<div className="flex gap-1.5">
+												<div className="flex gap-2 items-center flex-wrap">
 													<button 
 														onClick={() => {
 															setGasHedged(prev => prev + 100000);
 															setGasPrice(p => p + 0.000120);
 														}}
-														className="px-1.5 py-0.5 bg-white text-black font-bold text-[8px] uppercase tracking-wider"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
 													>
 														+ 100K
 													</button>
@@ -518,7 +518,7 @@ export default function Dashboard() {
 															setGasHedged(prev => Math.max(0, prev - 100000));
 															setGasPrice(p => Math.max(0.001, p - 0.000100));
 														}}
-														className="px-1.5 py-0.5 border border-white/20 text-white font-bold text-[8px] uppercase tracking-wider hover:bg-white/5"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
 													>
 														RELEASE
 													</button>
@@ -623,7 +623,7 @@ export default function Dashboard() {
 																setL402Console("// Console reset. Ready to challenge L402 gate");
 															}
 														}}
-														className="px-3 py-1 bg-[var(--gray-1000)] text-[#000000] font-bold text-[9px] uppercase tracking-wider"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.5vw] py-[0.5vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[2.2vw] max-lg:py-[0.7vw] max-sm:text-[9px] max-sm:px-3 max-sm:py-1.5 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
 													>
 														{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
 													</button>
