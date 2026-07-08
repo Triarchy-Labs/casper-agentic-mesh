@@ -80,34 +80,61 @@ export default function Page() {
       );
     });
 
-    // 3. Image Assembly Scroll Animation
+    // 3. Image Assembly Scroll Animation (Produx parity sequence)
     const assemblyTl = gsap.timeline({
       scrollTrigger: {
         trigger: "#assembly-sticky-trigger",
         start: "top top",
-        end: "+=120%",
-        pin: true,
+        end: "bottom bottom",
         scrub: 0.5,
       }
     });
 
-    // Slices slide in and merge
-    assemblyTl.fromTo(".assembly-slice-left",
-      { x: "-150px", opacity: 0, filter: "blur(6px)" },
-      { x: "0px", opacity: 1, filter: "blur(0px)", ease: "power2.inOut", stagger: 0.1 }
+    // Text box fades out and moves up (Produx splitLine exit style)
+    assemblyTl.to(".assembly-text-box", {
+      y: "-60px",
+      opacity: 0,
+      filter: "blur(4px)",
+      duration: 0.5,
+      ease: "power2.in",
+    }, 0);
+
+    // Slices slide in from scattered positions and merge
+    assemblyTl.fromTo(".assembly-slice-1",
+      { x: "-25vw", y: "-15vh", opacity: 0, filter: "blur(8px)" },
+      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
+      0.1
     );
-    assemblyTl.fromTo(".assembly-slice-right",
-      { x: "150px", opacity: 0, filter: "blur(6px)" },
-      { x: "0px", opacity: 1, filter: "blur(0px)", ease: "power2.inOut", stagger: 0.1 },
-      "<" // overlap with left slices
+    assemblyTl.fromTo(".assembly-slice-2",
+      { x: "25vw", y: "15vh", opacity: 0, filter: "blur(8px)" },
+      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
+      0.1
+    );
+    assemblyTl.fromTo(".assembly-slice-3",
+      { x: "-20vw", y: "10vh", opacity: 0, filter: "blur(8px)" },
+      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
+      0.2
+    );
+    assemblyTl.fromTo(".assembly-slice-4",
+      { x: "20vw", y: "-10vh", opacity: 0, filter: "blur(8px)" },
+      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
+      0.2
     );
 
-    // Overlaid text fades in
+    // Manifesto text overlays fade in
     assemblyTl.fromTo(".assembly-text-overlay",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
-      "-=0.2"
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 },
+      0.6
     );
+
+    // Zoom out at the end for clean exit transition
+    assemblyTl.to(".assembly-image-container", {
+      scale: 0.96,
+      opacity: 0.9,
+      duration: 0.4,
+      ease: "power2.inOut",
+    }, 0.9);
   }, { scope: containerRef });
 
   return (
@@ -127,29 +154,31 @@ export default function Page() {
             <ScrollHero />
 
             {/* Redesigned Pinned Second Section with Image Assembly */}
-            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex items-center bg-[rgba(6,3,4,0.4)] backdrop-blur-md">
-              <div className="w-full px-[5.5vw] grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-20">
+            <section id="assembly-sticky-trigger" className="relative w-full h-[220vh] bg-transparent">
+              
+              {/* Sticky top content holder */}
+              <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden pointer-events-none z-10">
                 
-                {/* Left: Heading and CTAs */}
-                <div className="md:col-span-5 flex flex-col items-start text-left pl-2 md:pl-12">
-                  <div className="flex items-center gap-3 mb-7 flex-wrap">
+                {/* Left: Heading and CTAs (positioned absolute to float over background) */}
+                <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
+                  <div className="flex items-center gap-3 mb-6 flex-wrap">
                     <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
                     <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
                     <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
                   </div>
-                  <h1 className="nb-display text-[clamp(44px,6vw,70px)] mb-1 leading-none">
+                  <h1 className="nb-display text-[clamp(40px,5.5vw,64px)] mb-1 leading-none">
                     <span className="relative inline-block overflow-hidden py-2 -my-2">
                       <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
                     </span>
                   </h1>
-                  <h1 className="nb-thin nb-outline text-[clamp(44px,6vw,70px)] mb-6 leading-none">
+                  <h1 className="nb-thin nb-outline text-[clamp(40px,5.5vw,64px)] mb-6 leading-none">
                     <span className="relative inline-block overflow-hidden py-2 -my-2">
                       <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
                     </span>
                   </h1>
-                  <div className="flex items-center gap-4 mb-9 w-full max-w-xl">
+                  <div className="flex items-center gap-4 mb-8 w-full">
                     <div className="tech-line flex-1 hero-sub-line origin-left" />
-                    <span className="nb-index whitespace-nowrap hero-sub-text">escrow · tribunal · oracle · the tower</span>
+                    <span className="nb-index whitespace-nowrap hero-sub-text">escrow · oracle · the tower</span>
                   </div>
                   <div className="flex gap-4 flex-wrap">
                     <button className="button-primary inline-flex items-center hero-btn-animate">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
@@ -157,88 +186,73 @@ export default function Page() {
                   </div>
                 </div>
 
-                {/* Right/Center: Image Assembly Box */}
-                <div className="md:col-span-7 relative flex justify-center items-center">
-                  <div className="relative aspect-[1.784/1] w-full overflow-hidden border border-white/10 bg-black/40 shadow-2xl">
-                    
-                    {/* Slices of image */}
-                    {/* Slice 1: Top 25% */}
-                    <div 
-                      className="absolute inset-0 assembly-slice-left" 
-                      style={{ 
-                        backgroundImage: "url(/anime_robot.jpeg)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        clipPath: "inset(0% 0% 75% 0%)"
-                      }} 
-                    />
-                    {/* Slice 2: Upper Middle 25% */}
-                    <div 
-                      className="absolute inset-0 assembly-slice-right" 
-                      style={{ 
-                        backgroundImage: "url(/anime_robot.jpeg)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        clipPath: "inset(25% 0% 50% 0%)"
-                      }} 
-                    />
-                    {/* Slice 3: Lower Middle 25% */}
-                    <div 
-                      className="absolute inset-0 assembly-slice-left" 
-                      style={{ 
-                        backgroundImage: "url(/anime_robot.jpeg)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        clipPath: "inset(50% 0% 25% 0%)"
-                      }} 
-                    />
-                    {/* Slice 4: Bottom 25% */}
-                    <div 
-                      className="absolute inset-0 assembly-slice-right" 
-                      style={{ 
-                        backgroundImage: "url(/anime_robot.jpeg)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        clipPath: "inset(75% 0% 0% 0%)"
-                      }} 
-                    />
+                {/* Center/Bottom: Image Assembly Box */}
+                <div className="assembly-image-container relative w-[65vw] max-w-[1000px] aspect-[1.784/1] z-10 pointer-events-auto max-lg:w-[90vw] max-lg:max-w-none">
+                  
+                  {/* Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
+                  {/* Slice 1: Top 25% */}
+                  <div 
+                    className="absolute inset-0 assembly-slice assembly-slice-1" 
+                    style={{ 
+                      backgroundImage: "url(/anime_robot.jpeg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      clipPath: "inset(0% 0% 75% 0%)"
+                    }} 
+                  />
+                  {/* Slice 2: Upper Middle 25% */}
+                  <div 
+                    className="absolute inset-0 assembly-slice assembly-slice-2" 
+                    style={{ 
+                      backgroundImage: "url(/anime_robot.jpeg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      clipPath: "inset(25% 0% 50% 0%)"
+                    }} 
+                  />
+                  {/* Slice 3: Lower Middle 25% */}
+                  <div 
+                    className="absolute inset-0 assembly-slice assembly-slice-3" 
+                    style={{ 
+                      backgroundImage: "url(/anime_robot.jpeg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      clipPath: "inset(50% 0% 25% 0%)"
+                    }} 
+                  />
+                  {/* Slice 4: Bottom 25% */}
+                  <div 
+                    className="absolute inset-0 assembly-slice assembly-slice-4" 
+                    style={{ 
+                      backgroundImage: "url(/anime_robot.jpeg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      clipPath: "inset(75% 0% 0% 0%)"
+                    }} 
+                  />
 
-                    {/* Dark scrim overlay for text readability */}
-                    <div className="absolute inset-0 bg-black/35 z-10 pointer-events-none" />
+                  {/* Clean gradient overlay on the image instead of solid dark scrim */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30 z-10 pointer-events-none" />
 
-                    {/* Integrated Manifesto Text Overlaid on Image */}
-                    <div 
-                      className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em]"
-                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                    >
-                      <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
-                      <p className="label-14 text-white/80">↳ to ship apps and agents</p>
-                      <p className="label-14 text-white/80">↳ automated by agents</p>
-                    </div>
-
-                    <div 
-                      className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right"
-                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                    >
-                      <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
-                    </div>
-
+                  {/* Integrated Manifesto Text Overlaid on Image */}
+                  <div 
+                    className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0"
+                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                  >
+                    <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
+                    <p className="label-14 text-white/80">↳ to ship apps and agents</p>
+                    <p className="label-14 text-white/80">↳ automated by agents</p>
                   </div>
+
+                  <div 
+                    className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0"
+                    style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                  >
+                    <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
+                  </div>
+
                 </div>
 
-              </div>
-
-              {/* Bottom Partner Logos (embedded in the section flow so they show on completion) */}
-              <div className="absolute bottom-8 left-0 right-0 w-full px-[5.5vw] flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20 max-lg:hidden">
-                <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 text-white/20 text-xs tracking-widest font-mono">
-                  <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">BLACKBOX.AI</span>
-                  <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair link-sweep">HH</span>
-                  <span className="font-sans font-semibold tracking-normal hover:text-white/40 transition-colors cursor-crosshair link-sweep">OpenAI</span>
-                  <span className="font-sans italic font-bold tracking-tight hover:text-white/40 transition-colors cursor-crosshair link-sweep">DOORDASH</span>
-                  <span className="font-serif italic font-normal tracking-wide hover:text-white/40 transition-colors cursor-crosshair link-sweep">charles SCHWAB</span>
-                  <span className="font-sans font-medium tracking-tight hover:text-white/40 transition-colors cursor-crosshair link-sweep">The Weather Company</span>
-                  <span className="font-sans font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">Polymarket</span>
-                </div>
               </div>
             </section>
 
