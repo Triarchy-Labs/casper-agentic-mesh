@@ -105,36 +105,31 @@ export default function Page() {
       scrollTrigger: {
         trigger: "#assembly-sticky-trigger",
         start: "top top",
-        end: "+=500%", // Pinned for a massive, gradual 12-scroll feel!
+        end: "+=450%", // Pinned for a massive, gradual 12-scroll feel!
         pin: true,
         scrub: 1.5,
       }
     });
 
-    // Text box entrance (0.0 to 0.8) and exit (3.0 to 3.8)
-    assemblyTl.fromTo(".assembly-text-box",
-      { opacity: 0, y: "60px", filter: "blur(4px)" },
-      { opacity: 1, y: "0px", filter: "blur(0px)", duration: 0.8, ease: "power2.out" },
-      0.0
-    );
+    // Text box exit starts at 2.0, ends at 2.8
     assemblyTl.to(".assembly-text-box", {
       opacity: 0,
       y: "-100px",
       filter: "blur(6px)",
       duration: 0.8,
       ease: "power2.in",
-    }, 3.0);
+    }, 2.0);
 
-    // 12 Slices fade in from opacity 0 to initialOpacity (0.8 to 1.6) and then merge (1.6 to 3.4)
+    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge (0.8 to 2.6)
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
         { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
         { opacity: p.initialOpacity, duration: 0.8, ease: "power1.inOut" },
-        0.8
+        0.0
       );
       assemblyTl.to(`.assembly-slice-${p.id}`,
         { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 1.8 },
-        1.6
+        0.8
       );
     });
 
@@ -142,25 +137,25 @@ export default function Page() {
     assemblyTl.fromTo(".assembly-scrim",
       { opacity: 0 },
       { opacity: 1, duration: 0.8, ease: "power2.inOut" },
-      2.4 // starts at 2.4, ends at 3.2
+      1.8 // starts at 1.8, ends at 2.6
     );
 
     // Manifesto text overlays fade in
     assemblyTl.fromTo(".assembly-text-overlay",
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
-      3.0 // starts at 3.0, ends at 3.8
+      2.0 // starts at 2.0, ends at 2.8
     );
 
-    // Image container exit (3.8 to 4.5) - disappears completely ~2 scrolls after text
+    // Image container exit (2.8 to 3.4) - disappears completely ~2 scrolls after text
     assemblyTl.to(".assembly-image-container", {
       y: "-120px",
       opacity: 0,
       scale: 0.95,
       filter: "blur(8px)",
-      duration: 0.7,
+      duration: 0.6,
       ease: "power2.in",
-    }, 3.8); // starts at 3.8, ends at 4.5
+    }, 2.8); // starts at 2.8, ends at 3.4
   }, { dependencies: [booted], scope: containerRef });
 
   return (
@@ -179,10 +174,10 @@ export default function Page() {
           <div className="relative z-20">
             <ScrollHero />
             {/* Redesigned Pinned Second Section with Image Assembly */}
-            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10" style={{ marginTop: "-120vh" }}>
+            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
               
               {/* Left: Heading and CTAs (positioned absolute to float over background) */}
-              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl" style={{ opacity: 0 }}>
+              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
                 <div className="flex items-center gap-3 mb-6 flex-wrap">
                   <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
                   <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
