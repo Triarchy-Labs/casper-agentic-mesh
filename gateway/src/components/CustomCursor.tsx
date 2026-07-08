@@ -71,7 +71,7 @@ export default function CustomCursor() {
 			currentPos.current.scale = lerp(currentPos.current.scale, targetScale, LERP * 0.4);
 
 			if (dotRef.current) {
-				dotRef.current.style.transform = `translate(${currentPos.current.x - 12}px, ${currentPos.current.y - 12}px) scale(${currentPos.current.scale})`;
+				dotRef.current.style.transform = `translate(${currentPos.current.x - 18}px, ${currentPos.current.y - 18}px) scale(${currentPos.current.scale})`;
 			}
 
 			// Arrow square — slower drift, offset bottom-right
@@ -122,16 +122,16 @@ export default function CustomCursor() {
 					position: "fixed",
 					top: 0,
 					left: 0,
-					width: 24,
-					height: 24,
+					width: 36,
+					height: 36,
 					pointerEvents: "none",
 					zIndex: 99999,
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					gap: isHovering ? "12px" : "4px",
+					gap: isHovering ? "12px" : "6px",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
-					fontSize: "14px",
+					fontSize: "21px",
 					fontWeight: "bold",
 					color: "#ffffff",
 					textShadow: isHovering ? "0 0 8px rgba(255,255,255,0.6)" : "none",
@@ -141,7 +141,7 @@ export default function CustomCursor() {
 				}}
 			>
 				<span style={{ transform: "translateY(-1px)" }}>[</span>
-				<div style={{ width: 4, height: 4, backgroundColor: '#ffffff', borderRadius: '50%', transform: isHovering ? 'scale(1.5)' : 'scale(1)', transition: 'transform 0.3s ease' }} />
+				<div style={{ width: 6, height: 6, minWidth: 6, minHeight: 6, flexShrink: 0, backgroundColor: '#ffffff', borderRadius: '50%', transform: isHovering ? 'scale(1.5)' : 'scale(1)', transition: 'transform 0.3s ease' }} />
 				<span style={{ transform: "translateY(-1px)" }}>]</span>
 			</div>
 

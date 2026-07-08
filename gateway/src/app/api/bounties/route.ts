@@ -14,25 +14,34 @@ interface Bounty {
     difficulty: string;
 }
 
-// STUB: Fallback local file-based database. In production, this requires atomic file locking or a real database (e.g., PostgreSQL) to prevent write race conditions during concurrent operations.
-// Ensure the db file exists, initialized with default values from the UI
+let memoryBounties: Bounty[] | null = null;
+
+const defaultBounties: Bounty[] = [
+    { id: "Q-1049", title: "Escrow Module Optimization", bounty: "5,000 CSPR", status: "OPEN", issuer: "Triarchy-Labs", skills: ["Rust", "Casper", "DeFi"], difficulty: "GOD-TIER" },
+    { id: "Q-1021", title: "WASM Payload Refactoring", bounty: "850 CSPR", status: "IN PROGRESS", issuer: "Anonymous", skills: ["WebAssembly", "C++"], difficulty: "A-TIER" },
+    { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 CSPR", status: "OPEN", issuer: "Casper Network", skills: ["Next.js", "React"], difficulty: "B-TIER" },
+];
+
 async function getBounties(): Promise<Bounty[]> {
+    if (memoryBounties) return memoryBounties;
     try {
         const data = await fs.readFile(DB_FILE, "utf-8");
-        return JSON.parse(data);
+        memoryBounties = JSON.parse(data);
+        return memoryBounties!;
     } catch {
-        const defaults: Bounty[] = [
-            { id: "Q-1049", title: "Escrow Module Optimization", bounty: "5,000 CSPR", status: "OPEN", issuer: "Triarchy-Labs", skills: ["Rust", "Casper", "DeFi"], difficulty: "GOD-TIER" },
-            { id: "Q-1021", title: "WASM Payload Refactoring", bounty: "850 CSPR", status: "IN PROGRESS", issuer: "Anonymous", skills: ["WebAssembly", "C++"], difficulty: "A-TIER" },
-            { id: "Q-0992", title: "Frontend Telemetry Injection", bounty: "200 CSPR", status: "OPEN", issuer: "Casper Network", skills: ["Next.js", "React"], difficulty: "B-TIER" },
-        ];
-        await fs.writeFile(DB_FILE, JSON.stringify(defaults, null, 2));
-        return defaults;
+        memoryBounties = [...defaultBounties];
+        try { await fs.writeFile(DB_FILE, JSON.stringify(memoryBounties, null, 2)); } catch (e) { /* ignore read-only fs on vercel */ }
+        return memoryBounties;
     }
 }
 
 async function saveBounties(bounties: Bounty[]) {
-    await fs.writeFile(DB_FILE, JSON.stringify(bounties, null, 2));
+    memoryBounties = bounties;
+    try {
+        await fs.writeFile(DB_FILE, JSON.stringify(bounties, null, 2));
+    } catch (e) {
+        /* ignore read-only fs on vercel */
+    }
 }
 
 export async function GET() {
