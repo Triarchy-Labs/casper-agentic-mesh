@@ -291,7 +291,7 @@ export default function Dashboard() {
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
             <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh] border-t border-white/20">
-                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
+                <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] mb-[15vh]">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
                     <div className="col-span-12 mb-4">
@@ -302,8 +302,8 @@ export default function Dashboard() {
                     <MeshControl />
 
                     {/* Execution Terminal (8 cols) */}
-                    <div className="col-span-12 md:col-span-8 flex flex-col gap-[1.39vw] grid-item relative">
-                        <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[48.8vh] flex flex-col flex-1">
+                    <div className="col-span-12 md:col-span-8 flex flex-col grid-item relative">
+                        <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[65vh] flex flex-col flex-1">
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 20% 80%, var(--red-500) 0%, transparent 70%)" }} />
@@ -382,8 +382,8 @@ export default function Dashboard() {
                             </div>
                         </div>
 
-                        <div className="project-info-trigger relative flex w-full">
-                            <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                        <div className="mt-[4vh] project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
                             <div className="flex flex-col gap-[0.73vw]">
                                 <h3 className="heading-32 leading-tight">L1 Execution Terminal</h3>
                                 <p className="label-13-mono text-[var(--gray-800)] uppercase">Central command interface. Live on-chain state and agent deployment logs.</p>
@@ -392,7 +392,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Telemetry & Nodes (4 cols) */}
-                    <div className="col-span-12 md:col-span-4 flex flex-col gap-[1.39vw] grid-item">
+                    <div className="col-span-12 md:col-span-4 flex flex-col grid-item">
                         <div className="flex flex-col gap-8 flex-1">
                             {/* Agent Stage */}
                             <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] h-[250px]">
@@ -437,8 +437,8 @@ export default function Dashboard() {
                             </div>
                         </div>
                         
-                        <div className="project-info-trigger relative flex w-full">
-                            <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                        <div className="mt-[4vh] project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
                             <div className="flex flex-col gap-[0.73vw]">
                                 <h3 className="heading-32 leading-tight">Swarm Telemetry</h3>
                                 <p className="label-13-mono text-[var(--gray-800)] uppercase">Agent emotional state and active WASI Nodes cluster ping.</p>
@@ -454,9 +454,9 @@ export default function Dashboard() {
 						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
 					</h2>
 
-					<div className="editorial-grid gap-8">
+					<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh]">
 						{/* Vector Gamma Panel */}
-						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
+						<div className="flex flex-col col-span-12 md:col-span-6">
 							<div className="editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
 								<CornerMarks />
 								<div className="z-10">
@@ -526,8 +526,8 @@ export default function Dashboard() {
 								</div>
 							</div>
 							
-							<div className="project-info-trigger relative flex w-full">
-								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+							<div className="mt-[4vh] project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
 								<div className="flex flex-col gap-[0.73vw]">
 									<h3 className="heading-32 leading-tight">Agent Tribunal</h3>
 									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Gamma. Cognitive Arbitrage and Gas Hedging Futures.</p>
@@ -596,8 +596,8 @@ export default function Dashboard() {
 								</div>
 							</div>
 							
-							<div className="project-info-trigger relative flex w-full">
-								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+							<div className="mt-[4vh] project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
 								<div className="flex flex-col gap-[0.73vw]">
 									<h3 className="heading-32 leading-tight">x402 Payment Layer</h3>
 									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Delta. Absolute Synergy and L402 HTTP Gateway.</p>

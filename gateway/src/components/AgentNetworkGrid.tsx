@@ -39,13 +39,13 @@ export function CornerMarks() {
 function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
 	return (
 		<motion.div
-			className={`${spanClass} flex flex-col gap-[1.5vw] group cursor-pointer`}
+			className={`${spanClass} flex flex-col group cursor-pointer`}
 			initial={{ opacity: 0, y: 50 }}
 			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true }}
-			transition={{ duration: 0.8 }}
+			viewport={{ once: true, margin: "-10%" }}
+			transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
 		>
-			<div className="w-full relative overflow-hidden bg-[#0a0a0a] aspect-[4/3] border border-white/5">
+			<div className="editorial-panel relative overflow-hidden bg-[#0a0a0a] border border-white/5 w-full aspect-[4/3] max-sm:aspect-[4/5]">
 				<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 				<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
@@ -60,14 +60,14 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-[1vw] mt-[0.5vw]">
-				<div className="flex items-center gap-[0.7vw]">
-					<div className="size-[0.4vw] border border-[var(--gray-600)] shrink-0" />
-					<h3 className="heading-24 text-[var(--gray-1000)] m-0">{agent.id}</h3>
+			<div className="mt-[3vh] project-info-trigger relative flex w-full">
+				<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
+				<div className="flex flex-col gap-[0.73vw]">
+					<h3 className="heading-32 text-[var(--gray-1000)] m-0">{agent.id}</h3>
+					<p className="label-13-mono text-[var(--gray-700)] uppercase max-w-[85%] leading-relaxed max-sm:max-w-full">
+						{agent.task}. SECURING {agent.staked} ON CASPER NETWORK. PASSPORT: {agent.passport}.
+					</p>
 				</div>
-				<p className="label-13-mono text-[var(--gray-700)] uppercase max-w-[85%] leading-relaxed max-sm:max-w-full">
-					{agent.task}. SECURING {agent.staked} ON CASPER NETWORK. PASSPORT: {agent.passport}.
-				</p>
 			</div>
 		</motion.div>
 	);
@@ -193,7 +193,7 @@ export default function AgentNetworkGrid() {
 				</div>
 			</motion.div>
 
-			<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[2vw] gap-y-[10vh] mb-[10vh]">
+			<div className="w-full grid grid-cols-12 gap-x-[4vw] gap-y-[15vh] px-[2vw] max-sm:gap-y-[10vh] mb-[15vh]">
 				{agents.length > 0 && (
 					<ProduxCard agent={agents[0]} spanClass="col-span-12 md:col-span-7" />
 				)}

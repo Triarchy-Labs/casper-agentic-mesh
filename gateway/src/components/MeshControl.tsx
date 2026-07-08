@@ -75,9 +75,9 @@ export function MeshControl() {
 	};
 
 	return (
-		<div className="col-span-12 grid grid-cols-12 gap-[1.39vw] focus-cards">
+		<div className="col-span-12 grid grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] focus-cards mb-[10vh]">
 			{/* THE TOWER */}
-			<div className="col-span-12 lg:col-span-5 flex flex-col gap-[1.39vw]">
+			<div className="col-span-12 lg:col-span-5 flex flex-col">
 				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
@@ -98,8 +98,8 @@ export function MeshControl() {
 						{towerLines && <Console lines={towerLines} />}
 					</div>
 				</div>
-				<div className="project-info-trigger relative flex w-full">
-					<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1"></div>
+				<div className="mt-[4vh] project-info-trigger relative flex w-full">
+					<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
 					<div className="flex flex-col gap-[0.73vw]">
 						<h3 className="heading-32 leading-tight">The Tower</h3>
 						<p className="label-13-mono text-[var(--gray-800)] uppercase">Mesh Overseer. Analyzes chain state.</p>
@@ -108,7 +108,7 @@ export function MeshControl() {
 			</div>
 
 			{/* AGENT TRIBUNAL / ARENA */}
-			<div className="col-span-12 lg:col-span-7 flex flex-col gap-[1.39vw]">
+			<div className="col-span-12 lg:col-span-7 flex flex-col">
 				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
@@ -146,8 +146,8 @@ export function MeshControl() {
 						{arena && <Console lines={arena} />}
 					</div>
 				</div>
-				<div className="project-info-trigger relative flex w-full">
-					<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1"></div>
+				<div className="mt-[4vh] project-info-trigger relative flex w-full">
+					<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
 					<div className="flex flex-col gap-[0.73vw]">
 						<h3 className="heading-32 leading-tight">Agent Tribunal</h3>
 						<p className="label-13-mono text-[var(--gray-800)] uppercase">Adversarial arena. Jury resolves bounties.</p>

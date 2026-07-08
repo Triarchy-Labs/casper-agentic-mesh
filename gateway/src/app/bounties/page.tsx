@@ -238,7 +238,7 @@ const BountiesPage = () => {
 					</p>
 					
 					{/* KPI Matrix (Produx Accordion) */}
-					<div className="w-full h-[240px] flex gap-2 mb-[48px] max-sm:flex-col max-sm:h-[600px]">
+					<div className="w-full h-[55vh] flex gap-2 mb-[15vh] max-sm:flex-col max-sm:h-[80vh]">
 						{[
 							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
 							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false },
@@ -285,7 +285,7 @@ const BountiesPage = () => {
 					</div>
 				</motion.div>
 
-				<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh] items-start">
+				<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] items-start mb-[15vh]">
 					
 					{/* 2. Left Column: Bounty Table */}
 					<div className="col-span-12 md:col-span-8 flex flex-col gap-[16px]">
@@ -416,7 +416,7 @@ const BountiesPage = () => {
 						Vector Telemetry <span className="text-[var(--gray-700)] font-mono text-sm uppercase mr-4">{"// SCALE EXPANSION VECTORS ALPHA & BETA"}</span>
 					</h2>
 
-					<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
+					<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh]">
 						{/* Vector Alpha Panel */}
 						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
 							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[420px] flex flex-col justify-between">
@@ -468,8 +468,8 @@ const BountiesPage = () => {
 								</div>
 							</div>
 							
-							<div className="project-info-trigger relative flex w-full">
-								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+							<div className="mt-[4vh] project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
 								<div className="flex flex-col gap-[0.73vw]">
 									<h3 className="heading-32 leading-tight">Autonomous Escrow</h3>
 									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Alpha. Trustless micropayments and agentic slash voting.</p>
@@ -479,7 +479,7 @@ const BountiesPage = () => {
 
 						{/* Vector Beta Panel */}
 						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
-							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[420px] flex flex-col justify-between">
+							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[50vh] flex flex-col justify-between">
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 30%, var(--red-500) 0%, transparent 70%)" }} />
 								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
@@ -525,8 +525,8 @@ const BountiesPage = () => {
 								</div>
 							</div>
 							
-							<div className="project-info-trigger relative flex w-full">
-								<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+							<div className="mt-[4vh] project-info-trigger relative flex w-full">
+								<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
 								<div className="flex flex-col gap-[0.73vw]">
 									<h3 className="heading-32 leading-tight">Risk Oracle</h3>
 									<p className="label-13-mono text-[var(--gray-800)] uppercase">Vector Beta. On-chain validation of agent zero-knowledge proofs.</p>
