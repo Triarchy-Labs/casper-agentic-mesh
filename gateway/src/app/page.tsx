@@ -111,44 +111,39 @@ export default function Page() {
       }
     });
 
-    // Text box entrance (0.0 to 0.8) and exit (2.4 to 3.2)
-    assemblyTl.fromTo(".assembly-text-box",
-      { opacity: 0, y: "60px", filter: "blur(4px)" },
-      { opacity: 1, y: "0px", filter: "blur(0px)", duration: 0.8, ease: "power2.out" },
-      0.0
-    );
+    // Text box exit starts at 2.2, ends at 3.0
     assemblyTl.to(".assembly-text-box", {
       opacity: 0,
       y: "-100px",
       filter: "blur(6px)",
       duration: 0.8,
       ease: "power2.in",
-    }, 2.4);
+    }, 2.2);
 
-    // 12 Slices slide in from scattered positions and merge (duration: 2.2)
+    // 12 Slices slide in from scattered positions and merge (duration: 2.2, ends at 2.4)
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
         { x: p.x, y: p.y, scale: p.scale, opacity: p.initialOpacity, filter: `blur(${p.blur})` },
         { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 2.2 },
-        0.6 // starts at 0.6, ends at 2.8
+        0.2 // starts immediately when section pins
       );
     });
 
     // Fade in the dark gradient overlay once slices assemble
     assemblyTl.fromTo(".assembly-scrim",
       { opacity: 0 },
-      { opacity: 1, duration: 1.0, ease: "power2.inOut" },
-      2.0 // starts at 2.0, ends at 3.0
+      { opacity: 1, duration: 0.8, ease: "power2.inOut" },
+      1.8 // starts at 1.8, ends at 2.6
     );
 
     // Manifesto text overlays fade in
     assemblyTl.fromTo(".assembly-text-overlay",
       { opacity: 0, y: 20 },
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
-      2.6 // starts at 2.6, ends at 3.4
+      2.2 // starts at 2.2, ends at 3.0
     );
 
-    // Image container exit (3.4 to 4.0) - disappears completely ~2 scrolls after text
+    // Image container exit (3.2 to 3.8) - disappears completely ~2 scrolls after text
     assemblyTl.to(".assembly-image-container", {
       y: "-120px",
       opacity: 0,
@@ -156,7 +151,7 @@ export default function Page() {
       filter: "blur(8px)",
       duration: 0.6,
       ease: "power2.in",
-    }, 3.4); // starts at 3.4, ends at 4.0
+    }, 3.2); // starts at 3.2, ends at 3.8
   }, { dependencies: [booted], scope: containerRef });
 
   return (
@@ -178,7 +173,7 @@ export default function Page() {
             <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
               
               {/* Left: Heading and CTAs (positioned absolute to float over background) */}
-              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl" style={{ opacity: 0 }}>
+              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
                 <div className="flex items-center gap-3 mb-6 flex-wrap">
                   <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
                   <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
