@@ -140,9 +140,9 @@ export default function CustomCursor() {
 					willChange: "transform, gap",
 				}}
 			>
-				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>[</span>
+				<span style={{ transform: "scaleY(1.4) translateY(-1px)", zIndex: 2 }}>[</span>
 				<div style={{ position: "absolute", top: "50%", left: "50%", width: isHovering ? "24px" : "16px", height: isHovering ? "24px" : "16px", backgroundColor: "rgba(255,255,255,0.3)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "none", transform: "translate(-50%, -50%)", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", zIndex: 1, pointerEvents: "none" }} />
-				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>]</span>
+				<span style={{ transform: "scaleY(1.4) translateY(-1px)", zIndex: 2 }}>]</span>
 			</div>
 
 			{/* Drifting arrow square — appears on card/button hover */}
