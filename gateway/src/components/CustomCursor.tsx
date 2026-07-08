@@ -129,7 +129,7 @@ export default function CustomCursor() {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					gap: isHovering ? "28px" : "10px",
+					gap: isHovering ? "16px" : "10px",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
 					fontSize: "21px",
 					fontWeight: "bold",
@@ -141,7 +141,7 @@ export default function CustomCursor() {
 				}}
 			>
 				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>[</span>
-				<div style={{ position: "absolute", width: "16px", height: "16px", backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.25)", opacity: isHovering ? 0 : 1, transform: isHovering ? "scale(0.5)" : "scale(1)", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", zIndex: 1, pointerEvents: "none" }} />
+				<div style={{ position: "absolute", top: "50%", left: "50%", width: isHovering ? "24px" : "16px", height: isHovering ? "24px" : "16px", backgroundColor: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.25)", transform: "translate(-50%, -50%)", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", zIndex: 1, pointerEvents: "none" }} />
 				<span style={{ transform: "translateY(-1px)", zIndex: 2 }}>]</span>
 			</div>
 
