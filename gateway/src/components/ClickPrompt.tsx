@@ -105,8 +105,8 @@ export default function ClickPrompt({
   // clientX/Y maps directly to fixed canvas — no rect offset needed
   const handleClick = (e: React.MouseEvent) => {
     particlesRef.current.push({
-      x: e.clientX,
-      y: e.clientY,
+      x: e.clientX + 35,
+      y: e.clientY - 35,
       timer: 0,
       life: 1.0,
       decay,

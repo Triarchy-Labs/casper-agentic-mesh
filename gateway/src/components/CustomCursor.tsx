@@ -71,7 +71,7 @@ export default function CustomCursor() {
 			currentPos.current.scale = lerp(currentPos.current.scale, targetScale, LERP * 0.4);
 
 			if (dotRef.current) {
-				dotRef.current.style.transform = `translate(${currentPos.current.x - 10}px, ${currentPos.current.y - 10}px) scale(${currentPos.current.scale})`;
+				dotRef.current.style.transform = `translate(${currentPos.current.x - 12}px, ${currentPos.current.y - 12}px) scale(${currentPos.current.scale})`;
 			}
 
 			// Arrow square — slower drift, offset bottom-right
@@ -122,30 +122,25 @@ export default function CustomCursor() {
 					position: "fixed",
 					top: 0,
 					left: 0,
-					width: 20,
-					height: 20,
-					borderRadius: "0px",
-					border: "1.5px solid var(--red-700)",
-					backgroundColor: isHovering ? "rgba(241, 50, 66, 0.08)" : "transparent",
+					width: 24,
+					height: 24,
 					pointerEvents: "none",
 					zIndex: 99999,
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					boxShadow: isHovering ? "0 0 10px rgba(241, 50, 66, 0.4)" : "none",
-					transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-					willChange: "transform",
+					gap: isHovering ? "12px" : "4px",
+					fontFamily: "ui-monospace, 'Geist Mono', monospace",
+					fontSize: "14px",
+					fontWeight: "bold",
+					color: "#ffffff",
+					textShadow: isHovering ? "0 0 8px rgba(255,255,255,0.6)" : "none",
+					transition: "gap 0.3s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.3s ease",
+					willChange: "transform, gap",
 				}}
 			>
-				<div
-					style={{
-						width: 4,
-						height: 4,
-						backgroundColor: "var(--red-700)",
-						transition: "transform 0.3s ease",
-						transform: isHovering ? "scale(1.5)" : "scale(1)"
-					}}
-				/>
+				<span style={{ transform: "translateY(-1px)" }}>[</span>
+				<span style={{ transform: "translateY(-1px)" }}>]</span>
 			</div>
 
 			{/* Drifting arrow square — appears on card/button hover */}
