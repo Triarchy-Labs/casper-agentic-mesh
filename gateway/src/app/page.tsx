@@ -257,8 +257,13 @@ export default function Page() {
                 <div className="focus-cards grid grid-cols-12 gap-[1.39vw] max-sm:grid-cols-1 max-sm:gap-[3.48vh]">
                   {/* 01 ESCROW — col-span-7, big left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh]">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] group overflow-hidden">
                       <CornerMarks />
+                      {/* Vector Illustration Background */}
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center opacity-[0.08] group-hover:opacity-[0.20] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
+                        style={{ backgroundImage: "url(/vector_escrow.jpeg)" }}
+                      />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deposit · release · refund</li>
