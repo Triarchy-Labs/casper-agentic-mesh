@@ -201,7 +201,7 @@ const BountiesPage = () => {
 			<CarbonFabric muted />
 			<Nav />
 
-			<div className="w-full max-w-7xl mx-auto px-8 md:px-24 pt-[18vh] pb-[20vh]">
+			<div className="w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
 				{/* 1. Header & Global KPIs Section */}
 				<motion.div 
 					initial={{ opacity: 0, y: 20 }}

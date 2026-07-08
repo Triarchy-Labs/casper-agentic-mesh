@@ -290,7 +290,7 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full max-w-7xl mx-auto px-8 md:px-24 max-sm:px-6 pt-[18vh] pb-[20vh] border-t border-white/20">
+            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh] border-t border-white/20">
                 <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
