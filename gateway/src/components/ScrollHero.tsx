@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
 
@@ -92,6 +93,7 @@ export function ScrollHero() {
 	// scroll so the wordmark eases into the nav gradually, never in jerks.
 	const smoothY = useSpring(scrollY, { stiffness: 38, damping: 24, restDelta: 0.5 });
 	const [scrolled, setScrolled] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
 
 	// Cursor-follow with lag + spring bump (their gsap.quickTo/lerp equivalent).
 	const rawX = useMotionValue(-200);
@@ -148,6 +150,46 @@ export function ScrollHero() {
 
 	return (
 		<>
+			<AnimatePresence>
+				{menuOpen && (
+					<motion.div
+						initial={{ height: 0 }}
+						animate={{ height: "100vh" }}
+						exit={{ height: 0 }}
+						transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+						className="px-[5.5vw] pt-[11.7vh] pb-[4vh] max-lg:px-[4.10vw] max-lg:pt-[11.39vh] max-sm:px-[5.97vw]"
+						style={{
+							position: "fixed",
+							top: 0,
+							left: 0,
+							right: 0,
+							zIndex: 90,
+							background: "#020103",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-between",
+							color: "#fff",
+							overflow: "hidden",
+						}}
+					>
+						<div className="flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12">
+							<Link href="/" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">HOME</span>
+							</Link>
+							<Link href="/bounties" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">BOUNTIES</span>
+							</Link>
+							<Link href="/dashboard" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">DASHBOARD</span>
+							</Link>
+						</div>
+						<div className="text-sm opacity-50 font-mono uppercase tracking-widest">
+							ECONOMIC OS FOR THE AGENT ECONOMY · CASPER
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
+
 			{/* cursor-follow [ SCROLL DOWN ] label — vanishes on first scroll */}
 			<motion.div
 				aria-hidden
@@ -176,19 +218,12 @@ export function ScrollHero() {
 
 			{/* fixed top bar: docked logo + animated bracket nav (fades in on scroll) */}
 			<motion.header
+				className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5.5vw] pt-[8vh] max-lg:px-[4.10vw] max-lg:pt-[9.59vh] max-sm:px-[5.97vw] max-sm:pt-[11.3vh]"
 				style={{
 					opacity: navOpacity,
 					y: navY,
-					position: "fixed",
-					top: 0,
-					left: 0,
-					right: 0,
-					zIndex: 50,
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-between",
-					padding: "16px clamp(20px,4vw,56px)",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
+					pointerEvents: "auto",
 				}}
 			>
 				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
@@ -223,10 +258,22 @@ export function ScrollHero() {
 					</motion.span>{" "}
 					MESH
 				</span>
-				<nav style={{ display: "flex", gap: "clamp(16px,2.6vw,90px)", alignItems: "center" }}>
-					<BracketLink label="BOUNTIES" href="/bounties" />
-					<BracketLink label="DASHBOARD" href="/dashboard" />
-					<BracketLink label="CONNECT WALLET" />
+				<nav className="flex items-center gap-[4.1vw]">
+					<div className="flex items-center gap-[4.1vw] max-lg:hidden">
+						<BracketLink label="BOUNTIES" href="/bounties" />
+						<BracketLink label="DASHBOARD" href="/dashboard" />
+					</div>
+					<div className="flex items-center gap-[4.1vw]">
+						<BracketLink label="CONNECT WALLET" />
+						<div 
+							onClick={() => setMenuOpen(!menuOpen)}
+							className="relative flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
+						>
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.25px]" : ""}`} />
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.25px]" : ""}`} />
+						</div>
+					</div>
 				</nav>
 			</motion.header>
 

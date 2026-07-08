@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
@@ -37,6 +37,7 @@ export function Nav() {
 	const [walletMissing, setWalletMissing] = useState(false);
     const [hoverLogo, setHoverLogo] = useState(false);
     const [showDisconnect, setShowDisconnect] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
 		const checkConn = async () => {
@@ -99,91 +100,137 @@ export function Nav() {
 	const contentText = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : walletMissing ? "GET CASPER WALLET" : "CONNECT WALLET";
 
 	return (
-		<motion.div
-			initial={{ opacity: 0, y: -20 }}
-			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-			style={{
-				position: "fixed",
-				top: 0,
-				left: 0,
-				right: 0,
-				display: "flex",
-				justifyContent: "space-between",
-				alignItems: "center",
-				padding: "16px clamp(20px,4vw,56px)",
-				zIndex: 100,
-				background: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
-				pointerEvents: "none",
-				fontFamily: "ui-monospace, 'Geist Mono', monospace",
-			}}
-		>
-			<Link href="/" style={{ pointerEvents: "auto", textDecoration: "none", color: "inherit" }}>
-				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
-					TRIARCHY{" "}
-					<motion.span
-						style={{ color: "#f13242", display: "inline-block" }}
-						animate={{
-							scale: [1, 1.09, 1],
-							textShadow: [
-								"0 0 0px rgba(241,50,66,0)",
-								"0 0 11px rgba(241,50,66,0.8)",
-								"0 0 0px rgba(241,50,66,0)",
-							],
-						}}
-						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-					>
-						/
-					</motion.span>
-					<motion.span
-						style={{ color: "#f13242", display: "inline-block" }}
-						animate={{
-							scale: [1, 1.09, 1],
-							textShadow: [
-								"0 0 0px rgba(241,50,66,0)",
-								"0 0 11px rgba(241,50,66,0.8)",
-								"0 0 0px rgba(241,50,66,0)",
-							],
-						}}
-						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2.4 }}
-					>
-						/
-					</motion.span>{" "}
-					MESH
-				</span>
-			</Link>
-
-			<nav style={{ pointerEvents: "auto", display: "flex", gap: "clamp(16px,2.6vw,90px)", alignItems: "center" }}>
-				<BracketLink label="BOUNTIES" href="/bounties" />
-				<BracketLink label="DASHBOARD" href="/dashboard" />
-				<div style={{ position: "relative" }}>
-					<div onClick={handleConnect}>
-						<BracketLink label={contentText} />
-					</div>
-
-					{/* Disconnect Bubble */}
+		<>
+			<AnimatePresence>
+				{menuOpen && (
 					<motion.div
-						initial={{ opacity: 0, y: -10, pointerEvents: "none" }}
-						animate={{ opacity: showDisconnect ? 1 : 0, y: showDisconnect ? 10 : -10, pointerEvents: showDisconnect ? "auto" : "none" }}
+						initial={{ height: 0 }}
+						animate={{ height: "100vh" }}
+						exit={{ height: 0 }}
+						transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+						className="px-[5.5vw] pt-[11.7vh] pb-[4vh] max-lg:px-[4.10vw] max-lg:pt-[11.39vh] max-sm:px-[5.97vw]"
 						style={{
-							position: "absolute",
-							top: "100%",
+							position: "fixed",
+							top: 0,
+							left: 0,
 							right: 0,
-							background: "var(--red-100)",
-							border: "1px solid var(--red-700)",
-							padding: "8px 16px",
-							borderRadius: "6px",
-							cursor: "pointer",
-							color: "var(--red-700)",
-							marginTop: "8px"
+							zIndex: 90,
+							background: "#020103",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-between",
+							color: "#fff",
+							overflow: "hidden",
+							pointerEvents: "auto",
 						}}
-						onClick={handleDisconnect}
 					>
-						<span className="label-14-mono">DISCONNECT</span>
+						<div className="flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12">
+							<Link href="/" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">HOME</span>
+							</Link>
+							<Link href="/bounties" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">BOUNTIES</span>
+							</Link>
+							<Link href="/dashboard" onClick={() => setMenuOpen(false)}>
+								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">DASHBOARD</span>
+							</Link>
+						</div>
+						<div className="text-sm opacity-50 font-mono uppercase tracking-widest">
+							ECONOMIC OS FOR THE AGENT ECONOMY · CASPER
+						</div>
 					</motion.div>
-				</div>
-			</nav>
-		</motion.div>
+				)}
+			</AnimatePresence>
+
+			<motion.div
+				initial={{ opacity: 0, y: -20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+				className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-[5.5vw] pt-[8vh] max-lg:px-[4.10vw] max-lg:pt-[9.59vh] max-sm:px-[5.97vw] max-sm:pt-[11.3vh]"
+				style={{
+					background: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%)",
+					pointerEvents: menuOpen ? "auto" : "none",
+					fontFamily: "ui-monospace, 'Geist Mono', monospace",
+				}}
+			>
+				<Link href="/" style={{ pointerEvents: "auto", textDecoration: "none", color: "inherit" }}>
+					<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
+						TRIARCHY{" "}
+						<motion.span
+							style={{ color: "#f13242", display: "inline-block" }}
+							animate={{
+								scale: [1, 1.09, 1],
+								textShadow: [
+									"0 0 0px rgba(241,50,66,0)",
+									"0 0 11px rgba(241,50,66,0.8)",
+									"0 0 0px rgba(241,50,66,0)",
+								],
+							}}
+							transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
+						>
+							/
+						</motion.span>
+						<motion.span
+							style={{ color: "#f13242", display: "inline-block" }}
+							animate={{
+								scale: [1, 1.09, 1],
+								textShadow: [
+									"0 0 0px rgba(241,50,66,0)",
+									"0 0 11px rgba(241,50,66,0.8)",
+									"0 0 0px rgba(241,50,66,0)",
+								],
+							}}
+							transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2.4 }}
+						>
+							/
+						</motion.span>{" "}
+						MESH
+					</span>
+				</Link>
+
+				<nav style={{ pointerEvents: "auto" }} className="flex items-center gap-[4.1vw]">
+					<div className="flex items-center gap-[4.1vw] max-lg:hidden">
+						<BracketLink label="BOUNTIES" href="/bounties" />
+						<BracketLink label="DASHBOARD" href="/dashboard" />
+					</div>
+					<div className="flex items-center gap-[4.1vw] relative">
+						<div onClick={handleConnect}>
+							<BracketLink label={contentText} />
+						</div>
+
+						{/* Disconnect Bubble */}
+						<motion.div
+							initial={{ opacity: 0, y: -10, pointerEvents: "none" }}
+							animate={{ opacity: showDisconnect ? 1 : 0, y: showDisconnect ? 10 : -10, pointerEvents: showDisconnect ? "auto" : "none" }}
+							style={{
+								position: "absolute",
+								top: "100%",
+								right: 0,
+								background: "var(--red-100)",
+								border: "1px solid var(--red-700)",
+								padding: "8px 16px",
+								borderRadius: "6px",
+								cursor: "pointer",
+								color: "var(--red-700)",
+								marginTop: "8px"
+							}}
+							onClick={handleDisconnect}
+						>
+							<span className="label-14-mono">DISCONNECT</span>
+						</motion.div>
+
+						<div 
+							onClick={() => setMenuOpen(!menuOpen)}
+							className="relative flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
+						>
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.25px]" : ""}`} />
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.25px]" : ""}`} />
+						</div>
+					</div>
+				</nav>
+			</motion.div>
+		</>
 	);
 }
 
