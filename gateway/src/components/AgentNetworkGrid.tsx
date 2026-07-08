@@ -36,164 +36,77 @@ export function CornerMarks() {
 	);
 }
 
-function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
-	const [hovered, setHovered] = useState(false);
-	const isQuarantined = agent.status === "QUARANTINED";
-	const isMark53 = agent.id === "mark_53_sarcophagus";
-
-	let statusColor = "var(--gray-700)";
-	if (agent.status === "ACTIVE") statusColor = "var(--gray-1000)";
-	else if (agent.status === "QUARANTINED") statusColor = "var(--gray-1000)";
-	else if (agent.status === "GOLDEN_TEMPLATE") statusColor = "var(--gray-1000)";
-
-	let borderColor = isQuarantined 
-		? "var(--gray-800)" 
-		: hovered 
-			? "var(--gray-600)"
-			: "var(--gray-400)";
-
-	if (isMark53) {
-		borderColor = "transparent"; // Handled by rare-snake-border pseudo-element
-	}
-
-	let layoutClass = "col-span-12 lg:col-span-6";
-	const pattern = index % 7;
-	if (pattern === 0) layoutClass = "col-span-12 md:col-span-7";
-	if (pattern === 1) layoutClass = "col-span-12 md:col-span-4 md:col-end-13 md:mt-[10vh]";
-	if (pattern === 2) layoutClass = "col-span-12 md:col-span-10 md:col-start-2";
-	if (pattern === 3) layoutClass = "col-span-12 md:col-span-4";
-	if (pattern === 4) layoutClass = "col-span-12 md:col-span-7 md:col-end-13 md:mt-[6vh]";
-	if (pattern === 5) layoutClass = "col-span-12 md:col-span-5";
-	if (pattern === 6) layoutClass = "col-span-12 md:col-span-5 md:col-end-13 md:mt-[8vh]";
-
+function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
 	return (
 		<motion.div
-			className={`${layoutClass} editorial-panel bento-card bento-card-${index} ${isMark53 ? "rare-snake-border" : ""}`}
-			initial={{ opacity: 0, y: 50, rotateX: 5, scale: 0.98 }}
-			whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
-			whileHover={{ y: -8, scale: 1.015, zIndex: 10 }}
-			viewport={{ once: true, amount: 0.1 }}
-			transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: (index % 2) * 0.1 }}
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			style={{
-				transformStyle: "preserve-3d",
-				transformOrigin: `top ${index % 2 === 0 ? "left" : "right"}`,
-				padding: "32px",
-				backgroundColor: hovered ? "var(--gray-200)" : "var(--background-100)",
-				border: isMark53 ? "none" : `1px solid ${borderColor}`,
-				borderRadius: "0px",
-				display: "flex",
-				flexDirection: "column",
-				gap: "20px",
-				cursor: "crosshair",
-				transition: "background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
-				boxShadow: isMark53 
-					? "0 0 40px rgba(255, 255, 255, 0.15)"
-					: hovered 
-						? "0 20px 40px rgba(0,0,0,0.5)" 
-						: "none",
-				minHeight: index === 0 || index === 3 || index === 6 ? "240px" : "320px",
-				justifyContent: "space-between",
-				overflow: "hidden",
-				wordBreak: "break-word" as const,
-				maxWidth: "100%",
-				boxSizing: "border-box" as const,
-				position: "relative"
-			}}
+			className={`${spanClass} flex flex-col gap-[1.5vw] group cursor-pointer`}
+			initial={{ opacity: 0, y: 50 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true }}
+			transition={{ duration: 0.8 }}
 		>
-			<CornerMarks />
-			
-			<div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", zIndex: 6 }}>
-				<span className="label-14-mono text-[var(--gray-1000)]" style={{ fontWeight: 600 }}>
-					{agent.id}
-				</span>
-				<span className="nb-tag" style={{
-					backgroundColor: "transparent",
-					color: statusColor,
-					border: `1px solid ${statusColor}`,
-					padding: "4px 8px",
-					fontSize: "11px",
-					display: "flex",
-					alignItems: "center",
-					gap: "6px",
-					textTransform: "uppercase",
-					letterSpacing: "0.05em",
-					fontWeight: 600,
-					borderRadius: "0px",
-					whiteSpace: "nowrap"
-				}}>{agent.status}</span>
-			</div>
-
-			<div style={{ display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid var(--gray-400)", paddingTop: "12px", zIndex: 6 }}>
-				<div style={{ display: "flex", justifyContent: "space-between" }} className="label-12-mono text-[var(--gray-700)]">
-					<span>PASSPORT:</span>
-					<span className="text-[var(--gray-1000)]">{agent.passport}</span>
-				</div>
-				<div style={{ display: "flex", justifyContent: "space-between" }} className="label-12-mono text-[var(--gray-700)]">
-					<span>COLLATERAL:</span>
-					<span className="text-[var(--gray-1000)]">{agent.staked}</span>
+			<div className="w-full relative overflow-hidden bg-[#0a0a0a] aspect-[4/3] border border-white/5">
+				<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+				<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
+				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+				
+				<div className="absolute bottom-6 right-6 flex gap-2 z-10 max-sm:bottom-4 max-sm:right-4">
+					<span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 label-10-mono text-white/70 uppercase">
+						{agent.status}
+					</span>
+					<span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 label-10-mono text-white/70 uppercase">
+						REP: {agent.rep}
+					</span>
 				</div>
 			</div>
-			
-			<div 
-				className="label-14-mono text-[var(--gray-800)]"
-				style={{ 
-					display: "flex", 
-					justifyContent: "space-between", 
-					alignItems: "flex-end",
-					marginTop: "auto",
-					zIndex: 6
-				}}
-			>
-				<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-					<span className="text-[10px] text-[var(--gray-600)]">DOMAIN</span>
-					<span className="text-[var(--gray-1000)]">[{agent.task}]</span>
-				</div>
 
-				<div style={{ display: "flex", flexDirection: "column", gap: "4px", alignItems: "flex-end" }}>
-					<div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-						<span>REP: {agent.rep}</span>
-						<span style={{ color: isMark53 ? statusColor : "var(--gray-1000)" }}>
-							{isMark53 ? "" : "CSPR: "}{agent.earned}
-						</span>
-					</div>
-					{isMark53 && (
-						<div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
-							<button 
-								onClick={() => window.open("https://github.com/Triarchy-Labs/mark53-autonomous-node", "_blank")}
-								className="button-secondary label-12-mono"
-								style={{
-									padding: "4px 8px",
-									height: "28px",
-									fontSize: "9px",
-									cursor: "pointer",
-									opacity: hovered ? 1 : 0.7
-								}}
-							>
-								[ OS CONFIG ]
-							</button>
-							<button 
-								onClick={() => window.open("https://github.com/Triarchy-Labs/tauri-exosuit-gateway", "_blank")}
-								className="button-primary label-12-mono"
-								style={{
-									padding: "4px 8px",
-									height: "28px",
-									fontSize: "9px",
-									fontWeight: "bold",
-									cursor: "pointer",
-									backgroundColor: "var(--gray-1000)",
-									color: "#000",
-									opacity: hovered ? 1 : 0.8
-								}}
-							>
-								[ TAURI EXOSUIT ]
-							</button>
-						</div>
-					)}
+			<div className="flex flex-col gap-[1vw] mt-[0.5vw]">
+				<div className="flex items-center gap-[0.7vw]">
+					<div className="size-[0.4vw] border border-[var(--gray-600)] shrink-0" />
+					<h3 className="heading-24 text-[var(--gray-1000)] m-0">{agent.id}</h3>
 				</div>
+				<p className="label-13-mono text-[var(--gray-700)] uppercase max-w-[85%] leading-relaxed max-sm:max-w-full">
+					{agent.task}. SECURING {agent.staked} ON CASPER NETWORK. PASSPORT: {agent.passport}.
+				</p>
 			</div>
 		</motion.div>
+	);
+}
+
+function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
+	return (
+		<div className="w-full h-[60vh] flex gap-2 mt-[10vh] max-sm:flex-col max-sm:h-[120vh]">
+			{agents.map((agent, i) => (
+				<div 
+					key={agent.id}
+					className="group relative flex-1 hover:flex-[3] max-sm:hover:flex-[2] transition-all duration-[1s] ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden cursor-pointer bg-[#0a0a0a] border border-white/5"
+				>
+					<div className="absolute inset-0 bg-gradient-to-t from-[#111] to-[#050505]" />
+					{/* Unique subtle tint per card */}
+					<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${i * 60}, 60%, 40%) 0%, transparent 70%)` }} />
+					<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+					
+					{/* Overlay Gradient for Text */}
+					<div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent h-2/3 pointer-events-none" />
+
+					{/* Title Content */}
+					<div className="absolute bottom-6 left-6 right-6 h-[80px]">
+						{/* Active State (Horizontal) */}
+						<div className="absolute bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transition-all duration-700 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)]">
+							<h3 className="heading-24 text-white m-0 truncate">{agent.id}</h3>
+							<p className="label-12-mono text-white/50 mt-2 truncate">
+								{agent.task} // {agent.status}
+							</p>
+						</div>
+						
+						{/* Inactive State (Vertical) */}
+						<div className="absolute bottom-0 left-0 origin-bottom-left -rotate-90 opacity-100 group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap max-sm:hidden">
+							<span className="heading-24 text-white/40 tracking-widest uppercase">{agent.id}</span>
+						</div>
+					</div>
+				</div>
+			))}
+		</div>
 	);
 }
 
@@ -280,11 +193,18 @@ export default function AgentNetworkGrid() {
 				</div>
 			</motion.div>
 
-			<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[1.39vw] gap-y-[13.67vh] max-sm:gap-[6vh]">
-				{agents.map((agent: AgentDisplay, i: number) => (
-					<AgentCard key={agent.id} agent={agent} index={i} />
-				))}
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[2vw] gap-y-[10vh] mb-[10vh]">
+				{agents.length > 0 && (
+					<ProduxCard agent={agents[0]} spanClass="col-span-12 md:col-span-7" />
+				)}
+				{agents.length > 1 && (
+					<ProduxCard agent={agents[1]} spanClass="col-span-12 md:col-span-4 md:col-end-13 md:mt-[10vh]" />
+				)}
 			</div>
+
+			{agents.length > 2 && (
+				<AccordionSection agents={agents.slice(2, 7)} />
+			)}
 		</div>
 	);
 }
