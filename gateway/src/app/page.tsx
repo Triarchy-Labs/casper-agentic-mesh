@@ -18,23 +18,23 @@ export default function Page() {
   const sectionsRef = useRef<HTMLDivElement>(null);
 
   // 12-piece mosaic assembly specifications (4 cols x 3 rows)
-  // Some pieces have initialOpacity: 0.8 to be visible at their scattered positions on load
+  // Wider coordinates, custom start times, durations, and easings for asymmetrical, organic assembly
   const pieces = [
     // Row 1
-    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-25vw", y: "-25vh", scale: 0.8, blur: "6px", initialOpacity: 0.8 },
-    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-5vw", y: "-30vh", scale: 0.7, blur: "4px", initialOpacity: 0 },
-    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "10vw", y: "-28vh", scale: 0.9, blur: "8px", initialOpacity: 0.8 },
-    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "30vw", y: "-20vh", scale: 0.85, blur: "5px", initialOpacity: 0 },
+    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-40vw", y: "-35vh", scale: 0.75, blur: "8px", initialOpacity: 0.8, startTime: 0.8, duration: 1.6, ease: "power3.out" },
+    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-10vw", y: "-40vh", scale: 0.7, blur: "5px", initialOpacity: 0, startTime: 1.2, duration: 1.2, ease: "back.out(1.2)" },
+    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "15vw", y: "-38vh", scale: 0.85, blur: "9px", initialOpacity: 0.8, startTime: 0.9, duration: 1.8, ease: "power2.inOut" },
+    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "42vw", y: "-30vh", scale: 0.8, blur: "6px", initialOpacity: 0, startTime: 1.4, duration: 1.0, ease: "sine.out" },
     // Row 2
-    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-32vw", y: "-5vh", scale: 0.75, blur: "7px", initialOpacity: 0.8 },
-    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-12vw", y: "15vh", scale: 0.8, blur: "5px", initialOpacity: 0 },
-    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "15vw", y: "-10vh", scale: 0.9, blur: "6px", initialOpacity: 0.8 },
-    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "28vw", y: "5vh", scale: 0.8, blur: "4px", initialOpacity: 0 },
+    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-45vw", y: "-10vh", scale: 0.7, blur: "8px", initialOpacity: 0.8, startTime: 0.7, duration: 2.0, ease: "power4.out" },
+    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-20vw", y: "20vh", scale: 0.75, blur: "6px", initialOpacity: 0, startTime: 1.3, duration: 1.4, ease: "power2.out" },
+    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "25vw", y: "-15vh", scale: 0.85, blur: "7px", initialOpacity: 0.8, startTime: 1.0, duration: 1.5, ease: "back.out(1.5)" },
+    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "45vw", y: "10vh", scale: 0.75, blur: "5px", initialOpacity: 0, startTime: 1.5, duration: 1.1, ease: "power3.inOut" },
     // Row 3
-    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-28vw", y: "22vh", scale: 0.85, blur: "6px", initialOpacity: 0.8 },
-    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-8vw", y: "28vh", scale: 0.7, blur: "8px", initialOpacity: 0 },
-    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "8vw", y: "25vh", scale: 0.75, blur: "5px", initialOpacity: 0.8 },
-    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "32vw", y: "20vh", scale: 0.8, blur: "7px", initialOpacity: 0 }
+    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-38vw", y: "30vh", scale: 0.8, blur: "7px", initialOpacity: 0.8, startTime: 0.8, duration: 1.7, ease: "power2.out" },
+    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-15vw", y: "40vh", scale: 0.65, blur: "9px", initialOpacity: 0, startTime: 1.1, duration: 1.3, ease: "sine.inOut" },
+    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "15vw", y: "38vh", scale: 0.7, blur: "6px", initialOpacity: 0.8, startTime: 1.2, duration: 1.6, ease: "power3.out" },
+    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "40vw", y: "35vh", scale: 0.75, blur: "8px", initialOpacity: 0, startTime: 0.6, duration: 2.2, ease: "power4.inOut" }
   ];
 
   // Always run the full 2.5s boot loader on every visit (no session skip).
@@ -120,7 +120,7 @@ export default function Page() {
       ease: "power2.in",
     }, 2.0);
 
-    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge (0.8 to 2.6)
+    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge with custom non-linear parameters
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
         { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
@@ -128,8 +128,8 @@ export default function Page() {
         0.0
       );
       assemblyTl.to(`.assembly-slice-${p.id}`,
-        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 1.8 },
-        0.8
+        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: p.ease, duration: p.duration },
+        p.startTime
       );
     });
 
@@ -200,7 +200,7 @@ export default function Page() {
               </div>
 
               {/* Center/Bottom: Image Assembly Box */}
-              <div className="assembly-image-container relative w-[75vw] max-w-[1200px] aspect-[1.784/1] z-10 pointer-events-auto mt-[20vh] max-lg:w-[90vw] max-lg:max-w-none">
+              <div className="assembly-image-container relative w-[82vw] max-w-[1300px] aspect-[1.784/1] z-10 pointer-events-auto mt-[12vh] max-lg:w-[90vw] max-lg:max-w-none">
                 
                 {/* 12 Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
                 {pieces.map((p) => (
