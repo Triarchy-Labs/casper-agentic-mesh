@@ -97,6 +97,10 @@ export function MeshControl() {
 						<Btn onClick={scanTower} busy={towerBusy}>Scan mesh</Btn>
 						{towerLines && <Console lines={towerLines} />}
 					</div>
+					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
+						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Overseer</span>
+						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Liveness</span>
+					</div>
 				</div>
 				<div className="mt-[4vh] project-info-trigger relative flex w-full">
 					<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
@@ -144,6 +148,10 @@ export function MeshControl() {
 							</div>
 						)}
 						{arena && <Console lines={arena} />}
+					</div>
+					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
+						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Tribunal</span>
+						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Dry Run</span>
 					</div>
 				</div>
 				<div className="mt-[4vh] project-info-trigger relative flex w-full">

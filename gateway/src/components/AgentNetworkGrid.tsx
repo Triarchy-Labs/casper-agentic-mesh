@@ -51,10 +51,10 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
 				
 				<div className="absolute bottom-6 right-6 flex gap-2 z-10 max-sm:bottom-4 max-sm:right-4">
-					<span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 label-10-mono text-white/70 uppercase">
+					<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">
 						{agent.status}
 					</span>
-					<span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/10 label-10-mono text-white/70 uppercase">
+					<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">
 						REP: {agent.rep}
 					</span>
 				</div>

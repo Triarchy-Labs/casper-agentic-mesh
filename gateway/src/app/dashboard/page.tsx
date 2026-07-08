@@ -328,9 +328,9 @@ export default function Dashboard() {
                                 )}
                             </div>
                             <div className="absolute bottom-6 right-6 flex gap-3 z-20">
-                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Emotional State</span>
-                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Neural Link</span>
-                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Telemetry</span>
+                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Emotional State</span>
+                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Neural Link</span>
+                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Telemetry</span>
                             </div>
                         </div>
                         <div className="mt-[4vh] project-info-trigger relative flex w-full">
@@ -458,8 +458,8 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="absolute bottom-4 right-4 flex gap-2 z-20">
-                                <span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">WASI Swarm</span>
-                                <span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">Telemetry</span>
+                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">WASI Swarm</span>
+                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Telemetry</span>
                             </div>
                         </div>
                         <div className="mt-[4vh] project-info-trigger relative flex w-full">
@@ -553,8 +553,8 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="absolute bottom-4 right-4 flex gap-1.5 z-20">
-									<span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/5 text-[8px] tracking-widest text-white/50 uppercase">Arbitrage</span>
-									<span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/5 text-[8px] tracking-widest text-white/50 uppercase">Futures</span>
+									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Arbitrage</span>
+									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Futures</span>
 								</div>
 							</div>
 							
@@ -633,8 +633,8 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="absolute bottom-4 right-4 flex gap-2 z-20">
-									<span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">P2P Mesh</span>
-									<span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">L402 Gate</span>
+									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">P2P Mesh</span>
+									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">L402 Gate</span>
 								</div>
 							</div>
 							
