@@ -380,6 +380,7 @@ export default function Dashboard() {
                                 )}
                                 </div>
                             </div>
+                        </div>
 
                         <div className="project-info-trigger relative flex w-full">
                             <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
