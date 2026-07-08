@@ -145,6 +145,11 @@ export default function Page() {
                         <span className="panel-cta-square" />
                         <span className="panel-cta-text">deploy escrow</span>
                       </div>
+                      <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
+                        <span className="nb-tag">Escrow</span>
+                        <span className="nb-tag">Proxy</span>
+                        <span className="nb-tag">Deterministic</span>
+                      </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
                       <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
@@ -168,6 +173,11 @@ export default function Page() {
                       <div className="panel-cta z-10">
                         <span className="panel-cta-square" />
                         <span className="panel-cta-text">query oracle</span>
+                      </div>
+                      <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
+                        <span className="nb-tag">Oracle</span>
+                        <span className="nb-tag">Price Feed</span>
+                        <span className="nb-tag">Reputation</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
@@ -193,6 +203,11 @@ export default function Page() {
                           Escrow, oracle and tribunal converging into one organism, overseen by The Tower — the economic OS for AI agents, live on Casper.
                         </p>
                         <button className="button-primary">INITIALIZE SYNERGY</button>
+                      </div>
+                      <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
+                        <span className="nb-tag">Omni-Mesh</span>
+                        <span className="nb-tag">The Tower</span>
+                        <span className="nb-tag">Liveness</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
@@ -221,6 +236,11 @@ export default function Page() {
                         <span className="panel-cta-square" />
                         <span className="panel-cta-text">view tribunal</span>
                       </div>
+                      <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
+                        <span className="nb-tag">Tribunal</span>
+                        <span className="nb-tag">Chief Judge</span>
+                        <span className="nb-tag">Adversarial</span>
+                      </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
                       <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
@@ -244,6 +264,11 @@ export default function Page() {
                       <div className="panel-cta z-10">
                         <span className="panel-cta-square" />
                         <span className="panel-cta-text">explore x402</span>
+                      </div>
+                      <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
+                        <span className="nb-tag">x402</span>
+                        <span className="nb-tag">Micro-payments</span>
+                        <span className="nb-tag">Gateway</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">

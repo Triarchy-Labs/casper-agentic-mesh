@@ -350,6 +350,17 @@ input:focus, textarea:focus, select:focus {
   color: var(--gray-1000);
 }
 
+.panel-tags {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms cubic-bezier(0.32,0.72,0,1), transform 300ms cubic-bezier(0.32,0.72,0,1);
+}
+.editorial-panel:hover .panel-tags {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
 /* Produx project-tag reveal — card content starts muted, reveals on hover.
    Source: produx dump `project-tag opacity-0 blur-sm translate-y-[1.95vh] -rotate-2deg` */
 .editorial-panel ul li {
