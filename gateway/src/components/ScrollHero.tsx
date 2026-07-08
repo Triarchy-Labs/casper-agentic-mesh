@@ -273,7 +273,7 @@ export function ScrollHero() {
 			</motion.header>
 
 			{/* giant scroll-shrink wordmark — first screen */}
-			<section style={{ height: "220vh", position: "relative" }}>
+			<section style={{ height: "120vh", position: "relative" }}>
 				{/* sticky pin: the hero holds in place while the wordmark shrinks (produx pin) */}
 				<div
 					style={{
