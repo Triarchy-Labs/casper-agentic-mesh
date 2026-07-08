@@ -79,6 +79,35 @@ export default function Page() {
         }
       );
     });
+
+    // 3. Image Assembly Scroll Animation
+    const assemblyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#assembly-sticky-trigger",
+        start: "top top",
+        end: "+=120%",
+        pin: true,
+        scrub: 0.5,
+      }
+    });
+
+    // Slices slide in and merge
+    assemblyTl.fromTo(".assembly-slice-left",
+      { x: "-150px", opacity: 0, filter: "blur(6px)" },
+      { x: "0px", opacity: 1, filter: "blur(0px)", ease: "power2.inOut", stagger: 0.1 }
+    );
+    assemblyTl.fromTo(".assembly-slice-right",
+      { x: "150px", opacity: 0, filter: "blur(6px)" },
+      { x: "0px", opacity: 1, filter: "blur(0px)", ease: "power2.inOut", stagger: 0.1 },
+      "<" // overlap with left slices
+    );
+
+    // Overlaid text fades in
+    assemblyTl.fromTo(".assembly-text-overlay",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
+      "-=0.2"
+    );
   }, { scope: containerRef });
 
   return (
@@ -97,23 +126,23 @@ export default function Page() {
           <div className="relative z-20">
             <ScrollHero />
 
-            {/* Hero Section */}
-            <section className="relative h-screen flex items-center px-8 md:px-24 overflow-hidden">
-              <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative min-h-[500px]">
-
-                {/* Left: Heading and CTAs (full-bleed, breathing) */}
-                <div className="md:col-span-8 md:col-start-1 flex flex-col items-start text-left z-20 pl-2 md:pl-12">
+            {/* Redesigned Pinned Second Section with Image Assembly */}
+            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex items-center bg-[rgba(6,3,4,0.4)] backdrop-blur-md">
+              <div className="w-full px-[5.5vw] grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-20">
+                
+                {/* Left: Heading and CTAs */}
+                <div className="md:col-span-5 flex flex-col items-start text-left pl-2 md:pl-12">
                   <div className="flex items-center gap-3 mb-7 flex-wrap">
                     <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
                     <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
                     <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
                   </div>
-                  <h1 className="nb-display text-[clamp(64px,11vw,700px)] mb-1">
+                  <h1 className="nb-display text-[clamp(44px,6vw,70px)] mb-1 leading-none">
                     <span className="relative inline-block overflow-hidden py-2 -my-2">
                       <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
                     </span>
                   </h1>
-                  <h1 className="nb-thin nb-outline text-[clamp(64px,11vw,700px)] mb-6">
+                  <h1 className="nb-thin nb-outline text-[clamp(44px,6vw,70px)] mb-6 leading-none">
                     <span className="relative inline-block overflow-hidden py-2 -my-2">
                       <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
                     </span>
@@ -128,20 +157,79 @@ export default function Page() {
                   </div>
                 </div>
 
+                {/* Right/Center: Image Assembly Box */}
+                <div className="md:col-span-7 relative flex justify-center items-center">
+                  <div className="relative aspect-[1.784/1] w-full overflow-hidden border border-white/10 bg-black/40 shadow-2xl">
+                    
+                    {/* Slices of image */}
+                    {/* Slice 1: Top 25% */}
+                    <div 
+                      className="absolute inset-0 assembly-slice-left" 
+                      style={{ 
+                        backgroundImage: "url(/anime_robot.jpeg)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        clipPath: "inset(0% 0% 75% 0%)"
+                      }} 
+                    />
+                    {/* Slice 2: Upper Middle 25% */}
+                    <div 
+                      className="absolute inset-0 assembly-slice-right" 
+                      style={{ 
+                        backgroundImage: "url(/anime_robot.jpeg)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        clipPath: "inset(25% 0% 50% 0%)"
+                      }} 
+                    />
+                    {/* Slice 3: Lower Middle 25% */}
+                    <div 
+                      className="absolute inset-0 assembly-slice-left" 
+                      style={{ 
+                        backgroundImage: "url(/anime_robot.jpeg)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        clipPath: "inset(50% 0% 25% 0%)"
+                      }} 
+                    />
+                    {/* Slice 4: Bottom 25% */}
+                    <div 
+                      className="absolute inset-0 assembly-slice-right" 
+                      style={{ 
+                        backgroundImage: "url(/anime_robot.jpeg)",
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        clipPath: "inset(75% 0% 0% 0%)"
+                      }} 
+                    />
+
+                    {/* Dark scrim overlay for text readability */}
+                    <div className="absolute inset-0 bg-black/35 z-10 pointer-events-none" />
+
+                    {/* Integrated Manifesto Text Overlaid on Image */}
+                    <div 
+                      className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em]"
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                    >
+                      <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
+                      <p className="label-14 text-white/80">↳ to ship apps and agents</p>
+                      <p className="label-14 text-white/80">↳ automated by agents</p>
+                    </div>
+
+                    <div 
+                      className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right"
+                      style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
+                    >
+                      <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
+                    </div>
+
+                  </div>
+                </div>
+
               </div>
 
-              {/* Manifesto — anchored bottom-right of the hero, with a scrim for legibility */}
-              <div className="absolute bottom-28 right-8 md:right-24 z-20 flex flex-col items-end text-right lowercase tracking-[0.14em] font-medium
-                              px-6 py-5 bg-[rgba(6,3,4,0.72)] backdrop-blur-[18px] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_48px_-24px_rgba(0,0,0,0.75)]">
-                <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
-                <p className="label-16 text-white/75">↳ to ship apps and agents</p>
-                <p className="label-16 text-white/75">↳ automated by agents</p>
-                <div className="tech-line w-28 my-3 self-end" />
-                <p className="label-16 text-[var(--red-700)]">settled on casper · live on-chain</p>
-              </div>
-
-              {/* Bottom Partner Logos */}
-              <div className="absolute bottom-8 left-0 right-0 w-full px-8 md:px-16 flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20">
+              {/* Bottom Partner Logos (embedded in the section flow so they show on completion) */}
+              <div className="absolute bottom-8 left-0 right-0 w-full px-[5.5vw] flex flex-wrap justify-between items-center gap-6 border-t border-white/5 pt-6 z-20 max-lg:hidden">
                 <div className="w-full max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-8 text-white/20 text-xs tracking-widest font-mono">
                   <span className="font-bold hover:text-white/40 transition-colors cursor-crosshair link-sweep">BLACKBOX.AI</span>
                   <span className="font-extrabold tracking-tighter hover:text-white/40 transition-colors cursor-crosshair link-sweep">HH</span>
