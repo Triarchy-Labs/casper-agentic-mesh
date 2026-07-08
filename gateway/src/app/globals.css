@@ -261,14 +261,9 @@ input:focus, textarea:focus, select:focus {
    (not generic gray), an inner top highlight, and a soft ambient shadow instead
    of a harsh drop shadow. Sharp corners kept — that's our identity. */
 .editorial-panel {
-  background-color: rgb(8, 5, 7);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  background-color: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0px;
-  backdrop-filter: blur(18px) saturate(1.05);
-  -webkit-backdrop-filter: blur(18px) saturate(1.05);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 24px 48px -24px rgba(0, 0, 0, 0.75);
   position: relative;
   z-index: 10;
   display: flex;
@@ -283,13 +278,11 @@ input:focus, textarea:focus, select:focus {
 }
 /* Hover: the focused card lifts and scales up (produx focus pattern). */
 .editorial-panel:hover {
-  background-color: rgb(12, 7, 9);
-  border-color: rgba(241, 50, 66, 0.40);
+  background-color: #000000;
+  border-color: rgba(255, 255, 255, 0.25);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.10),
-    0 30px 70px -22px rgba(0, 0, 0, 0.85),
-    0 0 0 1px rgba(241, 50, 66, 0.14),
-    0 0 40px -8px rgba(241, 50, 66, 0.18);
+    0 30px 70px -22px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   transform: translateY(-2px) scale(1.02);
   z-index: 12;
 }
@@ -320,7 +313,7 @@ input:focus, textarea:focus, select:focus {
 .panel-cta-square {
   width: 14px;
   height: 14px;
-  background: var(--red-700);
+  background: var(--gray-1000);
   flex-shrink: 0;
 }
 .panel-cta-text {
@@ -576,8 +569,8 @@ body {
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(60% 50% at 0% 50%, rgba(241,50,66,0.30), transparent 70%),
-    linear-gradient(90deg, rgba(241,50,66,0.16) 0%, transparent 72%);
+    radial-gradient(60% 50% at 0% 50%, rgba(255,255,255,0.10), transparent 70%),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 72%);
   filter: blur(6px);
   animation: edgeBreathe 7s ease-in-out infinite;
 }
@@ -586,8 +579,8 @@ body {
   position: absolute;
   top: 0; left: 0;
   width: 2px; height: 100%;
-  background: linear-gradient(180deg, transparent, var(--red-700) 18%, var(--red-900) 50%, var(--red-700) 82%, transparent);
-  box-shadow: 0 0 22px 3px rgba(241,50,66,0.55), 0 0 60px 8px rgba(241,50,66,0.25);
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.3) 18%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.3) 82%, transparent);
+  box-shadow: 0 0 22px 3px rgba(255,255,255,0.15), 0 0 60px 8px rgba(255,255,255,0.08);
 }
 @keyframes edgeBreathe {
   0%, 100% { opacity: 0.75; }
@@ -702,23 +695,25 @@ html.lenis, html.lenis body { height: auto; }
   -webkit-text-stroke: 1.4px rgba(255,233,237,0.5);
   text-stroke: 1.4px rgba(255,233,237,0.5);
 }
-/* hard red highlight block behind a word */
+/* hard white highlight block behind a word */
 .nb-hl {
-  background: var(--red-700);
-  color: #0a0204;
+  background: var(--gray-1000);
+  color: #000000;
   padding: 0 0.22em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-/* mono HUD tag chip — [ 23 // MESH ] */
+/* mono HUD tag chip / acrylic tag */
 .nb-tag {
   font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--red-1000);
-  border: 1px solid rgba(241,50,66,0.5);
-  padding: 4px 10px;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 4px 12px;
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(241,50,66,0.06);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 .nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
 /* diagonal slash motif from techwear refs */
@@ -757,7 +752,7 @@ html.lenis, html.lenis body { height: auto; }
 /* recolor the grey fabric into deep racing red — keeps the weave/fold luminance */
 .carbon-tint {
   position: absolute; inset: 0;
-  background: linear-gradient(160deg, #7a1020 0%, #b81e2e 45%, #5c0d18 100%);
+  background: linear-gradient(160deg, #111 0%, #222 45%, #050505 100%);
   mix-blend-mode: color;
   opacity: 0.72;
 }
@@ -765,7 +760,7 @@ html.lenis, html.lenis body { height: auto; }
 .carbon-backlight {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(120% 70% at 50% 118%, rgba(241,80,95,0.16), transparent 60%);
+  background: radial-gradient(120% 70% at 50% 118%, rgba(255,255,255,0.08), transparent 60%);
 }
 /* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
    (kicks in only near the corners, so the fabric centre stays fully visible). */

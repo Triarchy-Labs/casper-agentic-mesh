@@ -296,7 +296,7 @@ export default function Dashboard() {
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
                     <div className="col-span-12 mb-4">
                         <div className="text-xs tracking-[0.3em] text-white/40 mb-6 pb-3 border-b border-white/10 flex items-center gap-3">
-                            <span className="text-[var(--red-700)]">◢◤</span> MESH_CONTROL <span className="text-white/25">// overseer · adversarial court</span>
+                            <span className="text-[var(--gray-1000)]">◢◤</span> MESH_CONTROL <span className="text-white/25">// overseer · adversarial court</span>
                         </div>
                     </div>
                     <MeshControl />
@@ -350,7 +350,7 @@ export default function Dashboard() {
                                 <CornerMarks />
                                 <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
                                     <span>ON-CHAIN STATE · CASPER TESTNET</span>
-                                    <span className={onchain ? "text-[var(--red-700)]" : "text-white/30"}>
+                                    <span className={onchain ? "text-[var(--gray-1000)]" : "text-white/30"}>
                                         {onchain ? "● LIVE" : "○ …"}
                                     </span>
                                 </div>
@@ -436,8 +436,8 @@ export default function Dashboard() {
 								<CornerMarks />
 								<div className="z-10">
 									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-										<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
-										<span className="text-[10px] font-mono px-2 py-0.5 border border-[var(--red-700)] text-[var(--red-700)]">ACTIVE</span>
+										<span className="text-xs font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
+										<span className="nb-tag">ACTIVE</span>
 									</div>
 
 									{/* Gas Futures Tracker */}
@@ -476,19 +476,19 @@ export default function Dashboard() {
 										<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
 										<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
 											<div className="flex items-center gap-2">
-												<span className="text-[var(--red-700)]">[Orchestrator]</span>
+												<span className="text-[var(--gray-1000)]">[Orchestrator]</span>
 												<span className="text-white/40">mark_53_sarcophagus</span>
 											</div>
 											<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
 												<div className="flex items-center gap-2">
 													<span className="text-white/40">├── [Sub-Escrow A]</span>
 													<span className="text-white font-bold">credio_risk_monitor</span>
-													<span className="text-[var(--red-700)] text-[10px]">(Risk Analysis: SECURE)</span>
+													<span className="text-[var(--gray-600)] text-[10px]">(Risk Analysis: SECURE)</span>
 												</div>
 												<div className="flex items-center gap-2">
 													<span className="text-white/40">├── [Sub-Escrow B]</span>
 													<span className="text-white font-bold">agent_alpha_arbitrage</span>
-													<span className="text-[var(--red-700)] text-[10px]">(Claiming: 420.5 CSPR)</span>
+													<span className="text-[var(--gray-600)] text-[10px]">(Claiming: 420.5 CSPR)</span>
 												</div>
 												<div className="flex items-center gap-2">
 													<span className="text-white/40">└── [Sub-Escrow C]</span>
@@ -516,8 +516,8 @@ export default function Dashboard() {
 								<CornerMarks />
 								<div className="z-10">
 									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-										<span className="text-xs font-mono text-[var(--red-700)] font-bold tracking-widest">ABSOLUTE_SYNERGY</span>
-										<span className="text-[10px] font-mono px-2 py-0.5 border border-white/20 text-white/60">LOAD_BALANCER</span>
+										<span className="text-xs font-mono text-[var(--gray-1000)] font-bold tracking-widest">ABSOLUTE_SYNERGY</span>
+										<span className="nb-tag">LOAD_BALANCER</span>
 									</div>
 
 									{/* P2P Load Balancer / Latency Map */}
@@ -526,7 +526,7 @@ export default function Dashboard() {
 										<div className="grid grid-cols-6 gap-2">
 											{meshLoad.map((val, idx) => {
 												let boxColor = "bg-white/10 border-white/10";
-												if (val > 80) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.3)] animate-pulse";
+												if (val > 80) boxColor = "bg-[var(--gray-1000)] border-[var(--gray-1000)] shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse";
 												else if (val > 40) boxColor = "bg-white/40 border-white/40";
 												
 												return (
@@ -561,7 +561,7 @@ export default function Dashboard() {
 															setL402Console("// Console reset. Ready to challenge L402 gate");
 														}
 													}}
-													className="px-3 py-1 bg-[var(--red-700)] text-white font-bold text-[9px] uppercase tracking-wider"
+													className="px-3 py-1 bg-[var(--gray-1000)] text-[#000000] font-bold text-[9px] uppercase tracking-wider"
 												>
 													{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
 												</button>

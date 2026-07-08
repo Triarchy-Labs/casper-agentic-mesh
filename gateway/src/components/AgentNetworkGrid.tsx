@@ -43,11 +43,11 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 
 	let statusColor = "var(--gray-700)";
 	if (agent.status === "ACTIVE") statusColor = "var(--gray-1000)";
-	else if (agent.status === "QUARANTINED") statusColor = "var(--red-700)";
-	else if (agent.status === "GOLDEN_TEMPLATE") statusColor = "var(--red-700)";
+	else if (agent.status === "QUARANTINED") statusColor = "var(--gray-1000)";
+	else if (agent.status === "GOLDEN_TEMPLATE") statusColor = "var(--gray-1000)";
 
 	let borderColor = isQuarantined 
-		? "var(--red-700)" 
+		? "var(--gray-800)" 
 		: hovered 
 			? "var(--gray-600)"
 			: "var(--gray-400)";
@@ -79,7 +79,7 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 				cursor: "crosshair",
 				transition: "background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease",
 				boxShadow: isMark53 
-					? "0 0 40px rgba(241, 50, 66, 0.15)"
+					? "0 0 40px rgba(255, 255, 255, 0.15)"
 					: hovered 
 						? "0 20px 40px rgba(0,0,0,0.5)" 
 						: "none",
@@ -169,8 +169,8 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 									fontSize: "9px",
 									fontWeight: "bold",
 									cursor: "pointer",
-									backgroundColor: "var(--red-700)",
-									color: "#fff",
+									backgroundColor: "var(--gray-1000)",
+									color: "#000",
 									opacity: hovered ? 1 : 0.8
 								}}
 							>

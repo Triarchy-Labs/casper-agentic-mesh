@@ -210,7 +210,7 @@ const BountiesPage = () => {
 					className="mb-[48px]"
 				>
 					<div className="flex items-center gap-3 mb-6 flex-wrap">
-						<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> x402 arbitrage mesh · live</span>
+						<span className="nb-tag"><span className="text-[var(--gray-1000)]">◆</span> x402 arbitrage mesh · live</span>
 						<span className="nb-index">/// escrow · proofs · zero-trust</span>
 					</div>
 					<motion.h1
@@ -220,7 +220,7 @@ const BountiesPage = () => {
 						className="heading-56 mb-[16px]"
 					>
 						<span className="text-[var(--gray-700)] mr-[16px]"><motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 2 }}>_</motion.span></span>
-						Sovereign <span className="text-[var(--red-700)] drop-shadow-[0_0_15px_rgba(255,0,0,0.4)]">Bounty Board</span>
+						Sovereign <span className="text-[var(--gray-1000)]">Bounty Board</span>
 					</motion.h1>
 					
 					<p className="copy-16 mb-[32px] max-w-3xl">
@@ -294,7 +294,7 @@ const BountiesPage = () => {
 									setDirective(`Execute ${bounty.title} under Triarchy protocol guidelines.\nRequire: ${bounty.skills.join(', ')} expertise.\nPriority: ${bounty.difficulty}`);
 									setReward(bounty.bounty.split(' ')[0].replace(/,/g, ''));
 								}}
-								className={`grid grid-cols-[2fr_1fr] md:grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[16px] md:p-[24px] border rounded-none cursor-pointer relative transition-[transform,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${hoverIndex === i ? 'bg-[rgba(241,50,66,0.06)] border-[rgba(241,50,66,0.4)] shadow-[0_0_24px_-6px_rgba(241,50,66,0.25)] translate-x-[2px]' : 'bg-[rgba(9,4,6,0.42)] border-[rgba(255,255,255,0.09)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]'}`}
+								className={`grid grid-cols-[2fr_1fr] md:grid-cols-[1fr_3fr_1.5fr_1fr] items-center p-[16px] md:p-[24px] border rounded-none cursor-pointer relative transition-[transform,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${hoverIndex === i ? 'bg-[rgba(255,255,255,0.05)] border-[rgba(255,255,255,0.25)] shadow-[0_0_24px_-6px_rgba(255,255,255,0.15)] translate-x-[2px]' : 'bg-[#000000] border-[rgba(255,255,255,0.09)] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]'}`}
 							>
 								<CornerMarks />
 								<span className="hidden md:inline label-14-mono text-[var(--gray-600)] z-10">{bounty.id}</span>
@@ -308,12 +308,12 @@ const BountiesPage = () => {
 									</div>
 								</div>
 								<div className="flex flex-col items-end md:items-start gap-[4px] z-10">
-									<span className="label-14-mono text-[var(--red-700)] font-bold">{bounty.bounty}</span>
-									<span className={`inline md:hidden label-12-mono ${bounty.status === "OPEN" ? "text-[var(--red-700)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+									<span className="label-14-mono text-[var(--gray-1000)] font-bold">{bounty.bounty}</span>
+									<span className={`inline md:hidden label-12-mono ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
 										[{bounty.status}]
 									</span>
 								</div>
-								<span className={`hidden md:inline text-right label-14-mono z-10 ${bounty.status === "OPEN" ? "text-[var(--red-700)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+								<span className={`hidden md:inline text-right label-14-mono z-10 ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
 									[{bounty.status}]
 								</span>
 							</motion.div>
@@ -337,19 +337,19 @@ const BountiesPage = () => {
 								placeholder="Define directive... (e.g. 'Audit this smart contract...')"
 								value={directive}
 								onChange={(e) => setDirective(e.target.value)}
-								className="w-full min-h-[120px] bg-[var(--background-100)] border border-[var(--gray-500)] rounded-none p-[16px] text-[var(--gray-1000)] label-14-mono resize-none outline-none focus:border-[var(--red-700)] mb-[16px] transition-colors z-10"
+								className="w-full min-h-[120px] bg-[var(--background-100)] border border-[var(--gray-500)] rounded-none p-[16px] text-[var(--gray-1000)] label-14-mono resize-none outline-none focus:border-[var(--gray-1000)] mb-[16px] transition-colors z-10"
 							/>
 							
 							<div className="flex justify-between mb-[24px] gap-[8px] z-10">
 								<button className="button-secondary w-full label-14-mono" style={{ height: '32px', fontSize: '10px' }}>+ FILES</button>
-								<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-[var(--background-100)] border border-[var(--red-700)] text-[var(--red-700)] px-[8px] rounded-none label-14-mono text-right outline-none" />
+								<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-[var(--background-100)] border border-[var(--gray-700)] text-[var(--gray-1000)] px-[8px] rounded-none label-14-mono text-right outline-none" />
 							</div>
 
 							<button 
 								onClick={handleEscrow}
 								disabled={!directive.trim() || escrowStatus === "working"}
 								className={`w-full button-primary label-14-mono font-bold tracking-widest uppercase transition-all z-10 ${
-									escrowStatus === "error" ? "bg-[var(--red-800)] text-white" :
+									escrowStatus === "error" ? "bg-[var(--gray-800)] text-white" :
 									escrowStatus === "working" ? "cursor-wait" : ""
 								}`}
 								style={{ height: "48px" }}
@@ -357,14 +357,14 @@ const BountiesPage = () => {
 								{escrowStatus === "working" ? "[ DEPLOYING... ]" : escrowStatus === "success" ? "[ ✓ DEPLOYED ]" : "[ ESCROW & DEPLOY ]"}
 							</button>
 							{escrowResult && (
-								<div className={`mt-[12px] p-[8px] border rounded-[4px] text-[10px] label-14-mono ${escrowStatus === "success" ? "border-[var(--gray-500)] text-[var(--gray-1000)]" : "border-[var(--red-700)] text-[var(--red-700)]"}`}>
+								<div className={`mt-[12px] p-[8px] border rounded-[4px] text-[10px] label-14-mono ${escrowStatus === "success" ? "border-[var(--gray-500)] text-[var(--gray-1000)]" : "border-[var(--gray-700)] text-[var(--gray-600)]"}`}>
 									{escrowResult}
 								</div>
 							)}
 
 							<div className="mt-[32px] pt-[24px] border-t border-dashed border-[var(--gray-500)]">
 								<h4 className="label-14-mono text-[var(--gray-700)] mb-[8px]">AUTONOMOUS INGESTION (CURL):</h4>
-								<pre className="bg-[var(--background-100)] p-[12px] rounded-[6px] border border-[var(--gray-500)] text-[10px] text-[var(--red-700)] overflow-x-auto">
+								<pre className="bg-[var(--background-100)] p-[12px] rounded-[6px] border border-[var(--gray-500)] text-[10px] text-[var(--gray-600)] overflow-x-auto">
 									<code>
 										{"// Triarchy Bot A2A Hook\nPOST /api/orchestrator/v1/bounties\n{\n  \"bot_pubkey\": \"0157077a83d3e680a65bb74a1dc534065607da1b17a02c342f026a7e08bb2569ff\",\n  \"action\": \"claim\",\n  \"quest_id\": \"Q-1049\"\n}"}
 									</code>
@@ -396,8 +396,8 @@ const BountiesPage = () => {
 								<CornerMarks />
 								<div className="z-10">
 									<div className="flex justify-between items-center mb-[20px]">
-										<span className="label-14-mono text-[var(--red-700)] font-bold">LIVE STREAM</span>
-										<span className="label-12-mono px-[8px] py-[2px] bg-red-950/40 text-[var(--red-700)] border border-[var(--red-700)]">ACTIVE</span>
+										<span className="label-14-mono text-[var(--gray-1000)] font-bold">LIVE STREAM</span>
+										<span className="nb-tag">ACTIVE</span>
 									</div>
 
 									{/* Streaming Counter */}
@@ -406,7 +406,7 @@ const BountiesPage = () => {
 										<div className="heading-40 font-mono text-[var(--gray-1000)] tracking-tight">
 											{streamedTokens.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
 										</div>
-										<div className="label-12-mono text-[var(--red-700)] mt-[4px]">▲ FLOW RATE: 0.000185 CSPR/sec</div>
+										<div className="label-12-mono text-[var(--gray-600)] mt-[4px]">▲ FLOW RATE: 0.000185 CSPR/sec</div>
 									</div>
 
 									{/* Jury Swarm Disputes */}
@@ -415,12 +415,12 @@ const BountiesPage = () => {
 										<div className="flex flex-col gap-[12px]">
 											{[
 												{ id: "DISPUTE_C-8902", desc: "WASM mismatch on cargo-run hash", status: "8/12 SENTINELS", votes: "YES (Slash Operator): 78% | NO (Pay): 22%", border: "border-[var(--gray-400)]" },
-												{ id: "DISPUTE_C-1104", desc: "Double-claim signature breach", status: "11/12 SENTINELS", votes: "YES (Slash Operator): 100% | NO: 0%", border: "border-[var(--red-700)]" }
+												{ id: "DISPUTE_C-1104", desc: "Double-claim signature breach", status: "11/12 SENTINELS", votes: "YES (Slash Operator): 100% | NO: 0%", border: "border-[var(--gray-1000)]" }
 											].map((dispute, idx) => (
 												<div key={idx} className={`p-[16px] border ${dispute.border} bg-transparent flex flex-col gap-[4px]`}>
 													<div className="flex justify-between items-center label-12-mono">
 														<span className="text-[var(--gray-1000)] font-bold">{dispute.id}</span>
-														<span className="text-[var(--red-700)]">{dispute.status}</span>
+														<span className="text-[var(--gray-1000)]">{dispute.status}</span>
 													</div>
 													<div className="copy-14 text-[var(--gray-700)]">{dispute.desc}</div>
 													<div className="label-12-mono text-[var(--gray-600)] mt-[4px]">{dispute.votes}</div>
@@ -450,9 +450,9 @@ const BountiesPage = () => {
 								<CornerMarks />
 								<div className="z-10">
 									<div className="flex justify-between items-center mb-[20px]">
-										<span className="label-14-mono text-[var(--red-700)] font-bold">PRE-TRADE_RISK_ORACLE</span>
-										<span className={`label-12-mono px-[8px] py-[2px] border ${sandboxStatus === "SUCCESS" ? "bg-green-950/20 text-white border-white" : "bg-red-950/20 text-[var(--red-700)] border-[var(--red-700)]"}`}>
-											{sandboxStatus}
+										<span className="label-14-mono text-[var(--gray-1000)] font-bold">PRE-TRADE_RISK_ORACLE</span>
+										<span className="nb-tag">
+											{sandboxStatus === "IDLE" ? "SHADOW DEPLOY" : sandboxStatus}
 										</span>
 									</div>
 
@@ -461,7 +461,7 @@ const BountiesPage = () => {
 										<div className="label-12-mono text-[var(--gray-600)] mb-[8px]">SANDBOX SIMULATION CONSOLE</div>
 										<div className="bg-black/80 p-[16px] font-mono text-[11px] leading-relaxed text-white border border-[var(--gray-400)] overflow-y-auto h-[140px] flex flex-col gap-[6px]">
 											{sandboxLog.map((log, idx) => (
-												<div key={idx} className={`${idx === sandboxLog.length - 1 ? "text-[var(--red-700)] font-bold" : "text-white"}`}>
+												<div key={idx} className={`${idx === sandboxLog.length - 1 ? "text-[var(--gray-1000)] font-bold" : "text-white"}`}>
 													{log}
 												</div>
 											))}
