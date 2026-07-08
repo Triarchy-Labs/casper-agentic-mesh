@@ -97,7 +97,7 @@ export function Nav() {
         setShowDisconnect(false);
     };
 
-	const contentText = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : walletMissing ? "GET CASPER WALLET" : "CONNECT WALLET";
+	const contentText = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : "WALLET";
 
 	return (
 		<>
@@ -219,13 +219,8 @@ export function Nav() {
 							<span className="label-14-mono">DISCONNECT</span>
 						</motion.div>
 
-						<div 
-							onClick={() => setMenuOpen(!menuOpen)}
-							className="relative lg:hidden flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
-						>
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.25px]" : ""}`} />
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.25px]" : ""}`} />
+						<div onClick={() => setMenuOpen(!menuOpen)} className="z-[100]">
+							<BracketLink label={menuOpen ? "CLOSE" : "MENU"} />
 						</div>
 					</div>
 				</nav>

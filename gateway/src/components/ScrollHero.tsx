@@ -264,14 +264,9 @@ export function ScrollHero() {
 						<BracketLink label="DASHBOARD" href="/dashboard" />
 					</div>
 					<div className="flex items-center gap-[4.1vw]">
-						<BracketLink label="CONNECT WALLET" />
-						<div 
-							onClick={() => setMenuOpen(!menuOpen)}
-							className="relative lg:hidden flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
-						>
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.25px]" : ""}`} />
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-[6.25px]" : ""}`} />
+						<BracketLink label="WALLET" />
+						<div onClick={() => setMenuOpen(!menuOpen)} className="z-[100]">
+							<BracketLink label={menuOpen ? "CLOSE" : "MENU"} />
 						</div>
 					</div>
 				</nav>
