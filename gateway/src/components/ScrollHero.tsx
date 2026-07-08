@@ -1,6 +1,10 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent } from "framer-motion";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+
+gsap.registerPlugin(CustomEase);
 
 // produx's signature scroll ease + scrub:1.5 smoothing, extracted from their bundle.
 const PX_EASE = [0.2, 0.6, 0.35, 1] as const;
@@ -105,6 +109,31 @@ export function ScrollHero() {
 		window.addEventListener("mousemove", onMove);
 		return () => window.removeEventListener("mousemove", onMove);
 	}, [rawX, rawY]);
+
+	useEffect(() => {
+		CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1");
+		gsap.fromTo(".logo-letter",
+			{ y: "110%", opacity: 0 },
+			{
+				y: "0%",
+				opacity: 1,
+				duration: 1.4,
+				stagger: 0.07,
+				delay: 0.6,
+				ease: "natureSway",
+			}
+		);
+		gsap.fromTo(".logo-subtitle",
+			{ y: "20px", opacity: 0 },
+			{
+				y: "0px",
+				opacity: 1,
+				duration: 1.1,
+				delay: 0.9,
+				ease: "power4.out",
+			}
+		);
+	}, []);
 
 	// Giant wordmark shrinks + rises + fades over the first ~520px of scroll.
 	const wmScale = useTransform(smoothY, [0, 740], [1, 0.2]);
@@ -239,10 +268,16 @@ export function ScrollHero() {
 							textShadow: "0 8px 60px rgba(0,0,0,0.6)",
 						}}
 					>
-						TRIARCHY
+						{"TRIARCHY".split("").map((letter, i) => (
+							<span key={i} className="relative inline-block overflow-hidden py-4 -my-4">
+								<span className="logo-letter inline-block translate-y-full opacity-0">
+									{letter}
+								</span>
+							</span>
+						))}
 					</div>
 					<div
-						className="neon-sweep"
+						className="neon-sweep logo-subtitle opacity-0"
 						style={{
 							marginTop: "1.4rem",
 							fontFamily: "ui-monospace, 'Geist Mono', monospace",
