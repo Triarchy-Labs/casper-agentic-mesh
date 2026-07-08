@@ -26,6 +26,39 @@ export default function Page() {
 
   // GSAP Cinematic Transitions & Pinning (Brutalist Aesthetic)
   useGSAP(() => {
+    // 1. Entrance animation timeline (starts immediately on mount, which is after loader unmounts)
+    const tl = gsap.timeline();
+
+    tl.fromTo(".hero-tag-animate", 
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
+    );
+
+    tl.fromTo(".hero-split-word",
+      { y: "100%", opacity: 0 },
+      { y: "0%", opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" },
+      "-=0.6"
+    );
+
+    tl.fromTo(".hero-sub-line",
+      { scaleX: 0 },
+      { scaleX: 1, duration: 1, transformOrigin: "left center", ease: "power3.out" },
+      "-=0.8"
+    );
+
+    tl.fromTo(".hero-sub-text",
+      { opacity: 0, x: -10 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+      "-=0.6"
+    );
+
+    tl.fromTo(".hero-btn-animate",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" },
+      "-=0.6"
+    );
+
+    // 2. ScrollTrigger animations for sections
     const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
     sections.forEach((section) => {
       gsap.fromTo(section, 
@@ -71,23 +104,27 @@ export default function Page() {
                 {/* Left: Heading and CTAs (full-bleed, breathing) */}
                 <div className="md:col-span-8 md:col-start-1 flex flex-col items-start text-left z-20 pl-2 md:pl-12">
                   <div className="flex items-center gap-3 mb-7 flex-wrap">
-                    <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
-                    <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
-                    <span className="nb-index">𝟐𝟎𝟐𝟔</span>
+                    <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
+                    <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
+                    <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
                   </div>
                   <h1 className="nb-display text-[clamp(64px,11vw,700px)] mb-1">
-                    Agentic
+                    <span className="relative inline-block overflow-hidden py-2 -my-2">
+                      <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
+                    </span>
                   </h1>
                   <h1 className="nb-thin nb-outline text-[clamp(64px,11vw,700px)] mb-6">
-                    Infrastructure
+                    <span className="relative inline-block overflow-hidden py-2 -my-2">
+                      <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
+                    </span>
                   </h1>
                   <div className="flex items-center gap-4 mb-9 w-full max-w-xl">
-                    <div className="tech-line flex-1" />
-                    <span className="nb-index whitespace-nowrap">escrow · tribunal · oracle · the tower</span>
+                    <div className="tech-line flex-1 hero-sub-line origin-left" />
+                    <span className="nb-index whitespace-nowrap hero-sub-text">escrow · tribunal · oracle · the tower</span>
                   </div>
                   <div className="flex gap-4 flex-wrap">
-                    <button className="button-primary inline-flex items-center">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
-                    <button className="btn-ghost">Talk to Sales</button>
+                    <button className="button-primary inline-flex items-center hero-btn-animate">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
+                    <button className="btn-ghost hero-btn-animate">Talk to Sales</button>
                   </div>
                 </div>
 
