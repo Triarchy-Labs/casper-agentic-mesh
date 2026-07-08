@@ -313,7 +313,36 @@ export default function Dashboard() {
                     </div>
                     <MeshControl />
 
-                    {/* Execution Terminal (8 cols) */}
+                    {/* SWARM TELEMETRY (Row 2 - Dedicated Full Width Card styled like Jurni AI) */}
+                    <div className="col-span-12 flex flex-col grid-item mb-[5vh]">
+                        <div className="editorial-panel block relative w-full aspect-video md:aspect-[21/9] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+                            {/* Produx Visual Background */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                            <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            
+                            <div className="absolute inset-0 flex items-center justify-center z-10">
+                                <AgentOrb state={agentState} size={180} />
+                                {agentState === "exhausted" && (
+                                    <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
+                                )}
+                            </div>
+                            <div className="absolute bottom-6 right-6 flex gap-3 z-20">
+                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Emotional State</span>
+                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Neural Link</span>
+                                <span className="px-3 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[10px] tracking-widest text-white/50 uppercase">Telemetry</span>
+                            </div>
+                        </div>
+                        <div className="mt-[4vh] project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
+                            <div className="flex flex-col gap-[0.73vw]">
+                                <h3 className="heading-32 leading-tight">Swarm Telemetry</h3>
+                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Agent emotional state monitor.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Execution Terminal (Row 3 - Left 8 cols) */}
                     <div className="col-span-12 md:col-span-8 flex flex-col grid-item relative">
                         <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[65vh] flex flex-col flex-1">
                             {/* Produx Visual Background */}
@@ -403,36 +432,18 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    {/* Telemetry & Nodes (4 cols) */}
+                    {/* WASI Nodes (Row 3 - Right 4 cols) */}
                     <div className="col-span-12 md:col-span-4 flex flex-col grid-item">
-                        <div className="flex flex-col gap-8 flex-1">
-                            {/* Agent Stage */}
-                            <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] h-[250px]">
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
-                                <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
-                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
-                                
-                                <div className="p-[2.22vw] relative z-10 flex items-center justify-center h-full w-full">
-                                    <CornerMarks />
-                                    <AgentOrb state={agentState} size={168} />
-                                    {agentState === "exhausted" && (
-                                        <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
-                                    )}
+                        <div className="editorial-panel block relative w-full aspect-[4/3] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                            <div className="absolute inset-0 opacity-[0.1]" style={{ background: "radial-gradient(circle at 50% 100%, var(--red-500) 0%, transparent 70%)" }} />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            
+                            <div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center">
+                                <div className="text-xs tracking-widest text-white/40 uppercase mb-5 pb-3 border-b border-white/10 z-10">
+                                    ACTIVE_NODES
                                 </div>
-                            </div>
-
-                            {/* WASI Nodes */}
-                            <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] flex-1">
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
-                                <div className="absolute inset-0 opacity-[0.1]" style={{ background: "radial-gradient(circle at 50% 100%, var(--red-500) 0%, transparent 70%)" }} />
-                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
-                                
-                                <div className="p-[2.22vw] relative z-10 h-full">
-                                    <CornerMarks />
-                                    <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
-                                        ACTIVE_NODES
-                                    </div>
-                                    <div className="flex flex-col gap-4">
+                                <div className="flex flex-col gap-3">
                                     {wasiNodes.length > 0 ? wasiNodes.map((node) => (
                                         <div key={node.id} className="flex justify-between items-center text-xs">
                                             <div className="flex items-center gap-3">
@@ -444,16 +455,18 @@ export default function Dashboard() {
                                     )) : (
                                         <div className="text-xs text-white/30 animate-pulse">POLLING TELEMETRY...</div>
                                     )}
-                                    </div>
                                 </div>
                             </div>
+                            <div className="absolute bottom-4 right-4 flex gap-2 z-20">
+                                <span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">WASI Swarm</span>
+                                <span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">Telemetry</span>
+                            </div>
                         </div>
-                        
                         <div className="mt-[4vh] project-info-trigger relative flex w-full">
-                            <div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 transition-colors group-hover:bg-white/20"></div>
-                            <div className="flex flex-col gap-[0.73vw]">
-                                <h3 className="heading-32 leading-tight">Swarm Telemetry</h3>
-                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Agent emotional state and active WASI Nodes cluster ping.</p>
+                            <div className="my-[1.2vh] mr-[0.8vw] size-[0.5vw] border border-[#303030] shrink-0 mt-1"></div>
+                            <div className="flex flex-col gap-[0.5vw]">
+                                <h3 className="heading-32 leading-tight">WASI Swarm</h3>
+                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Active sandbox nodes cluster ping.</p>
                             </div>
                         </div>
                     </div>
