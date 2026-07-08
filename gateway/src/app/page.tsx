@@ -261,8 +261,12 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-[0.08] group-hover:opacity-[0.20] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
-                        style={{ backgroundImage: "url(/vector_escrow.jpeg)" }}
+                        className="absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
+                        style={{ 
+                          backgroundImage: "url(/vector_escrow.jpeg)",
+                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
+                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
+                        }}
                       />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
