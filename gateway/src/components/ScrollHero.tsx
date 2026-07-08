@@ -45,7 +45,8 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 				alignItems: "center",
 				gap: 6,
 				fontFamily: "ui-monospace, 'Geist Mono', monospace",
-				fontSize: "clamp(13px,1.2vw,58px)",
+				fontSize: "clamp(13px,0.97vw,24px)",
+				fontWeight: 200,
 				letterSpacing: "0.18em",
 				color: hovered ? "#fff" : "rgba(255,255,255,0.66)",
 				textDecoration: "none",
@@ -216,7 +217,6 @@ export function ScrollHero() {
 				[ scroll down ]
 			</motion.div>
 
-			{/* fixed top bar: docked logo + animated bracket nav (fades in on scroll) */}
 			<motion.header
 				className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5.5vw] pt-[8vh] max-lg:px-[4.10vw] max-lg:pt-[9.59vh] max-sm:px-[5.97vw] max-sm:pt-[11.3vh]"
 				style={{
@@ -226,7 +226,7 @@ export function ScrollHero() {
 					pointerEvents: "auto",
 				}}
 			>
-				<span style={{ fontWeight: 700, letterSpacing: "0.16em", fontSize: "clamp(16px,1.9vw,90px)" }}>
+				<span style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, letterSpacing: "0.16em", fontSize: "clamp(14px,1.1vw,24px)" }}>
 					TRIARCHY{" "}
 					<motion.span
 						style={{ color: "#f13242", display: "inline-block" }}
@@ -267,7 +267,7 @@ export function ScrollHero() {
 						<BracketLink label="CONNECT WALLET" />
 						<div 
 							onClick={() => setMenuOpen(!menuOpen)}
-							className="relative flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
+							className="relative lg:hidden flex h-[14px] w-[35px] flex-col justify-between overflow-hidden cursor-pointer max-sm:h-[13px] max-sm:w-[32px] group z-[100]"
 						>
 							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-[6.25px]" : ""}`} />
 							<div className={`bg-white h-[1.5px] w-full max-sm:h-[1px] transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
