@@ -200,7 +200,7 @@ export default function Page() {
               </div>
 
               {/* Center/Bottom: Image Assembly Box */}
-              <div className="assembly-image-container relative w-[82vw] max-w-[1300px] aspect-[1.784/1] z-10 pointer-events-auto mt-[12vh] max-lg:w-[90vw] max-lg:max-w-none">
+              <div className="assembly-image-container relative w-[80vw] max-w-[1600px] aspect-[1.784/1] z-10 pointer-events-auto mt-[10vh] max-lg:w-[90vw] max-lg:max-w-none">
                 
                 {/* 12 Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
                 {pieces.map((p) => (
