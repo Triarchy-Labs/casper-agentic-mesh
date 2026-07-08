@@ -125,16 +125,16 @@ export default function Page() {
       ease: "power2.in",
     }, 3.0);
 
-    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge (0.8 to 3.2)
+    // 12 Slices fade in from opacity 0 to initialOpacity (0.8 to 1.6) and then merge (1.6 to 3.4)
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
         { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
         { opacity: p.initialOpacity, duration: 0.8, ease: "power1.inOut" },
-        0.0
+        0.8
       );
       assemblyTl.to(`.assembly-slice-${p.id}`,
-        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 2.4 },
-        0.8
+        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 1.8 },
+        1.6
       );
     });
 
