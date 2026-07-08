@@ -86,7 +86,7 @@ export default function Page() {
                     <span className="nb-index whitespace-nowrap">escrow · tribunal · oracle · the tower</span>
                   </div>
                   <div className="flex gap-4 flex-wrap">
-                    <button className="btn-neon inline-flex items-center">Deploy Now<span className="btn-icon-circle">↗</span></button>
+                    <button className="button-primary inline-flex items-center">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
                     <button className="btn-ghost">Talk to Sales</button>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export default function Page() {
                         <p className="copy-18 text-[var(--gray-900)] mb-[36px] max-w-2xl">
                           Escrow, oracle and tribunal converging into one organism, overseen by The Tower — the economic OS for AI agents, live on Casper.
                         </p>
-                        <button className="btn-neon">initialize synergy</button>
+                        <button className="button-primary">INITIALIZE SYNERGY</button>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">

@@ -98,18 +98,21 @@ function AgentCard({ agent, index }: { agent: AgentDisplay; index: number }) {
 				<span className="label-14-mono text-[var(--gray-1000)]" style={{ fontWeight: 600 }}>
 					{agent.id}
 				</span>
-				<span
-					className="label-12-mono"
-					style={{
-						padding: "4px 8px",
-						border: `1px solid ${statusColor}`,
-						color: statusColor,
-						borderRadius: "4px",
-						fontWeight: 600
-					}}
-				>
-					{agent.status}
-				</span>
+				<span className="nb-tag" style={{
+					backgroundColor: "transparent",
+					color: statusColor,
+					border: `1px solid ${statusColor}`,
+					padding: "4px 8px",
+					fontSize: "11px",
+					display: "flex",
+					alignItems: "center",
+					gap: "6px",
+					textTransform: "uppercase",
+					letterSpacing: "0.05em",
+					fontWeight: 600,
+					borderRadius: "0px",
+					whiteSpace: "nowrap"
+				}}>{agent.status}</span>
 			</div>
 
 			<div style={{ display: "flex", flexDirection: "column", gap: "8px", borderTop: "1px solid var(--gray-400)", paddingTop: "12px", zIndex: 6 }}>
@@ -230,8 +233,10 @@ export default function AgentNetworkGrid() {
 
 	return (
 		<div
+			className="w-full max-w-7xl mx-auto px-8 md:px-24"
 			style={{
-				padding: "40px 0",
+				paddingTop: "40px",
+				paddingBottom: "40px",
 				background: "transparent",
 				color: "var(--gray-1000)",
 				fontFamily: "var(--font-mono)",
@@ -264,7 +269,7 @@ export default function AgentNetworkGrid() {
 				</div>
 			</motion.div>
 
-			<div className="bento-grid">
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
 				{agents.map((agent: AgentDisplay, i: number) => (
 					<AgentCard key={agent.id} agent={agent} index={i} />
 				))}

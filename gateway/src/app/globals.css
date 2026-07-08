@@ -3,8 +3,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-casper-red: #f13242;
-  --color-casper-darkred: #88151f;
+  --color-casper-red: #e03529;
+  --color-casper-darkred: #782024;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-sans: "General Sans", var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-array: "Array", var(--font-sans);
@@ -39,16 +39,16 @@
   --gray-alpha-1000: #ffffffeb;
 
   /* Casper Red Accent Scale (replacing Geist Red) */
-  --red-100: #330a11;
-  --red-200: #440d13;
-  --red-300: #5d0e17;
-  --red-400: #6f101b;
-  --red-500: #88151f;
-  --red-600: #f32e40;
-  --red-700: #f13242;
-  --red-800: #e2162a;
-  --red-900: #ff565f;
-  --red-1000: #ffe9ed;
+  --red-100: #330c0a;
+  --red-200: #4a120e;
+  --red-300: #661813;
+  --red-400: #782024;
+  --red-500: #9e251d;
+  --red-600: #c22e23;
+  --red-700: #e03529;
+  --red-800: #d63327;
+  --red-900: #f0473a;
+  --red-1000: #ffd3cf;
 
   /* Geist Blue Accent Scale */
   --blue-100: #06193a;
@@ -149,8 +149,8 @@ body {
 }
 
 ::selection {
-  background-color: var(--red-700);
-  color: #fff;
+  background-color: var(--gray-1000);
+  color: #000;
 }
 
 ::-webkit-scrollbar { display: none; }
@@ -479,28 +479,6 @@ input:focus, textarea:focus, select:focus {
   position: relative;
 }
 
-.rare-snake-border::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--snake-angle),
-    transparent 0%,
-    transparent 80%,
-    rgba(241, 50, 66, 0.3) 88%,
-    rgba(241, 50, 66, 0.9) 95%,
-    rgba(241, 50, 66, 0.3) 100%
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: snakeRotate 3s linear infinite, rareSnakeOpacity 20s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 5;
-}
 
 /* ============================================================
    RESPONSIVE BENTO GRID (AWWWARDS / GEIST GRID)
@@ -550,7 +528,7 @@ input:focus, textarea:focus, select:focus {
 .corner-mark-br { bottom: -5px; right: -3px; }
 
 .editorial-panel:hover .corner-mark {
-  color: var(--red-700);
+  color: var(--gray-1000);
   transform: rotate(90deg);
 }
 
@@ -578,8 +556,8 @@ body {
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(60% 50% at 0% 50%, rgba(255,255,255,0.10), transparent 70%),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 72%);
+    radial-gradient(60% 50% at 0% 50%, rgba(224,53,41,0.18), transparent 70%),
+    linear-gradient(90deg, rgba(224,53,41,0.08) 0%, transparent 72%);
   filter: blur(6px);
   animation: edgeBreathe 7s ease-in-out infinite;
 }
@@ -588,42 +566,14 @@ body {
   position: absolute;
   top: 0; left: 0;
   width: 2px; height: 100%;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.3) 18%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.3) 82%, transparent);
-  box-shadow: 0 0 22px 3px rgba(255,255,255,0.15), 0 0 60px 8px rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, transparent, rgba(224,53,41,0.4) 18%, rgba(224,53,41,0.8) 50%, rgba(224,53,41,0.4) 82%, transparent);
+  box-shadow: 0 0 22px 3px rgba(224,53,41,0.25), 0 0 60px 8px rgba(224,53,41,0.15);
 }
 @keyframes edgeBreathe {
   0%, 100% { opacity: 0.75; }
   50% { opacity: 1; }
 }
 
-/* Neon button — soft pulsing red aura, not flat. */
-.btn-neon {
-  position: relative;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: clamp(13px, 1.05vw, 44px);
-  padding: clamp(14px,1vw,46px) clamp(24px,1.8vw,90px);
-  color: var(--red-1000);
-  background: linear-gradient(180deg, rgba(241,50,66,0.10), rgba(0,0,0,0.4));
-  border: 1px solid rgba(241,50,66,0.55);
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all 200ms cubic-bezier(0.2,0.8,0.2,1);
-  box-shadow: 0 0 0 0 rgba(241,50,66,0.0), inset 0 0 12px rgba(241,50,66,0.08);
-  animation: neonIdle 3.4s ease-in-out infinite;
-}
-.btn-neon:hover {
-  color: #fff;
-  border-color: var(--red-900);
-  box-shadow: 0 0 18px 2px rgba(241,50,66,0.55), 0 0 48px 8px rgba(241,50,66,0.28), inset 0 0 18px rgba(241,50,66,0.2);
-  transform: translateY(-1px);
-}
-.btn-neon:disabled { opacity: 0.4; cursor: not-allowed; animation: none; }
-@keyframes neonIdle {
-  0%, 100% { box-shadow: 0 0 6px 0 rgba(241,50,66,0.18), inset 0 0 12px rgba(241,50,66,0.08); }
-  50% { box-shadow: 0 0 14px 1px rgba(241,50,66,0.34), inset 0 0 14px rgba(241,50,66,0.12); }
-}
 
 .btn-ghost {
   font-family: var(--font-mono);
@@ -761,15 +711,15 @@ html.lenis, html.lenis body { height: auto; }
 /* recolor the grey fabric into deep racing red — keeps the weave/fold luminance */
 .carbon-tint {
   position: absolute; inset: 0;
-  background: linear-gradient(160deg, #111 0%, #222 45%, #050505 100%);
-  mix-blend-mode: color;
-  opacity: 0.72;
+  background: linear-gradient(160deg, rgba(224,53,41,0.7) 0%, rgba(120,32,36,0.65) 45%, #050202 100%);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
 }
 /* gentle warm glow from below — static, no cursor lightbulb */
 .carbon-backlight {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(120% 70% at 50% 118%, rgba(255,255,255,0.08), transparent 60%);
+  background: radial-gradient(120% 70% at 50% 118%, rgba(224,53,41,0.15), transparent 60%);
 }
 /* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
    (kicks in only near the corners, so the fabric centre stays fully visible). */

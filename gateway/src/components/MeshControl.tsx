@@ -5,12 +5,12 @@ import { CornerMarks } from "@/components/AgentNetworkGrid";
 
 // Colour a transcript line by the agent role that produced it.
 function lineClass(line: string): string {
-	if (line.includes("🗡️") || line.includes("PROSECUTION")) return "text-[#f13242]";
-	if (line.includes("🛡️") || line.includes("DEFENSE")) return "text-sky-400";
+	if (line.includes("🗡️") || line.includes("PROSECUTION")) return "text-[var(--gray-1000)]";
+	if (line.includes("🛡️") || line.includes("DEFENSE")) return "text-[var(--gray-700)]";
 	if (line.includes("👨‍⚖️") || line.includes("RULING") || line.includes("CHIEF")) return "text-amber-300";
 	if (line.includes("✅") || line.includes("APPROVE") || line.includes("ALIVE") || line.includes("healthy")) return "text-white";
-	if (line.includes("❌") || line.includes("REJECT") || line.includes("🚨") || line.includes("STALE")) return "text-[#f13242]";
-	if (line.includes("🛑") || line.includes("DEGRADED") || line.includes("frozen")) return "text-[#f13242] font-semibold";
+	if (line.includes("❌") || line.includes("REJECT") || line.includes("🚨") || line.includes("STALE")) return "text-[var(--gray-1000)]";
+	if (line.includes("🛑") || line.includes("DEGRADED") || line.includes("frozen")) return "text-[var(--gray-1000)] font-semibold";
 	if (line.includes("⚠️") || line.includes("PARTIAL")) return "text-amber-300";
 	if (line.includes("🔗") || line.includes("https://")) return "text-[var(--red-900)] underline";
 	if (line.startsWith("⚖️") || line.includes("JUROR")) return "text-white/70";
@@ -19,7 +19,7 @@ function lineClass(line: string): string {
 
 function Console({ lines }: { lines: string[] }) {
 	return (
-		<div className="mt-4 max-h-[420px] overflow-auto scroll-red rounded-sm bg-black/60 border border-white/10 p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap">
+		<div className="mt-4 max-h-[420px] overflow-auto bg-black/60 border border-[var(--gray-500)] p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap">
 			{lines.map((l, i) => (
 				<div key={i} className={lineClass(l)}>{l || " "}</div>
 			))}
@@ -32,7 +32,7 @@ function Btn({ onClick, busy, children }: { onClick: () => void; busy: boolean; 
 		<button
 			onClick={onClick}
 			disabled={busy}
-			className="px-5 py-2.5 text-xs tracking-widest uppercase font-mono border border-[#f13242]/60 text-[#f13242] hover:bg-[#f13242] hover:text-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+			className="button-secondary"
 		>
 			{busy ? "running…" : children}
 		</button>
@@ -112,16 +112,16 @@ export function MeshControl() {
 						diverse llms, and a chief judge — deliberates a bounty. on a real run the
 						verdict moves cspr on-chain. ◆ here it deliberates only.
 					</p>
-					<div className="grid gap-3 mb-4">
+					<div className="grid gap-3, mb-4">
 						<textarea
 							value={desc} onChange={(e) => setDesc(e.target.value)} rows={2}
 							placeholder="Task description"
-							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[#f13242]/50 outline-none resize-none"
+							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
 						/>
 						<textarea
 							value={proof} onChange={(e) => setProof(e.target.value)} rows={3}
 							placeholder="Submitted proof"
-							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[#f13242]/50 outline-none resize-none"
+							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
 						/>
 					</div>
 					<Btn onClick={convene} busy={arenaBusy}>Convene tribunal</Btn>

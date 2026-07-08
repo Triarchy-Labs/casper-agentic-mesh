@@ -59,7 +59,7 @@ export default function CustomCursor() {
 				!!target.closest("a");
 			setIsHovering(hovering);
 			// Check if over an editorial-panel card or interactive button
-			const overCard = !!target.closest(".editorial-panel") || !!target.closest(".btn-neon") || !!target.closest(".btn-ghost");
+			const overCard = !!target.closest(".editorial-panel") || !!target.closest(".button-primary") || !!target.closest(".button-secondary") || !!target.closest(".btn-ghost");
 			setIsOverCard(overCard);
 		};
 

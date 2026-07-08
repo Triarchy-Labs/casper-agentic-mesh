@@ -201,7 +201,7 @@ const BountiesPage = () => {
 			<CarbonFabric muted />
 			<Nav />
 
-			<div className="w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
+			<div className="w-full max-w-7xl mx-auto px-8 md:px-24 pt-[18vh] pb-[20vh]">
 				{/* 1. Header & Global KPIs Section */}
 				<motion.div 
 					initial={{ opacity: 0, y: 20 }}
@@ -238,7 +238,7 @@ const BountiesPage = () => {
 					</p>
 					
 					{/* KPI Matrix (Brutalist CSS Grid) */}
-					<div className="editorial-grid mb-[48px]">
+					<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh] mb-[48px]">
 						{[
 							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
 							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false },
@@ -264,7 +264,7 @@ const BountiesPage = () => {
 					</div>
 				</motion.div>
 
-				<div className="editorial-grid items-start">
+				<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh] items-start">
 					
 					{/* 2. Left Column: Bounty Table */}
 					<div className="col-span-12 md:col-span-8 flex flex-col gap-[16px]">
@@ -328,8 +328,8 @@ const BountiesPage = () => {
 							{/* Human UI vs Bot API toggle */}
 							<div className="flex justify-between items-start mb-[24px] z-10">
 								<div className="flex gap-[8px]">
-									<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-[2px]">HUMAN_UI</span>
-									<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-[2px]">BOT_API / WASM</span>
+									<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-none">HUMAN_UI</span>
+									<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-none">BOT_API / WASM</span>
 								</div>
 							</div>
 
@@ -357,14 +357,14 @@ const BountiesPage = () => {
 								{escrowStatus === "working" ? "[ DEPLOYING... ]" : escrowStatus === "success" ? "[ ✓ DEPLOYED ]" : "[ ESCROW & DEPLOY ]"}
 							</button>
 							{escrowResult && (
-								<div className={`mt-[12px] p-[8px] border rounded-[4px] text-[10px] label-14-mono ${escrowStatus === "success" ? "border-[var(--gray-500)] text-[var(--gray-1000)]" : "border-[var(--gray-700)] text-[var(--gray-600)]"}`}>
+								<div className={`mt-[12px] p-[8px] border rounded-none text-[10px] label-14-mono ${escrowStatus === "success" ? "border-[var(--gray-500)] text-[var(--gray-1000)]" : "border-[var(--gray-700)] text-[var(--gray-600)]"}`}>
 									{escrowResult}
 								</div>
 							)}
 
 							<div className="mt-[32px] pt-[24px] border-t border-dashed border-[var(--gray-500)]">
 								<h4 className="label-14-mono text-[var(--gray-700)] mb-[8px]">AUTONOMOUS INGESTION (CURL):</h4>
-								<pre className="bg-[var(--background-100)] p-[12px] rounded-[6px] border border-[var(--gray-500)] text-[10px] text-[var(--gray-600)] overflow-x-auto">
+								<pre className="bg-[var(--background-100)] p-[12px] rounded-none border border-[var(--gray-500)] text-[10px] text-[var(--gray-600)] overflow-x-auto">
 									<code>
 										{"// Triarchy Bot A2A Hook\nPOST /api/orchestrator/v1/bounties\n{\n  \"bot_pubkey\": \"0157077a83d3e680a65bb74a1dc534065607da1b17a02c342f026a7e08bb2569ff\",\n  \"action\": \"claim\",\n  \"quest_id\": \"Q-1049\"\n}"}
 									</code>
@@ -389,7 +389,7 @@ const BountiesPage = () => {
 						Vector Telemetry <span className="text-[var(--gray-700)] font-mono text-sm uppercase mr-4">{"// SCALE EXPANSION VECTORS ALPHA & BETA"}</span>
 					</h2>
 
-					<div className="editorial-grid gap-[32px]">
+					<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
 						{/* Vector Alpha Panel */}
 						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
 							<div className="editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
