@@ -18,22 +18,23 @@ export default function Page() {
   const sectionsRef = useRef<HTMLDivElement>(null);
 
   // 12-piece mosaic assembly specifications (4 cols x 3 rows)
+  // Some pieces have initialOpacity: 0.8 to be visible at their scattered positions on load
   const pieces = [
     // Row 1
-    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-25vw", y: "-25vh", scale: 0.8, blur: "6px" },
-    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-5vw", y: "-30vh", scale: 0.7, blur: "4px" },
-    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "10vw", y: "-28vh", scale: 0.9, blur: "8px" },
-    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "30vw", y: "-20vh", scale: 0.85, blur: "5px" },
+    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-25vw", y: "-25vh", scale: 0.8, blur: "6px", initialOpacity: 0.8 },
+    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-5vw", y: "-30vh", scale: 0.7, blur: "4px", initialOpacity: 0 },
+    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "10vw", y: "-28vh", scale: 0.9, blur: "8px", initialOpacity: 0.8 },
+    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "30vw", y: "-20vh", scale: 0.85, blur: "5px", initialOpacity: 0 },
     // Row 2
-    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-32vw", y: "-5vh", scale: 0.75, blur: "7px" },
-    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-12vw", y: "15vh", scale: 0.8, blur: "5px" },
-    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "15vw", y: "-10vh", scale: 0.9, blur: "6px" },
-    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "28vw", y: "5vh", scale: 0.8, blur: "4px" },
+    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-32vw", y: "-5vh", scale: 0.75, blur: "7px", initialOpacity: 0.8 },
+    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-12vw", y: "15vh", scale: 0.8, blur: "5px", initialOpacity: 0 },
+    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "15vw", y: "-10vh", scale: 0.9, blur: "6px", initialOpacity: 0.8 },
+    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "28vw", y: "5vh", scale: 0.8, blur: "4px", initialOpacity: 0 },
     // Row 3
-    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-28vw", y: "22vh", scale: 0.85, blur: "6px" },
-    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-8vw", y: "28vh", scale: 0.7, blur: "8px" },
-    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "8vw", y: "25vh", scale: 0.75, blur: "5px" },
-    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "32vw", y: "20vh", scale: 0.8, blur: "7px" }
+    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-28vw", y: "22vh", scale: 0.85, blur: "6px", initialOpacity: 0.8 },
+    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-8vw", y: "28vh", scale: 0.7, blur: "8px", initialOpacity: 0 },
+    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "8vw", y: "25vh", scale: 0.75, blur: "5px", initialOpacity: 0.8 },
+    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "32vw", y: "20vh", scale: 0.8, blur: "7px", initialOpacity: 0 }
   ];
 
   // Always run the full 2.5s boot loader on every visit (no session skip).
@@ -104,51 +105,51 @@ export default function Page() {
       scrollTrigger: {
         trigger: "#assembly-sticky-trigger",
         start: "top top",
-        end: "+=180%",
+        end: "+=400%", // Pinned for a massive, gradual 10-scroll feel!
         pin: true,
         scrub: 1.5,
       }
     });
 
-    // Text box fades out and moves up (Produx splitLine exit style)
+    // Text box stays still for a bit, then fades out and moves up (duration: 1.2)
     assemblyTl.to(".assembly-text-box", {
-      y: "-60px",
+      y: "-120px",
       opacity: 0,
-      filter: "blur(4px)",
-      duration: 0.5,
-      ease: "power2.in",
-    }, 0);
+      filter: "blur(6px)",
+      duration: 1.2,
+      ease: "power2.inOut",
+    }, 0.2); // starts at 0.2, ends at 1.4
 
-    // 12 Slices slide in from scattered positions and merge
+    // 12 Slices slide in from scattered positions and merge (duration: 2.2)
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
-        { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
-        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
-        0.1
+        { x: p.x, y: p.y, scale: p.scale, opacity: p.initialOpacity, filter: `blur(${p.blur})` },
+        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 2.2 },
+        0.6 // starts at 0.6, ends at 2.8
       );
     });
 
     // Fade in the dark gradient overlay once slices assemble
     assemblyTl.fromTo(".assembly-scrim",
       { opacity: 0 },
-      { opacity: 1, duration: 0.6, ease: "power2.inOut" },
-      0.4
+      { opacity: 1, duration: 1.0, ease: "power2.inOut" },
+      2.0 // starts at 2.0, ends at 3.0
     );
 
     // Manifesto text overlays fade in
     assemblyTl.fromTo(".assembly-text-overlay",
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.15 },
-      0.6
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
+      2.6 // starts at 2.6, ends at 3.4
     );
 
     // Zoom out at the end for clean exit transition
     assemblyTl.to(".assembly-image-container", {
-      scale: 0.96,
+      scale: 0.95,
       opacity: 0.9,
-      duration: 0.4,
+      duration: 0.6,
       ease: "power2.inOut",
-    }, 0.9);
+    }, 3.4); // starts at 3.4, ends at 4.0
   }, { dependencies: [booted], scope: containerRef });
 
   return (
@@ -205,7 +206,7 @@ export default function Page() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       clipPath: p.inset,
-                      opacity: 0,
+                      opacity: p.initialOpacity,
                     }} 
                   />
                 ))}
