@@ -78,18 +78,25 @@ export function MeshControl() {
 		<div className="col-span-12 grid grid-cols-12 gap-[1.39vw] focus-cards">
 			{/* THE TOWER */}
 			<div className="col-span-12 lg:col-span-5 flex flex-col gap-[1.39vw]">
-				<div className="editorial-panel p-[2.22vw] relative flex-1">
-					<CornerMarks />
-					<div className="flex items-center justify-between mb-2">
-						<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
+				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+					{/* Produx Visual Background */}
+					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
+					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+					
+					<div className="p-[2.22vw] relative z-10 h-full flex flex-col">
+						<CornerMarks />
+						<div className="flex items-center justify-between mb-2">
+							<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
+						</div>
+						<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
+							one brain over the swarm. reads the on-chain world — oracle, reputation,
+							agent liveness — then dispatches sub-agents. ◆ click to scan. nothing runs
+							in the background. nothing is spent.
+						</p>
+						<Btn onClick={scanTower} busy={towerBusy}>Scan mesh</Btn>
+						{towerLines && <Console lines={towerLines} />}
 					</div>
-					<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
-						one brain over the swarm. reads the on-chain world — oracle, reputation,
-						agent liveness — then dispatches sub-agents. ◆ click to scan. nothing runs
-						in the background. nothing is spent.
-					</p>
-					<Btn onClick={scanTower} busy={towerBusy}>Scan mesh</Btn>
-					{towerLines && <Console lines={towerLines} />}
 				</div>
 				<div className="project-info-trigger relative flex w-full">
 					<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1"></div>
@@ -102,35 +109,42 @@ export function MeshControl() {
 
 			{/* AGENT TRIBUNAL / ARENA */}
 			<div className="col-span-12 lg:col-span-7 flex flex-col gap-[1.39vw]">
-				<div className="editorial-panel p-[2.22vw] relative flex-1">
-					<CornerMarks />
-					<div className="flex items-center justify-between mb-2">
-						<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
-					</div>
-					<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
-						an adversarial court of real models — prosecutor, defender, a jury of
-						diverse llms, and a chief judge — deliberates a bounty. on a real run the
-						verdict moves cspr on-chain. ◆ here it deliberates only.
-					</p>
-					<div className="grid gap-3, mb-4">
-						<textarea
-							value={desc} onChange={(e) => setDesc(e.target.value)} rows={2}
-							placeholder="Task description"
-							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
-						/>
-						<textarea
-							value={proof} onChange={(e) => setProof(e.target.value)} rows={3}
-							placeholder="Submitted proof"
-							className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
-						/>
-					</div>
-					<Btn onClick={convene} busy={arenaBusy}>Convene tribunal</Btn>
-					{arenaBusy && !arena && (
-						<div className="mt-4 text-xs text-white/40 font-mono animate-pulse">
-							the bench is deliberating across multiple models — this takes ~30–60s…
+				<div className="editorial-panel relative flex-1 overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+					{/* Produx Visual Background */}
+					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
+					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+					
+					<div className="p-[2.22vw] relative z-10 h-full flex flex-col">
+						<CornerMarks />
+						<div className="flex items-center justify-between mb-2">
+							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
 						</div>
-					)}
-					{arena && <Console lines={arena} />}
+						<p className="text-xs text-white/40 lowercase leading-relaxed mb-5">
+							an adversarial court of real models — prosecutor, defender, a jury of
+							diverse llms, and a chief judge — deliberates a bounty. on a real run the
+							verdict moves cspr on-chain. ◆ here it deliberates only.
+						</p>
+						<div className="grid gap-3 mb-4">
+							<textarea
+								value={desc} onChange={(e) => setDesc(e.target.value)} rows={2}
+								placeholder="Task description"
+								className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
+							/>
+							<textarea
+								value={proof} onChange={(e) => setProof(e.target.value)} rows={3}
+								placeholder="Submitted proof"
+								className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
+							/>
+						</div>
+						<Btn onClick={convene} busy={arenaBusy}>Convene tribunal</Btn>
+						{arenaBusy && !arena && (
+							<div className="mt-4 text-xs text-white/40 font-mono animate-pulse">
+								the bench is deliberating across multiple models — this takes ~30–60s…
+							</div>
+						)}
+						{arena && <Console lines={arena} />}
+					</div>
 				</div>
 				<div className="project-info-trigger relative flex w-full">
 					<div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1"></div>

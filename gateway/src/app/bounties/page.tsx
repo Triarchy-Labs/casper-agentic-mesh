@@ -237,26 +237,47 @@ const BountiesPage = () => {
 						))}
 					</p>
 					
-					{/* KPI Matrix (Brutalist CSS Grid) */}
-					<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh] mb-[48px]">
+					{/* KPI Matrix (Produx Accordion) */}
+					<div className="w-full h-[240px] flex gap-2 mb-[48px] max-sm:flex-col max-sm:h-[600px]">
 						{[
 							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
 							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false },
 							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "Fastest: 45ms", isFloat: true },
 							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "Agent-to-Agent" }
 						].map((kpi, idx) => (
-							<div key={idx} className="flex flex-col gap-[1.2vw] col-span-12 md:col-span-3">
-								<div className="editorial-panel p-[24px] relative flex flex-col justify-center min-h-[120px]">
-									<CornerMarks />
-									<div className="heading-40 text-[var(--gray-1000)] z-10">
-										{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
+							<div 
+								key={idx} 
+								className="group relative flex-1 hover:flex-[3] max-sm:hover:flex-[2] transition-all duration-[1s] ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden cursor-pointer bg-[#0a0a0a] border border-white/5"
+							>
+								{/* Produx Background */}
+								<div className="absolute inset-0 bg-gradient-to-t from-[#111] to-[#050505]" />
+								<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${idx * 40}, 60%, 40%) 0%, transparent 70%)` }} />
+								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								
+								{/* Overlay Gradient */}
+								<div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent h-2/3 pointer-events-none" />
+
+								{/* Content */}
+								<div className="absolute bottom-6 left-6 right-6 h-[80px]">
+									{/* Active State (Horizontal Full) */}
+									<div className="absolute bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transition-all duration-700 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)]">
+										<h3 className="label-14-mono text-white/50 mb-1 truncate">{kpi.label}</h3>
+										<div className="heading-40 text-white truncate leading-none">
+											{kpi.rawValue ? <AnimatedCounter value={kpi.rawValue} prefix={kpi.prefix} suffix={kpi.suffix} isFloat={kpi.isFloat} /> : kpi.value}
+										</div>
+										{kpi.sub && <p className="label-12-mono text-white/40 mt-2 truncate">{kpi.sub}</p>}
 									</div>
-								</div>
-								<div className="project-info-trigger relative flex w-full">
-									<div className="my-[0.5vh] mr-[0.5vw] size-[0.4vw] border border-[#303030] max-sm:hidden shrink-0 mt-[6px]"></div>
-									<div className="flex flex-col gap-[4px]">
-										<h3 className="label-14-mono text-[var(--gray-1000)] leading-tight">{kpi.label}</h3>
-										{kpi.sub && <p className="label-12-mono text-[var(--gray-800)] uppercase">{kpi.sub}</p>}
+									
+									{/* Inactive State (Vertical Pillar) */}
+									<div className="absolute bottom-0 left-0 origin-bottom-left -rotate-90 opacity-100 group-hover:opacity-0 transition-opacity duration-300 whitespace-nowrap max-sm:hidden">
+										<span className="heading-32 text-white/40 tracking-widest leading-none">
+											{kpi.rawValue ? `${kpi.prefix || ''}${kpi.isFloat ? kpi.rawValue.toFixed(1) : kpi.rawValue.toLocaleString()}${kpi.suffix || ''}` : kpi.value}
+										</span>
+									</div>
+									<div className="hidden max-sm:block opacity-100 group-hover:opacity-0 transition-opacity duration-300 absolute bottom-0 left-0">
+										<span className="heading-32 text-white/40 leading-none">
+											{kpi.rawValue ? `${kpi.prefix || ''}${kpi.isFloat ? kpi.rawValue.toFixed(1) : kpi.rawValue.toLocaleString()}${kpi.suffix || ''}` : kpi.value}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -322,28 +343,33 @@ const BountiesPage = () => {
 
 					{/* 3. Right Column: Ingestion Terminal (Sticky layout) */}
 					<div className="col-span-12 md:col-span-4 sticky-section flex flex-col gap-[1.39vw]" style={{ height: 'auto', alignSelf: 'start', top: '120px' }}>
-						<div className="editorial-panel p-[2.22vw] w-full relative min-h-[48.8vh] flex flex-col justify-between">
-							<CornerMarks />
+						<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] w-full min-h-[48.8vh] flex flex-col justify-between">
+							<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+							<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 30%, var(--red-500) 0%, transparent 70%)" }} />
+							<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 							
-							{/* Human UI vs Bot API toggle */}
-							<div className="flex justify-between items-start mb-[24px] z-10">
-								<div className="flex gap-[8px]">
-									<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-none">HUMAN_UI</span>
-									<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-none">BOT_API / WASM</span>
+							<div className="p-[2.22vw] relative z-10 flex flex-col h-full">
+								<CornerMarks />
+								
+								{/* Human UI vs Bot API toggle */}
+								<div className="flex justify-between items-start mb-[24px] z-10">
+									<div className="flex gap-[8px]">
+										<span className="px-[8px] py-[4px] bg-[var(--gray-1000)] text-[var(--background-100)] font-bold text-[10px] rounded-none">HUMAN_UI</span>
+										<span className="px-[8px] py-[4px] border border-[var(--gray-500)] text-[var(--gray-700)] text-[10px] rounded-none">BOT_API / WASM</span>
+									</div>
 								</div>
-							</div>
 
-							<textarea 
-								placeholder="Define directive... (e.g. 'Audit this smart contract...')"
-								value={directive}
-								onChange={(e) => setDirective(e.target.value)}
-								className="w-full min-h-[120px] bg-[var(--background-100)] border border-[var(--gray-500)] rounded-none p-[16px] text-[var(--gray-1000)] label-14-mono resize-none outline-none focus:border-[var(--gray-1000)] mb-[16px] transition-colors z-10"
-							/>
-							
-							<div className="flex justify-between mb-[24px] gap-[8px] z-10">
-								<button className="button-secondary w-full label-14-mono" style={{ height: '32px', fontSize: '10px' }}>+ FILES</button>
-								<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-[var(--background-100)] border border-[var(--gray-700)] text-[var(--gray-1000)] px-[8px] rounded-none label-14-mono text-right outline-none" />
-							</div>
+								<textarea 
+									placeholder="Define directive... (e.g. 'Audit this smart contract...')"
+									value={directive}
+									onChange={(e) => setDirective(e.target.value)}
+									className="w-full min-h-[120px] bg-black/60 border border-[var(--gray-500)] rounded-none p-[16px] text-white/80 label-14-mono resize-none outline-none focus:border-[var(--gray-1000)] mb-[16px] transition-colors z-10"
+								/>
+								
+								<div className="flex justify-between mb-[24px] gap-[8px] z-10">
+									<button className="button-secondary w-full label-14-mono" style={{ height: '32px', fontSize: '10px' }}>+ FILES</button>
+									<input type="text" placeholder="CSPR REWARD" value={reward} onChange={(e) => setReward(e.target.value)} className="w-full bg-black/60 border border-[var(--gray-700)] text-white/80 px-[8px] rounded-none label-14-mono text-right outline-none focus:border-[var(--gray-1000)]" />
+								</div>
 
 							<button 
 								onClick={handleEscrow}
@@ -362,13 +388,14 @@ const BountiesPage = () => {
 								</div>
 							)}
 
-							<div className="mt-[32px] pt-[24px] border-t border-dashed border-[var(--gray-500)]">
-								<h4 className="label-14-mono text-[var(--gray-700)] mb-[8px]">AUTONOMOUS INGESTION (CURL):</h4>
-								<pre className="bg-[var(--background-100)] p-[12px] rounded-none border border-[var(--gray-500)] text-[10px] text-[var(--gray-600)] overflow-x-auto">
+							<div className="mt-[32px] pt-[24px] border-t border-dashed border-white/20 z-10">
+								<h4 className="label-14-mono text-white/50 mb-[8px]">AUTONOMOUS INGESTION (CURL):</h4>
+								<pre className="bg-black/60 p-[12px] rounded-none border border-white/10 text-[10px] text-white/40 overflow-x-auto">
 									<code>
 										{"// Triarchy Bot A2A Hook\nPOST /api/orchestrator/v1/bounties\n{\n  \"bot_pubkey\": \"0157077a83d3e680a65bb74a1dc534065607da1b17a02c342f026a7e08bb2569ff\",\n  \"action\": \"claim\",\n  \"quest_id\": \"Q-1049\"\n}"}
 									</code>
 								</pre>
+							</div>
 							</div>
 						</div>
 						
@@ -392,9 +419,14 @@ const BountiesPage = () => {
 					<div className="grid grid-cols-1 md:grid-cols-12 gap-[1.39vw] max-sm:gap-[3.48vh]">
 						{/* Vector Alpha Panel */}
 						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
-							<div className="editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
-								<CornerMarks />
-								<div className="z-10">
+							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[420px] flex flex-col justify-between">
+								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 70%, var(--red-500) 0%, transparent 70%)" }} />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								
+								<div className="p-[32px] relative z-10 h-full flex flex-col justify-between">
+									<CornerMarks />
+									<div className="z-10">
 									<div className="flex justify-between items-center mb-[20px]">
 										<span className="label-14-mono text-[var(--gray-1000)] font-bold">LIVE STREAM</span>
 										<span className="nb-tag">ACTIVE</span>
@@ -430,8 +462,9 @@ const BountiesPage = () => {
 									</div>
 								</div>
 
-								<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
-									CEP-18 Escrow Contract: <span className="text-[var(--gray-900)]">01b4c...f201</span>
+									<div className="label-12-mono text-white/40 pt-[16px] border-t border-dashed border-white/10 mt-[24px]">
+										CEP-18 Escrow Contract: <span className="text-white/80">01b4c...f201</span>
+									</div>
 								</div>
 							</div>
 							
@@ -446,9 +479,14 @@ const BountiesPage = () => {
 
 						{/* Vector Beta Panel */}
 						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
-							<div className="editorial-panel p-[32px] relative flex flex-col justify-between min-h-[420px]">
-								<CornerMarks />
-								<div className="z-10">
+							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[420px] flex flex-col justify-between">
+								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 30%, var(--red-500) 0%, transparent 70%)" }} />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								
+								<div className="p-[32px] relative z-10 h-full flex flex-col justify-between">
+									<CornerMarks />
+									<div className="z-10">
 									<div className="flex justify-between items-center mb-[20px]">
 										<span className="label-14-mono text-[var(--gray-1000)] font-bold">PRE-TRADE_RISK_ORACLE</span>
 										<span className="nb-tag">
@@ -481,8 +519,9 @@ const BountiesPage = () => {
 									</div>
 								</div>
 
-								<div className="label-12-mono text-[var(--gray-600)] pt-[16px] border-t border-dashed border-[var(--gray-500)] mt-[24px]">
-									Sentinel Node Quorum: <span className="text-[var(--gray-900)]">99.8% Exec Safety Verify</span>
+									<div className="label-12-mono text-white/40 pt-[16px] border-t border-dashed border-white/10 mt-[24px]">
+										Sentinel Node Quorum: <span className="text-white/80">99.8% Exec Safety Verify</span>
+									</div>
 								</div>
 							</div>
 							

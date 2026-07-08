@@ -303,12 +303,18 @@ export default function Dashboard() {
 
                     {/* Execution Terminal (8 cols) */}
                     <div className="col-span-12 md:col-span-8 flex flex-col gap-[1.39vw] grid-item relative">
-                        <div className="editorial-panel p-[2.22vw] min-h-[48.8vh] flex flex-col flex-1">
-                            <CornerMarks />
-                            <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
-                                <span>L1_TERMINAL</span>
-                                <span>SYS_LOG</span>
-                            </div>
+                        <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[48.8vh] flex flex-col flex-1">
+                            {/* Produx Visual Background */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                            <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 20% 80%, var(--red-500) 0%, transparent 70%)" }} />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            
+                            <div className="p-[2.22vw] relative z-10 h-full flex flex-col flex-1">
+                                <CornerMarks />
+                                <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 flex justify-between z-10">
+                                    <span>L1_TERMINAL</span>
+                                    <span>SYS_LOG</span>
+                                </div>
                             
                             <div className="flex-1 flex flex-col justify-end text-sm leading-loose text-white/70 font-mono">
                                 <div>{">"} BOOTSTRAPPING NEURAL LINK...</div>
@@ -344,16 +350,22 @@ export default function Dashboard() {
                                     {lastResult.result && <div className="mt-4 text-xs leading-relaxed text-white/60">{lastResult.result}</div>}
                                 </motion.div>
                             )}
+                            </div>
 
                             {/* LIVE ON-CHAIN STATE — read straight from the Casper ledger */}
-                            <div className="editorial-panel p-6 mt-8 relative">
-                                <CornerMarks />
-                                <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
-                                    <span>ON-CHAIN STATE · CASPER TESTNET</span>
-                                    <span className={onchain ? "text-[var(--gray-1000)]" : "text-white/30"}>
-                                        {onchain ? "● LIVE" : "○ …"}
-                                    </span>
-                                </div>
+                            <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] mt-8">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                                <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 80% 20%, var(--red-500) 0%, transparent 70%)" }} />
+                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                                
+                                <div className="p-6 relative z-10">
+                                    <CornerMarks />
+                                    <div className="flex items-center justify-between text-xs tracking-widest text-white/40 uppercase mb-4 pb-3 border-b border-white/10">
+                                        <span>ON-CHAIN STATE · CASPER TESTNET</span>
+                                        <span className={onchain ? "text-[var(--gray-1000)]" : "text-white/30"}>
+                                            {onchain ? "● LIVE" : "○ …"}
+                                        </span>
+                                    </div>
                                 {onchain ? (
                                     <div className="font-mono text-sm space-y-2">
                                         <div><span className="text-white/40 w-40 inline-block">ORACLE [{onchain.asset}]:</span> {onchain.priceUsd != null ? `$${onchain.priceUsd.toFixed(6)}` : "—"}</div>
@@ -366,8 +378,8 @@ export default function Dashboard() {
                                 ) : (
                                     <div className="text-white/30 text-sm">querying Casper node…</div>
                                 )}
+                                </div>
                             </div>
-                        </div>
 
                         <div className="project-info-trigger relative flex w-full">
                             <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
@@ -382,21 +394,32 @@ export default function Dashboard() {
                     <div className="col-span-12 md:col-span-4 flex flex-col gap-[1.39vw] grid-item">
                         <div className="flex flex-col gap-8 flex-1">
                             {/* Agent Stage */}
-                            <div className="editorial-panel p-[2.22vw] h-[250px] flex items-center justify-center relative overflow-hidden">
-                                <CornerMarks />
-                                <AgentOrb state={agentState} size={168} />
-                                {agentState === "exhausted" && (
-                                    <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
-                                )}
+                            <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] h-[250px]">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                                <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
+                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                                
+                                <div className="p-[2.22vw] relative z-10 flex items-center justify-center h-full w-full">
+                                    <CornerMarks />
+                                    <AgentOrb state={agentState} size={168} />
+                                    {agentState === "exhausted" && (
+                                        <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
+                                    )}
+                                </div>
                             </div>
 
                             {/* WASI Nodes */}
-                            <div className="editorial-panel p-[2.22vw] flex-1 relative">
-                                <CornerMarks />
-                                <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
-                                    ACTIVE_NODES
-                                </div>
-                                <div className="flex flex-col gap-4">
+                            <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] flex-1">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                                <div className="absolute inset-0 opacity-[0.1]" style={{ background: "radial-gradient(circle at 50% 100%, var(--red-500) 0%, transparent 70%)" }} />
+                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                                
+                                <div className="p-[2.22vw] relative z-10 h-full">
+                                    <CornerMarks />
+                                    <div className="text-xs tracking-widest text-white/40 uppercase mb-8 pb-4 border-b border-white/10 z-10">
+                                        ACTIVE_NODES
+                                    </div>
+                                    <div className="flex flex-col gap-4">
                                     {wasiNodes.length > 0 ? wasiNodes.map((node) => (
                                         <div key={node.id} className="flex justify-between items-center text-xs">
                                             <div className="flex items-center gap-3">
@@ -408,6 +431,7 @@ export default function Dashboard() {
                                     )) : (
                                         <div className="text-xs text-white/30 animate-pulse">POLLING TELEMETRY...</div>
                                     )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
