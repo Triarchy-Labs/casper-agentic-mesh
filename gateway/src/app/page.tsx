@@ -26,6 +26,8 @@ export default function Page() {
 
   // GSAP Cinematic Transitions & Pinning (Brutalist Aesthetic)
   useGSAP(() => {
+    if (!booted) return;
+
     // 1. Entrance animation timeline (starts immediately on mount, which is after loader unmounts)
     const tl = gsap.timeline();
 
@@ -136,7 +138,7 @@ export default function Page() {
       duration: 0.4,
       ease: "power2.inOut",
     }, 0.9);
-  }, { scope: containerRef });
+  }, { dependencies: [booted], scope: containerRef });
 
   return (
     <>
