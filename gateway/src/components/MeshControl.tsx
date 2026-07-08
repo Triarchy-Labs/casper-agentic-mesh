@@ -98,8 +98,8 @@ export function MeshControl() {
 						{towerLines && <Console lines={towerLines} />}
 					</div>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
-						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Overseer</span>
-						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Liveness</span>
+						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Overseer</span>
+						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Liveness</span>
 					</div>
 				</div>
 				<div className="mt-[4vh] project-info-trigger relative flex w-full">
@@ -150,8 +150,8 @@ export function MeshControl() {
 						{arena && <Console lines={arena} />}
 					</div>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
-						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Tribunal</span>
-						<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Dry Run</span>
+						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Tribunal</span>
+						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Dry Run</span>
 					</div>
 				</div>
 				<div className="mt-[4vh] project-info-trigger relative flex w-full">

@@ -328,9 +328,9 @@ export default function Dashboard() {
                                 )}
                             </div>
                             <div className="absolute bottom-6 right-6 flex gap-3 z-20">
-                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Emotional State</span>
-                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Neural Link</span>
-                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Telemetry</span>
+                                <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Emotional State</span>
+                                <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Neural Link</span>
+                                <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Telemetry</span>
                             </div>
                         </div>
                         <div className="mt-[4vh] project-info-trigger relative flex w-full">
@@ -458,8 +458,8 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <div className="absolute bottom-4 right-4 flex gap-2 z-20">
-                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">WASI Swarm</span>
-                                <span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Telemetry</span>
+                                <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">WASI Swarm</span>
+                                <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Telemetry</span>
                             </div>
                         </div>
                         <div className="mt-[4vh] project-info-trigger relative flex w-full">
@@ -553,8 +553,8 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="absolute bottom-4 right-4 flex gap-1.5 z-20">
-									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Arbitrage</span>
-									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">Futures</span>
+									<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Arbitrage</span>
+									<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Futures</span>
 								</div>
 							</div>
 							
@@ -633,8 +633,8 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="absolute bottom-4 right-4 flex gap-2 z-20">
-									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">P2P Mesh</span>
-									<span className="px-[20px] py-[10px] bg-black/30 backdrop-blur-[12px] text-[10px] tracking-[0.15em] text-white/80 font-mono uppercase rounded-none border-none">L402 Gate</span>
+									<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">P2P Mesh</span>
+									<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">L402 Gate</span>
 								</div>
 							</div>
 							

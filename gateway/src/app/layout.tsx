@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Michroma, Chakra_Petch } from "next/font/google";
+import { Geist, Geist_Mono, Michroma, Chakra_Petch, DM_Mono } from "next/font/google";
 import "./fonts.css";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
@@ -14,6 +14,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
+});
+
+const dmMono = DM_Mono({
+	variable: "--font-dm-mono",
+	subsets: ["latin"],
+	weight: ["400", "500"],
 });
 
 // Sharp geometric techno face (Chakra Petch) for display and headings
@@ -52,7 +58,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} ${chakra.variable} ${michroma.variable} antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} ${dmMono.variable} ${chakra.variable} ${michroma.variable} antialiased`}
 		>
 			<head />
 			<body className="flex flex-col min-h-screen">

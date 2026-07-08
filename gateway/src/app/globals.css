@@ -6,6 +6,7 @@
   --color-casper-red: #e03529;
   --color-casper-darkred: #782024;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-DM-mono: var(--font-dm-mono), monospace;
   --font-sans: "General Sans", var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-array: "Array", var(--font-sans);
 }
