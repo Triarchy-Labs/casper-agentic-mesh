@@ -267,7 +267,7 @@ export default function Dashboard() {
                     
                     <motion.div 
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 1 }}
-                        className="flex flex-col md:flex-row gap-12 border-t border-white/20 pt-8 mt-12 w-full max-w-4xl"
+                        className="flex flex-col md:flex-row gap-12 pt-8 mt-12 w-full max-w-4xl"
                     >
                         <div className="flex-1">
                             <h3 className="text-xs tracking-[0.2em] uppercase text-white/40 mb-4">Architecture</h3>
@@ -290,7 +290,7 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh] border-t border-white/20">
+            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
                 <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] mb-[15vh]">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
@@ -449,7 +449,7 @@ export default function Dashboard() {
                 </div>
 
 				{/* 4. Scale Expansion Telemetry Section */}
-				<div className="w-full mt-20 border-t border-white/20 pt-16">
+				<div className="w-full mt-20 pt-16">
 					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
 						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
 					</h2>
