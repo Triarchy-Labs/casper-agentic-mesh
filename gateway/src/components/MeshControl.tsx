@@ -84,7 +84,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center overflow-y-auto">
+					<div className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col justify-center overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/30">read-only</span>
@@ -94,9 +94,15 @@ export function MeshControl() {
 							agent liveness — then dispatches sub-agents. ◆ click to scan. nothing runs
 							in the background. nothing is spent.
 						</p>
-						<Btn onClick={scanTower} busy={towerBusy}>Scan mesh</Btn>
 						{towerLines && <Console lines={towerLines} />}
 					</div>
+					<button
+						onClick={scanTower}
+						disabled={towerBusy}
+						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						{towerBusy ? "scanning..." : "scan mesh"}
+					</button>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Overseer</span>
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Liveness</span>
@@ -119,7 +125,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col overflow-y-auto">
+					<div className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto">
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
@@ -141,7 +147,6 @@ export function MeshControl() {
 								className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
 							/>
 						</div>
-						<Btn onClick={convene} busy={arenaBusy}>Convene tribunal</Btn>
 						{arenaBusy && !arena && (
 							<div className="mt-4 text-xs text-white/40 font-mono animate-pulse">
 								the bench is deliberating across multiple models — this takes ~30–60s…
@@ -149,6 +154,13 @@ export function MeshControl() {
 						)}
 						{arena && <Console lines={arena} />}
 					</div>
+					<button
+						onClick={convene}
+						disabled={arenaBusy}
+						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						{arenaBusy ? "deliberating..." : "convene tribunal"}
+					</button>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Tribunal</span>
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Dry Run</span>
