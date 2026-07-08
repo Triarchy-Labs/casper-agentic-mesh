@@ -476,78 +476,82 @@ export default function Dashboard() {
 				{/* 4. Scale Expansion Telemetry Section */}
 				<div className="w-full mt-20 pt-16">
 					<h2 className="text-2xl font-mono uppercase tracking-widest text-white/90 mb-12">
-						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
-					</h2>
-
-					<div className="grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh]">
-						{/* Vector Gamma Panel */}
-						<div className="flex flex-col col-span-12 md:col-span-6">
-							<div className="editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-								<CornerMarks />
-								<div className="z-10">
-									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-										<span className="text-xs font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
-										<span className="nb-tag">ACTIVE</span>
-									</div>
-
-									{/* Gas Futures Tracker */}
-									<div className="mb-8 p-4 bg-white/5 border border-white/10">
-										<div className="text-[10px] text-white/40 mb-2 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
-										<div className="text-3xl font-mono font-bold text-white tracking-tight">
-											{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
+						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA 					<div className="flex flex-col md:flex-row gap-[12%] items-end focus-cards">
+						{/* Vector Gamma Panel (Left 30% Square) */}
+						<div className="w-full md:w-[30%] flex flex-col">
+							<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+								{/* Produx Visual Background */}
+								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								
+								<div className="absolute inset-0 p-[2vw] z-10 flex flex-col justify-center overflow-y-auto">
+									<div className="z-10">
+										<div className="flex justify-between items-center mb-6 pb-3 border-b border-white/10">
+											<span className="text-[10px] font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
+											<span className="nb-tag text-[9px] px-1.5 py-0.5">ACTIVE</span>
 										</div>
-										<div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
-											<span className="text-xs text-white/60">Hedged Capacity: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas-units</span></span>
-											<div className="flex gap-2">
-												<button 
-													onClick={() => {
-														setGasHedged(prev => prev + 100000);
-														setGasPrice(p => p + 0.000120);
-													}}
-													className="px-2 py-1 bg-white text-black font-bold text-[9px] uppercase tracking-wider"
-												>
-													+ 100K HEDGE
-												</button>
-												<button 
-													onClick={() => {
-														setGasHedged(prev => Math.max(0, prev - 100000));
-														setGasPrice(p => Math.max(0.001, p - 0.000100));
-													}}
-													className="px-2 py-1 border border-white/20 text-white font-bold text-[9px] uppercase tracking-wider hover:bg-white/5"
-												>
-													RELEASE
-												</button>
-											</div>
-										</div>
-									</div>
 
-									{/* Arbitrage Delegation Tree */}
-									<div>
-										<h4 className="text-xs font-mono text-white/60 mb-3 uppercase">Cognitive Arbitrage Delegation Tree</h4>
-										<div className="flex flex-col gap-2 font-mono text-xs text-white/80 bg-white/5 p-4 border border-white/10">
-											<div className="flex items-center gap-2">
-												<span className="text-[var(--gray-1000)]">[Orchestrator]</span>
-												<span className="text-white/40">mark_53_sarcophagus</span>
+										{/* Gas Futures Tracker */}
+										<div className="mb-6 p-3 bg-white/5 border border-white/10">
+											<div className="text-[9px] text-white/40 mb-1.5 uppercase">Gas Hedging Futures (CSPR / Gas-Unit)</div>
+											<div className="text-2xl font-mono font-bold text-white tracking-tight">
+												{gasPrice.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
 											</div>
-											<div className="pl-4 border-l border-white/20 flex flex-col gap-2 mt-1">
-												<div className="flex items-center gap-2">
-													<span className="text-white/40">├── [Sub-Escrow A]</span>
-													<span className="text-white font-bold">credio_risk_monitor</span>
-													<span className="text-[var(--gray-600)] text-[10px]">(Risk Analysis: SECURE)</span>
-												</div>
-												<div className="flex items-center gap-2">
-													<span className="text-white/40">├── [Sub-Escrow B]</span>
-													<span className="text-white font-bold">agent_alpha_arbitrage</span>
-													<span className="text-[var(--gray-600)] text-[10px]">(Claiming: 420.5 CSPR)</span>
-												</div>
-												<div className="flex items-center gap-2">
-													<span className="text-white/40">└── [Sub-Escrow C]</span>
-													<span className="text-white font-bold">liquidity_sniper</span>
-													<span className="text-yellow-500 text-[10px]">(MEV Flash-loan: PENDING)</span>
+											<div className="flex flex-col gap-2 mt-2 pt-2 border-t border-white/5">
+												<span className="text-[10px] text-white/60">Hedged: <span className="text-white font-bold">{gasHedged.toLocaleString()} gas</span></span>
+												<div className="flex gap-1.5">
+													<button 
+														onClick={() => {
+															setGasHedged(prev => prev + 100000);
+															setGasPrice(p => p + 0.000120);
+														}}
+														className="px-1.5 py-0.5 bg-white text-black font-bold text-[8px] uppercase tracking-wider"
+													>
+														+ 100K
+													</button>
+													<button 
+														onClick={() => {
+															setGasHedged(prev => Math.max(0, prev - 100000));
+															setGasPrice(p => Math.max(0.001, p - 0.000100));
+														}}
+														className="px-1.5 py-0.5 border border-white/20 text-white font-bold text-[8px] uppercase tracking-wider hover:bg-white/5"
+													>
+														RELEASE
+													</button>
 												</div>
 											</div>
 										</div>
+
+										{/* Arbitrage Delegation Tree */}
+										<div>
+											<h4 className="text-[10px] font-mono text-white/60 mb-2 uppercase">Delegation Tree</h4>
+											<div className="flex flex-col gap-1.5 font-mono text-[10px] text-white/80 bg-white/5 p-3 border border-white/10">
+												<div className="flex items-center gap-1.5">
+													<span className="text-[var(--gray-1000)]">[Orchestrator]</span>
+													<span className="text-white/40 truncate max-w-[120px]">sarcophagus</span>
+												</div>
+												<div className="pl-3 border-l border-white/20 flex flex-col gap-1 mt-0.5">
+													<div className="flex items-center gap-1">
+														<span className="text-white/40">├─ A:</span>
+														<span className="text-white truncate max-w-[100px]">risk_monitor</span>
+													</div>
+													<div className="flex items-center gap-1">
+														<span className="text-white/40">├─ B:</span>
+														<span className="text-white truncate max-w-[100px]">arbitrage</span>
+													</div>
+													<div className="flex items-center gap-1">
+														<span className="text-white/40">└─ C:</span>
+														<span className="text-yellow-500 truncate max-w-[100px]">sniper</span>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
+								</div>
+								<div className="absolute bottom-4 right-4 flex gap-1.5 z-20">
+									<span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/5 text-[8px] tracking-widest text-white/50 uppercase">Arbitrage</span>
+									<span className="px-2 py-0.5 bg-black/40 backdrop-blur-md border border-white/5 text-[8px] tracking-widest text-white/50 uppercase">Futures</span>
 								</div>
 							</div>
 							
@@ -560,64 +564,74 @@ export default function Dashboard() {
 							</div>
 						</div>
 
-						{/* Vector Delta Panel */}
-						<div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-6">
-							<div className="editorial-panel p-8 relative flex flex-col justify-between min-h-[440px]">
-								<CornerMarks />
-								<div className="z-10">
-									<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
-										<span className="text-xs font-mono text-[var(--gray-1000)] font-bold tracking-widest">ABSOLUTE_SYNERGY</span>
-										<span className="nb-tag">LOAD_BALANCER</span>
-									</div>
-
-									{/* P2P Load Balancer / Latency Map */}
-									<div className="mb-8">
-										<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
-										<div className="grid grid-cols-6 gap-2">
-											{meshLoad.map((val, idx) => {
-												let boxColor = "bg-white/10 border-white/10";
-												if (val > 80) boxColor = "bg-[var(--gray-1000)] border-[var(--gray-1000)] shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse";
-												else if (val > 40) boxColor = "bg-white/40 border-white/40";
-												
-												return (
-													<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
-														<div className={`w-3 h-3 ${boxColor} rounded-none`} />
-														<span className="text-[9px] font-mono text-white/50">{val}%</span>
-													</div>
-												);
-											})}
+						{/* Vector Delta Panel (Right 58% Square) */}
+						<div className="w-full md:w-[58%] flex flex-col">
+							<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[60vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+								{/* Produx Visual Background */}
+								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								
+								<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center overflow-y-auto">
+									<div className="z-10">
+										<div className="flex justify-between items-center mb-8 pb-4 border-b border-white/10">
+											<span className="text-xs font-mono text-[var(--gray-1000)] font-bold tracking-widest">ABSOLUTE_SYNERGY</span>
+											<span className="nb-tag">LOAD_BALANCER</span>
 										</div>
-									</div>
 
-									{/* L402 Casper Gateway Challenge Console */}
-									<div>
-										<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
-										<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
-											<pre className="text-white/60 max-h-[80px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
-												<code>{l402Console}</code>
-											</pre>
-											<div className="flex justify-between items-center pt-2 border-t border-white/10">
-												<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
-												<button 
-													onClick={() => {
-														if (l402Status === "IDLE") {
-															setL402Status("CHALLENGED");
-															setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
-														} else if (l402Status === "CHALLENGED") {
-															setL402Status("SUCCESS");
-															setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
-														} else {
-															setL402Status("IDLE");
-															setL402Console("// Console reset. Ready to challenge L402 gate");
-														}
-													}}
-													className="px-3 py-1 bg-[var(--gray-1000)] text-[#000000] font-bold text-[9px] uppercase tracking-wider"
-												>
-													{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
-												</button>
+										{/* P2P Load Balancer / Latency Map */}
+										<div className="mb-8">
+											<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
+											<div className="grid grid-cols-6 gap-2">
+												{meshLoad.map((val, idx) => {
+													let boxColor = "bg-white/10 border-white/10";
+													if (val > 80) boxColor = "bg-[var(--gray-1000)] border-[var(--gray-1000)] shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse";
+													else if (val > 40) boxColor = "bg-white/40 border-white/40";
+													
+													return (
+														<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
+															<div className={`w-3 h-3 ${boxColor} rounded-none`} />
+															<span className="text-[9px] font-mono text-white/50">{val}%</span>
+														</div>
+													);
+												})}
+											</div>
+										</div>
+
+										{/* L402 Casper Gateway Challenge Console */}
+										<div>
+											<h4 className="text-xs font-mono text-white/60 mb-2 uppercase">L402-Casper HTTP 402 Gateway Client</h4>
+											<div className="bg-black border border-white/10 p-4 font-mono text-[11px] text-white flex flex-col gap-3">
+												<pre className="text-white/60 max-h-[100px] overflow-y-auto leading-relaxed whitespace-pre-wrap">
+													<code>{l402Console}</code>
+												</pre>
+												<div className="flex justify-between items-center pt-2 border-t border-white/10">
+													<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
+													<button 
+														onClick={() => {
+															if (l402Status === "IDLE") {
+																setL402Status("CHALLENGED");
+																setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
+															} else if (l402Status === "CHALLENGED") {
+																setL402Status("SUCCESS");
+																setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
+															} else {
+																setL402Status("IDLE");
+																setL402Console("// Console reset. Ready to challenge L402 gate");
+															}
+														}}
+														className="px-3 py-1 bg-[var(--gray-1000)] text-[#000000] font-bold text-[9px] uppercase tracking-wider"
+													>
+														{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
+													</button>
+												</div>
 											</div>
 										</div>
 									</div>
+								</div>
+								<div className="absolute bottom-4 right-4 flex gap-2 z-20">
+									<span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">P2P Mesh</span>
+									<span className="px-2 py-1 bg-black/40 backdrop-blur-md border border-white/5 text-[9px] tracking-widest text-white/50 uppercase">L402 Gate</span>
 								</div>
 							</div>
 							
