@@ -125,12 +125,16 @@ export default function Page() {
       ease: "power2.in",
     }, 3.0);
 
-    // 12 Slices slide in from scattered positions and merge (duration: 2.4, ends at 3.2)
+    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge (0.8 to 3.2)
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
-        { x: p.x, y: p.y, scale: p.scale, opacity: p.initialOpacity, filter: `blur(${p.blur})` },
+        { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
+        { opacity: p.initialOpacity, duration: 0.8, ease: "power1.inOut" },
+        0.0
+      );
+      assemblyTl.to(`.assembly-slice-${p.id}`,
         { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power2.inOut", duration: 2.4 },
-        0.8 // starts after text is fully docked
+        0.8
       );
     });
 
@@ -213,7 +217,7 @@ export default function Page() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       clipPath: p.inset,
-                      opacity: p.initialOpacity,
+                      opacity: 0,
                     }} 
                   />
                 ))}
