@@ -207,46 +207,55 @@ input:focus, textarea:focus, select:focus {
 /* Geist Components */
 .button-primary {
   background-color: var(--gray-1000);
-  color: var(--background-100);
+  color: #000000;
   border-radius: 0px;
   padding: 0 18px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1);
-  font-weight: 500;
-  border: 1px solid transparent;
-  box-shadow: 0 8px 24px -12px rgba(0,0,0,0.7);
+  transition: all 220ms cubic-bezier(0.32,0.72,0,1);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--gray-1000);
 }
 .button-primary:hover {
   background-color: #ffffff;
-  box-shadow: 0 12px 30px -12px rgba(0,0,0,0.75), 0 0 0 3px rgba(255,255,255,0.06);
+  border-color: #ffffff;
+  box-shadow: 0 0 24px rgba(255,255,255,0.3);
 }
 .button-primary:active { transform: scale(0.97); }
 .button-primary:disabled {
-  background-color: var(--gray-200);
-  color: var(--gray-700);
+  background-color: var(--gray-300);
+  color: var(--gray-600);
+  border-color: var(--gray-300);
   cursor: not-allowed;
 }
 
 .button-secondary {
-  background-color: rgba(255,255,255,0.03);
+  background-color: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--gray-1000);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
   border-radius: 0px;
   padding: 0 18px;
   height: 40px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 220ms cubic-bezier(0.32,0.72,0,1), background-color 220ms cubic-bezier(0.32,0.72,0,1), border-color 220ms cubic-bezier(0.32,0.72,0,1), box-shadow 220ms cubic-bezier(0.32,0.72,0,1);
+  transition: all 220ms cubic-bezier(0.32,0.72,0,1);
+  font-family: var(--font-mono);
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 .button-secondary:hover {
-  background-color: rgba(241,50,66,0.08);
-  border-color: rgba(241,50,66,0.4);
-  box-shadow: 0 0 16px rgba(241,50,66,0.2);
+  background-color: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
 }
 .button-secondary:active { transform: scale(0.97); }
 .button-secondary:disabled {

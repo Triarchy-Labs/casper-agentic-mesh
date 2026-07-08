@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Sora, Orbitron } from "next/font/google";
+import { Geist, Geist_Mono, Michroma, Chakra_Petch } from "next/font/google";
 import "./fonts.css";
 import "./globals.css";
 import { SmoothScroller } from "@/components/SmoothScroller";
@@ -16,18 +16,18 @@ const geistMono = Geist_Mono({
 	subsets: ["latin"],
 });
 
-// Premium geometric display face (Aventa-class), full weight range.
-const sora = Sora({
+// Sharp geometric techno face (Chakra Petch) for display and headings
+const chakra = Chakra_Petch({
 	variable: "--font-display",
 	subsets: ["latin"],
-	weight: ["200", "300", "400", "500", "600", "700", "800"],
+	weight: ["300", "400", "500", "600", "700"],
 });
 
-// Sharp geometric techno face for the logo / accent wordmark.
-const orbitron = Orbitron({
+// Structural infrastructure face (Michroma) for tech accents
+const michroma = Michroma({
 	variable: "--font-tech",
 	subsets: ["latin"],
-	weight: ["500", "600", "700", "800", "900"],
+	weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -52,7 +52,7 @@ export default function RootLayout({
 	return (
 		<html
 			lang="en"
-			className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} ${orbitron.variable} antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} ${chakra.variable} ${michroma.variable} antialiased`}
 		>
 			<head />
 			<body className="flex flex-col min-h-screen">
