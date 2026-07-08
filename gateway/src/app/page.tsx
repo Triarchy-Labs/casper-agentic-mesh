@@ -17,12 +17,29 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
+  // 12-piece mosaic assembly specifications (4 cols x 3 rows)
+  const pieces = [
+    // Row 1
+    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-25vw", y: "-25vh", scale: 0.8, blur: "6px" },
+    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-5vw", y: "-30vh", scale: 0.7, blur: "4px" },
+    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "10vw", y: "-28vh", scale: 0.9, blur: "8px" },
+    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "30vw", y: "-20vh", scale: 0.85, blur: "5px" },
+    // Row 2
+    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-32vw", y: "-5vh", scale: 0.75, blur: "7px" },
+    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-12vw", y: "15vh", scale: 0.8, blur: "5px" },
+    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "15vw", y: "-10vh", scale: 0.9, blur: "6px" },
+    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "28vw", y: "5vh", scale: 0.8, blur: "4px" },
+    // Row 3
+    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-28vw", y: "22vh", scale: 0.85, blur: "6px" },
+    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-8vw", y: "28vh", scale: 0.7, blur: "8px" },
+    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "8vw", y: "25vh", scale: 0.75, blur: "5px" },
+    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "32vw", y: "20vh", scale: 0.8, blur: "7px" }
+  ];
+
   // Always run the full 2.5s boot loader on every visit (no session skip).
   const handleBootComplete = () => {
     setBooted(true);
   };
-
-
 
   // GSAP Cinematic Transitions & Pinning (Brutalist Aesthetic)
   useGSAP(() => {
@@ -87,9 +104,9 @@ export default function Page() {
       scrollTrigger: {
         trigger: "#assembly-sticky-trigger",
         start: "top top",
-        end: "+=150%",
+        end: "+=180%",
         pin: true,
-        scrub: 0.5,
+        scrub: 1.5,
       }
     });
 
@@ -102,26 +119,20 @@ export default function Page() {
       ease: "power2.in",
     }, 0);
 
-    // Slices slide in from scattered positions and merge
-    assemblyTl.fromTo(".assembly-slice-1",
-      { x: "-25vw", y: "-15vh", opacity: 0, filter: "blur(8px)" },
-      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
-      0.1
-    );
-    assemblyTl.fromTo(".assembly-slice-2",
-      { x: "25vw", y: "15vh", opacity: 0, filter: "blur(8px)" },
-      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
-      0.1
-    );
-    assemblyTl.fromTo(".assembly-slice-3",
-      { x: "-20vw", y: "10vh", opacity: 0, filter: "blur(8px)" },
-      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
-      0.2
-    );
-    assemblyTl.fromTo(".assembly-slice-4",
-      { x: "20vw", y: "-10vh", opacity: 0, filter: "blur(8px)" },
-      { x: "0vw", y: "0vh", opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
-      0.2
+    // 12 Slices slide in from scattered positions and merge
+    pieces.forEach((p) => {
+      assemblyTl.fromTo(`.assembly-slice-${p.id}`,
+        { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
+        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: "power3.inOut" },
+        0.1
+      );
+    });
+
+    // Fade in the dark gradient overlay once slices assemble
+    assemblyTl.fromTo(".assembly-scrim",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.6, ease: "power2.inOut" },
+      0.4
     );
 
     // Manifesto text overlays fade in
@@ -165,15 +176,11 @@ export default function Page() {
                   <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
                   <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
                 </div>
-                <h1 className="nb-display text-[clamp(40px,5.5vw,64px)] mb-1 leading-none">
-                  <span className="relative inline-block overflow-hidden py-2 -my-2">
-                    <span className="hero-split-word block translate-y-full opacity-0">Agentic</span>
-                  </span>
+                <h1 className="mb-1 leading-none text-white uppercase tracking-tight" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(36px, 5.5vw, 64px)" }}>
+                  Agentic
                 </h1>
-                <h1 className="nb-thin nb-outline text-[clamp(40px,5.5vw,64px)] mb-6 leading-none">
-                  <span className="relative inline-block overflow-hidden py-2 -my-2">
-                    <span className="hero-split-word block translate-y-full opacity-0">Infrastructure</span>
-                  </span>
+                <h1 className="mb-6 leading-none text-white uppercase tracking-tight" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(36px, 5.5vw, 64px)" }}>
+                  Infrastructure
                 </h1>
                 <div className="flex items-center gap-4 mb-8 w-full">
                   <div className="tech-line flex-1 hero-sub-line origin-left" />
@@ -186,52 +193,25 @@ export default function Page() {
               </div>
 
               {/* Center/Bottom: Image Assembly Box */}
-              <div className="assembly-image-container relative w-[65vw] max-w-[1000px] aspect-[1.784/1] z-10 pointer-events-auto max-lg:w-[90vw] max-lg:max-w-none">
+              <div className="assembly-image-container relative w-[75vw] max-w-[1200px] aspect-[1.784/1] z-10 pointer-events-auto mt-[20vh] max-lg:w-[90vw] max-lg:max-w-none">
                 
-                {/* Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
-                {/* Slice 1: Top 25% */}
-                <div 
-                  className="absolute inset-0 assembly-slice assembly-slice-1" 
-                  style={{ 
-                    backgroundImage: "url(/anime_robot.jpeg)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    clipPath: "inset(0% 0% 75% 0%)"
-                  }} 
-                />
-                {/* Slice 2: Upper Middle 25% */}
-                <div 
-                  className="absolute inset-0 assembly-slice assembly-slice-2" 
-                  style={{ 
-                    backgroundImage: "url(/anime_robot.jpeg)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    clipPath: "inset(25% 0% 50% 0%)"
-                  }} 
-                />
-                {/* Slice 3: Lower Middle 25% */}
-                <div 
-                  className="absolute inset-0 assembly-slice assembly-slice-3" 
-                  style={{ 
-                    backgroundImage: "url(/anime_robot.jpeg)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    clipPath: "inset(50% 0% 25% 0%)"
-                  }} 
-                />
-                {/* Slice 4: Bottom 25% */}
-                <div 
-                  className="absolute inset-0 assembly-slice assembly-slice-4" 
-                  style={{ 
-                    backgroundImage: "url(/anime_robot.jpeg)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    clipPath: "inset(75% 0% 0% 0%)"
-                  }} 
-                />
+                {/* 12 Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
+                {pieces.map((p) => (
+                  <div 
+                    key={p.id}
+                    className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} 
+                    style={{ 
+                      backgroundImage: "url(/anime_robot.jpeg)",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      clipPath: p.inset,
+                      opacity: 0,
+                    }} 
+                  />
+                ))}
 
                 {/* Clean gradient overlay on the image instead of solid dark scrim */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-black/30 z-10 pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 
                 {/* Integrated Manifesto Text Overlaid on Image */}
                 <div 
