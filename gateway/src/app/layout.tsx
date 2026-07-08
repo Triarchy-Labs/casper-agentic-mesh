@@ -42,6 +42,8 @@ export const metadata: Metadata = {
 	},
 };
 
+import ClickPrompt from "@/components/ClickPrompt";
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -57,12 +59,14 @@ export default function RootLayout({
 				<div className="edge-aura" aria-hidden />
 				<div className="fx-overlay" aria-hidden />
 				<CursorProvider />
-				<SmoothScroller>
-					<div className="flex flex-col min-h-screen">
-						<div className="flex-1">{children}</div>
-						<Footer />
-					</div>
-				</SmoothScroller>
+				<ClickPrompt color="#ffffff" decay={0.015}>
+					<SmoothScroller>
+						<div className="flex flex-col min-h-screen">
+							<div className="flex-1">{children}</div>
+							<Footer />
+						</div>
+					</SmoothScroller>
+				</ClickPrompt>
 			</body>
 		</html>
 	);
