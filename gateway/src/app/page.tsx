@@ -156,6 +156,57 @@ export default function Page() {
       duration: 0.6,
       ease: "power2.in",
     }, 2.8); // starts at 2.8, ends at 3.4
+
+    // 4. Produx parity — photo parallax inside each card frame.
+    // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
+    const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
+    photos.forEach((photo) => {
+      gsap.set(photo, { scale: 1.15, transformOrigin: "center center" });
+      const frame = photo.closest(".synergy-section") as HTMLElement | null;
+      // Dump: yPercent magnitude 10, ease none, start "top bottom" → end "bottom top".
+      gsap.fromTo(
+        photo,
+        { yPercent: -5 },
+        {
+          yPercent: 5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: frame ?? photo,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        }
+      );
+    });
+
+    // 5. Produx parity — focus grid. EXACT values traced from the minified card handler.
+    // Hovered: opacity 1, scale 1.02, no blur. Siblings: opacity 0.5, scale 0.98,
+    // filter blur(4px) brightness(0.4). duration 0.6, ease power2.out, overwrite true.
+    const focusCards = gsap.utils.toArray<HTMLElement>(".focus-cards > div");
+    const focusCleanups: Array<() => void> = [];
+    focusCards.forEach((card) => {
+      const enter = () => {
+        gsap.to(
+          focusCards.filter((c) => c !== card),
+          { opacity: 0.5, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
+        );
+        gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
+      };
+      const leave = () => {
+        gsap.to(focusCards, { opacity: 1, scale: 1, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
+      };
+      card.addEventListener("mouseenter", enter);
+      card.addEventListener("mouseleave", leave);
+      focusCleanups.push(() => {
+        card.removeEventListener("mouseenter", enter);
+        card.removeEventListener("mouseleave", leave);
+      });
+    });
+
+    return () => {
+      focusCleanups.forEach((fn) => fn());
+    };
   }, { dependencies: [booted], scope: containerRef });
 
   return (
@@ -257,12 +308,12 @@ export default function Page() {
                 <div className="focus-cards grid grid-cols-12 gap-[1.39vw] max-sm:grid-cols-1 max-sm:gap-[3.48vh]">
                   {/* 01 ESCROW — col-span-7, big left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] group overflow-hidden">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden">
                       <CornerMarks />
-                      {/* Vector Illustration Background */}
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
-                        style={{ 
+                      {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
+                      <div
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        style={{
                           backgroundImage: "url(/vector_escrow.jpeg)",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
@@ -294,12 +345,12 @@ export default function Page() {
                   </div>
 
                   {/* 03 OMNI-MESH — col-span-4, right, pushed down (mt-auto) */}
-                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:col-end-13 md:mt-auto cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden min-h-[48.8vh]">
+                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:col-end-13 md:mt-auto md:h-fit cursor-pointer">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden min-h-[48.8vh] md:min-h-0 md:aspect-[1.04/1]">
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/anime_robot.jpeg)",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
@@ -333,11 +384,11 @@ export default function Page() {
 
                   {/* Row 2: wide centered (10) — RWA Risk Oracle */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-10 md:col-start-2 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] flex flex-col justify-center group">
+                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] md:min-h-0 md:aspect-[1.83/1] flex flex-col justify-center group">
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0" 
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/vector_oracle.jpeg)",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
@@ -369,8 +420,8 @@ export default function Page() {
 
                   {/* Row 3: small-left (4) + big-right (7) */}
                   {/* 04 TRIBUNAL — col-span-4, small left */}
-                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:mt-auto cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh]">
+                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:h-fit cursor-pointer">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden">
                       <CornerMarks />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
@@ -399,7 +450,7 @@ export default function Page() {
 
                   {/* 05 x402 PAYMENT — col-span-7, big right */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 md:col-end-13 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh]">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden">
                       <CornerMarks />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
