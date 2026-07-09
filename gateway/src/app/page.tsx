@@ -295,7 +295,7 @@ export default function Page() {
 
                   {/* 03 OMNI-MESH — col-span-4, right, pushed down (mt-auto) */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:col-end-13 md:mt-auto cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden min-h-[48.8vh]">
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
@@ -335,7 +335,7 @@ export default function Page() {
                 {/* Row 2: wide centered (10) — RWA Risk Oracle */}
                 <div className="grid grid-cols-12">
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-10 md:col-start-2 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[48.8vh] flex flex-col justify-center group">
+                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] flex flex-col justify-center group">
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
@@ -374,7 +374,7 @@ export default function Page() {
                 <div className="focus-cards grid grid-cols-12 gap-[1.39vw] max-sm:grid-cols-1 max-sm:gap-[3.48vh]">
                   {/* 04 TRIBUNAL — col-span-4, small left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh]">
                       <CornerMarks />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
