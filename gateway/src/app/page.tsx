@@ -187,9 +187,12 @@ export default function Page() {
     const focusCleanups: Array<() => void> = [];
     focusCards.forEach((card) => {
       const enter = () => {
+        // produx sets sibling opacity 0.5, but their bg is near-black so it reads as pure dimming.
+        // Our bg is the red carbon fabric, so opacity shows through — keep cards opaque and
+        // dim via brightness+blur only (matches their look on our background).
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 0.5, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
