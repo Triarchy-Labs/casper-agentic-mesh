@@ -384,7 +384,7 @@ export default function Page() {
 
                   {/* Row 2: wide centered (10) — RWA Risk Oracle */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-10 md:col-start-2 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] md:min-h-0 md:aspect-[1.83/1] flex flex-col justify-center group">
+                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] md:min-h-0 md:aspect-[1.9/1] flex flex-col justify-center group">
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
