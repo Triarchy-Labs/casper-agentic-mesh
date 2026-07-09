@@ -330,10 +330,8 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Row 2: wide centered (10) — RWA Risk Oracle */}
-                <div className="grid grid-cols-12">
+                  {/* Row 2: wide centered (10) — RWA Risk Oracle */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-10 md:col-start-2 cursor-pointer">
                     <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] flex flex-col justify-center group">
                       <CornerMarks />
@@ -368,12 +366,10 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Row 3: small-left (4) + big-right (7) */}
-                <div className="focus-cards grid grid-cols-12 gap-[1.39vw] max-sm:grid-cols-1 max-sm:gap-[3.48vh]">
+                  {/* Row 3: small-left (4) + big-right (7) */}
                   {/* 04 TRIBUNAL — col-span-4, small left */}
-                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 cursor-pointer">
+                  <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:mt-auto cursor-pointer">
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh]">
                       <CornerMarks />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
