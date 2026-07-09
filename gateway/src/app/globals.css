@@ -315,6 +315,23 @@ input:focus, textarea:focus, select:focus {
   transform: scale(0.97);
 }
 
+/* Unified focus-dim for functional card grids (dashboard) — mirrors the corrected
+   home focus effect: siblings darken + blur (no see-through opacity), hovered lifts.
+   Scoped by .focus-dim-scope so it never leaks into the home .focus-cards grid. */
+.focus-card {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, filter;
+}
+.focus-dim-scope:has(.focus-card:hover) .focus-card:not(:hover) {
+  filter: brightness(0.4) blur(4px);
+  transform: scale(0.98);
+}
+.focus-dim-scope .focus-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  z-index: 12;
+}
+
 /* Hover-reveal CTA — hidden by default, appears on card hover (produx ■ VIEW PROJECT pattern) */
 .panel-cta {
   display: flex;

@@ -302,7 +302,7 @@ export default function Dashboard() {
             </section>
 
             {/* Editorial Grid Section (Scrolls over Hero) */}
-            <section ref={gridRef} className="relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
+            <section ref={gridRef} className="focus-dim-scope relative z-10 bg-transparent min-h-screen w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
                 <div className="w-full grid grid-cols-1 md:grid-cols-12 gap-x-[4vw] gap-y-[10vh] max-sm:gap-y-[6vh] mb-[15vh]">
 
                     {/* MESH CONTROL — The Tower + Agent Tribunal (click-triggered, fault-tolerant) */}
@@ -315,7 +315,7 @@ export default function Dashboard() {
 
                     {/* SWARM TELEMETRY (Row 2 - Dedicated Full Width Card styled like Jurni AI) */}
                     <div className="col-span-12 flex flex-col grid-item mb-[5vh]">
-                        <div className="editorial-panel block relative w-full aspect-video md:aspect-[21/9] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+                        <div className="focus-card editorial-panel block relative w-full aspect-video md:aspect-[21/9] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
@@ -344,7 +344,7 @@ export default function Dashboard() {
 
                     {/* Execution Terminal (Row 3 - Left 8 cols) */}
                     <div className="col-span-12 md:col-span-8 flex flex-col grid-item relative">
-                        <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[65vh] flex flex-col flex-1">
+                        <div className="focus-card editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[65vh] flex flex-col flex-1">
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 20% 80%, var(--red-500) 0%, transparent 70%)" }} />
@@ -434,7 +434,7 @@ export default function Dashboard() {
 
                     {/* WASI Nodes (Row 3 - Right 4 cols) */}
                     <div className="col-span-12 md:col-span-4 flex flex-col grid-item">
-                        <div className="editorial-panel block relative w-full aspect-[4/3] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+                        <div className="focus-card editorial-panel block relative w-full aspect-[4/3] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.1]" style={{ background: "radial-gradient(circle at 50% 100%, var(--red-500) 0%, transparent 70%)" }} />
                             <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
@@ -479,10 +479,10 @@ export default function Dashboard() {
 						System Scale Mesh <span className="text-white/40 font-normal text-xs uppercase ml-4">{"// SCALE EXPANSION VECTORS GAMMA & DELTA"}</span>
 					</h2>
 
-					<div className="flex flex-col md:flex-row gap-[12%] items-end focus-cards">
+					<div className="flex flex-col md:flex-row gap-[12%] items-end">
 						{/* Vector Gamma Panel (Left 30% Square) */}
 						<div className="w-full md:w-[30%] flex flex-col">
-							<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+							<div className="focus-card editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 								{/* Produx Visual Background */}
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
@@ -569,7 +569,7 @@ export default function Dashboard() {
 
 						{/* Vector Delta Panel (Right 58% Square) */}
 						<div className="w-full md:w-[58%] flex flex-col">
-							<div className="editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[60vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
+							<div className="focus-card editorial-panel block relative w-full aspect-square max-sm:aspect-auto max-sm:min-h-[60vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
 								{/* Produx Visual Background */}
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />

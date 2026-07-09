@@ -45,7 +45,7 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 			viewport={{ once: true, margin: "-10%" }}
 			transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
 		>
-			<div className="editorial-panel relative overflow-hidden bg-[#0a0a0a] border border-white/5 w-full aspect-[4/3] max-sm:aspect-[4/5]">
+			<div className="focus-card editorial-panel relative overflow-hidden bg-[#0a0a0a] border border-white/5 w-full aspect-[4/3] max-sm:aspect-[4/5]">
 				<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 				<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
