@@ -197,18 +197,26 @@ export function ScrollHero() {
 			//    b) then ride continuously up the whole viewport synced with the shrink,
 			//    c) fog back out at the top right as the pin ends → mosaic begins.
 			tl.fromTo(phrasesRef.current,
-				{ autoAlpha: 0, filter: "blur(10px)" },
-				{ autoAlpha: 1, filter: "blur(0px)", ease: "power2.out", duration: 0.2 },
-				0.05
+				{ autoAlpha: 0 },
+				{ autoAlpha: 1, ease: "none", duration: 0.05 },
+				0.06
 			);
+			// entry: each line fogs + rises into place, staggered (produx natureSway feel)
+			tl.fromTo(".mf-hero-line",
+				{ yPercent: 120, opacity: 0, filter: "blur(8px)" },
+				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.3 },
+				0.08
+			);
+			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
-				{ y: () => window.innerHeight * 0.05 },
-				{ y: () => -window.innerHeight * 0.95, ease: "power1.in", duration: 0.68 },
-				0.28
+				{ y: () => window.innerHeight * 0.02 },
+				{ y: () => -window.innerHeight * 0.5, ease: "power1.inOut", duration: 0.38 },
+				0.3
 			);
-			tl.to(phrasesRef.current,
-				{ autoAlpha: 0, filter: "blur(10px)", rotateZ: -2, ease: "power2.in", duration: 0.14 },
-				0.85
+			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
+			tl.to(".mf-hero-line",
+				{ yPercent: -120, rotateZ: -2, opacity: 0, filter: "blur(4px)", stagger: 0.045, ease: "power2.in", duration: 0.2 },
+				0.82
 			);
 		}, heroRef);
 
@@ -415,21 +423,21 @@ export function ScrollHero() {
 					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
 				>
 					<div className="w-full max-w-[1600px] mx-auto flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
-						<div className="md:col-span-6 flex flex-col items-start">
-							<div className="flex items-center gap-3 mb-7 flex-wrap">
+						<div className="flex flex-col items-start text-left">
+							<div className="mf-hero-line flex items-center gap-3 mb-7 flex-wrap">
 								<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
 								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
 								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
 							</div>
 							<h2 className="uppercase tracking-tight text-white leading-[1.1] max-w-[40vw] max-lg:max-w-[62vw]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
-								Machines now hire, pay, and trade each other.
+								<span className="block overflow-hidden"><span className="mf-hero-line block">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block">trade each other.</span></span>
 							</h2>
 						</div>
-						<div className="md:col-span-5 md:col-start-8 md:pt-[7vh] flex flex-col items-start gap-6">
-							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
+						<div className="max-w-[30vw] max-lg:max-w-full flex flex-col items-start gap-6 md:mb-[2vh] shrink-0">
+							<p className="mf-hero-line text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
 								But value can&apos;t flow to a machine you can&apos;t hold accountable. Triarchy is the command deck for that economy — the trust layer where agents lock escrow, price work against a real-world oracle, and answer to an adversarial tribunal, under one overseer.
 							</p>
-							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
+							<p className="mf-hero-line text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
 								Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
 							</p>
 						</div>
