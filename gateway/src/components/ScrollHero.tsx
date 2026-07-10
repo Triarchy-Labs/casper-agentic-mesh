@@ -94,6 +94,7 @@ export function ScrollHero() {
 	const wordmarkRef = useRef<HTMLDivElement>(null);
 	const subtitleRef = useRef<HTMLDivElement>(null);
 	const headerRef = useRef<HTMLElement>(null);
+	const logoTargetRef = useRef<HTMLSpanElement>(null); // nav "TRIARCHY" — the exact landing slot
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -136,6 +137,24 @@ export function ScrollHero() {
 	useEffect(() => {
 		if (!heroRef.current) return;
 		CustomEase.create("pxScroll", "M0,0 C0.2,0.6 0.35,1 1,1");
+
+		// Exact landing slot: translate + scale so the giant wordmark lands ON the nav
+		// "TRIARCHY" (same spot, same width) — so the crossfade reads as one continuous word.
+		// Measured live (offsetWidth ignores transforms) and re-read on every ScrollTrigger refresh.
+		const measure = () => {
+			const nav = logoTargetRef.current;
+			const wm = wordmarkRef.current;
+			if (!nav || !wm) {
+				return { x: -window.innerWidth * 0.32, y: -window.innerHeight * 0.34, s: 0.11 };
+			}
+			const nr = nav.getBoundingClientRect();
+			return {
+				x: nr.left + nr.width / 2 - window.innerWidth / 2,
+				y: nr.top + nr.height / 2 - window.innerHeight / 2,
+				s: nr.width / wm.offsetWidth,
+			};
+		};
+
 		const ctx = gsap.context(() => {
 			const tl = gsap.timeline({
 				defaults: { ease: "pxScroll" },
@@ -148,29 +167,23 @@ export function ScrollHero() {
 					invalidateOnRefresh: true,
 				},
 			});
-			// 1. subtitle dissolves first (first ~2 ticks)
-			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12 }, 0);
-			// 2. wordmark shrinks + drifts toward the top-left nav slot (produx left-anchor)
-			tl.to(
-				wordmarkRef.current,
-				{
-					scale: 0.2,
-					x: () => -window.innerWidth * 0.3,
-					y: () => -window.innerHeight * 0.3,
-					duration: 0.82,
-				},
-				0
-			);
-			// 3. wordmark dissolves near the corner
-			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(12px)", ease: "power2.in", duration: 0.22 }, 0.7);
-			// 4. our nav panel reveals in its place (produx header-reveal mechanic)
-			tl.fromTo(
-				headerRef.current,
-				{ autoAlpha: 0, y: -20 },
-				{ autoAlpha: 1, y: 0, ease: "power3.out", duration: 0.24 },
-				0.72
-			);
+			// 1. subtitle dissolves first (first ~2 ticks), independent of the word
+			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, 0);
+			// 2. shrink to the nav wordmark's exact size (smooth throughout)
+			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.88 }, 0);
+			// 3a. drift LEFT early, then settle — X eases out (the horizontal half of the arc)
+			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.72, ease: "power2.out" }, 0);
+			// 3b. whip UP late + accelerating — Y eases in (the vertical half → curved, quick finish)
+			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.9, ease: "power2.in" }, 0);
+			// 4. crossfade AT the meeting point: giant word dissolves as the nav word takes its place
+			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.12, ease: "power2.in" }, 0.9);
+			tl.fromTo(headerRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 0.9);
 		}, heroRef);
+
+		// Fonts change the measured widths — re-measure once they load so the landing is exact.
+		if (typeof document !== "undefined" && document.fonts) {
+			document.fonts.ready.then(() => ScrollTrigger.refresh());
+		}
 		return () => ctx.revert();
 	}, []);
 
@@ -254,7 +267,7 @@ export function ScrollHero() {
 				}}
 			>
 				<span style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, letterSpacing: "0.16em", fontSize: "clamp(14px,1.1vw,24px)" }}>
-					TRIARCHY{" "}
+					<span ref={logoTargetRef} style={{ display: "inline-block" }}>TRIARCHY</span>{" "}
 					<motion.span
 						style={{ color: "#f13242", display: "inline-block" }}
 						animate={{
@@ -313,6 +326,7 @@ export function ScrollHero() {
 					<div
 						ref={wordmarkRef}
 						style={{
+							position: "relative",
 							transformOrigin: "center center",
 							textAlign: "center",
 							pointerEvents: "none",
@@ -342,7 +356,13 @@ export function ScrollHero() {
 							ref={subtitleRef}
 							className="neon-sweep logo-subtitle opacity-0"
 							style={{
+								position: "absolute",
+								top: "100%",
+								left: 0,
+								right: 0,
 								marginTop: "1.4rem",
+								textAlign: "center",
+								whiteSpace: "nowrap",
 								fontFamily: "ui-monospace, 'Geist Mono', monospace",
 								letterSpacing: "0.36em",
 								fontSize: "clamp(12px,1.5vw,64px)",
