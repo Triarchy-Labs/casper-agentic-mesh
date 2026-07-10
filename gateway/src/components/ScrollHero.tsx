@@ -204,19 +204,19 @@ export function ScrollHero() {
 			// entry: each line fogs + rises into place, staggered (produx natureSway feel)
 			tl.fromTo(".mf-hero-line",
 				{ yPercent: 120, opacity: 0, filter: "blur(8px)" },
-				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.025, ease: "power2.out", duration: 0.2 },
+				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.02, ease: "power2.out", duration: 0.2 },
 				0.08
 			);
 			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
 				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.16 },
+				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.12 },
 				0.5
 			);
 			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
 			tl.to(".mf-hero-line",
-				{ yPercent: -110, rotateZ: -2, stagger: 0.018, ease: "power3.in", duration: 0.14 },
-				0.74
+				{ yPercent: -130, stagger: 0.012, ease: "power3.in", duration: 0.12 },
+				0.7
 			);
 		}, heroRef);
 

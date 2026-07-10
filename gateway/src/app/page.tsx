@@ -46,37 +46,6 @@ export default function Page() {
   useGSAP(() => {
     if (!booted) return;
 
-    // 1. Entrance animation timeline (starts immediately on mount, which is after loader unmounts)
-    const tl = gsap.timeline();
-
-    tl.fromTo(".hero-tag-animate", 
-      { opacity: 0, y: 15 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: "power3.out" }
-    );
-
-    tl.fromTo(".hero-split-word",
-      { y: "100%", opacity: 0 },
-      { y: "0%", opacity: 1, duration: 1.2, stagger: 0.15, ease: "power4.out" },
-      "-=0.6"
-    );
-
-    tl.fromTo(".hero-sub-line",
-      { scaleX: 0 },
-      { scaleX: 1, duration: 1, transformOrigin: "left center", ease: "power3.out" },
-      "-=0.8"
-    );
-
-    tl.fromTo(".hero-sub-text",
-      { opacity: 0, x: -10 },
-      { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
-      "-=0.6"
-    );
-
-    tl.fromTo(".hero-btn-animate",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" },
-      "-=0.6"
-    );
 
     // 2. ScrollTrigger animations for sections
     const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
