@@ -210,13 +210,13 @@ export function ScrollHero() {
 			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
 				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.24 },
-				0.58
+				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.22 },
+				0.55
 			);
 			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
 			tl.to(".mf-hero-line",
-				{ opacity: 0, filter: "blur(14px)", scale: 0.9, rotateZ: -1, stagger: 0.08, ease: "power2.in", duration: 0.2 },
-				0.9
+				{ yPercent: -110, rotateZ: -2, stagger: 0.03, ease: "power3.in", duration: 0.12 },
+				0.82
 			);
 		}, heroRef);
 
@@ -429,13 +429,13 @@ export function ScrollHero() {
 							</h2>
 						</div>
 						<div className="max-w-[30vw] max-lg:max-w-full flex flex-col items-start gap-6 md:mb-[2vh] shrink-0">
-							<p className="mf-hero-line text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
+							<div className="overflow-hidden"><p className="mf-hero-line text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
 								But value can&apos;t flow to a machine you can&apos;t hold accountable. Triarchy is the command deck for that economy — the trust layer where agents lock escrow, price work against a real-world oracle, and answer to an adversarial tribunal, under one overseer.
-							</p>
-							<p className="mf-hero-line text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
+							</p></div>
+							<div className="overflow-hidden"><p className="mf-hero-line text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
 								Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
-							</p>
-							<div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div>
+							</p></div>
+							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
 						</div>
 					</div>
 				</div>
