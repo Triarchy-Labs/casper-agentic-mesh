@@ -111,15 +111,6 @@ export default function Page() {
       }
     });
 
-    // Text box exit starts at 2.0, ends at 2.8
-    assemblyTl.to(".assembly-text-box", {
-      opacity: 0,
-      y: "-100px",
-      filter: "blur(6px)",
-      duration: 0.8,
-      ease: "power2.in",
-    }, 2.0);
-
     // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge with custom non-linear parameters
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
@@ -156,6 +147,26 @@ export default function Page() {
       duration: 0.6,
       ease: "power2.in",
     }, 2.8); // starts at 2.8, ends at 3.4
+
+    // Manifesto — our entry (rise from below) → produx exit (y:-110%, rotateZ:-2deg), scrubbed.
+    const mfTl = gsap.timeline({
+      scrollTrigger: { trigger: "#manifesto", start: "top bottom", end: "bottom top", scrub: 1 },
+    });
+    mfTl.fromTo(".mf-line",
+      { yPercent: 115, opacity: 0, filter: "blur(6px)" },
+      { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.42 },
+      0
+    );
+    mfTl.fromTo(".mf-fade",
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, ease: "power2.out", duration: 0.3 },
+      0.05
+    );
+    mfTl.to(".mf-line",
+      { yPercent: -115, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.04, ease: "power2.in", duration: 0.42 },
+      0.58
+    );
+    mfTl.to(".mf-fade", { opacity: 0, y: -12, ease: "power2.in", duration: 0.3 }, 0.6);
 
     // 4. Produx parity — photo parallax inside each card frame.
     // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
@@ -227,31 +238,43 @@ export default function Page() {
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
             <ScrollHero />
-            {/* Redesigned Pinned Second Section with Image Assembly */}
-            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
-              
-              {/* Left: Heading and CTAs (positioned absolute to float over background) */}
-              <div className="assembly-text-box absolute left-[5.5vw] top-[16vh] flex flex-col items-start text-left z-20 pointer-events-auto max-lg:relative max-lg:left-0 max-lg:top-0 max-lg:px-[4.10vw] max-sm:px-[5.97vw] max-lg:mb-[4vh] w-full max-w-xl">
-                <div className="flex items-center gap-3 mb-6 flex-wrap">
-                  <span className="nb-tag hero-tag-animate"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
-                  <span className="nb-tag nb-tag-ghost hero-tag-animate">/// vol.𝟎𝟏 — agent economy</span>
-                  <span className="nb-index hero-tag-animate">𝟐𝟎𝟐𝟔</span>
+
+            {/* Manifesto — two groups ride up from below on scroll, then exit upward (produx parity) */}
+            <section id="manifesto" className="relative w-full min-h-[135vh] overflow-hidden flex items-start justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] pt-[40vh] pb-[16vh] z-10">
+              <div className="w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start">
+                {/* LEFT — kicker + big hook */}
+                <div className="md:col-span-7 flex flex-col items-start">
+                  <div className="mf-fade flex items-center gap-3 mb-8 flex-wrap">
+                    <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
+                    <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
+                    <span className="nb-index">𝟐𝟎𝟐𝟔</span>
+                  </div>
+                  <h2 className="uppercase tracking-tight text-white leading-[0.96]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(38px, 5.6vw, 92px)" }}>
+                    {["Machines now", "hire, pay, and", "trade each other."].map((line, i) => (
+                      <span key={i} className="block overflow-hidden py-[0.06em]">
+                        <span className="mf-line block">{line}</span>
+                      </span>
+                    ))}
+                  </h2>
                 </div>
-                <h1 className="mb-1 leading-none text-white uppercase tracking-tight" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(36px, 5.5vw, 64px)" }}>
-                  Agentic
-                </h1>
-                <h1 className="mb-6 leading-none text-white uppercase tracking-tight" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(36px, 5.5vw, 64px)" }}>
-                  Infrastructure
-                </h1>
-                <div className="flex items-center gap-4 mb-8 w-full">
-                  <div className="tech-line flex-1 hero-sub-line origin-left" />
-                  <span className="nb-index whitespace-nowrap hero-sub-text">escrow · oracle · the tower</span>
-                </div>
-                <div className="flex gap-4 flex-wrap">
-                  <button className="button-primary inline-flex items-center hero-btn-animate">Deploy Now<span className="btn-icon-circle ml-2">↗</span></button>
-                  <button className="btn-ghost hero-btn-animate">Talk to Sales</button>
+                {/* RIGHT — the turn + what Triarchy is */}
+                <div className="md:col-span-5 md:pt-[9vh] flex flex-col items-start gap-6">
+                  <span className="block overflow-hidden py-[0.1em]">
+                    <span className="mf-line block text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(15px, 1.15vw, 26px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
+                      But value can&apos;t flow to a machine you can&apos;t hold accountable. Triarchy is the command deck for that economy — the trust layer where agents lock escrow, price work against a real-world oracle, and answer to an adversarial tribunal, under one overseer.
+                    </span>
+                  </span>
+                  <span className="block overflow-hidden py-[0.1em]">
+                    <span className="mf-line block text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", letterSpacing: "0.14em" }}>
+                      Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
+                    </span>
+                  </span>
                 </div>
               </div>
+            </section>
+
+            {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
+            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
 
               {/* Center/Bottom: Image Assembly Box */}
               <div className="assembly-image-container relative w-[80vw] max-w-[1600px] aspect-[1.784/1] z-10 pointer-events-auto mt-[10vh] max-lg:w-[90vw] max-lg:max-w-none" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
