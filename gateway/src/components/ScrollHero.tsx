@@ -422,15 +422,15 @@ export function ScrollHero() {
 					className="absolute inset-x-0 bottom-[6vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
 					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
 				>
-					<div className="w-full max-w-[1600px] mx-auto flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
+					<div className="w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
 						<div className="flex flex-col items-start text-left">
 							<div className="mf-hero-line flex items-center gap-3 mb-7 flex-wrap">
 								<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
 								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
 								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
 							</div>
-							<h2 className="uppercase tracking-tight text-white leading-[1.1] max-w-[40vw] max-lg:max-w-[62vw]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
-								<span className="block overflow-hidden"><span className="mf-hero-line block">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block">trade each other.</span></span>
+							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
+								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
 							</h2>
 						</div>
 						<div className="max-w-[30vw] max-lg:max-w-full flex flex-col items-start gap-6 md:mb-[2vh] shrink-0">
