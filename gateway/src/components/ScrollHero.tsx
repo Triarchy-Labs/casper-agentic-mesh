@@ -169,21 +169,21 @@ export function ScrollHero() {
 			});
 			// 1. subtitle dissolves first (first ~2 ticks), independent of the word
 			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, 0);
-			// 2. shrink to the nav wordmark's exact size (smooth throughout)
-			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.85, ease: "power1.inOut" }, 0);
-			// 3. STRAIGHT, gently-sloped glide toward the nav slot — X and Y share ease + timing,
-			//    so the path is a single line (no arc). On wide screens it lands ~30° = shallow.
-			//    Gentle in/out so the reposition barely registers; the shrink carries the eye.
-			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.85, ease: "power1.inOut" }, 0);
-			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.85, ease: "power1.inOut" }, 0);
-			// 4. soft dissolve as the nav emerges — the word just recedes + fades, no felt jump
-			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power2.in" }, 0.82);
+			// 2+3. shrink AND straight glide land TOGETHER and early (0.6): scale, x, y share the
+			//      exact same window + ease, so the word never keeps travelling after it looks shrunk
+			//      (kills the "flies up after shrinking" tail). Straight, shallow line on wide screens.
+			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.6, ease: "power1.inOut" }, 0);
+			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.6, ease: "power1.inOut" }, 0);
+			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.6, ease: "power1.inOut" }, 0);
+			// 4. dissolve STARTS just before it lands (0.53) so it is already fading on arrival —
+			//    the blend into the nav reads correctly; after 0.6 it only dissolves in place, no motion
+			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.32, ease: "power2.in" }, 0.53);
 			// 5. nav reveals FROM FOG, in place (blur->0 + fade, no slide) — produx reveal 1:1
 			tl.fromTo(
 				headerRef.current,
 				{ autoAlpha: 0, filter: "blur(10px)" },
-				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" },
-				0.82
+				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.4, ease: "power2.out" },
+				0.55
 			);
 		}, heroRef);
 
