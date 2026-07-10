@@ -148,25 +148,27 @@ export default function Page() {
       ease: "power2.in",
     }, 2.8); // starts at 2.8, ends at 3.4
 
-    // Manifesto — our entry (rise from below) → produx exit (y:-110%, rotateZ:-2deg), scrubbed.
+    // Manifesto — trigger on the CONTENT (not the tall section) so the reveal lines up with the
+    // moment the text is actually on screen. Our entry (rise from below) → produx exit (y:-110%,
+    // rotateZ:-2deg), scrubbed across the content's transit through the viewport.
     const mfTl = gsap.timeline({
-      scrollTrigger: { trigger: "#manifesto", start: "top bottom", end: "bottom top", scrub: 1 },
+      scrollTrigger: { trigger: ".mf-content", start: "top 85%", end: "bottom 15%", scrub: 1 },
     });
     mfTl.fromTo(".mf-line",
       { yPercent: 115, opacity: 0, filter: "blur(6px)" },
-      { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.42 },
+      { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.4 },
       0
     );
     mfTl.fromTo(".mf-fade",
       { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, ease: "power2.out", duration: 0.3 },
-      0.05
+      { opacity: 1, y: 0, ease: "power2.out", duration: 0.28 },
+      0.04
     );
     mfTl.to(".mf-line",
-      { yPercent: -115, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.04, ease: "power2.in", duration: 0.42 },
-      0.58
+      { yPercent: -115, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.04, ease: "power2.in", duration: 0.4 },
+      0.6
     );
-    mfTl.to(".mf-fade", { opacity: 0, y: -12, ease: "power2.in", duration: 0.3 }, 0.6);
+    mfTl.to(".mf-fade", { opacity: 0, y: -12, ease: "power2.in", duration: 0.28 }, 0.62);
 
     // 4. Produx parity — photo parallax inside each card frame.
     // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
@@ -240,8 +242,8 @@ export default function Page() {
             <ScrollHero />
 
             {/* Manifesto — two groups ride up from below on scroll, then exit upward (produx parity) */}
-            <section id="manifesto" className="relative w-full min-h-[135vh] overflow-hidden flex items-start justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] pt-[40vh] pb-[16vh] z-10">
-              <div className="w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start">
+            <section id="manifesto" className="relative w-full min-h-[115vh] overflow-hidden flex items-center justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] py-[14vh] z-10">
+              <div className="mf-content w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start">
                 {/* LEFT — kicker + big hook */}
                 <div className="md:col-span-7 flex flex-col items-start">
                   <div className="mf-fade flex items-center gap-3 mb-8 flex-wrap">
