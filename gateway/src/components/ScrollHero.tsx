@@ -202,9 +202,9 @@ export function ScrollHero() {
 				0.05
 			);
 			tl.fromTo(phrasesRef.current,
-				{ y: () => window.innerHeight * 0.12 },
-				{ y: () => -window.innerHeight * 0.82, ease: "none", duration: 0.82 },
-				0.05
+				{ y: () => window.innerHeight * 0.05 },
+				{ y: () => -window.innerHeight * 0.95, ease: "power1.in", duration: 0.68 },
+				0.28
 			);
 			tl.to(phrasesRef.current,
 				{ autoAlpha: 0, filter: "blur(10px)", rotateZ: -2, ease: "power2.in", duration: 0.14 },
@@ -411,7 +411,7 @@ export function ScrollHero() {
 				    them in on first scroll, rides them up in sync with the shrink, then exits up. */}
 				<div
 					ref={phrasesRef}
-					className="absolute inset-x-0 bottom-[9vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
+					className="absolute inset-x-0 bottom-[6vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
 					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
 				>
 					<div className="w-full max-w-[1600px] mx-auto flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
@@ -421,8 +421,8 @@ export function ScrollHero() {
 								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
 								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
 							</div>
-							<h2 className="uppercase tracking-tight text-white leading-[0.9]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(42px, 6.2vw, 116px)" }}>
-								Machines now<br />hire, pay, and<br />trade each other.
+							<h2 className="uppercase tracking-tight text-white leading-[1.1] max-w-[40vw] max-lg:max-w-[62vw]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
+								Machines now hire, pay, and trade each other.
 							</h2>
 						</div>
 						<div className="md:col-span-5 md:col-start-8 md:pt-[7vh] flex flex-col items-start gap-6">
