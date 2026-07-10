@@ -210,13 +210,13 @@ export function ScrollHero() {
 			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
 				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.55, ease: "none", duration: 0.36 },
+				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.24 },
 				0.58
 			);
 			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
 			tl.to(".mf-hero-line",
-				{ yPercent: -130, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.08, ease: "power2.in", duration: 0.26 },
-				0.78
+				{ opacity: 0, filter: "blur(14px)", scale: 0.9, rotateZ: -1, stagger: 0.08, ease: "power2.in", duration: 0.2 },
+				0.9
 			);
 		}, heroRef);
 
