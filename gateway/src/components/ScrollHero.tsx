@@ -192,17 +192,23 @@ export function ScrollHero() {
 				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.34, ease: "power2.out" },
 				0.62
 			);
-			// 6. Manifesto phrases ride up from below SYNCED to the shrink — they settle under the nav
-			//    line right as the word lands (~0.6), hold, then exit upward (produx y:-110/rotateZ:-2)
-			//    at the very end of the pin, so the mosaic starts the instant the pin releases.
+			// 6. Manifesto phrases (produx layout: sit at the BOTTOM, ride UP through the screen).
+			//    a) fog in IN PLACE first (so they don't start rising while still blurred),
+			//    b) then ride continuously up the whole viewport synced with the shrink,
+			//    c) fog back out at the top right as the pin ends → mosaic begins.
 			tl.fromTo(phrasesRef.current,
-				{ yPercent: 68, autoAlpha: 0, filter: "blur(8px)" },
-				{ yPercent: 0, autoAlpha: 1, filter: "blur(0px)", ease: "power2.out", duration: 0.52 },
-				0.1
+				{ autoAlpha: 0, filter: "blur(10px)" },
+				{ autoAlpha: 1, filter: "blur(0px)", ease: "power2.out", duration: 0.2 },
+				0.05
+			);
+			tl.fromTo(phrasesRef.current,
+				{ y: () => window.innerHeight * 0.12 },
+				{ y: () => -window.innerHeight * 0.82, ease: "none", duration: 0.82 },
+				0.05
 			);
 			tl.to(phrasesRef.current,
-				{ yPercent: -80, rotateZ: -2, autoAlpha: 0, filter: "blur(8px)", ease: "power2.in", duration: 0.22 },
-				0.82
+				{ autoAlpha: 0, filter: "blur(10px)", rotateZ: -2, ease: "power2.in", duration: 0.14 },
+				0.85
 			);
 		}, heroRef);
 
@@ -405,17 +411,17 @@ export function ScrollHero() {
 				    them in on first scroll, rides them up in sync with the shrink, then exits up. */}
 				<div
 					ref={phrasesRef}
-					className="absolute inset-x-0 top-[24vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
+					className="absolute inset-x-0 bottom-[9vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
 					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
 				>
-					<div className="w-full max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-y-[5vh] md:gap-x-[6vw] items-start">
+					<div className="w-full max-w-[1600px] mx-auto flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
 						<div className="md:col-span-6 flex flex-col items-start">
 							<div className="flex items-center gap-3 mb-7 flex-wrap">
 								<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
 								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
 								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
 							</div>
-							<h2 className="uppercase tracking-tight text-white leading-[0.98]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(34px, 4.6vw, 76px)" }}>
+							<h2 className="uppercase tracking-tight text-white leading-[0.9]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(42px, 6.2vw, 116px)" }}>
 								Machines now<br />hire, pay, and<br />trade each other.
 							</h2>
 						</div>
