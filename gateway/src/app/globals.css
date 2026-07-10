@@ -765,7 +765,7 @@ html.lenis, html.lenis body { height: auto; }
 /* REAL woven-carbon photo (macro fabric with true folds + depth-of-field).
    Source: Unsplash (free license). Oversized + parallax so it feels alive. */
 .carbon-weave {
-  position: absolute; inset: -6%;
+  position: absolute; inset: -12%;
   background-image: url(/carbon.jpg);
   background-size: cover;
   background-position: center;

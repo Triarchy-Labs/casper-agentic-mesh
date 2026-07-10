@@ -31,7 +31,9 @@ export function CarbonFabric({ muted = false }: { muted?: boolean }) {
 			tmx = (e.clientX / window.innerWidth) * 100;
 			tmy = (e.clientY / window.innerHeight) * 100;
 		};
-		const onScroll = () => { scrolly = window.scrollY * 0.04; };
+		// Cap the scroll parallax so the woven layer never drifts past its overscan
+		// (tall pages have large scrollY — uncapped it would expose the backing plate).
+		const onScroll = () => { scrolly = Math.min(window.scrollY * 0.04, 80); };
 
 		const loop = () => {
 			spx += (tpx - spx) * 0.06;
