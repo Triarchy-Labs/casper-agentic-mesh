@@ -210,7 +210,7 @@ export function ScrollHero() {
 			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
 				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.55, ease: "power2.out", duration: 0.32 },
+				{ y: () => -window.innerHeight * 0.55, ease: "none", duration: 0.36 },
 				0.58
 			);
 			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
@@ -423,7 +423,7 @@ export function ScrollHero() {
 					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
 				>
 					<div className="w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
-						<div className="flex flex-col items-start text-left">
+						<div className="flex flex-col items-start text-left mb-[9vh]">
 							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
 								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
 							</h2>
