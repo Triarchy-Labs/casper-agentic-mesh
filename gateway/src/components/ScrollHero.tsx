@@ -92,6 +92,7 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 export function ScrollHero() {
 	const heroRef = useRef<HTMLElement>(null);
 	const wordmarkRef = useRef<HTMLDivElement>(null);
+	const lettersRef = useRef<HTMLDivElement>(null);
 	const subtitleRef = useRef<HTMLDivElement>(null);
 	const headerRef = useRef<HTMLElement>(null);
 	const logoTargetRef = useRef<HTMLSpanElement>(null); // nav "TRIARCHY" — the exact landing slot
@@ -167,23 +168,28 @@ export function ScrollHero() {
 					invalidateOnRefresh: true,
 				},
 			});
-			// 1. subtitle dissolves first (first ~2 ticks), independent of the word
-			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, 0);
+			// 1. subtitle melts out as the REVERSE of the nav fog-reveal — fade + blur in place,
+			//    no vertical jump (was jerky). Mirrors the header's blur(0<-10) emergence.
+			tl.to(subtitleRef.current, { opacity: 0, filter: "blur(10px)", duration: 0.22, ease: "power1.out" }, 0);
 			// 2+3. shrink AND straight glide land TOGETHER and early (0.6): scale, x, y share the
 			//      exact same window + ease, so the word never keeps travelling after it looks shrunk
 			//      (kills the "flies up after shrinking" tail). Straight, shallow line on wide screens.
 			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.6, ease: "power1.inOut" }, 0);
 			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.6, ease: "power1.inOut" }, 0);
 			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.6, ease: "power1.inOut" }, 0);
-			// 4. dissolve STARTS just before it lands (0.53) so it is already fading on arrival —
-			//    the blend into the nav reads correctly; after 0.6 it only dissolves in place, no motion
-			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.32, ease: "power2.in" }, 0.53);
-			// 5. nav reveals FROM FOG, in place (blur->0 + fade, no slide) — produx reveal 1:1
+			// 3b. thin the wordmark toward the nav weight, hidden under the dissolve blur so any
+			//     faux-bold step is invisible — softens the thick->thin edge jump at the handoff.
+			tl.to(lettersRef.current, { fontWeight: 400, duration: 0.2, ease: "none" }, 0.6);
+			// 4. dissolve starts BEFORE landing (0.5) and blurs HARD (18px): the thick faux-bold
+			//    edges melt into fog well before the thin nav sharpens, so there is no bold/thin clash
+			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(18px)", duration: 0.36, ease: "power2.in" }, 0.5);
+			// 5. nav emerges FROM FOG in place (blur->0 + fade, no slide), sharpening only once the
+			//    word is already fog — produx reveal 1:1, seamless crossover
 			tl.fromTo(
 				headerRef.current,
-				{ autoAlpha: 0, filter: "blur(10px)" },
-				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.4, ease: "power2.out" },
-				0.55
+				{ autoAlpha: 0, filter: "blur(12px)" },
+				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.34, ease: "power2.out" },
+				0.62
 			);
 		}, heroRef);
 
@@ -341,6 +347,7 @@ export function ScrollHero() {
 						}}
 					>
 						<div
+							ref={lettersRef}
 							style={{
 								fontFamily: "var(--font-tech), 'Sora', sans-serif",
 								fontWeight: 800,
