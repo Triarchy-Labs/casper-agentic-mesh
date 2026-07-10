@@ -204,19 +204,19 @@ export function ScrollHero() {
 			// entry: each line fogs + rises into place, staggered (produx natureSway feel)
 			tl.fromTo(".mf-hero-line",
 				{ yPercent: 120, opacity: 0, filter: "blur(8px)" },
-				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.3 },
+				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.22 },
 				0.08
 			);
 			// travel up into the vacated space, then HOLD readable (the pause produx has)
 			tl.fromTo(phrasesRef.current,
 				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.5, ease: "power1.inOut", duration: 0.38 },
-				0.3
+				{ y: () => -window.innerHeight * 0.55, ease: "power2.out", duration: 0.32 },
+				0.58
 			);
 			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
 			tl.to(".mf-hero-line",
-				{ yPercent: -120, rotateZ: -2, opacity: 0, filter: "blur(4px)", stagger: 0.045, ease: "power2.in", duration: 0.2 },
-				0.82
+				{ yPercent: -130, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.08, ease: "power2.in", duration: 0.26 },
+				0.78
 			);
 		}, heroRef);
 
@@ -424,11 +424,6 @@ export function ScrollHero() {
 				>
 					<div className="w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
 						<div className="flex flex-col items-start text-left">
-							<div className="mf-hero-line flex items-center gap-3 mb-7 flex-wrap">
-								<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
-								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
-								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
-							</div>
 							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
 								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
 							</h2>
@@ -440,6 +435,7 @@ export function ScrollHero() {
 							<p className="mf-hero-line text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
 								Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
 							</p>
+							<div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div>
 						</div>
 					</div>
 				</div>
