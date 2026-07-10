@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -16,16 +16,6 @@ export default function Page() {
   const [booted, setBooted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
-
-  // Manifesto motion driven by the section's LIVE scroll position (framer reads the rect each
-  // frame, so pin-spacers from the hero/mosaic pins can't desync it — GSAP ScrollTrigger could).
-  // Entry: rides up from below → holds readable in the middle → exits upward (produx parity).
-  const mfSectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: mfProgress } = useScroll({ target: mfSectionRef, offset: ["start end", "end start"] });
-  const mfY = useTransform(mfProgress, [0, 0.4, 0.62, 1], ["105%", "0%", "0%", "-105%"]);
-  const mfOpacity = useTransform(mfProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0]);
-  const mfBlurV = useTransform(mfProgress, [0, 0.28, 0.72, 1], [8, 0, 0, 8]);
-  const mfFilter = useTransform(mfBlurV, (b) => `blur(${b}px)`);
 
   // 12-piece mosaic assembly specifications (4 cols x 3 rows)
   // Wider coordinates, custom start times, durations, and easings for asymmetrical, organic assembly
@@ -228,40 +218,6 @@ export default function Page() {
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
             <ScrollHero />
-
-            {/* Manifesto — two groups ride up from below on scroll, then exit upward (produx parity) */}
-            <section ref={mfSectionRef} id="manifesto" className="relative w-full min-h-[115vh] overflow-hidden flex items-center justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] py-[14vh] z-10">
-              <motion.div className="mf-content w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start" style={{ y: mfY, opacity: mfOpacity, filter: mfFilter }}>
-                {/* LEFT — kicker + big hook */}
-                <div className="md:col-span-7 flex flex-col items-start">
-                  <div className="mf-fade flex items-center gap-3 mb-8 flex-wrap">
-                    <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
-                    <span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
-                    <span className="nb-index">𝟐𝟎𝟐𝟔</span>
-                  </div>
-                  <h2 className="uppercase tracking-tight text-white leading-[0.96]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(38px, 5.6vw, 92px)" }}>
-                    {["Machines now", "hire, pay, and", "trade each other."].map((line, i) => (
-                      <span key={i} className="block overflow-hidden py-[0.06em]">
-                        <span className="mf-line block">{line}</span>
-                      </span>
-                    ))}
-                  </h2>
-                </div>
-                {/* RIGHT — the turn + what Triarchy is */}
-                <div className="md:col-span-5 md:pt-[9vh] flex flex-col items-start gap-6">
-                  <span className="block overflow-hidden py-[0.1em]">
-                    <span className="mf-line block text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(15px, 1.15vw, 26px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
-                      But value can&apos;t flow to a machine you can&apos;t hold accountable. Triarchy is the command deck for that economy — the trust layer where agents lock escrow, price work against a real-world oracle, and answer to an adversarial tribunal, under one overseer.
-                    </span>
-                  </span>
-                  <span className="block overflow-hidden py-[0.1em]">
-                    <span className="mf-line block text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", letterSpacing: "0.14em" }}>
-                      Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
-                    </span>
-                  </span>
-                </div>
-              </motion.div>
-            </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
             <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">

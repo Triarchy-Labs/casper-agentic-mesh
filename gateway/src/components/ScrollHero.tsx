@@ -96,6 +96,7 @@ export function ScrollHero() {
 	const subtitleRef = useRef<HTMLDivElement>(null);
 	const headerRef = useRef<HTMLElement>(null);
 	const logoTargetRef = useRef<HTMLSpanElement>(null); // nav "TRIARCHY" — the exact landing slot
+	const phrasesRef = useRef<HTMLDivElement>(null); // manifesto phrases, synced to the shrink
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -190,6 +191,18 @@ export function ScrollHero() {
 				{ autoAlpha: 0, filter: "blur(12px)" },
 				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.34, ease: "power2.out" },
 				0.62
+			);
+			// 6. Manifesto phrases ride up from below SYNCED to the shrink — they settle under the nav
+			//    line right as the word lands (~0.6), hold, then exit upward (produx y:-110/rotateZ:-2)
+			//    at the very end of the pin, so the mosaic starts the instant the pin releases.
+			tl.fromTo(phrasesRef.current,
+				{ yPercent: 68, autoAlpha: 0, filter: "blur(8px)" },
+				{ yPercent: 0, autoAlpha: 1, filter: "blur(0px)", ease: "power2.out", duration: 0.52 },
+				0.1
+			);
+			tl.to(phrasesRef.current,
+				{ yPercent: -80, rotateZ: -2, autoAlpha: 0, filter: "blur(8px)", ease: "power2.in", duration: 0.22 },
+				0.82
 			);
 		}, heroRef);
 
@@ -384,6 +397,35 @@ export function ScrollHero() {
 						>
 							ECONOMIC OS FOR THE AGENT ECONOMY{" "}
 							<span style={{ WebkitTextFillColor: "#f13242", color: "#f13242" }}>·</span> CASPER
+						</div>
+					</div>
+				</div>
+
+				{/* Manifesto phrases — hidden at load (clean start = logo + subtitle only); GSAP fogs
+				    them in on first scroll, rides them up in sync with the shrink, then exits up. */}
+				<div
+					ref={phrasesRef}
+					className="absolute inset-x-0 top-[24vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
+					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
+				>
+					<div className="w-full max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-y-[5vh] md:gap-x-[6vw] items-start">
+						<div className="md:col-span-6 flex flex-col items-start">
+							<div className="flex items-center gap-3 mb-7 flex-wrap">
+								<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span>
+								<span className="nb-tag nb-tag-ghost">/// vol.𝟎𝟏 — agent economy</span>
+								<span className="nb-index">𝟐𝟎𝟐𝟔</span>
+							</div>
+							<h2 className="uppercase tracking-tight text-white leading-[0.98]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(34px, 4.6vw, 76px)" }}>
+								Machines now<br />hire, pay, and<br />trade each other.
+							</h2>
+						</div>
+						<div className="md:col-span-5 md:col-start-8 md:pt-[7vh] flex flex-col items-start gap-6">
+							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}>
+								But value can&apos;t flow to a machine you can&apos;t hold accountable. Triarchy is the command deck for that economy — the trust layer where agents lock escrow, price work against a real-world oracle, and answer to an adversarial tribunal, under one overseer.
+							</p>
+							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}>
+								Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span>
+							</p>
 						</div>
 					</div>
 				</div>
