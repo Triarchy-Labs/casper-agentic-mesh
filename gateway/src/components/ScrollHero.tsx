@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(CustomEase);
+gsap.registerPlugin(CustomEase, ScrollTrigger);
 
 // produx's signature scroll ease + scrub:1.5 smoothing, extracted from their bundle.
 const PX_EASE = [0.2, 0.6, 0.35, 1] as const;
@@ -89,10 +90,11 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 }
 
 export function ScrollHero() {
+	const heroRef = useRef<HTMLElement>(null);
+	const wordmarkRef = useRef<HTMLDivElement>(null);
+	const subtitleRef = useRef<HTMLDivElement>(null);
+	const headerRef = useRef<HTMLElement>(null);
 	const { scrollY } = useScroll();
-	// Emulate ScrollTrigger scrub:1.5 — a soft, slightly longer lag behind the raw
-	// scroll so the wordmark eases into the nav gradually, never in jerks.
-	const smoothY = useSpring(scrollY, { stiffness: 38, damping: 24, restDelta: 0.5 });
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -113,41 +115,64 @@ export function ScrollHero() {
 		return () => window.removeEventListener("mousemove", onMove);
 	}, [rawX, rawY]);
 
+	// On-load entrance: letters rise into place, subtitle fades up under them.
 	useEffect(() => {
 		CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1");
 		gsap.fromTo(".logo-letter",
 			{ y: "110%", opacity: 0 },
-			{
-				y: "0%",
-				opacity: 1,
-				duration: 1.4,
-				stagger: 0.07,
-				delay: 0.6,
-				ease: "natureSway",
-			}
+			{ y: "0%", opacity: 1, duration: 1.4, stagger: 0.07, delay: 0.6, ease: "natureSway" }
 		);
 		gsap.fromTo(".logo-subtitle",
 			{ y: "20px", opacity: 0 },
-			{
-				y: "0px",
-				opacity: 1,
-				duration: 1.1,
-				delay: 0.9,
-				ease: "power4.out",
-			}
+			{ y: "0px", opacity: 1, duration: 1.1, delay: 0.9, ease: "power4.out" }
 		);
 	}, []);
 
-	// Giant wordmark shrinks + rises + fades over the first ~520px of scroll.
-	const wmScale = useTransform(smoothY, [0, 740], [1, 0.2]);
-	const wmY = useTransform(smoothY, [0, 740], [0, -160]);
-	const wmOpacity = useTransform(smoothY, [0, 480, 740], [1, 0.2, 0]);
-	const blur = useTransform(smoothY, [420, 740], [0, 9]);
-	const wmFilter = useTransform(blur, (b) => `blur(${b}px)`);
-
-	// Docked bracket nav fades in as the wordmark shrinks away.
-	const navOpacity = useTransform(smoothY, [220, 520], [0, 1]);
-	const navY = useTransform(smoothY, [220, 520], [-18, 0]);
+	// produx logo-shrink: the hero pins, and over a long scrub the giant wordmark
+	// eases toward the top-left. Our two deviations from produx:
+	//   (a) the subtitle dissolves FIRST (first couple ticks),
+	//   (b) at the end the wordmark DISSOLVES and our nav panel reveals in its place
+	//       (produx keeps the shrunk mark as the logo; we hand off to the nav).
+	useEffect(() => {
+		if (!heroRef.current) return;
+		CustomEase.create("pxScroll", "M0,0 C0.2,0.6 0.35,1 1,1");
+		const ctx = gsap.context(() => {
+			const tl = gsap.timeline({
+				defaults: { ease: "pxScroll" },
+				scrollTrigger: {
+					trigger: heroRef.current,
+					start: "top top",
+					end: "+=185%",
+					pin: true,
+					scrub: 1.5,
+					invalidateOnRefresh: true,
+				},
+			});
+			// 1. subtitle dissolves first (first ~2 ticks)
+			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12 }, 0);
+			// 2. wordmark shrinks + drifts toward the top-left nav slot (produx left-anchor)
+			tl.to(
+				wordmarkRef.current,
+				{
+					scale: 0.2,
+					x: () => -window.innerWidth * 0.3,
+					y: () => -window.innerHeight * 0.3,
+					duration: 0.82,
+				},
+				0
+			);
+			// 3. wordmark dissolves near the corner
+			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(12px)", ease: "power2.in", duration: 0.22 }, 0.7);
+			// 4. our nav panel reveals in its place (produx header-reveal mechanic)
+			tl.fromTo(
+				headerRef.current,
+				{ autoAlpha: 0, y: -20 },
+				{ autoAlpha: 1, y: 0, ease: "power3.out", duration: 0.24 },
+				0.72
+			);
+		}, heroRef);
+		return () => ctx.revert();
+	}, []);
 
 	return (
 		<>
@@ -217,11 +242,13 @@ export function ScrollHero() {
 				[ scroll down ]
 			</motion.div>
 
-			<motion.header
+			{/* Nav panel — hidden at first; GSAP reveals it as the wordmark dissolves. */}
+			<header
+				ref={headerRef}
 				className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[5.5vw] pt-[8vh] max-lg:px-[4.10vw] max-lg:pt-[9.59vh] max-sm:px-[5.97vw] max-sm:pt-[11.3vh]"
 				style={{
-					opacity: navOpacity,
-					y: navY,
+					opacity: 0,
+					visibility: "hidden",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
 					pointerEvents: "auto",
 				}}
@@ -270,67 +297,61 @@ export function ScrollHero() {
 						</div>
 					</div>
 				</nav>
-			</motion.header>
+			</header>
 
-			{/* giant scroll-shrink wordmark — first screen */}
-			<section style={{ height: "110vh", position: "relative" }}>
-				{/* sticky pin: the hero holds in place while the wordmark shrinks (produx pin) */}
+			{/* giant scroll-shrink wordmark — pinned first screen (produx pin + scrub) */}
+			<section ref={heroRef} style={{ height: "100vh", position: "relative", overflow: "hidden" }}>
 				<div
 					style={{
-						position: "sticky",
-						top: 0,
-						height: "100vh",
+						position: "absolute",
+						inset: 0,
 						display: "flex",
-						flexDirection: "column",
 						alignItems: "center",
 						justifyContent: "center",
-						overflow: "hidden",
-					}}
-				>
-				<motion.div
-					style={{
-						scale: wmScale,
-						y: wmY,
-						opacity: wmOpacity,
-						filter: wmFilter,
-						transformOrigin: "center center",
-						textAlign: "center",
-						pointerEvents: "none",
-						willChange: "transform, opacity, filter",
 					}}
 				>
 					<div
+						ref={wordmarkRef}
 						style={{
-							fontFamily: "var(--font-tech), 'Sora', sans-serif",
-							fontWeight: 800,
-							fontSize: "clamp(72px, 11.9vw, 900px)", // produx hero = 11.9vw pure (no low cap on 4K)
-							lineHeight: 0.88,
-							letterSpacing: "-0.035em",
-							color: "#fff",
-							textShadow: "0 8px 60px rgba(0,0,0,0.6)",
+							transformOrigin: "center center",
+							textAlign: "center",
+							pointerEvents: "none",
+							willChange: "transform, opacity, filter",
 						}}
 					>
-						{"TRIARCHY".split("").map((letter, i) => (
-							<span key={i} className="relative inline-block overflow-hidden py-4 -my-4">
-								<span className="logo-letter inline-block translate-y-full opacity-0">
-									{letter}
+						<div
+							style={{
+								fontFamily: "var(--font-tech), 'Sora', sans-serif",
+								fontWeight: 800,
+								fontSize: "clamp(72px, 11.9vw, 900px)", // produx hero = 11.9vw pure (no low cap on 4K)
+								lineHeight: 0.88,
+								letterSpacing: "-0.035em",
+								color: "#fff",
+								textShadow: "0 8px 60px rgba(0,0,0,0.6)",
+							}}
+						>
+							{"TRIARCHY".split("").map((letter, i) => (
+								<span key={i} className="relative inline-block overflow-hidden py-4 -my-4">
+									<span className="logo-letter inline-block translate-y-full opacity-0">
+										{letter}
+									</span>
 								</span>
-							</span>
-						))}
+							))}
+						</div>
+						<div
+							ref={subtitleRef}
+							className="neon-sweep logo-subtitle opacity-0"
+							style={{
+								marginTop: "1.4rem",
+								fontFamily: "ui-monospace, 'Geist Mono', monospace",
+								letterSpacing: "0.36em",
+								fontSize: "clamp(12px,1.5vw,64px)",
+							}}
+						>
+							ECONOMIC OS FOR THE AGENT ECONOMY{" "}
+							<span style={{ WebkitTextFillColor: "#f13242", color: "#f13242" }}>·</span> CASPER
+						</div>
 					</div>
-					<div
-						className="neon-sweep logo-subtitle opacity-0"
-						style={{
-							marginTop: "1.4rem",
-							fontFamily: "ui-monospace, 'Geist Mono', monospace",
-							letterSpacing: "0.36em",
-							fontSize: "clamp(12px,1.5vw,64px)",
-						}}
-					>
-						ECONOMIC OS FOR THE AGENT ECONOMY{" "}
-						<span style={{ WebkitTextFillColor: "#f13242", color: "#f13242" }}>·</span> CASPER
-					</div>
-				</motion.div>
 				</div>
 			</section>
 		</>
