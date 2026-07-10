@@ -170,14 +170,21 @@ export function ScrollHero() {
 			// 1. subtitle dissolves first (first ~2 ticks), independent of the word
 			tl.to(subtitleRef.current, { opacity: 0, y: -26, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, 0);
 			// 2. shrink to the nav wordmark's exact size (smooth throughout)
-			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.88 }, 0);
-			// 3a. drift LEFT early, then settle — X eases out (the horizontal half of the arc)
-			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.72, ease: "power2.out" }, 0);
-			// 3b. whip UP late + accelerating — Y eases in (the vertical half → curved, quick finish)
-			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.9, ease: "power2.in" }, 0);
-			// 4. crossfade AT the meeting point: giant word dissolves as the nav word takes its place
-			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.12, ease: "power2.in" }, 0.9);
-			tl.fromTo(headerRef.current, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 0.9);
+			tl.to(wordmarkRef.current, { scale: () => measure().s, duration: 0.85, ease: "power1.inOut" }, 0);
+			// 3. STRAIGHT, gently-sloped glide toward the nav slot — X and Y share ease + timing,
+			//    so the path is a single line (no arc). On wide screens it lands ~30° = shallow.
+			//    Gentle in/out so the reposition barely registers; the shrink carries the eye.
+			tl.to(wordmarkRef.current, { x: () => measure().x, duration: 0.85, ease: "power1.inOut" }, 0);
+			tl.to(wordmarkRef.current, { y: () => measure().y, duration: 0.85, ease: "power1.inOut" }, 0);
+			// 4. soft dissolve as the nav emerges — the word just recedes + fades, no felt jump
+			tl.to(wordmarkRef.current, { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power2.in" }, 0.82);
+			// 5. nav reveals FROM FOG, in place (blur->0 + fade, no slide) — produx reveal 1:1
+			tl.fromTo(
+				headerRef.current,
+				{ autoAlpha: 0, filter: "blur(10px)" },
+				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.18, ease: "power2.out" },
+				0.82
+			);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
