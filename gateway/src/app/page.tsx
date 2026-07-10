@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -16,6 +16,16 @@ export default function Page() {
   const [booted, setBooted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
+
+  // Manifesto motion driven by the section's LIVE scroll position (framer reads the rect each
+  // frame, so pin-spacers from the hero/mosaic pins can't desync it — GSAP ScrollTrigger could).
+  // Entry: rides up from below → holds readable in the middle → exits upward (produx parity).
+  const mfSectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: mfProgress } = useScroll({ target: mfSectionRef, offset: ["start end", "end start"] });
+  const mfY = useTransform(mfProgress, [0, 0.4, 0.62, 1], ["105%", "0%", "0%", "-105%"]);
+  const mfOpacity = useTransform(mfProgress, [0, 0.28, 0.72, 1], [0, 1, 1, 0]);
+  const mfBlurV = useTransform(mfProgress, [0, 0.28, 0.72, 1], [8, 0, 0, 8]);
+  const mfFilter = useTransform(mfBlurV, (b) => `blur(${b}px)`);
 
   // 12-piece mosaic assembly specifications (4 cols x 3 rows)
   // Wider coordinates, custom start times, durations, and easings for asymmetrical, organic assembly
@@ -148,28 +158,6 @@ export default function Page() {
       ease: "power2.in",
     }, 2.8); // starts at 2.8, ends at 3.4
 
-    // Manifesto — trigger on the CONTENT (not the tall section) so the reveal lines up with the
-    // moment the text is actually on screen. Our entry (rise from below) → produx exit (y:-110%,
-    // rotateZ:-2deg), scrubbed across the content's transit through the viewport.
-    const mfTl = gsap.timeline({
-      scrollTrigger: { trigger: ".mf-content", start: "top 85%", end: "bottom 15%", scrub: 1 },
-    });
-    mfTl.fromTo(".mf-line",
-      { yPercent: 115, opacity: 0, filter: "blur(6px)" },
-      { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.05, ease: "power2.out", duration: 0.4 },
-      0
-    );
-    mfTl.fromTo(".mf-fade",
-      { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, ease: "power2.out", duration: 0.28 },
-      0.04
-    );
-    mfTl.to(".mf-line",
-      { yPercent: -115, rotateZ: -2, opacity: 0, filter: "blur(6px)", stagger: 0.04, ease: "power2.in", duration: 0.4 },
-      0.6
-    );
-    mfTl.to(".mf-fade", { opacity: 0, y: -12, ease: "power2.in", duration: 0.28 }, 0.62);
-
     // 4. Produx parity — photo parallax inside each card frame.
     // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
     const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
@@ -242,8 +230,8 @@ export default function Page() {
             <ScrollHero />
 
             {/* Manifesto — two groups ride up from below on scroll, then exit upward (produx parity) */}
-            <section id="manifesto" className="relative w-full min-h-[115vh] overflow-hidden flex items-center justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] py-[14vh] z-10">
-              <div className="mf-content w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start">
+            <section ref={mfSectionRef} id="manifesto" className="relative w-full min-h-[115vh] overflow-hidden flex items-center justify-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] py-[14vh] z-10">
+              <motion.div className="mf-content w-full max-w-[1600px] grid grid-cols-1 md:grid-cols-12 gap-y-[7vh] md:gap-x-[6vw] items-start" style={{ y: mfY, opacity: mfOpacity, filter: mfFilter }}>
                 {/* LEFT — kicker + big hook */}
                 <div className="md:col-span-7 flex flex-col items-start">
                   <div className="mf-fade flex items-center gap-3 mb-8 flex-wrap">
@@ -272,7 +260,7 @@ export default function Page() {
                     </span>
                   </span>
                 </div>
-              </div>
+              </motion.div>
             </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
