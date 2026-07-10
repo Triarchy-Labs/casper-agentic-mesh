@@ -308,7 +308,7 @@ export default function Page() {
               <div className="flex flex-col gap-[13.67vh] max-sm:gap-[6vh] pt-[11.7vh] max-sm:pt-[4vh]">
 
                 {/* Row 1: big-left (7) + small-right-down (4) */}
-                <div className="focus-cards grid grid-cols-12 gap-[1.39vw] max-sm:grid-cols-1 max-sm:gap-[3.48vh]">
+                <div className="focus-cards grid grid-cols-12 gap-x-[1.39vw] gap-y-[13.67vh] max-sm:grid-cols-1 max-sm:gap-y-[6vh]">
                   {/* 01 ESCROW — col-span-7, big left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 cursor-pointer">
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden">
