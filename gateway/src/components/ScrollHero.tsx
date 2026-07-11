@@ -128,10 +128,7 @@ export function ScrollHero() {
 			{ y: "20px", opacity: 0 },
 			{ y: "0px", opacity: 1, duration: 1.1, delay: 0.9, ease: "power4.out" }
 		);
-		// PHRASES entry (on load): masked lines roll up from below into view, staggered.
-		gsap.from(".hero-line",
-			{ yPercent: 115, opacity: 0, duration: 1.15, stagger: 0.05, delay: 0.75, ease: "power4.out" }
-		);
+		// (Phrases no longer enter on load — they fog-reveal on the first scroll, in the pin timeline.)
 	}, []);
 
 	// produx logo-shrink: the hero pins, and over a long scrub the giant wordmark
@@ -207,6 +204,14 @@ export function ScrollHero() {
 			// word up instead of overtaking it (the overtake was a mismatched ease: power2.out rose too
 			// fast early against the word's slow-start power1.inOut).
 			tl.to(".hero-phrases", { y: 0, duration: 0.6, ease: "power1.inOut" }, 0);
+			// 5c. FOG-REVEAL on the first scroll — the exact same effect as the nav (autoAlpha 0->1,
+			//     blur 12px->0, power2.out). Hidden on load; the first scroll gesture fades them in.
+			tl.fromTo(
+				".hero-phrases",
+				{ autoAlpha: 0, filter: "blur(12px)" },
+				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.22, ease: "power2.out" },
+				0
+			);
 			// 6. phrases HOLD through the shrink, then roll OUT line-by-line as the nav reveals —
 			//    produx splitLine exit: y:-118% + rotateZ:-2, staggered, power3.in (by-pieces roll-up).
 			//    10 lines: last ends at 0.62 + 9*0.015 + 0.2 = 0.955 <= 0.96 (header end), so this
