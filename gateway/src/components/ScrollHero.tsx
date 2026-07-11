@@ -202,6 +202,10 @@ export function ScrollHero() {
 				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.34, ease: "power2.out" },
 				0.62
 			);
+			// 5b. THE RISE (produx's sticky hero-section effect): on load the phrase block sits low
+			//     (visible at the bottom, below the giant word); as the word shrinks it is pulled UP
+			//     in sync (same 0->0.6 window + feel) and settles at pt-[15vh] under the nav.
+			tl.fromTo(".hero-phrases", { y: "58vh" }, { y: "0vh", duration: 0.6, ease: "power1.inOut" }, 0);
 			// 6. phrases HOLD through the shrink, then roll OUT line-by-line as the nav reveals —
 			//    produx splitLine exit: y:-118% + rotateZ:-2, staggered, power3.in (by-pieces roll-up).
 			//    10 lines: last ends at 0.62 + 9*0.015 + 0.2 = 0.955 <= 0.96 (header end), so this
@@ -411,7 +415,7 @@ export function ScrollHero() {
 								{/* produx phrase blocks — pt-[15vh] under the nav (their exact position + structure):
 				    hook = splitWord (per-word masks), description = splitLine (masks with ghost placeholders).
 				    mix-blend-difference like theirs. The TRIARCHY word + subtitle above are untouched. */}
-				<div className="absolute top-0 inset-x-0 pt-[15vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-[40] pointer-events-none mix-blend-difference">
+				<div className="hero-phrases absolute top-0 inset-x-0 pt-[15vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-[40] pointer-events-none mix-blend-difference will-change-transform">
 					<div className="flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-[3.07vh]">
 						{/* LEFT — hook, split by WORD */}
 						<h2 className="flex flex-wrap gap-x-[0.26em] gap-y-0 max-w-[40vw] max-lg:max-w-[62vw] uppercase tracking-tight text-white leading-[1.1]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
