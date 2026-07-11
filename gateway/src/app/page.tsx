@@ -209,6 +209,12 @@ export default function Page() {
                 </div>
 
               </div>
+              {/* meta capsules — moved here from the hero phrases; sit below the mosaic */}
+              <div className="assembly-text-overlay opacity-0 mt-[5vh] flex items-center gap-3 flex-wrap justify-center px-[5vw]" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+                <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · live on-chain</span>
+                <span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span>
+                <span className="nb-index">2026</span>
+              </div>
               </div>
             </section>
 
