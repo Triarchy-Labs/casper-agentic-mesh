@@ -128,11 +128,16 @@ export function ScrollHero() {
 			{ y: "20px", opacity: 0 },
 			{ y: "0px", opacity: 1, duration: 1.1, delay: 0.9, ease: "power4.out" }
 		);
-		// produx phrase ENTRY (on load): each masked line rolls up from below into place,
-		// staggered — their heroSection-splitLine (translate-y-full -> 0, power4.out).
-		gsap.fromTo(".hero-phrase-line",
+		// produx phrase ENTRY (on load), 1:1 from the bundle:
+		//   hook = splitWord: y110%->0, opacity .1->1, dur 1.4, stagger .07, delay .6, natureSway
+		gsap.fromTo(".hero-split-word",
+			{ yPercent: 110, opacity: 0.1 },
+			{ yPercent: 0, opacity: 1, duration: 1.4, stagger: 0.07, delay: 0.6, ease: "natureSway" }
+		);
+		//   description = splitLine: y110%->0, opacity 0->1, dur 1.1, stagger .2, delay .9, power4.out
+		gsap.fromTo(".hero-split-line",
 			{ yPercent: 110, opacity: 0 },
-			{ yPercent: 0, opacity: 1, duration: 1.15, stagger: 0.08, delay: 0.85, ease: "power4.out" }
+			{ yPercent: 0, opacity: 1, duration: 1.1, stagger: 0.14, delay: 0.9, ease: "power4.out" }
 		);
 	}, []);
 
@@ -201,9 +206,10 @@ export function ScrollHero() {
 			//    produx splitLine exit: y:-118% + rotateZ:-2, staggered, power3.in (by-pieces roll-up).
 			//    10 lines: last ends at 0.62 + 9*0.015 + 0.2 = 0.955 <= 0.96 (header end), so this
 			//    does NOT extend the timeline and the approved logo-shrink timing is preserved.
+			// ~15 elements: last ends 0.62 + 14*0.009 + 0.2 = 0.946 <= 0.96 -> timeline not extended.
 			tl.to(
-				".hero-phrase-line",
-				{ yPercent: -118, rotateZ: -2, duration: 0.2, stagger: 0.015, ease: "power3.in" },
+				".hero-phrase-el",
+				{ yPercent: -118, rotateZ: -2, duration: 0.2, stagger: 0.009, ease: "power3.in" },
 				0.62
 			);
 		}, heroRef);
@@ -402,22 +408,24 @@ export function ScrollHero() {
 						</div>
 					</div>
 				</div>
-				{/* produx phrases — INSIDE the pinned hero (same screen as the shrinking word).
-				    Enter from below on load, hold while the word shrinks, then roll out line-by-line. */}
-				<div className="absolute inset-x-0 bottom-[9vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none">
-					<div className="w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
-						<div className="flex flex-col items-start text-left">
-							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
-								<span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">Machines now</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">hire, pay, and</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">trade each other.</span></span>
-							</h2>
-						</div>
-						<div className="max-lg:max-w-full flex flex-col items-start gap-5 shrink-0">
-							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.85, letterSpacing: "0.01em" }}><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">But value can’t flow to a machine</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">you can’t hold accountable. Triarchy</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">is the command deck for that economy —</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">escrow, a real-world oracle, and an</span></span><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">adversarial tribunal, under one overseer.</span></span></p>
-							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="block overflow-hidden"><span className="hero-phrase-line block whitespace-nowrap translate-y-full opacity-0">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
-							<div className="overflow-hidden"><div className="hero-phrase-line flex items-center gap-3 flex-wrap pt-2 translate-y-full opacity-0"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
+								{/* produx phrase blocks — pt-[15vh] under the nav (their exact position + structure):
+				    hook = splitWord (per-word masks), description = splitLine (masks with ghost placeholders).
+				    mix-blend-difference like theirs. The TRIARCHY word + subtitle above are untouched. */}
+				<div className="absolute top-0 inset-x-0 pt-[15vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-[40] pointer-events-none mix-blend-difference">
+					<div className="flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-[3.07vh]">
+						{/* LEFT — hook, split by WORD */}
+						<h2 className="flex flex-wrap gap-x-[0.26em] gap-y-0 max-w-[40vw] max-lg:max-w-[62vw] uppercase tracking-tight text-white leading-[1.1]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
+							<span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">Machines</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">now</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">hire,</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">pay,</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">and</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">trade</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">each</span></span><span className="relative inline-block overflow-hidden"><span className="absolute top-0 left-0 h-full w-full"></span><span className="hero-split-word hero-phrase-el block translate-y-full opacity-0">other.</span></span>
+						</h2>
+						{/* RIGHT — description, split by LINE (ghost + absolute) */}
+						<div className="flex flex-col items-start gap-5 shrink-0 max-w-[32vw] max-lg:max-w-[45vw] max-sm:max-w-none">
+							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.85, letterSpacing: "0.01em" }}><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">But value can’t flow to a machine</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">But value can’t flow to a machine</span></span><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">you can’t hold accountable. Triarchy</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">you can’t hold accountable. Triarchy</span></span><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">is the command deck for that economy —</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">is the command deck for that economy —</span></span><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">escrow, a real-world oracle, and an</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">escrow, a real-world oracle, and an</span></span><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">adversarial tribunal, under one overseer.</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">adversarial tribunal, under one overseer.</span></span></p>
+							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="relative block overflow-hidden"><span className="block whitespace-nowrap select-none text-transparent" aria-hidden="true">Every settlement live on Casper. Not a simulation.</span><span className="hero-split-line hero-phrase-el absolute top-0 left-0 block whitespace-nowrap translate-y-full opacity-0">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
+							<div className="overflow-hidden"><div className="hero-split-line hero-phrase-el flex items-center gap-3 flex-wrap pt-2 translate-y-full opacity-0"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
 						</div>
 					</div>
 				</div>
+
 				</section>
 		</>
 	);
