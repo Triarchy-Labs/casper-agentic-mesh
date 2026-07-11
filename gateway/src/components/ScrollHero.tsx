@@ -96,7 +96,6 @@ export function ScrollHero() {
 	const subtitleRef = useRef<HTMLDivElement>(null);
 	const headerRef = useRef<HTMLElement>(null);
 	const logoTargetRef = useRef<HTMLSpanElement>(null); // nav "TRIARCHY" — the exact landing slot
-	const phrasesRef = useRef<HTMLDivElement>(null); // manifesto phrases, synced to the shrink
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -191,32 +190,6 @@ export function ScrollHero() {
 				{ autoAlpha: 0, filter: "blur(12px)" },
 				{ autoAlpha: 1, filter: "blur(0px)", duration: 0.34, ease: "power2.out" },
 				0.62
-			);
-			// 6. Manifesto phrases (produx layout: sit at the BOTTOM, ride UP through the screen).
-			//    a) fog in IN PLACE first (so they don't start rising while still blurred),
-			//    b) then ride continuously up the whole viewport synced with the shrink,
-			//    c) fog back out at the top right as the pin ends → mosaic begins.
-			tl.fromTo(phrasesRef.current,
-				{ autoAlpha: 0 },
-				{ autoAlpha: 1, ease: "none", duration: 0.05 },
-				0.06
-			);
-			// entry: each line fogs + rises into place, staggered (produx natureSway feel)
-			tl.fromTo(".mf-hero-line",
-				{ yPercent: 120, opacity: 0, filter: "blur(8px)" },
-				{ yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.02, ease: "power2.out", duration: 0.2 },
-				0.08
-			);
-			// travel up into the vacated space, then HOLD readable (the pause produx has)
-			tl.fromTo(phrasesRef.current,
-				{ y: () => window.innerHeight * 0.02 },
-				{ y: () => -window.innerHeight * 0.42, ease: "none", duration: 0.12 },
-				0.5
-			);
-			// exit: per-line roll-up (produx splitWord y:-110% rotateZ:-2, staggered)
-			tl.to(".mf-hero-line",
-				{ yPercent: -130, stagger: 0.012, ease: "power3.in", duration: 0.12 },
-				0.7
 			);
 		}, heroRef);
 
@@ -414,28 +387,7 @@ export function ScrollHero() {
 						</div>
 					</div>
 				</div>
-
-				{/* Manifesto phrases — hidden at load (clean start = logo + subtitle only); GSAP fogs
-				    them in on first scroll, rides them up in sync with the shrink, then exits up. */}
-				<div
-					ref={phrasesRef}
-					className="absolute inset-x-0 bottom-[6vh] px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10 pointer-events-none"
-					style={{ opacity: 0, visibility: "hidden", willChange: "transform, opacity, filter" }}
-				>
-					<div className="w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
-						<div className="flex flex-col items-start text-left mb-[9vh]">
-							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
-								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
-							</h2>
-						</div>
-						<div className="max-lg:max-w-full flex flex-col items-start gap-5 md:mb-[2vh] shrink-0">
-							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.85, letterSpacing: "0.01em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">But value can’t flow to a machine</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">you can’t hold accountable. Triarchy</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">is the command deck for that economy —</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">escrow, a real-world oracle, and an</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">adversarial tribunal, under one overseer.</span></span></p>
-							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
-							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
-						</div>
-					</div>
-				</div>
-			</section>
+				</section>
 		</>
 	);
 }

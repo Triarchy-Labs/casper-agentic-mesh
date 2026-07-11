@@ -16,6 +16,7 @@ export default function Page() {
   const [booted, setBooted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
+  const mfRef = useRef<HTMLElement>(null);
 
   // 12-piece mosaic assembly specifications (4 cols x 3 rows)
   // Wider coordinates, custom start times, durations, and easings for asymmetrical, organic assembly
@@ -117,6 +118,25 @@ export default function Page() {
       ease: "power2.in",
     }, 2.8); // starts at 2.8, ends at 3.4
 
+
+    // Manifesto (un-pinned): natural scroll carries the block up; a gentle scrub rolls the
+    // masked lines in, holds, then rolls them out. Trigger on the content so it tracks its transit.
+    const mfInner = document.querySelector(".mf-flow") as HTMLElement | null;
+    if (mfInner) {
+      const mfTl = gsap.timeline({
+        scrollTrigger: { trigger: mfInner, start: "top 80%", end: "bottom 20%", scrub: 1, invalidateOnRefresh: true },
+      });
+      mfTl.fromTo(".mf-hero-line",
+        { yPercent: 115, opacity: 0, filter: "blur(6px)" },
+        { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.015, ease: "power3.out", duration: 0.32 },
+        0
+      );
+      mfTl.to(".mf-hero-line",
+        { yPercent: -115, ease: "power3.in", stagger: 0.015, duration: 0.3 },
+        0.62
+      );
+    }
+
     // 4. Produx parity — photo parallax inside each card frame.
     // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
     const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
@@ -187,6 +207,23 @@ export default function Page() {
           {/* LAYER 2: Nav and Content (Z-Index Editorial Depth) */}
           <div className="relative z-20">
             <ScrollHero />
+
+            {/* Manifesto — NOT pinned. The phrases ride up with NATURAL scroll (produx 1:1);
+                a light scrub only rolls the masked lines in, then out. Smooth by construction. */}
+            <section ref={mfRef} id="manifesto" className="relative w-full min-h-[170vh] flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10">
+              <div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
+						<div className="flex flex-col items-start text-left mb-[9vh]">
+							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
+								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
+							</h2>
+						</div>
+						<div className="max-lg:max-w-full flex flex-col items-start gap-5 md:mb-[2vh] shrink-0">
+							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.85, letterSpacing: "0.01em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">But value can’t flow to a machine</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">you can’t hold accountable. Triarchy</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">is the command deck for that economy —</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">escrow, a real-world oracle, and an</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">adversarial tribunal, under one overseer.</span></span></p>
+							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
+							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
+						</div>
+					</div>
+            </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
             <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
