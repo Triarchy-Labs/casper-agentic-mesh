@@ -16,13 +16,6 @@ export default function Page() {
   const [booted, setBooted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
-  const mfRef = useRef<HTMLElement>(null);
-  const mfTlRef = useRef<gsap.core.Timeline | null>(null);
-  // Position from framer useScroll (reads the section's real rect -> immune to the hero's
-  // GSAP pin-spacer, which was making the GSAP ScrollTrigger fire the roll early, at the
-  // bottom of the screen). progress 0 = sticky just caught it centred; 1 = sticky releases.
-  const { scrollYProgress: mfProg } = useScroll({ target: mfRef, offset: ["start start", "end end"] });
-  useMotionValueEvent(mfProg, "change", (v) => { mfTlRef.current?.progress(v); });
 
   // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
   // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
@@ -50,21 +43,6 @@ export default function Page() {
   useGSAP(() => {
     if (!booted) return;
 
-    // Manifesto (CSS-sticky held, like produx .heroSection-Sticky-wrapper): masked lines roll IN
-    // staggered, HOLD, then roll OUT staggered (y:-110% rotateZ:-2, power3.in) -- their splitLine.
-    if (mfRef.current) {
-      const mfTl = gsap.timeline({ paused: true });
-      mfTlRef.current = mfTl;
-      mfTl.fromTo(".mf-hero-line",
-        { yPercent: 118 },
-        { yPercent: 0, stagger: 0.02, ease: "power4.out", duration: 0.22 },
-        0.02
-      );
-      mfTl.to(".mf-hero-line",
-        { yPercent: -118, rotateZ: -2, stagger: 0.02, ease: "power3.in", duration: 0.2 },
-        0.62
-      );
-    }
 
 
     // 2. ScrollTrigger animations for sections
@@ -187,26 +165,6 @@ export default function Page() {
           <div className="relative z-20">
             <ScrollHero />
 
-            {/* Manifesto — CSS-sticky wrapper HOLDS the phrases centred (produx .heroSection-
-                Sticky-wrapper). Lines roll in staggered, hold, roll out staggered (splitLine).
-                Progress is framer-driven so it never fires early during the scroll-in. */}
-            <section ref={mfRef} id="manifesto" className="relative w-full min-h-[250vh] z-10">
-              <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw]">
-              <div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
-						<div className="flex flex-col items-start text-left mb-[9vh]">
-							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
-								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
-							</h2>
-						</div>
-						<div className="max-lg:max-w-full flex flex-col items-start gap-5 md:mb-[2vh] shrink-0">
-							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.85, letterSpacing: "0.01em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">But value can’t flow to a machine</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">you can’t hold accountable. Triarchy</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">is the command deck for that economy —</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">escrow, a real-world oracle, and an</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">adversarial tribunal, under one overseer.</span></span></p>
-							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
-							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
-						</div>
-					
-            </div>
-              </div>
-            </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
             <section id="assembly-sticky-trigger" className="relative w-full min-h-[260vh] bg-transparent z-10">
