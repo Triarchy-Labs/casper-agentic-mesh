@@ -182,7 +182,7 @@ export function ScrollHero() {
 				scrollTrigger: {
 					trigger: heroRef.current,
 					start: "top top",
-					end: "+=275%",
+					end: "+=340%",
 					pin: true,
 					scrub: 1.5,
 					invalidateOnRefresh: true,
@@ -251,7 +251,7 @@ export function ScrollHero() {
 			// The whole mosaic block RISES from lower into the centre as it assembles (produx's
 			// image-container scrolls up from below), so the squares appear low and TRAVEL UP into
 			// the frame toward the text's place — not pop in centred.
-			tl.fromTo(".assembly-rise", { y: () => window.innerHeight * 0.42 }, { y: 0, duration: 1.0, ease: "none" }, 0.3);
+			tl.fromTo(".assembly-rise", { y: () => window.innerHeight * 0.42 }, { y: 0, duration: 1.3, ease: "none" }, 0.3);
 			HERO_PIECES.forEach((p) => {
 				tl.fromTo(
 					`.assembly-slice-${p.id}`,
@@ -261,12 +261,12 @@ export function ScrollHero() {
 				);
 				tl.to(
 					`.assembly-slice-${p.id}`,
-					{ xPercent: 0, yPercent: 0, z: 0, scale: 1, opacity: 1, filter: "blur(0px)", force3D: true, ease: "power3.inOut", duration: 0.55 },
-					0.55 + (p.pri / C) * 0.35
+					{ xPercent: 0, yPercent: 0, z: 0, scale: 1, opacity: 1, filter: "blur(0px)", force3D: true, ease: "power3.inOut", duration: 0.7 },
+					0.55 + (p.pri / C) * 0.42
 				);
 			});
-			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 1.25);
-			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", stagger: 0.1 }, 1.3);
+			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 1.45);
+			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", stagger: 0.1 }, 1.5);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
@@ -481,7 +481,7 @@ export function ScrollHero() {
 				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
 				    while the phrases are still rising, then converges into the image as they roll out. */}
 				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
-					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse 118% 98% at 50% 44%, black 50%, transparent 86%)", WebkitMaskImage: "radial-gradient(ellipse 118% 98% at 50% 44%, black 50%, transparent 86%)" }}>
+					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%)", WebkitMaskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%)" }}>
 						{HERO_PIECES.map((p) => (
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
