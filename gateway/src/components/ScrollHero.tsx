@@ -205,16 +205,18 @@ export function ScrollHero() {
 			// 5b. THE RISE (produx's sticky hero-section effect): on load the phrase block sits low
 			//     (visible at the bottom, below the giant word); as the word shrinks it is pulled UP
 			//     in sync (same 0->0.6 window + feel) and settles at pt-[15vh] under the nav.
-			tl.fromTo(".hero-phrases", { y: "58vh" }, { y: "0vh", duration: 0.6, ease: "power1.inOut" }, 0);
+			// NOTE: GSAP treats "58vh" on a transform as px — must give real px (fn = re-evals on refresh).
+			tl.fromTo(".hero-phrases", { y: () => window.innerHeight * 0.5 }, { y: 0, duration: 0.6, ease: "power1.inOut" }, 0);
 			// 6. phrases HOLD through the shrink, then roll OUT line-by-line as the nav reveals —
 			//    produx splitLine exit: y:-118% + rotateZ:-2, staggered, power3.in (by-pieces roll-up).
 			//    10 lines: last ends at 0.62 + 9*0.015 + 0.2 = 0.955 <= 0.96 (header end), so this
 			//    does NOT extend the timeline and the approved logo-shrink timing is preserved.
-			// ~15 elements: last ends 0.62 + 14*0.009 + 0.2 = 0.946 <= 0.96 -> timeline not extended.
+			// HOLD 0.6 -> 0.66 (settled & readable) before the exit, so it never appears mid-skew.
+			// ~15 elements: last ends 0.66 + 14*0.009 + 0.16 = 0.946 <= 0.96 -> timeline not extended.
 			tl.to(
 				".hero-phrase-el",
-				{ yPercent: -118, rotateZ: -2, duration: 0.2, stagger: 0.009, ease: "power3.in" },
-				0.62
+				{ yPercent: -118, rotateZ: -2, duration: 0.16, stagger: 0.009, ease: "power3.in" },
+				0.66
 			);
 		}, heroRef);
 
