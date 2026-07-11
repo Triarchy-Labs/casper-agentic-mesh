@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -119,23 +119,6 @@ export default function Page() {
     }, 2.8); // starts at 2.8, ends at 3.4
 
 
-    // Manifesto (un-pinned): natural scroll carries the block up; a gentle scrub rolls the
-    // masked lines in, holds, then rolls them out. Trigger on the content so it tracks its transit.
-    const mfInner = document.querySelector(".mf-flow") as HTMLElement | null;
-    if (mfInner) {
-      const mfTl = gsap.timeline({
-        scrollTrigger: { trigger: mfInner, start: "top 80%", end: "bottom 20%", scrub: 1, invalidateOnRefresh: true },
-      });
-      mfTl.fromTo(".mf-hero-line",
-        { yPercent: 115, opacity: 0, filter: "blur(6px)" },
-        { yPercent: 0, opacity: 1, filter: "blur(0px)", stagger: 0.015, ease: "power3.out", duration: 0.32 },
-        0
-      );
-      mfTl.to(".mf-hero-line",
-        { yPercent: -115, ease: "power3.in", stagger: 0.015, duration: 0.3 },
-        0.62
-      );
-    }
 
     // 4. Produx parity — photo parallax inside each card frame.
     // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
@@ -220,7 +203,7 @@ export default function Page() {
             {/* Manifesto — NOT pinned. The phrases ride up with NATURAL scroll (produx 1:1);
                 a light scrub only rolls the masked lines in, then out. Smooth by construction. */}
             <section ref={mfRef} id="manifesto" className="relative w-full min-h-[170vh] flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10">
-              <div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
+              <motion.div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]" initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 1.1, ease: [0.2, 0.6, 0.35, 1] }}>
 						<div className="flex flex-col items-start text-left mb-[9vh]">
 							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
 								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
@@ -231,7 +214,8 @@ export default function Page() {
 							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.85vw, 18px)", letterSpacing: "0.14em" }}><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
 							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
 						</div>
-					</div>
+					
+            </motion.div>
             </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
