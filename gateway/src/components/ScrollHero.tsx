@@ -481,7 +481,7 @@ export function ScrollHero() {
 				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
 				    while the phrases are still rising, then converges into the image as they roll out. */}
 				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
-					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(72% 66% at 104% -4%, transparent, transparent 22%, black 64%)", maskComposite: "intersect", WebkitMaskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(72% 66% at 104% -4%, transparent, transparent 22%, black 64%)", WebkitMaskComposite: "source-in" }}>
+					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(34% 42% at 105% -5%, transparent, transparent 24%, black 42%)", maskComposite: "intersect", WebkitMaskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(34% 42% at 105% -5%, transparent, transparent 24%, black 42%)", WebkitMaskComposite: "source-in" }}>
 						{HERO_PIECES.map((p) => (
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
