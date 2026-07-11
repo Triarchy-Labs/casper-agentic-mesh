@@ -889,16 +889,11 @@ html.lenis, html.lenis body { height: auto; }
 .btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }
 
 
-/* Per-line reader strip behind the hero description — thin faux-frost: a light glass sheen over a
-   soft translucent base (declutters the carbon for legibility), glass edge highlight. Semi-transparent,
-   not milky. No live backdrop-blur here (the transform-animated container disables backdrop-filter). */
+/* Per-line reader strip behind the hero description — dark translucent underlay that darkens the
+   busy carbon so the text stays legible (the cleanest-reading option). */
 .dstrip {
-	background:
-		linear-gradient(rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.04)),
-		rgba(10, 7, 12, 0.30);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	border-radius: 4px;
-	padding: 0.06em 0.55em;
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+	background: rgba(6, 2, 5, 0.46);
+	border-radius: 3px;
+	padding: 0.05em 0.55em;
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
 }
