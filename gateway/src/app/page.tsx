@@ -20,7 +20,7 @@ export default function Page() {
   // Drive the masked-line roll from the section's LIVE scroll position (immune to pins):
   // lines roll IN inside their masks, hold, then roll OUT in place -- produx splitLine 1:1.
   const { scrollYProgress: mfProg } = useScroll({ target: mfRef, offset: ["start end", "end start"] });
-  const mfRoll = useTransform(mfProg, [0, 0.34, 0.6, 1], ["118%", "0%", "0%", "-118%"]);
+  const mfRoll = useTransform(mfProg, [0, 0.24, 0.42, 0.56], ["118%", "0%", "0%", "-118%"]);
 
   // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
   // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
