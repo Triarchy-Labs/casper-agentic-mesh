@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -191,6 +191,15 @@ export default function Page() {
       focusCleanups.forEach((fn) => fn());
     };
   }, { dependencies: [booted], scope: containerRef });
+
+  // The hero + mosaic pins insert pin-spacers that push the un-pinned #manifesto down the page.
+  // ScrollTrigger measures the manifesto trigger before those spacers settle, so its start/end
+  // land in the wrong place and the lines stay hidden. Force a recalc once everything is mounted.
+  useEffect(() => {
+    if (!booted) return;
+    const ids = [120, 400, 900].map((d) => setTimeout(() => ScrollTrigger.refresh(), d));
+    return () => ids.forEach(clearTimeout);
+  }, [booted]);
 
   return (
     <>
