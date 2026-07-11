@@ -481,7 +481,7 @@ export function ScrollHero() {
 				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
 				    while the phrases are still rising, then converges into the image as they roll out. */}
 				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
-					<div className="assembly-image-container relative w-[60vw] max-w-[1150px] aspect-[1.784/1] mt-[8vh] max-lg:w-[86vw]" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
+					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse, black 18%, transparent 58%)", WebkitMaskImage: "radial-gradient(ellipse, black 18%, transparent 58%)" }}>
 						{HERO_PIECES.map((p) => (
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
