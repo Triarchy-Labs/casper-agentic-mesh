@@ -196,7 +196,7 @@ export default function Page() {
                       <div 
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{ 
-                          backgroundImage: "url(/anime_robot.jpeg)",
+                          backgroundImage: "url(/card-omni-mesh.jpg)",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
