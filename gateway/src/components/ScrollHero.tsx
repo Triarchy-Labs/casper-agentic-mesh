@@ -239,7 +239,7 @@ export function ScrollHero() {
 			// ~15 elements: last ends 0.66 + 14*0.009 + 0.16 = 0.946 <= 0.96 -> timeline not extended.
 			tl.to(
 				".hero-line",
-				{ yPercent: -118, rotateZ: -2, duration: 0.16, stagger: 0.009, ease: "power3.in" },
+				{ yPercent: -118, rotateZ: -2, duration: 0.3, stagger: 0.02, ease: "power3.in" },
 				0.66
 			);
 
