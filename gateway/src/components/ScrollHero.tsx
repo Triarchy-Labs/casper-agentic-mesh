@@ -489,7 +489,7 @@ export function ScrollHero() {
 						))}
 						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 						{/* pulsing red aura pinned over the Casper crystal — wrapper handles reveal, inner CSS-pulses */}
-						<div className="crystal-reveal" style={{ position: "absolute", left: "60.5%", top: "41%", width: "6%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)", opacity: 0, pointerEvents: "none", zIndex: 12 }}>
+						<div className="crystal-reveal" style={{ position: "absolute", left: "61.5%", top: "39.5%", width: "5%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)", opacity: 0, pointerEvents: "none", zIndex: 12 }}>
 							<div className="crystal-pulse" style={{ width: "100%", height: "100%", borderRadius: "50%", background: "radial-gradient(circle, rgba(241,50,66,0.9) 0%, rgba(241,50,66,0.4) 38%, transparent 68%)", mixBlendMode: "screen" }} />
 						</div>
 						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
