@@ -89,6 +89,25 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 	);
 }
 
+// Mosaic slices — fly in from a 3D scatter, appear, then converge into the image (produx).
+// 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
+  // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
+const HERO_PIECES = [
+  { id: 1, inset: "inset(0% 75% 66.66% 0%)", sx: -58, sy: -22, sz: -320, sb: 12, pri: 0 },
+  { id: 2, inset: "inset(0% 50% 66.66% 25%)", sx: 24, sy: 30, sz: -120, sb: 0, pri: 6 },
+  { id: 3, inset: "inset(0% 25% 66.66% 50%)", sx: -20, sy: -18, sz: -1200, sb: 12, pri: 2 },
+  { id: 4, inset: "inset(0% 0% 66.66% 75%)", sx: 22, sy: 10, sz: -360, sb: 0, pri: 9 },
+  { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", sx: -64, sy: -16, sz: -260, sb: 0, pri: 3 },
+  { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", sx: -10, sy: 26, sz: -900, sb: 0, pri: 7 },
+  { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", sx: 14, sy: -26, sz: -2000, sb: 12, pri: 1 },
+  { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", sx: 30, sy: -8, sz: 200, sb: 0, pri: 10 },
+  { id: 9, inset: "inset(66.66% 75% 0% 0%)", sx: -34, sy: 24, sz: -520, sb: 0, pri: 4 },
+  { id: 10, inset: "inset(66.66% 50% 0% 25%)", sx: -14, sy: 30, sz: -1500, sb: 12, pri: 8 },
+  { id: 11, inset: "inset(66.66% 25% 0% 50%)", sx: 26, sy: 20, sz: -240, sb: 0, pri: 5 },
+  { id: 12, inset: "inset(66.66% 0% 0% 75%)", sx: 44, sy: -14, sz: -960, sb: 12, pri: 11 },
+];
+
+
 export function ScrollHero() {
 	const heroRef = useRef<HTMLElement>(null);
 	const wordmarkRef = useRef<HTMLDivElement>(null);
@@ -163,7 +182,7 @@ export function ScrollHero() {
 				scrollTrigger: {
 					trigger: heroRef.current,
 					start: "top top",
-					end: "+=185%",
+					end: "+=275%",
 					pin: true,
 					scrub: 1.5,
 					invalidateOnRefresh: true,
@@ -223,6 +242,27 @@ export function ScrollHero() {
 				{ yPercent: -118, rotateZ: -2, duration: 0.16, stagger: 0.009, ease: "power3.in" },
 				0.66
 			);
+
+			// 7. MOSAIC (produx: image-container in the same screen). Squares APPEAR at scattered
+			//    positions at ~0.3 — while the phrases are still mid-rise (their overlap) — then
+			//    CONVERGE into the image as the phrases roll out. Pin extended to 275% so the word/
+			//    phrase pacing is preserved (0.6/1.42*275 = 116vh, same as before).
+			const C = HERO_PIECES.length;
+			HERO_PIECES.forEach((p) => {
+				tl.fromTo(
+					`.assembly-slice-${p.id}`,
+					{ xPercent: p.sx, yPercent: p.sy, z: p.sz, scale: 0.2, opacity: 0, filter: `blur(${p.sb}px)` },
+					{ opacity: 0.85, scale: 0.85, ease: "power2.out", duration: 0.2 },
+					0.3 + (p.pri / C) * 0.14
+				);
+				tl.to(
+					`.assembly-slice-${p.id}`,
+					{ xPercent: 0, yPercent: 0, z: 0, scale: 1, opacity: 1, filter: "blur(0px)", force3D: true, ease: "power3.inOut", duration: 0.55 },
+					0.55 + (p.pri / C) * 0.35
+				);
+			});
+			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 1.25);
+			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", stagger: 0.1 }, 1.3);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
@@ -434,6 +474,29 @@ export function ScrollHero() {
 					</div>
 				</div>
 
+				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
+				    while the phrases are still rising, then converges into the image as they roll out. */}
+				<div className="absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
+					<div className="assembly-image-container relative w-[60vw] max-w-[1150px] aspect-[1.784/1] mt-[8vh] max-lg:w-[86vw]" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
+						{HERO_PIECES.map((p) => (
+							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/anime_robot.jpeg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
+						))}
+						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
+						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+							<p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
+							<p className="label-14 text-white/80">↳ to ship apps and agents</p>
+							<p className="label-14 text-white/80">↳ automated by agents</p>
+						</div>
+						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+							<p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
+						</div>
+						<div className="absolute -bottom-[9vh] left-1/2 -translate-x-1/2 z-20 assembly-text-overlay flex items-center gap-3 flex-wrap justify-center whitespace-nowrap opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+							<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · live on-chain</span>
+							<span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span>
+							<span className="nb-index">2026</span>
+						</div>
+					</div>
+				</div>
 				</section>
 		</>
 	);

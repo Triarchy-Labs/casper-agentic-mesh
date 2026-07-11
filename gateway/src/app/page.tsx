@@ -17,22 +17,6 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
-  // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
-  // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
-  const pieces = [
-    { id: 1, inset: "inset(0% 75% 66.66% 0%)", sx: -58, sy: -22, sz: -320, sb: 12, pri: 0 },
-    { id: 2, inset: "inset(0% 50% 66.66% 25%)", sx: 24, sy: 30, sz: -120, sb: 0, pri: 6 },
-    { id: 3, inset: "inset(0% 25% 66.66% 50%)", sx: -20, sy: -18, sz: -1200, sb: 12, pri: 2 },
-    { id: 4, inset: "inset(0% 0% 66.66% 75%)", sx: 22, sy: 10, sz: -360, sb: 0, pri: 9 },
-    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", sx: -64, sy: -16, sz: -260, sb: 0, pri: 3 },
-    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", sx: -10, sy: 26, sz: -900, sb: 0, pri: 7 },
-    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", sx: 14, sy: -26, sz: -2000, sb: 12, pri: 1 },
-    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", sx: 30, sy: -8, sz: 200, sb: 0, pri: 10 },
-    { id: 9, inset: "inset(66.66% 75% 0% 0%)", sx: -34, sy: 24, sz: -520, sb: 0, pri: 4 },
-    { id: 10, inset: "inset(66.66% 50% 0% 25%)", sx: -14, sy: 30, sz: -1500, sb: 12, pri: 8 },
-    { id: 11, inset: "inset(66.66% 25% 0% 50%)", sx: 26, sy: 20, sz: -240, sb: 0, pri: 5 },
-    { id: 12, inset: "inset(66.66% 0% 0% 75%)", sx: 44, sy: -14, sz: -960, sb: 12, pri: 11 },
-  ];
 
   // Always run the full 2.5s boot loader on every visit (no session skip).
   const handleBootComplete = () => {
@@ -67,21 +51,6 @@ export default function Page() {
       );
     });
 
-    // 3. Mosaic assembly — UN-PINNED (natural scroll via CSS sticky = smooth like produx).
-    //    Pieces fly in from a 3D scatter and converge: scrub 1.5, power3.inOut, staggered by priority.
-    const C = pieces.length;
-    const assemblyTl = gsap.timeline({
-      scrollTrigger: { trigger: "#assembly-sticky-trigger", start: "top top", end: "+=150%", scrub: 1.5, invalidateOnRefresh: true },
-    });
-    pieces.forEach((p) => {
-      assemblyTl.fromTo(`.assembly-slice-${p.id}`,
-        { xPercent: p.sx, yPercent: p.sy, z: p.sz, scale: 0.2, opacity: 0, filter: `blur(${p.sb}px)` },
-        { xPercent: 0, yPercent: 0, z: 0, scale: 1, opacity: 1, filter: "blur(0px)", force3D: true, ease: "power3.inOut", duration: 0.55 },
-        (p.pri / C) * 0.5
-      );
-    });
-    assemblyTl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut" }, 0.62);
-    assemblyTl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", stagger: 0.12 }, 0.7);
 
 
 
@@ -166,57 +135,6 @@ export default function Page() {
             <ScrollHero />
 
 
-            {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
-            <section id="assembly-sticky-trigger" className="relative w-full min-h-[260vh] bg-transparent z-10">
-              <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center" style={{ perspective: "1400px" }}>
-
-              {/* Center/Bottom: Image Assembly Box */}
-              <div className="assembly-image-container relative w-[80vw] max-w-[1600px] aspect-[1.784/1] z-10 pointer-events-auto mt-[10vh] max-lg:w-[90vw] max-lg:max-w-none" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
-                
-                {/* 12 Slices of image (NO bounding boxes, NO borders, floating in open space!) */}
-                {pieces.map((p) => (
-                  <div 
-                    key={p.id}
-                    className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} 
-                    style={{ 
-                      backgroundImage: "url(/anime_robot.jpeg)",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                      clipPath: p.inset,
-                      opacity: 0,
-                    }} 
-                  />
-                ))}
-
-                {/* Clean gradient overlay on the image instead of solid dark scrim */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
-
-                {/* Integrated Manifesto Text Overlaid on Image */}
-                <div 
-                  className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0"
-                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                >
-                  <p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
-                  <p className="label-14 text-white/80">↳ to ship apps and agents</p>
-                  <p className="label-14 text-white/80">↳ automated by agents</p>
-                </div>
-
-                <div 
-                  className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0"
-                  style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}
-                >
-                  <p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
-                </div>
-
-              </div>
-              {/* meta capsules — moved here from the hero phrases; sit below the mosaic */}
-              <div className="assembly-text-overlay opacity-0 mt-[5vh] flex items-center gap-3 flex-wrap justify-center px-[5vw]" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
-                <span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · live on-chain</span>
-                <span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span>
-                <span className="nb-index">2026</span>
-              </div>
-              </div>
-            </section>
 
             {/* Synergy Dashboard Cinematic Chapters */}
             <div ref={sectionsRef} className="w-full px-[5.5vw] py-[120px] flex flex-col gap-12">
