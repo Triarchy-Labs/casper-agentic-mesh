@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
-import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -17,6 +17,12 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const mfRef = useRef<HTMLElement>(null);
+  const mfTlRef = useRef<gsap.core.Timeline | null>(null);
+  // Position from framer useScroll (reads the section's real rect -> immune to the hero's
+  // GSAP pin-spacer, which was making the GSAP ScrollTrigger fire the roll early, at the
+  // bottom of the screen). progress 0 = sticky just caught it centred; 1 = sticky releases.
+  const { scrollYProgress: mfProg } = useScroll({ target: mfRef, offset: ["start start", "end end"] });
+  useMotionValueEvent(mfProg, "change", (v) => { mfTlRef.current?.progress(v); });
 
   // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
   // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
@@ -47,9 +53,8 @@ export default function Page() {
     // Manifesto (CSS-sticky held, like produx .heroSection-Sticky-wrapper): masked lines roll IN
     // staggered, HOLD, then roll OUT staggered (y:-110% rotateZ:-2, power3.in) -- their splitLine.
     if (mfRef.current) {
-      const mfTl = gsap.timeline({
-        scrollTrigger: { trigger: mfRef.current, start: "top top", end: "+=150%", scrub: 1.5, invalidateOnRefresh: true },
-      });
+      const mfTl = gsap.timeline({ paused: true });
+      mfTlRef.current = mfTl;
       mfTl.fromTo(".mf-hero-line",
         { yPercent: 118 },
         { yPercent: 0, stagger: 0.02, ease: "power4.out", duration: 0.22 },
@@ -182,8 +187,9 @@ export default function Page() {
           <div className="relative z-20">
             <ScrollHero />
 
-            {/* Manifesto — NOT pinned. The phrases ride up with NATURAL scroll (produx 1:1);
-                a light scrub only rolls the masked lines in, then out. Smooth by construction. */}
+            {/* Manifesto — CSS-sticky wrapper HOLDS the phrases centred (produx .heroSection-
+                Sticky-wrapper). Lines roll in staggered, hold, roll out staggered (splitLine).
+                Progress is framer-driven so it never fires early during the scroll-in. */}
             <section ref={mfRef} id="manifesto" className="relative w-full min-h-[250vh] z-10">
               <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw]">
               <div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
