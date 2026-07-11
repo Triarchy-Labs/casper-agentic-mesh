@@ -265,8 +265,16 @@ export default function Page() {
                   {/* Row 3: small-left (4) + big-right (7) */}
                   {/* 04 TRIBUNAL — col-span-4, small left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:h-fit cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group">
                       <CornerMarks />
+                      <div
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        style={{
+                          backgroundImage: "url(/card-tribunal.jpg)",
+                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
+                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
+                        }}
+                      />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> prosecutor · defender · jury</li>
