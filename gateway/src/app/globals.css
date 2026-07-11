@@ -889,12 +889,12 @@ html.lenis, html.lenis body { height: auto; }
 .btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }
 
 
-/* Per-line reader strip behind the hero description — darkens the busy carbon so the
-   text stays legible. (True backdrop-blur can't work here: the phrase container is
-   transformed for the rise, which disables backdrop-filter on its descendants.) */
+/* Per-line reader strip behind the hero description — the SAME frosted-glass material as the
+   custom-cursor square (white 30% + blur 12px), living under the container's mix-blend-difference. */
 .dstrip {
-	background: rgba(6, 2, 5, 0.46);
+	background: rgba(255, 255, 255, 0.3);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
 	border-radius: 3px;
 	padding: 0.05em 0.55em;
-	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
 }
