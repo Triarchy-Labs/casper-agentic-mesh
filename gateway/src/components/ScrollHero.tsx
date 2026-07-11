@@ -201,10 +201,12 @@ export function ScrollHero() {
 			// Container's CSS default is translateY(50vh) (down, visible under the word); the timeline
 			// just rises it to 0 -> start = the natural CSS state, so it cannot fail to apply at scroll 0
 			// (a fromTo `from` was unreliable here with scrub + invalidateOnRefresh).
-			// Delayed rise (starts at 0.3, not 0): the block STAYS low while the word shrinks from full,
-			// then rises 0.3->0.6 trailing the word up (so it follows it, not overtakes it — our word is
-			// centred, not high like produx, so an immediate rise crossed over the still-big word).
-			tl.to(".hero-phrases", { y: 0, duration: 0.3, ease: "power2.out" }, 0.3);
+			// Rise LOCKED to the word shrink as one unit: identical window (0, dur 0.6) AND identical
+			// ease (power1.inOut) as the wordmark's scale/x/y. They move in perfect lockstep — smooth,
+			// no jerk, and because the block starts lower and both rise proportionally it trails the
+			// word up instead of overtaking it (the overtake was a mismatched ease: power2.out rose too
+			// fast early against the word's slow-start power1.inOut).
+			tl.to(".hero-phrases", { y: 0, duration: 0.6, ease: "power1.inOut" }, 0);
 			// 6. phrases HOLD through the shrink, then roll OUT line-by-line as the nav reveals —
 			//    produx splitLine exit: y:-118% + rotateZ:-2, staggered, power3.in (by-pieces roll-up).
 			//    10 lines: last ends at 0.62 + 9*0.015 + 0.2 = 0.955 <= 0.96 (header end), so this
