@@ -888,5 +888,3 @@ html.lenis, html.lenis body { height: auto; }
 }
 .btn-neon:hover .btn-icon-circle { transform: translate(2px,-2px); background: rgba(255,255,255,0.12); }
 
-/* Manifesto lines roll inside their overflow-hidden masks, driven by --mfroll (produx splitLine). */
-.mf-hero-line { transform: translateY(var(--mfroll, 118%)); will-change: transform; }

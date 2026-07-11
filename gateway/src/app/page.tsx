@@ -17,10 +17,6 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const mfRef = useRef<HTMLElement>(null);
-  // Drive the masked-line roll from the section's LIVE scroll position (immune to pins):
-  // lines roll IN inside their masks, hold, then roll OUT in place -- produx splitLine 1:1.
-  const { scrollYProgress: mfProg } = useScroll({ target: mfRef, offset: ["start end", "end start"] });
-  const mfRoll = useTransform(mfProg, [0, 0.24, 0.42, 0.56], ["118%", "0%", "0%", "-118%"]);
 
   // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
   // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
@@ -47,6 +43,23 @@ export default function Page() {
   // GSAP Cinematic Transitions & Pinning (Brutalist Aesthetic)
   useGSAP(() => {
     if (!booted) return;
+
+    // Manifesto (CSS-sticky held, like produx .heroSection-Sticky-wrapper): masked lines roll IN
+    // staggered, HOLD, then roll OUT staggered (y:-110% rotateZ:-2, power3.in) -- their splitLine.
+    if (mfRef.current) {
+      const mfTl = gsap.timeline({
+        scrollTrigger: { trigger: mfRef.current, start: "top top", end: "+=150%", scrub: 1.5, invalidateOnRefresh: true },
+      });
+      mfTl.fromTo(".mf-hero-line",
+        { yPercent: 118 },
+        { yPercent: 0, stagger: 0.02, ease: "power4.out", duration: 0.22 },
+        0.02
+      );
+      mfTl.to(".mf-hero-line",
+        { yPercent: -118, rotateZ: -2, stagger: 0.02, ease: "power3.in", duration: 0.2 },
+        0.62
+      );
+    }
 
 
     // 2. ScrollTrigger animations for sections
@@ -171,8 +184,9 @@ export default function Page() {
 
             {/* Manifesto — NOT pinned. The phrases ride up with NATURAL scroll (produx 1:1);
                 a light scrub only rolls the masked lines in, then out. Smooth by construction. */}
-            <section ref={mfRef} id="manifesto" className="relative w-full min-h-[170vh] flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10">
-              <motion.div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]" style={{ ["--mfroll"]: mfRoll } as React.CSSProperties}>
+            <section ref={mfRef} id="manifesto" className="relative w-full min-h-[250vh] z-10">
+              <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw]">
+              <div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]">
 						<div className="flex flex-col items-start text-left mb-[9vh]">
 							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
 								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
@@ -184,7 +198,8 @@ export default function Page() {
 							<div className="overflow-hidden"><div className="mf-hero-line flex items-center gap-3 flex-wrap pt-2"><span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · testnet live</span><span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span><span className="nb-index">2026</span></div></div>
 						</div>
 					
-            </motion.div>
+            </div>
+              </div>
             </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
