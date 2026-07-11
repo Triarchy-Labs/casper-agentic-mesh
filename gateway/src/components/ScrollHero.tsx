@@ -248,6 +248,10 @@ export function ScrollHero() {
 			//    CONVERGE into the image as the phrases roll out. Pin extended to 275% so the word/
 			//    phrase pacing is preserved (0.6/1.42*275 = 116vh, same as before).
 			const C = HERO_PIECES.length;
+			// The whole mosaic block RISES from lower into the centre as it assembles (produx's
+			// image-container scrolls up from below), so the squares appear low and TRAVEL UP into
+			// the frame toward the text's place — not pop in centred.
+			tl.fromTo(".assembly-rise", { y: () => window.innerHeight * 0.42 }, { y: 0, duration: 1.0, ease: "none" }, 0.3);
 			HERO_PIECES.forEach((p) => {
 				tl.fromTo(
 					`.assembly-slice-${p.id}`,
@@ -476,7 +480,7 @@ export function ScrollHero() {
 
 				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
 				    while the phrases are still rising, then converges into the image as they roll out. */}
-				<div className="absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
+				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
 					<div className="assembly-image-container relative w-[60vw] max-w-[1150px] aspect-[1.784/1] mt-[8vh] max-lg:w-[86vw]" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
 						{HERO_PIECES.map((p) => (
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/anime_robot.jpeg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
