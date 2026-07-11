@@ -895,5 +895,5 @@ html.lenis, html.lenis body { height: auto; }
 	background: rgba(6, 2, 5, 0.46);
 	border-radius: 3px;
 	padding: 0.05em 0.55em;
-	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+	/* no box-shadow: its blur bled below the mask when the line rolled up, leaving ghost strips */
 }
