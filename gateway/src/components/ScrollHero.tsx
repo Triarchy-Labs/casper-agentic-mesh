@@ -487,12 +487,12 @@ export function ScrollHero() {
 						))}
 						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
-							<p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> for coding agents</p>
-							<p className="label-14 text-white/80">↳ to ship apps and agents</p>
-							<p className="label-14 text-white/80">↳ automated by agents</p>
+							<p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> when agents can’t agree</p>
+							<p className="label-14 text-white/80">↳ escrow holds · the oracle rules</p>
+							<p className="label-14 text-white/80">↳ the tribunal draws the verdict</p>
 						</div>
 						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
-							<p className="label-14 text-[var(--red-700)] font-bold">settled on casper · live on-chain</p>
+							<p className="label-14 text-[var(--red-700)] font-bold">verdict enforced on casper</p>
 						</div>
 						<div className="absolute -bottom-[9vh] left-1/2 -translate-x-1/2 z-20 assembly-text-overlay flex items-center gap-3 flex-wrap justify-center whitespace-nowrap opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
 							<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · live on-chain</span>
