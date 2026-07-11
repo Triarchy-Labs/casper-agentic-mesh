@@ -897,3 +897,13 @@ html.lenis, html.lenis body { height: auto; }
 	padding: 0.05em 0.55em;
 	/* no box-shadow: its blur bled below the mask when the line rolled up, leaving ghost strips */
 }
+
+/* Living red aura pinned over the Casper crystal in the mosaic — breathes scale + brightness. */
+.crystal-pulse {
+	animation: crystalPulse 2.6s ease-in-out infinite;
+	will-change: transform, filter, opacity;
+}
+@keyframes crystalPulse {
+	0%, 100% { transform: scale(0.82); filter: brightness(0.7); opacity: 0.72; }
+	50%      { transform: scale(1.18); filter: brightness(1.5); opacity: 1; }
+}

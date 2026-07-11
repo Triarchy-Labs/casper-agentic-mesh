@@ -267,6 +267,8 @@ export function ScrollHero() {
 			});
 			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 1.45);
 			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", stagger: 0.1 }, 1.5);
+			// reveal the crystal aura once the image is assembled (it keeps CSS-pulsing on its own)
+			tl.to(".crystal-reveal", { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.5);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
@@ -486,12 +488,16 @@ export function ScrollHero() {
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
 						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
+						{/* pulsing red aura pinned over the Casper crystal — wrapper handles reveal, inner CSS-pulses */}
+						<div className="crystal-reveal" style={{ position: "absolute", left: "58%", top: "43%", width: "12%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)", opacity: 0, pointerEvents: "none", zIndex: 12 }}>
+							<div className="crystal-pulse" style={{ width: "100%", height: "100%", borderRadius: "50%", background: "radial-gradient(circle, rgba(241,50,66,0.9) 0%, rgba(241,50,66,0.4) 38%, transparent 68%)", mixBlendMode: "screen" }} />
+						</div>
 						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
 							<p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> when agents can’t agree</p>
 							<p className="label-14 text-white/80">↳ escrow holds · the oracle rules</p>
 							<p className="label-14 text-white/80">↳ the tribunal draws the verdict</p>
 						</div>
-						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
+						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 0 7px rgba(241,50,66,0.9), 0 0 16px rgba(241,50,66,0.5), 0 2px 6px rgba(0,0,0,0.95)" }}>
 							<p className="label-14 text-[var(--red-700)] font-bold">verdict enforced on casper</p>
 						</div>
 						<div className="absolute -bottom-[9vh] left-1/2 -translate-x-1/2 z-20 assembly-text-overlay flex items-center gap-3 flex-wrap justify-center whitespace-nowrap opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
