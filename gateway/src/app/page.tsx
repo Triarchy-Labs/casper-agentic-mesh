@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -17,6 +17,10 @@ export default function Page() {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
   const mfRef = useRef<HTMLElement>(null);
+  // Drive the masked-line roll from the section's LIVE scroll position (immune to pins):
+  // lines roll IN inside their masks, hold, then roll OUT in place -- produx splitLine 1:1.
+  const { scrollYProgress: mfProg } = useScroll({ target: mfRef, offset: ["start end", "end start"] });
+  const mfRoll = useTransform(mfProg, [0, 0.34, 0.6, 1], ["118%", "0%", "0%", "-118%"]);
 
   // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
   // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
@@ -168,7 +172,7 @@ export default function Page() {
             {/* Manifesto — NOT pinned. The phrases ride up with NATURAL scroll (produx 1:1);
                 a light scrub only rolls the masked lines in, then out. Smooth by construction. */}
             <section ref={mfRef} id="manifesto" className="relative w-full min-h-[170vh] flex items-center px-[5.5vw] max-lg:px-[4.10vw] max-sm:px-[5.97vw] z-10">
-              <motion.div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]" initial={{ opacity: 0, y: 80 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 1.1, ease: [0.2, 0.6, 0.35, 1] }}>
+              <motion.div className="mf-flow w-full flex items-end justify-between gap-[6vw] max-lg:flex-col max-lg:items-start max-lg:gap-y-[4vh]" style={{ ["--mfroll"]: mfRoll } as React.CSSProperties}>
 						<div className="flex flex-col items-start text-left mb-[9vh]">
 							<h2 className="uppercase tracking-tight text-white leading-[1.05]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, fontSize: "clamp(30px, 4.44vw, 92px)" }}>
 								<span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">Machines now</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">hire, pay, and</span></span><span className="block overflow-hidden"><span className="mf-hero-line block whitespace-nowrap">trade each other.</span></span>
