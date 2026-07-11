@@ -483,7 +483,7 @@ export function ScrollHero() {
 				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
 					<div className="assembly-image-container relative w-[60vw] max-w-[1150px] aspect-[1.784/1] mt-[8vh] max-lg:w-[86vw]" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
 						{HERO_PIECES.map((p) => (
-							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/anime_robot.jpeg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
+							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
 						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
