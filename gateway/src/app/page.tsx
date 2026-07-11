@@ -18,24 +18,21 @@ export default function Page() {
   const sectionsRef = useRef<HTMLDivElement>(null);
   const mfRef = useRef<HTMLElement>(null);
 
-  // 12-piece mosaic assembly specifications (4 cols x 3 rows)
-  // Wider coordinates, custom start times, durations, and easings for asymmetrical, organic assembly
+  // 12 image slices. Each flies in from a scattered 3D position (xPercent sx, yPercent sy,
+  // z sz, blur sb) and converges to its cell — produx scatter->assemble. pri = assembly order.
   const pieces = [
-    // Row 1
-    { id: 1, inset: "inset(0% 75% 66.66% 0%)", x: "-40vw", y: "-35vh", scale: 0.75, blur: "8px", initialOpacity: 0.8, startTime: 0.8, duration: 1.6, ease: "power3.out" },
-    { id: 2, inset: "inset(0% 50% 66.66% 25%)", x: "-10vw", y: "-40vh", scale: 0.7, blur: "5px", initialOpacity: 0, startTime: 1.2, duration: 1.2, ease: "back.out(1.2)" },
-    { id: 3, inset: "inset(0% 25% 66.66% 50%)", x: "15vw", y: "-38vh", scale: 0.85, blur: "9px", initialOpacity: 0.8, startTime: 0.9, duration: 1.8, ease: "power2.inOut" },
-    { id: 4, inset: "inset(0% 0% 66.66% 75%)", x: "42vw", y: "-30vh", scale: 0.8, blur: "6px", initialOpacity: 0, startTime: 1.4, duration: 1.0, ease: "sine.out" },
-    // Row 2
-    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", x: "-45vw", y: "-10vh", scale: 0.7, blur: "8px", initialOpacity: 0.8, startTime: 0.7, duration: 2.0, ease: "power4.out" },
-    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", x: "-20vw", y: "20vh", scale: 0.75, blur: "6px", initialOpacity: 0, startTime: 1.3, duration: 1.4, ease: "power2.out" },
-    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", x: "25vw", y: "-15vh", scale: 0.85, blur: "7px", initialOpacity: 0.8, startTime: 1.0, duration: 1.5, ease: "back.out(1.5)" },
-    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", x: "45vw", y: "10vh", scale: 0.75, blur: "5px", initialOpacity: 0, startTime: 1.5, duration: 1.1, ease: "power3.inOut" },
-    // Row 3
-    { id: 9, inset: "inset(66.66% 75% 0% 0%)", x: "-38vw", y: "30vh", scale: 0.8, blur: "7px", initialOpacity: 0.8, startTime: 0.8, duration: 1.7, ease: "power2.out" },
-    { id: 10, inset: "inset(66.66% 50% 0% 25%)", x: "-15vw", y: "40vh", scale: 0.65, blur: "9px", initialOpacity: 0, startTime: 1.1, duration: 1.3, ease: "sine.inOut" },
-    { id: 11, inset: "inset(66.66% 25% 0% 50%)", x: "15vw", y: "38vh", scale: 0.7, blur: "6px", initialOpacity: 0.8, startTime: 1.2, duration: 1.6, ease: "power3.out" },
-    { id: 12, inset: "inset(66.66% 0% 0% 75%)", x: "40vw", y: "35vh", scale: 0.75, blur: "8px", initialOpacity: 0, startTime: 0.6, duration: 2.2, ease: "power4.inOut" }
+    { id: 1, inset: "inset(0% 75% 66.66% 0%)", sx: -58, sy: -22, sz: -320, sb: 12, pri: 0 },
+    { id: 2, inset: "inset(0% 50% 66.66% 25%)", sx: 24, sy: 30, sz: -120, sb: 0, pri: 6 },
+    { id: 3, inset: "inset(0% 25% 66.66% 50%)", sx: -20, sy: -18, sz: -1200, sb: 12, pri: 2 },
+    { id: 4, inset: "inset(0% 0% 66.66% 75%)", sx: 22, sy: 10, sz: -360, sb: 0, pri: 9 },
+    { id: 5, inset: "inset(33.33% 75% 33.33% 0%)", sx: -64, sy: -16, sz: -260, sb: 0, pri: 3 },
+    { id: 6, inset: "inset(33.33% 50% 33.33% 25%)", sx: -10, sy: 26, sz: -900, sb: 0, pri: 7 },
+    { id: 7, inset: "inset(33.33% 25% 33.33% 50%)", sx: 14, sy: -26, sz: -2000, sb: 12, pri: 1 },
+    { id: 8, inset: "inset(33.33% 0% 33.33% 75%)", sx: 30, sy: -8, sz: 200, sb: 0, pri: 10 },
+    { id: 9, inset: "inset(66.66% 75% 0% 0%)", sx: -34, sy: 24, sz: -520, sb: 0, pri: 4 },
+    { id: 10, inset: "inset(66.66% 50% 0% 25%)", sx: -14, sy: 30, sz: -1500, sb: 12, pri: 8 },
+    { id: 11, inset: "inset(66.66% 25% 0% 50%)", sx: 26, sy: 20, sz: -240, sb: 0, pri: 5 },
+    { id: 12, inset: "inset(66.66% 0% 0% 75%)", sx: 44, sy: -14, sz: -960, sb: 12, pri: 11 },
   ];
 
   // Always run the full 2.5s boot loader on every visit (no session skip).
@@ -70,53 +67,21 @@ export default function Page() {
       );
     });
 
-    // 3. Image Assembly Scroll Animation (Produx parity sequence)
+    // 3. Mosaic assembly — UN-PINNED (natural scroll via CSS sticky = smooth like produx).
+    //    Pieces fly in from a 3D scatter and converge: scrub 1.5, power3.inOut, staggered by priority.
+    const C = pieces.length;
     const assemblyTl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "#assembly-sticky-trigger",
-        start: "top top",
-        end: "+=450%", // Pinned for a massive, gradual 12-scroll feel!
-        pin: true,
-        scrub: 1.5,
-      }
+      scrollTrigger: { trigger: "#assembly-sticky-trigger", start: "top top", end: "+=150%", scrub: 1.5, invalidateOnRefresh: true },
     });
-
-    // 12 Slices fade in from opacity 0 to initialOpacity (0.0 to 0.8) and then merge with custom non-linear parameters
     pieces.forEach((p) => {
       assemblyTl.fromTo(`.assembly-slice-${p.id}`,
-        { x: p.x, y: p.y, scale: p.scale, opacity: 0, filter: `blur(${p.blur})` },
-        { opacity: p.initialOpacity, duration: 0.8, ease: "power1.inOut" },
-        0.0
-      );
-      assemblyTl.to(`.assembly-slice-${p.id}`,
-        { x: "0vw", y: "0vh", scale: 1, opacity: 1, filter: "blur(0px)", ease: p.ease, duration: p.duration },
-        p.startTime
+        { xPercent: p.sx, yPercent: p.sy, z: p.sz, scale: 0.2, opacity: 0, filter: `blur(${p.sb}px)` },
+        { xPercent: 0, yPercent: 0, z: 0, scale: 1, opacity: 1, filter: "blur(0px)", force3D: true, ease: "power3.inOut", duration: 0.55 },
+        (p.pri / C) * 0.5
       );
     });
-
-    // Fade in the dark gradient overlay once slices assemble
-    assemblyTl.fromTo(".assembly-scrim",
-      { opacity: 0 },
-      { opacity: 1, duration: 0.8, ease: "power2.inOut" },
-      1.8 // starts at 1.8, ends at 2.6
-    );
-
-    // Manifesto text overlays fade in
-    assemblyTl.fromTo(".assembly-text-overlay",
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", stagger: 0.2 },
-      2.0 // starts at 2.0, ends at 2.8
-    );
-
-    // Image container exit (2.8 to 3.4) - disappears completely ~2 scrolls after text
-    assemblyTl.to(".assembly-image-container", {
-      y: "-120px",
-      opacity: 0,
-      scale: 0.95,
-      filter: "blur(8px)",
-      duration: 0.6,
-      ease: "power2.in",
-    }, 2.8); // starts at 2.8, ends at 3.4
+    assemblyTl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.inOut" }, 0.62);
+    assemblyTl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out", stagger: 0.12 }, 0.7);
 
 
 
@@ -219,7 +184,8 @@ export default function Page() {
             </section>
 
             {/* Pinned Second Section with Image Assembly (intro text moved to #manifesto) */}
-            <section id="assembly-sticky-trigger" className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-transparent z-10">
+            <section id="assembly-sticky-trigger" className="relative w-full min-h-[260vh] bg-transparent z-10">
+              <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-center items-center" style={{ perspective: "1400px" }}>
 
               {/* Center/Bottom: Image Assembly Box */}
               <div className="assembly-image-container relative w-[80vw] max-w-[1600px] aspect-[1.784/1] z-10 pointer-events-auto mt-[10vh] max-lg:w-[90vw] max-lg:max-w-none" style={{ maskImage: "radial-gradient(ellipse, black 40%, transparent 92%)", WebkitMaskImage: "radial-gradient(ellipse, black 40%, transparent 92%)" }}>
@@ -260,7 +226,7 @@ export default function Page() {
                 </div>
 
               </div>
-
+              </div>
             </section>
 
             {/* Synergy Dashboard Cinematic Chapters */}
