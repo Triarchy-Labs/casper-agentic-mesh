@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollHero } from "@/components/ScrollHero";
 import { ManifestoReveal } from "@/components/ManifestoReveal";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
+import { CrystalForge } from "@/components/CrystalForge";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -343,6 +344,10 @@ export default function Page() {
               </div>
 
             </div>
+
+            {/* Crystal forge — produx rock section rebuilt: scroll-scrubbed crystal charging red,
+                gradient headline, then the three verdict points pop in on the hero pose */}
+            <CrystalForge />
 
             {/* Thesis — tall sticky section so the pixel-decode plays over ~2-3 scrolls, text held in view */}
             <ManifestoReveal />

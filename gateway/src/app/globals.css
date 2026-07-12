@@ -907,3 +907,10 @@ html.lenis, html.lenis body { height: auto; }
 	0%, 100% { transform: scale(0.82); filter: brightness(0.7); opacity: 0.72; }
 	50%      { transform: scale(1.18); filter: brightness(1.5); opacity: 1; }
 }
+
+/* CrystalForge embers — slow float, red sparks drifting around the charging crystal */
+@keyframes cfDrift {
+	0%   { transform: translate3d(0, 0, 0); opacity: 0.35; }
+	50%  { opacity: 0.9; }
+	100% { transform: translate3d(6px, -22px, 0); opacity: 0.4; }
+}
