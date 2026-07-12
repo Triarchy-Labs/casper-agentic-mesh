@@ -26,7 +26,8 @@ export function PixelDecodeText({ text }: { text: string }) {
 		let cells: Cell[] = [];
 		let W = 0, H = 0, dpr = 1, reveal = 0, raf = 0;
 
-		const fontStr = (px: number) => `400 ${px}px var(--font-tech), 'Sora', sans-serif`;
+		// NOTE: canvas ctx.font does NOT understand CSS vars — must be a real family name.
+		const fontStr = (px: number) => `400 ${px}px 'Sora', 'Arial', sans-serif`;
 
 		function layout() {
 			dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -133,7 +134,7 @@ export function PixelDecodeText({ text }: { text: string }) {
 
 	return (
 		<div ref={wrapRef} className="w-full">
-			<canvas ref={canvasRef} className="block w-full select-none" aria-label={text} />
+			<canvas ref={canvasRef} className="block select-none" aria-label={text} />
 		</div>
 	);
 }
