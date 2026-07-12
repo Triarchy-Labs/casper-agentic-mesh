@@ -34,10 +34,10 @@ export function SmoothScroller({ children }: { children: ReactNode }) {
 			root
 			autoRaf={false}
 			options={{
-				// lerp = how fast the scroll catches up to its target. LOW (floaty) = long inertia coast
-				// after you stop = the crystal's frames tick through it visibly. 0.1 shortens that coast so
-				// the settle is quick (ticks blur into one smooth stop). Site-wide feel lever; tune here.
-				lerp: 0.1,
+				// Keep the site OILY (low lerp = long, soft inertia glide — the feel we want everywhere).
+				// The crystal's coast-tick is fixed at the crystal itself (velocity-gated frame), NOT by
+				// making the whole site crisper. 0.05 = a touch more glide than the previous 0.06.
+				lerp: 0.05,
 				smoothWheel: true,
 				wheelMultiplier: 1,
 				touchMultiplier: 1.6,

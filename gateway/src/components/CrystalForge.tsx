@@ -132,8 +132,9 @@ export function CrystalForge() {
 		// killing the 1-frame desync that caused the micro-jitter on the settle. Density (472 interpolated
 		// frames) + Lenis's own smoothing give the smoothness; no extra lag needed.
 
+		const CF_VMIN = 60; // px/s: below this the coast is "settling" — freeze the crystal frame
 		const ctxq = gsap.context(() => {
-			let headlineShown = false, labelsShown = false;
+			let headlineShown = false, labelsShown = false, frameP = 0;
 			// produx uses gsap `y:"0%"` (NOT yPercent): `y` reads the element's current transform matrix,
 			// so it correctly animates FROM the Tailwind `translate-y-full` (translateY 100%) baseline.
 			// yPercent is a separate gsap prop with a 0 baseline -> it never moved the words off-screen.
@@ -160,7 +161,12 @@ export function CrystalForge() {
 				invalidateOnRefresh: true,
 				onUpdate: (self) => {
 					const p = self.progress;
-					drawFrame(p * (N - 1));
+					// Advance the crystal frame only while actively scrolling. Through the slow inertia coast
+					// tail (velocity below CF_VMIN) HOLD the last frame, so the crystal stops crisply instead
+					// of ticking through the last few coast frames. The page's oily scroll is untouched —
+					// only the crystal's frame ignores the coast tail. (charge/reveals still follow real p.)
+					if (Math.abs(self.getVelocity()) > CF_VMIN) frameP = p;
+					drawFrame(frameP * (N - 1));
 					const charge = Math.max(0, (p - 0.15)) * 1.1;
 					gsap.set(sparksRef.current, { opacity: charge });
 					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
