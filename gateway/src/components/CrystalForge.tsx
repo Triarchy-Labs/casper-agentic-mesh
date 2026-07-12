@@ -103,19 +103,37 @@ export function CrystalForge() {
 			{ rootMargin: "2800px 0px" }
 		);
 		if (sectionRef.current) io.observe(sectionRef.current);
+		function nearestLoaded(i: number): number {
+			if (imgs[i]?.complete && imgs[i].naturalWidth) return i;
+			for (let d = 1; d < N; d++) {
+				const lo = Math.max(0, i - d), hi = Math.min(N - 1, i + d);
+				if (imgs[lo]?.complete && imgs[lo].naturalWidth) return lo;
+				if (imgs[hi]?.complete && imgs[hi].naturalWidth) return hi;
+			}
+			return -1;
+		}
+		// Sub-frame interpolation: crossfade the current frame toward the next by the fractional part
+		// of the scroll position. 159 discrete frames over 360vh step ~20px each, which reads as judder
+		// during Lenis's inertia tail; blending adjacent frames makes the motion continuous.
 		function drawFrame(idx: number) {
-			let i = Math.max(0, Math.min(N - 1, Math.round(idx)));
-			if (!imgs[i]?.complete) {
-				for (let d = 1; d < N; d++) {
-					if (imgs[Math.max(0, i - d)]?.complete) { i = Math.max(0, i - d); break; }
-					if (imgs[Math.min(N - 1, i + d)]?.complete) { i = Math.min(N - 1, i + d); break; }
+			const f = Math.max(0, Math.min(N - 1, idx));
+			const i0 = Math.floor(f);
+			const frac = f - i0;
+			const a = nearestLoaded(i0);
+			if (a < 0) return;
+			const imA = imgs[a];
+			if (canvas!.width !== imA.naturalWidth) { canvas!.width = imA.naturalWidth; canvas!.height = imA.naturalHeight; }
+			ctx!.globalAlpha = 1;
+			ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
+			ctx!.drawImage(imA, 0, 0);
+			if (frac > 0.02 && i0 + 1 < N) {
+				const b = nearestLoaded(i0 + 1);
+				if (b >= 0 && b !== a) {
+					ctx!.globalAlpha = frac;
+					ctx!.drawImage(imgs[b], 0, 0);
+					ctx!.globalAlpha = 1;
 				}
 			}
-			const im = imgs[i];
-			if (!im || !im.complete || !im.naturalWidth) return;
-			if (canvas!.width !== im.naturalWidth) { canvas!.width = im.naturalWidth; canvas!.height = im.naturalHeight; }
-			ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-			ctx!.drawImage(im, 0, 0);
 		}
 
 		// Draw the frame for the current scroll position DIRECTLY. Lenis already smooths the scroll;
