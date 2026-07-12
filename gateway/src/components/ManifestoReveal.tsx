@@ -13,9 +13,10 @@ const ACCENT_WORDS = new Set(["accountability,", "Casper."]);
 
 const RED = "#f13242";
 const DIM = "rgba(190,190,196,0.22)";
-// pixel grid (checker) + a moving hard wipe edge; intersected -> pixelated reveal
-const MASK = "linear-gradient(90deg, #000 var(--wipe, 0%), transparent var(--wipe, 0%)), repeating-conic-gradient(#000 0% 25%, transparent 0% 50%)";
-const MASK_SIZE = "100% 100%, 3px 3px";
+// pixel grid (checker) + a moving hard wipe edge; intersected -> pixelated reveal.
+// wipe runs BOTTOM-TO-TOP on a diagonal (-20deg), like produx; bigger cells = clearer square pixels.
+const MASK = "linear-gradient(-20deg, #000 var(--wipe, 0%), transparent var(--wipe, 0%)), repeating-conic-gradient(#000 0% 25%, transparent 0% 50%)";
+const MASK_SIZE = "100% 100%, 6px 6px";
 
 function Char({ ch, progress, start, end, accent }: { ch: string; progress: MotionValue<number>; start: number; end: number; accent: boolean }) {
 	const p = useTransform(progress, [start, end], [0, 1]);
