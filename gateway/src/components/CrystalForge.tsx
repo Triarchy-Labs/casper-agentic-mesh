@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // underlying technique as their canvas path — a scroll-scrubbed frame sequence drawn to a canvas
 // with mix-blend-screen (black frame bg -> transparent). Frames = our Veo crystal charging red.
 // Values (label design, positions, reveal easings) lifted 1:1 from the produx bundle.
-const N = 66;
+const N = 159;
 const frameSrc = (i: number) => `/crystal/f_${String(i + 1).padStart(3, "0")}.webp`;
 
 // gradient headline, produx cadence — grouped words, masked roll-up
@@ -98,7 +98,7 @@ export function CrystalForge() {
 		}
 		const io = new IntersectionObserver(
 			(entries) => { if (entries[0].isIntersecting) { preload(); io.disconnect(); } },
-			{ rootMargin: "1400px 0px" }
+			{ rootMargin: "2800px 0px" }
 		);
 		if (sectionRef.current) io.observe(sectionRef.current);
 		function drawFrame(idx: number) {
