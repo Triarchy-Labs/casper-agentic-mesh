@@ -47,9 +47,11 @@ function ServicePoint({ p }: { p: (typeof POINTS)[number] }) {
 		<div className={`relative ${p.size}`}>
 			<div className="cf-square absolute inset-0 border border-[#F2F2F2]" style={{ scale: 0, opacity: 0 }} />
 			<div className="absolute inset-0 flex items-center justify-center">
+				{/* NO backdrop-blur: it recomposites the (animating) crystal behind it every frame and
+				    was the main cause of the scroll judder. Plain translucent fill reads the same. */}
 				<div
-					className="cf-inner size-[2.85vw] bg-white/10 backdrop-blur-[5px] max-lg:size-[4vw]"
-					style={{ scale: 0, opacity: 0, filter: "blur(8px)" }}
+					className="cf-inner size-[2.85vw] bg-white/[0.14] max-lg:size-[4vw]"
+					style={{ scale: 0, opacity: 0 }}
 				/>
 			</div>
 		</div>
@@ -76,6 +78,7 @@ export function CrystalForge() {
 	const pinRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const sparksRef = useRef<HTMLDivElement>(null);
+	const glowRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
@@ -163,7 +166,9 @@ export function CrystalForge() {
 			ScrollTrigger.create({
 				trigger: pinRef.current,
 				start: "top top",
-				end: "+=360%",
+				// ~1.3x more scroll for the same rotation (360% -> 470%): slower per-gesture crystal
+				// travel = fewer frame boundaries crossed as Lenis's inertia settles = smoother stop.
+				end: "+=470%",
 				pin: true,
 				anticipatePin: 1,
 				invalidateOnRefresh: true,
@@ -171,7 +176,9 @@ export function CrystalForge() {
 					const p = self.progress;
 					pendingFrame = p * (N - 1);
 					scheduleDraw();
-					gsap.set(sparksRef.current, { opacity: Math.max(0, (p - 0.15)) * 1.1 });
+					const charge = Math.max(0, (p - 0.15)) * 1.1;
+					gsap.set(sparksRef.current, { opacity: charge });
+					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
 					// headline present during the charge, rolls out before the verdict points land
 					const wantHead = p >= 0.07 && p < 0.62;
 					if (wantHead !== headlineShown) { headlineShown = wantHead; wantHead ? headIn() : headOut(); }
@@ -206,12 +213,19 @@ export function CrystalForge() {
 					))}
 				</div>
 
-				{/* the crystal — scrubbed frame sequence with real alpha (bg keyed out), so it floats
-				    with no box. Big portrait hero, sized by height; drop-shadow restores the red halo. */}
+				{/* STATIC red halo behind the crystal — a radial-gradient div (composited once), not a
+				    per-frame canvas drop-shadow filter (which recomputed every frame the crystal drew
+				    and fed the judder). Its opacity ramps with the charge via a cheap gsap.set. */}
+				<div
+					ref={glowRef}
+					className="pointer-events-none absolute z-[8] h-[70vh] w-[46vw] max-lg:w-[64vw] max-sm:w-[88vw]"
+					style={{ opacity: 0, background: "radial-gradient(ellipse at center, rgba(241,50,66,0.42), rgba(241,50,66,0.12) 45%, transparent 72%)" }}
+				/>
+
+				{/* the crystal — scrubbed frame sequence with real alpha (bg keyed out), floats with no box */}
 				<canvas
 					ref={canvasRef}
 					className="relative z-[10] h-[82vh] w-auto max-lg:h-[66vh] max-sm:h-[52vh] select-none"
-					style={{ filter: "drop-shadow(0 0 55px rgba(241,50,66,0.34)) drop-shadow(0 0 120px rgba(241,50,66,0.18))" }}
 					aria-hidden
 				/>
 
