@@ -34,12 +34,10 @@ export function SmoothScroller({ children }: { children: ReactNode }) {
 			root
 			autoRaf={false}
 			options={{
-				// produx uses GSAP ScrollSmoother (time-based glide). We match the feel with Lenis in
-				// DURATION mode (not lerp — mixing both was a no-op conflict): every scroll eases out
-				// over ~1.2s with easeOutExpo, giving one consistent, soft glide across the WHOLE site,
-				// so it never drops into "dry" native scroll after the pinned mosaic.
-				duration: 1.2,
-				easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+				// lerp mode = constant inertia ("compensation" that keeps gliding after you let go).
+				// 0.06 is ~1.3x more glide than the old 0.08 (0.08/0.06 ≈ 1.33) — soft but not floaty.
+				// One clock across the whole site (root), so the feel stays consistent everywhere.
+				lerp: 0.06,
 				smoothWheel: true,
 				wheelMultiplier: 1,
 				touchMultiplier: 1.6,
