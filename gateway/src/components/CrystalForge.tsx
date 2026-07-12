@@ -130,18 +130,19 @@ export function CrystalForge() {
 
 		const ctxq = gsap.context(() => {
 			let headlineShown = false, labelsShown = false;
-			// fromTo with an explicit from-state — .to alone can't read the Tailwind translate-y-full
-			// baseline, so it no-ops and the words stay hidden below the overflow-hidden mask.
-			const headIn = () => gsap.fromTo(".cf-word", { yPercent: 100, opacity: 0, filter: "blur(6px)" }, { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "power4.out", stagger: 0.03 });
-			const headOut = () => gsap.to(".cf-word", { yPercent: 100, opacity: 0, filter: "blur(6px)", duration: 0.6, ease: "expo.in", stagger: 0.02 });
+			// produx uses gsap `y:"0%"` (NOT yPercent): `y` reads the element's current transform matrix,
+			// so it correctly animates FROM the Tailwind `translate-y-full` (translateY 100%) baseline.
+			// yPercent is a separate gsap prop with a 0 baseline -> it never moved the words off-screen.
+			const headIn = () => gsap.to(".cf-word", { y: "0%", opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "power4.out", stagger: 0.03, overwrite: "auto" });
+			const headOut = () => gsap.to(".cf-word", { y: "100%", opacity: 0, filter: "blur(6px)", duration: 0.6, ease: "expo.in", stagger: 0.02, overwrite: "auto" });
 			const labelsIn = () => {
-				gsap.fromTo(".cf-square", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out", stagger: 0.1 });
-				gsap.fromTo(".cf-inner", { scale: 0, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "expo.out", stagger: 0.1 });
-				gsap.fromTo(".cf-label-word", { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: "power4.out", stagger: 0.02, delay: 0.1 });
+				gsap.fromTo(".cf-square", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.2, ease: "expo.out", stagger: 0.1, overwrite: "auto" });
+				gsap.fromTo(".cf-inner", { scale: 0, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.2, ease: "expo.out", stagger: 0.1, overwrite: "auto" });
+				gsap.to(".cf-label-word", { y: "0%", opacity: 1, filter: "blur(0px)", duration: 0.8, ease: "power4.out", stagger: 0.03, delay: 0.1, overwrite: "auto" });
 			};
 			const labelsOut = () => {
-				gsap.to(".cf-square, .cf-inner", { scale: 0, opacity: 0, duration: 1, ease: "expo.in" });
-				gsap.to(".cf-label-word", { yPercent: 100, opacity: 0, duration: 0.5, ease: "expo.in" });
+				gsap.to(".cf-square, .cf-inner", { scale: 0, opacity: 0, duration: 1, ease: "expo.in", overwrite: "auto" });
+				gsap.to(".cf-label-word", { y: "100%", opacity: 0, filter: "blur(6px)", duration: 0.5, ease: "expo.in", overwrite: "auto" });
 			};
 
 			ScrollTrigger.create({
