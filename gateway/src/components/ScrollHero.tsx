@@ -190,7 +190,7 @@ export function ScrollHero() {
 					start: "top top",
 					end: "+=340%",
 					pin: true,
-					scrub: 1.5,
+					scrub: 1.2,
 					anticipatePin: 1,
 					invalidateOnRefresh: true,
 				},
@@ -272,10 +272,10 @@ export function ScrollHero() {
 					0.55 + (p.pri / C) * 0.42
 				);
 			});
-			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.inOut" }, 1.45);
-			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.25, ease: "power3.out", stagger: 0.1 }, 1.5);
+			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.22, ease: "power2.inOut" }, 1.28);
+			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.22, ease: "power3.out", stagger: 0.06 }, 1.4);
 			// reveal the crystal aura once the image is assembled (it keeps CSS-pulsing on its own)
-			tl.to(".crystal-reveal", { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.5);
+			tl.to(".crystal-reveal", { opacity: 1, duration: 0.24, ease: "power2.out" }, 1.42);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.

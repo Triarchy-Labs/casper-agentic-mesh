@@ -46,7 +46,7 @@ export default function Page() {
             trigger: section,
             start: "top 85%",
             end: "center center",
-            scrub: 1.5,
+            scrub: 1.2,
             toggleActions: "play reverse play reverse",
           }
         }

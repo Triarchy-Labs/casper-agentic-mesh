@@ -135,15 +135,18 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 		function computeTarget() {
 			const st = scrollRef?.current;
 			if (st) {
-				// tall sticky section: reveal spans the whole scroll-through, finishing at 85%.
+				// tall sticky section (unused now): reveal spans the whole scroll-through.
 				const rect = st.getBoundingClientRect();
 				const h = Math.max(1, st.offsetHeight - window.innerHeight);
 				target = Math.max(0, Math.min(1, (-rect.top / h) / 0.85));
 			} else {
+				// produx model: NORMAL section, no pin. Decode is tied to the block's natural transit —
+				// 0 when it enters from the bottom (top at viewport bottom), completing at ~72% of the
+				// way up so the finished text holds white as it keeps scrolling out. Text is never held.
 				const r = wrap!.getBoundingClientRect();
 				const vh = window.innerHeight;
-				const start = vh * 0.82, end = vh * 0.26;
-				target = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+				const p = (vh - r.top) / (vh + r.height);
+				target = Math.max(0, Math.min(1, p / 0.72));
 			}
 		}
 
