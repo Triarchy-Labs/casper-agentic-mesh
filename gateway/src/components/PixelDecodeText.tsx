@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 // resolving to clean white). Rendered on a canvas -> not selectable, like theirs.
 const PIXEL = 5;
 
-export function PixelDecodeText({ text }: { text: string }) {
+export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?: React.RefObject<HTMLElement | null> }) {
 	const wrapRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -136,10 +136,19 @@ export function PixelDecodeText({ text }: { text: string }) {
 			if (raf) return;
 			raf = requestAnimationFrame(() => {
 				raf = 0;
-				const r = wrap!.getBoundingClientRect();
-				const vh = window.innerHeight;
-				const start = vh * 0.82, end = vh * 0.26;
-				reveal = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+				const st = scrollRef?.current;
+				if (st) {
+					// driven by a tall sticky section: reveal spans the whole scroll-through (~2-3 screens),
+					// finishing at 85% so the completed text holds in view for a beat.
+					const rect = st.getBoundingClientRect();
+					const h = Math.max(1, st.offsetHeight - window.innerHeight);
+					reveal = Math.max(0, Math.min(1, (-rect.top / h) / 0.85));
+				} else {
+					const r = wrap!.getBoundingClientRect();
+					const vh = window.innerHeight;
+					const start = vh * 0.82, end = vh * 0.26;
+					reveal = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+				}
 				draw();
 			});
 		}

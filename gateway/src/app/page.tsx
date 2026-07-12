@@ -344,10 +344,8 @@ export default function Page() {
 
             </div>
 
-            {/* Thesis — the bridge from emotion to conviction (scroll-reveal, red accents) */}
-            <section className="relative w-full px-[5.5vw] py-[20vh] z-10">
-              <ManifestoReveal />
-            </section>
+            {/* Thesis — tall sticky section so the pixel-decode plays over ~2-3 scrolls, text held in view */}
+            <ManifestoReveal />
 
             {/* Ecosystem — angled Off-White strips: the buildathon context, forged in the open */}
             <section className="relative w-full px-[5.5vw] pb-[22vh] z-10">
