@@ -22,7 +22,7 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 		const tctx = temp.getContext("2d");
 		if (!tctx) return;
 
-		let W = 0, H = 0, dpr = 1, reveal = 0, raf = 0, fs = 0, lineH = 0;
+		let W = 0, H = 0, dpr = 1, reveal = 0, target = 0, raf = 0, fs = 0, lineH = 0;
 		let off: HTMLCanvasElement | null = null;
 		let offData: Uint8ClampedArray | null = null;
 		let lines: { y0: number; y1: number; w: number }[] = [];
@@ -132,25 +132,38 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 			}
 		}
 
-		function onScroll() {
-			if (raf) return;
-			raf = requestAnimationFrame(() => {
-				raf = 0;
-				const st = scrollRef?.current;
-				if (st) {
-					// driven by a tall sticky section: reveal spans the whole scroll-through (~2-3 screens),
-					// finishing at 85% so the completed text holds in view for a beat.
-					const rect = st.getBoundingClientRect();
-					const h = Math.max(1, st.offsetHeight - window.innerHeight);
-					reveal = Math.max(0, Math.min(1, (-rect.top / h) / 0.85));
-				} else {
-					const r = wrap!.getBoundingClientRect();
-					const vh = window.innerHeight;
-					const start = vh * 0.82, end = vh * 0.26;
-					reveal = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
-				}
+		function computeTarget() {
+			const st = scrollRef?.current;
+			if (st) {
+				// tall sticky section: reveal spans the whole scroll-through, finishing at 85%.
+				const rect = st.getBoundingClientRect();
+				const h = Math.max(1, st.offsetHeight - window.innerHeight);
+				target = Math.max(0, Math.min(1, (-rect.top / h) / 0.85));
+			} else {
+				const r = wrap!.getBoundingClientRect();
+				const vh = window.innerHeight;
+				const start = vh * 0.82, end = vh * 0.26;
+				target = Math.max(0, Math.min(1, (start - r.top) / (start - end)));
+			}
+		}
+
+		// scrub-like lag: reveal eases toward the scroll target (~matches the mosaic's scrub feel),
+		// so the thesis reads as smooth/heavy as the pinned top instead of snapping 1:1 to scroll.
+		function tick() {
+			reveal += (target - reveal) * 0.09;
+			if (Math.abs(target - reveal) < 0.0006) {
+				reveal = target;
 				draw();
-			});
+				raf = 0;
+				return;
+			}
+			draw();
+			raf = requestAnimationFrame(tick);
+		}
+
+		function onScroll() {
+			computeTarget();
+			if (!raf) raf = requestAnimationFrame(tick);
 		}
 
 		layout();

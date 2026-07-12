@@ -44,9 +44,9 @@ export default function Page() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: section,
-            start: "top 80%",
+            start: "top 85%",
             end: "center center",
-            scrub: 0.5, 
+            scrub: 1.5,
             toggleActions: "play reverse play reverse",
           }
         }
