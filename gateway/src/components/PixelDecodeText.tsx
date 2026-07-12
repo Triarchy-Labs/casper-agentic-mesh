@@ -97,6 +97,10 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 				const lp = Math.max(0, Math.min(1, (reveal * nLines - k) * 1.22)); // reading order, slight overlap
 				if (lp <= 0) continue;
 				const front = lp * (ln.w + soft * 2) - soft;
+				// the red front FADES to nothing as it reaches the line end, so it never leaves a frozen
+				// red block sitting at the end once the white fill already looks complete (the bug where
+				// the last + second-to-last lines kept a red square parked after the text).
+				const endFade = Math.max(0, Math.min(1, (ln.w - front) / soft));
 
 				// smooth white fill up to the (diagonal) front — this line band only
 				tctx!.setTransform(1, 0, 0, 1, 0, 0);
@@ -124,7 +128,7 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 						if (gv < 0.04 || gv > 0.97) continue;
 						const on = hash(Math.round(cx / cell), Math.round(cy / cell)) < (0.3 + 0.62 * gv) * (0.6 + 0.5 * (1 - vert));
 						if (on) {
-							ctx!.fillStyle = `rgba(241,50,66,${0.5 + 0.45 * gv})`;
+							ctx!.fillStyle = `rgba(241,50,66,${(0.5 + 0.45 * gv) * endFade})`;
 							ctx!.fillRect(cx, cy, cell - 1, cell - 1);
 						}
 					}

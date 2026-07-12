@@ -4,19 +4,25 @@ import { motion, useScroll, useTransform, type MotionValue } from "framer-motion
 
 // The substance slot: what the mesh IS and what it stands on. Angled Off-White / Adidas strips
 // that drift as you scroll — the product's own guarantees, not hackathon logistics or a logo wall.
-// Every strip is CLICKABLE and points at a REAL source of truth (deployed contract on Casper
-// testnet, on-chain proof doc, or the exact source file) — verified against DEPLOYMENTS.md.
+// Every strip is CLICKABLE and points at its REAL source of truth — preferring the NATIVE proof:
+// live Casper-testnet transactions / contract packages on cspr.live, the native x402 tooling, the
+// open repo. All hashes/URLs verified against DEPLOYMENTS.md — nothing invented.
 const REPO = "https://github.com/Triarchy-Labs/casper-agentic-mesh";
-const PKG = "a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d";
+const EXP = "https://testnet.cspr.live";
+const PKG_ESCROW = "a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d";
+const PKG_ORACLE = "16d86943d2d95769bff18da2438c9bf674e35347890705f0ef73ad14e37964b2";
+const ACCOUNT = "013d8de764919e6dfb002636071ec1729abb0f2be2c3589da79e2278131ce52c35";
+const TX_ESCROW_PAYOUT = "1ea27a03a072b0db1f8b5f4cf176364eec9ef50cb396bafb9f56829c21204f14"; // release_bounty
+const TX_AGENT_RULING = "c333c9d1513c633d161627c39ff9cb3cf28ef2f3acf3cda3d19c0d55f9dfcb89"; // LLM APPROVE -> payout
 
 const STRIPS: { tag: string; label: string; href: string; accent?: boolean }[] = [
-	{ tag: "THE MESH", label: "Machines that hire, pay & settle each other", accent: true, href: REPO },
-	{ tag: "SETTLEMENT", label: "Casper · Rust / WASM", href: `https://testnet.cspr.live/contract-package/${PKG}` },
-	{ tag: "ESCROW", label: "Funds held in code, released on proof", href: `${REPO}/blob/main/contracts/casper-mesh-contract/src/lib.rs` },
-	{ tag: "ORACLE", label: "Truth verified on-chain", href: `${REPO}/tree/main/contracts/oracle-contract` },
-	{ tag: "TRIBUNAL", label: "Disputes ruled by protocol, not people", href: `${REPO}/blob/main/swarm/bounty-judge/src/main.rs` },
-	{ tag: "PAYMENTS", label: "x402 native rails", href: `${REPO}/blob/main/gateway/src/app/api/hire/route.ts` },
-	{ tag: "STATUS", label: "Live on Casper testnet", href: `${REPO}/blob/main/DEPLOYMENTS.md` },
+	{ tag: "THE MESH", label: "Machines that hire, pay & settle each other", accent: true, href: `${REPO}/blob/main/README.md` },
+	{ tag: "SETTLEMENT", label: "Casper · Rust / WASM", href: `${EXP}/contract-package/${PKG_ESCROW}` },
+	{ tag: "ESCROW", label: "Funds held in code, released on proof", href: `${EXP}/transaction/${TX_ESCROW_PAYOUT}` },
+	{ tag: "ORACLE", label: "Truth verified on-chain", href: `${EXP}/contract-package/${PKG_ORACLE}` },
+	{ tag: "TRIBUNAL", label: "Disputes ruled by protocol, not people", href: `${EXP}/transaction/${TX_AGENT_RULING}` },
+	{ tag: "PAYMENTS", label: "x402 native rails", href: "https://github.com/odradev/casper-x402-poc" },
+	{ tag: "STATUS", label: "Live on Casper testnet", href: `${EXP}/account/${ACCOUNT}` },
 	{ tag: "SOURCE", label: "Open · public · verifiable", href: REPO },
 	{ tag: "THE MANDATE", label: "Agentic AI · DeFi · RWA — on Casper", accent: true, href: `${REPO}/blob/main/VISION.md` },
 ];
