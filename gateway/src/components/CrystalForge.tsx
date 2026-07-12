@@ -11,18 +11,20 @@ const N = 159;
 const frameSrc = (i: number) => `/crystal/f_${String(i + 1).padStart(3, "0")}.webp`;
 
 // gradient headline, produx cadence — grouped words, masked roll-up
+// the phrase we agreed (user-proposed, refined): "Forged in an accelerating current of time —
+// at the seam of human and machine. Web3 has never been this solid, this clean." Headline carries
+// the core; the three points carry the continuation + the product anchor.
 const HEADLINE = [
-	["Forged", "where", "human"],
-	["and", "machine", "meet"],
-	["— trust,", "written", "in", "code,"],
-	["settled", "on", "Casper."],
+	["Forged", "in", "an"],
+	["accelerating", "current"],
+	["of", "time."],
 ];
 
-// the three service-points (produx design + positions), our product truths
+// the three service-points (produx design + positions), our agreed phrase
 const POINTS = [
-	{ pos: "top-[15%] right-[24%]", size: "size-[3.75vw] max-lg:size-[5.27vw]", text: "Value locked in code", side: "left" as const },
-	{ pos: "top-[40%] left-[16.5%]", size: "size-[4.51vw] max-lg:size-[6.34vw]", text: "Verdicts final, on-chain", side: "right" as const },
-	{ pos: "top-[68%] right-[8%]", size: "size-[3.75vw] max-lg:size-[5.27vw]", text: "Settled on Casper testnet", side: "left" as const },
+	{ pos: "top-[15%] right-[24%]", size: "size-[3.75vw] max-lg:size-[5.27vw]", text: "At the seam of human & machine", side: "left" as const },
+	{ pos: "top-[40%] left-[16.5%]", size: "size-[4.51vw] max-lg:size-[6.34vw]", text: "Web3, never this solid — this clean", side: "right" as const },
+	{ pos: "top-[68%] right-[8%]", size: "size-[3.75vw] max-lg:size-[5.27vw]", text: "Settled on Casper", side: "left" as const },
 ];
 
 function Caption({ text }: { text: string }) {
