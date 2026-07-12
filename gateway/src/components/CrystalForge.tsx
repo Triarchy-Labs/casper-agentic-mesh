@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // underlying technique as their canvas path — a scroll-scrubbed frame sequence drawn to a canvas
 // with mix-blend-screen (black frame bg -> transparent). Frames = our Veo crystal charging red.
 // Values (label design, positions, reveal easings) lifted 1:1 from the produx bundle.
-const N = 133;
+const N = 66;
 const frameSrc = (i: number) => `/crystal/f_${String(i + 1).padStart(3, "0")}.webp`;
 
 // gradient headline, produx cadence — grouped words, masked roll-up
@@ -82,28 +82,39 @@ export function CrystalForge() {
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// preload the sequence; draw whatever is the nearest loaded frame so scrub never blanks
+		// preload the sequence (~8MB) LAZILY — only once the section is near the viewport, so it
+		// never blocks the initial page load. Draw the nearest loaded frame so scrub never blanks.
 		const imgs: HTMLImageElement[] = [];
-		for (let i = 0; i < N; i++) {
-			const im = new Image();
-			im.src = frameSrc(i);
-			imgs[i] = im;
+		let preloaded = false;
+		function preload() {
+			if (preloaded) return;
+			preloaded = true;
+			for (let i = 0; i < N; i++) {
+				const im = new Image();
+				im.src = frameSrc(i);
+				imgs[i] = im;
+			}
+			imgs[0].onload = () => drawFrame(0);
 		}
+		const io = new IntersectionObserver(
+			(entries) => { if (entries[0].isIntersecting) { preload(); io.disconnect(); } },
+			{ rootMargin: "1400px 0px" }
+		);
+		if (sectionRef.current) io.observe(sectionRef.current);
 		function drawFrame(idx: number) {
 			let i = Math.max(0, Math.min(N - 1, Math.round(idx)));
-			if (!imgs[i].complete) {
+			if (!imgs[i]?.complete) {
 				for (let d = 1; d < N; d++) {
 					if (imgs[Math.max(0, i - d)]?.complete) { i = Math.max(0, i - d); break; }
 					if (imgs[Math.min(N - 1, i + d)]?.complete) { i = Math.min(N - 1, i + d); break; }
 				}
 			}
 			const im = imgs[i];
-			if (!im.complete || !im.naturalWidth) return;
+			if (!im || !im.complete || !im.naturalWidth) return;
 			if (canvas!.width !== im.naturalWidth) { canvas!.width = im.naturalWidth; canvas!.height = im.naturalHeight; }
 			ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
 			ctx!.drawImage(im, 0, 0);
 		}
-		imgs[0].onload = () => drawFrame(0);
 
 		// scrub-lag so frames glide toward the scroll target (same buttery feel as the rest of the site)
 		let target = 0, cur = 0, raf = 0;
@@ -151,7 +162,7 @@ export function CrystalForge() {
 			});
 		}, sectionRef);
 
-		return () => { ctxq.revert(); if (raf) cancelAnimationFrame(raf); };
+		return () => { io.disconnect(); ctxq.revert(); if (raf) cancelAnimationFrame(raf); };
 	}, []);
 
 	return (
@@ -175,11 +186,12 @@ export function CrystalForge() {
 					))}
 				</div>
 
-				{/* the crystal — scrubbed frame sequence, screen-blended so its black bg drops out */}
+				{/* the crystal — scrubbed frame sequence with real alpha (bg keyed out), so it floats
+				    with no box. Big portrait hero, sized by height; drop-shadow restores the red halo. */}
 				<canvas
 					ref={canvasRef}
-					className="relative z-[10] h-auto w-[44vw] max-w-[600px] max-lg:w-[62vw] max-sm:w-[86vw] select-none"
-					style={{ mixBlendMode: "screen" }}
+					className="relative z-[10] h-[82vh] w-auto max-lg:h-[66vh] max-sm:h-[52vh] select-none"
+					style={{ filter: "drop-shadow(0 0 55px rgba(241,50,66,0.34)) drop-shadow(0 0 120px rgba(241,50,66,0.18))" }}
 					aria-hidden
 				/>
 

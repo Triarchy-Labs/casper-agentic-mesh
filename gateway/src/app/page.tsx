@@ -345,10 +345,6 @@ export default function Page() {
 
             </div>
 
-            {/* Crystal forge — produx rock section rebuilt: scroll-scrubbed crystal charging red,
-                gradient headline, then the three verdict points pop in on the hero pose */}
-            <CrystalForge />
-
             {/* Thesis — tall sticky section so the pixel-decode plays over ~2-3 scrolls, text held in view */}
             <ManifestoReveal />
 
@@ -356,6 +352,10 @@ export default function Page() {
             <section className="relative w-full px-[5.5vw] pb-[22vh] z-10">
               <EcosystemStrips />
             </section>
+
+            {/* Crystal forge — produx rock section rebuilt: scroll-scrubbed crystal charging red,
+                gradient headline, then the three verdict points pop in on the hero pose */}
+            <CrystalForge />
           </div>
         </main>
       )}
