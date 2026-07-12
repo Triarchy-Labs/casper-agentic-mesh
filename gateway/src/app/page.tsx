@@ -302,8 +302,16 @@ export default function Page() {
 
                   {/* 05 x402 PAYMENT — col-span-7, big right */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 md:col-end-13 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group">
                       <CornerMarks />
+                      <div
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.42] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        style={{
+                          backgroundImage: "url(/card-x402.jpg)",
+                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
+                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
+                        }}
+                      />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> pay-per-call micro-settlements</li>
