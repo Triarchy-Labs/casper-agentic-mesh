@@ -294,7 +294,10 @@ export function ScrollHero() {
 							left: 0,
 							right: 0,
 							zIndex: 90,
-							background: "#020103",
+							backgroundColor: "#020103",
+							backgroundImage: "linear-gradient(270deg, rgba(2,1,3,0.92) 0%, rgba(2,1,3,0.5) 28%, rgba(2,1,3,0.05) 60%, rgba(2,1,3,0.28) 100%), linear-gradient(0deg, rgba(2,1,3,0.82) 0%, transparent 32%), url(/menu-triarchs.jpg)",
+							backgroundSize: "cover",
+							backgroundPosition: "center",
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "space-between",
@@ -302,7 +305,7 @@ export function ScrollHero() {
 							overflow: "hidden",
 						}}
 					>
-						<div className="flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12">
+						<div className="flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12 items-end text-right">
 							<Link href="/" onClick={() => setMenuOpen(false)}>
 								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">HOME</span>
 							</Link>
