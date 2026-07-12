@@ -115,36 +115,28 @@ export function CrystalForge() {
 			}
 			return -1;
 		}
-		// Sub-frame interpolation: crossfade the current frame toward the next by the fractional part
-		// of the scroll position. 159 discrete frames over 360vh step ~20px each, which reads as judder
-		// during Lenis's inertia tail; blending adjacent frames makes the motion continuous.
+		// Draw one sharp frame (rounded). Smoothness comes from motion blur BAKED into the frames
+		// (ffmpeg tmix) — a live crossfade instead produced a sharp<->ghost "beat" every frame boundary
+		// that read as micro-shimmer across the whole scroll.
 		function drawFrame(idx: number) {
-			const f = Math.max(0, Math.min(N - 1, idx));
-			const i0 = Math.floor(f);
-			const frac = f - i0;
-			const a = nearestLoaded(i0);
-			if (a < 0) return;
-			const imA = imgs[a];
-			if (canvas!.width !== imA.naturalWidth) { canvas!.width = imA.naturalWidth; canvas!.height = imA.naturalHeight; }
-			ctx!.globalAlpha = 1;
+			const i = nearestLoaded(Math.round(Math.max(0, Math.min(N - 1, idx))));
+			if (i < 0) return;
+			const im = imgs[i];
+			if (canvas!.width !== im.naturalWidth) { canvas!.width = im.naturalWidth; canvas!.height = im.naturalHeight; }
 			ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-			ctx!.drawImage(imA, 0, 0);
-			if (frac > 0.02 && i0 + 1 < N) {
-				const b = nearestLoaded(i0 + 1);
-				if (b >= 0 && b !== a) {
-					ctx!.globalAlpha = frac;
-					ctx!.drawImage(imgs[b], 0, 0);
-					ctx!.globalAlpha = 1;
-				}
-			}
+			ctx!.drawImage(im, 0, 0);
 		}
 
-		// Draw the frame for the current scroll position DIRECTLY. Lenis already smooths the scroll;
-		// stacking a second frame-lag (lerp) on top made the crystal creep/step a few frames after
-		// each gesture as the two lags settled out of sync — that was the "grind". rAF-throttled so we
-		// draw at most once per frame with the latest target.
-		let pendingFrame = 0, raf = 0;
-		function scheduleDraw() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawFrame(pendingFrame); }); }
+		// The exact soft scrub-lag that was smooth BEFORE the texts were added (the judder came from
+		// backdrop-blur / crossfade added around the text work, not from this or the frames).
+		let target = 0, cur = 0, raf = 0;
+		function tick() {
+			cur += (target - cur) * 0.14;
+			if (Math.abs(target - cur) < 0.35) { cur = target; drawFrame(cur); raf = 0; return; }
+			drawFrame(cur);
+			raf = requestAnimationFrame(tick);
+		}
+		function nudge() { if (!raf) raf = requestAnimationFrame(tick); }
 
 		const ctxq = gsap.context(() => {
 			let headlineShown = false, labelsShown = false;
@@ -174,8 +166,8 @@ export function CrystalForge() {
 				invalidateOnRefresh: true,
 				onUpdate: (self) => {
 					const p = self.progress;
-					pendingFrame = p * (N - 1);
-					scheduleDraw();
+					target = p * (N - 1);
+					nudge();
 					const charge = Math.max(0, (p - 0.15)) * 1.1;
 					gsap.set(sparksRef.current, { opacity: charge });
 					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
