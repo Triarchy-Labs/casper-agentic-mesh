@@ -118,15 +118,12 @@ export function CrystalForge() {
 			ctx!.drawImage(im, 0, 0);
 		}
 
-		// scrub-lag so frames glide toward the scroll target (same buttery feel as the rest of the site)
-		let target = 0, cur = 0, raf = 0;
-		function tick() {
-			cur += (target - cur) * 0.14;
-			if (Math.abs(target - cur) < 0.35) { cur = target; drawFrame(cur); raf = 0; return; }
-			drawFrame(cur);
-			raf = requestAnimationFrame(tick);
-		}
-		function nudge() { if (!raf) raf = requestAnimationFrame(tick); }
+		// Draw the frame for the current scroll position DIRECTLY. Lenis already smooths the scroll;
+		// stacking a second frame-lag (lerp) on top made the crystal creep/step a few frames after
+		// each gesture as the two lags settled out of sync — that was the "grind". rAF-throttled so we
+		// draw at most once per frame with the latest target.
+		let pendingFrame = 0, raf = 0;
+		function scheduleDraw() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; drawFrame(pendingFrame); }); }
 
 		const ctxq = gsap.context(() => {
 			let headlineShown = false, labelsShown = false;
@@ -154,8 +151,8 @@ export function CrystalForge() {
 				invalidateOnRefresh: true,
 				onUpdate: (self) => {
 					const p = self.progress;
-					target = p * (N - 1);
-					nudge();
+					pendingFrame = p * (N - 1);
+					scheduleDraw();
 					gsap.set(sparksRef.current, { opacity: Math.max(0, (p - 0.15)) * 1.1 });
 					// headline present during the charge, rolls out before the verdict points land
 					const wantHead = p >= 0.07 && p < 0.62;
