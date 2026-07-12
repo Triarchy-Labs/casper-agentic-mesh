@@ -289,10 +289,10 @@ export function ScrollHero() {
 			<AnimatePresence>
 				{menuOpen && (
 					<motion.div
-						initial={{ height: 0 }}
-						animate={{ height: "100vh" }}
-						exit={{ height: 0 }}
-						transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+						initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
+						animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+						exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
+						transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
 						className="px-[5.5vw] pt-[11.7vh] pb-[4vh] max-lg:px-[4.10vw] max-lg:pt-[11.39vh] max-sm:px-[5.97vw]"
 						onMouseMove={(e) => {
 							const cx = window.innerWidth / 2;
@@ -305,6 +305,8 @@ export function ScrollHero() {
 							top: 0,
 							left: 0,
 							right: 0,
+							height: "100vh",
+							willChange: "clip-path",
 							zIndex: 90,
 							backgroundColor: "#020103",
 							display: "flex",
