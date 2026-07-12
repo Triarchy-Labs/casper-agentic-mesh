@@ -115,16 +115,30 @@ export function CrystalForge() {
 			}
 			return -1;
 		}
-		// Draw one sharp frame (rounded). Smoothness comes from motion blur BAKED into the frames
-		// (ffmpeg tmix) — a live crossfade instead produced a sharp<->ghost "beat" every frame boundary
-		// that read as micro-shimmer across the whole scroll.
+		// PROPER crossfade between adjacent frames (fade the old one OUT, the new one IN) so the slow
+		// inertia tail after a single gesture morphs continuously instead of clicking through 3 discrete
+		// frames ("тык-тык-тык"). The earlier buggy version drew B over A without fading A, leaving a
+		// permanent double image — that was the shimmer. Fast scroll = brief blend = motion-blur-like.
 		function drawFrame(idx: number) {
-			const i = nearestLoaded(Math.round(Math.max(0, Math.min(N - 1, idx))));
-			if (i < 0) return;
-			const im = imgs[i];
-			if (canvas!.width !== im.naturalWidth) { canvas!.width = im.naturalWidth; canvas!.height = im.naturalHeight; }
+			const f = Math.max(0, Math.min(N - 1, idx));
+			const i0 = Math.floor(f);
+			const frac = f - i0;
+			const a = nearestLoaded(i0);
+			if (a < 0) return;
+			const imA = imgs[a];
+			if (canvas!.width !== imA.naturalWidth) { canvas!.width = imA.naturalWidth; canvas!.height = imA.naturalHeight; }
 			ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-			ctx!.drawImage(im, 0, 0);
+			const b = frac > 0.015 && i0 + 1 < N ? nearestLoaded(i0 + 1) : -1;
+			if (b < 0 || b === a) {
+				ctx!.globalAlpha = 1;
+				ctx!.drawImage(imA, 0, 0);
+			} else {
+				ctx!.globalAlpha = 1 - frac;
+				ctx!.drawImage(imA, 0, 0);
+				ctx!.globalAlpha = frac;
+				ctx!.drawImage(imgs[b], 0, 0);
+			}
+			ctx!.globalAlpha = 1;
 		}
 
 		// The exact soft scrub-lag that was smooth BEFORE the texts were added (the judder came from
