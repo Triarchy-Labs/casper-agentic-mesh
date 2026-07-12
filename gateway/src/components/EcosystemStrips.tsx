@@ -2,17 +2,18 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
-// The context slot: who this was forged with. Angled Off-White / Adidas strips that
-// drift as you scroll — the hackathon ecosystem, not a boring logo wall.
+// The substance slot: what the mesh IS and what it stands on. Angled Off-White / Adidas strips
+// that drift as you scroll — the product's own guarantees, not hackathon logistics or a logo wall.
+// (Prize-pool / sponsor / platform credits belong in the submission metadata, not the landing.)
 const STRIPS: { tag: string; label: string; accent?: boolean }[] = [
-	{ tag: "THE ARENA", label: "Casper Agentic Buildathon 2026", accent: true },
-	{ tag: "PRIZE POOL", label: "$150,000 — cash + x402 ecosystem credits" },
-	{ tag: "ORGANIZER", label: "Casper Association" },
-	{ tag: "PLATFORM", label: "DoraHacks" },
-	{ tag: "IRL", label: "Istanbul Blockchain Week" },
-	{ tag: "SECURITY", label: "Halborn" },
-	{ tag: "DATA", label: "Allium" },
-	{ tag: "INFRA", label: "NOWNodes" },
+	{ tag: "THE MESH", label: "Machines that hire, pay & settle each other", accent: true },
+	{ tag: "SETTLEMENT", label: "Casper · Rust / WASM" },
+	{ tag: "ESCROW", label: "Funds held in code, released on proof" },
+	{ tag: "ORACLE", label: "Truth verified on-chain" },
+	{ tag: "TRIBUNAL", label: "Disputes ruled by protocol, not people" },
+	{ tag: "PAYMENTS", label: "x402 native rails" },
+	{ tag: "STATUS", label: "Live on Casper testnet" },
+	{ tag: "SOURCE", label: "Open · public · verifiable" },
 	{ tag: "THE MANDATE", label: "Agentic AI · DeFi · RWA — on Casper", accent: true },
 ];
 
@@ -51,7 +52,7 @@ export function EcosystemStrips() {
 		<div ref={ref} className="w-full overflow-hidden">
 			<div className="mb-[7vh] flex items-baseline gap-4 flex-wrap">
 				<span className="label-13-mono text-[var(--red-700)] uppercase tracking-[0.2em]">/// forged in the open</span>
-				<span className="label-13-mono text-[var(--gray-800)]/60 uppercase tracking-[0.14em]">— the ecosystem that put the arena up</span>
+				<span className="label-13-mono text-[var(--gray-800)]/60 uppercase tracking-[0.14em]">— the mesh, its guarantees, its settlement</span>
 			</div>
 
 			<div className="flex flex-col gap-3.5">
