@@ -125,6 +125,12 @@ export function ScrollHero() {
 	const cursorX = useSpring(rawX, { stiffness: 140, damping: 15, mass: 0.5 });
 	const cursorY = useSpring(rawY, { stiffness: 140, damping: 15, mass: 0.5 });
 
+	// Menu background parallax — slow, heavy spring for an expensive, deep feel.
+	const menuMX = useMotionValue(0);
+	const menuMY = useMotionValue(0);
+	const menuPX = useSpring(menuMX, { stiffness: 55, damping: 18, mass: 0.8 });
+	const menuPY = useSpring(menuMY, { stiffness: 55, damping: 18, mass: 0.8 });
+
 	useMotionValueEvent(scrollY, "change", (v) => setScrolled(v > 14));
 
 	useEffect(() => {
@@ -288,6 +294,12 @@ export function ScrollHero() {
 						exit={{ height: 0 }}
 						transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
 						className="px-[5.5vw] pt-[11.7vh] pb-[4vh] max-lg:px-[4.10vw] max-lg:pt-[11.39vh] max-sm:px-[5.97vw]"
+						onMouseMove={(e) => {
+							const cx = window.innerWidth / 2;
+							const cy = window.innerHeight / 2;
+							menuMX.set(((e.clientX - cx) / cx) * -26);
+							menuMY.set(((e.clientY - cy) / cy) * -26);
+						}}
 						style={{
 							position: "fixed",
 							top: 0,
@@ -295,9 +307,6 @@ export function ScrollHero() {
 							right: 0,
 							zIndex: 90,
 							backgroundColor: "#020103",
-							backgroundImage: "linear-gradient(270deg, rgba(2,1,3,0.92) 0%, rgba(2,1,3,0.5) 28%, rgba(2,1,3,0.05) 60%, rgba(2,1,3,0.28) 100%), linear-gradient(0deg, rgba(2,1,3,0.82) 0%, transparent 32%), url(/menu-triarchs.jpg)",
-							backgroundSize: "cover",
-							backgroundPosition: "center",
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "space-between",
@@ -305,7 +314,46 @@ export function ScrollHero() {
 							overflow: "hidden",
 						}}
 					>
-						<div className="flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12 items-end text-right">
+						{/* parallax background — drifts opposite the cursor for depth */}
+						<motion.div
+							aria-hidden
+							style={{
+								position: "absolute",
+								inset: "-7%",
+								zIndex: 0,
+								x: menuPX,
+								y: menuPY,
+								backgroundImage: "url(/menu-triarchs.jpg)",
+								backgroundSize: "cover",
+								backgroundPosition: "center",
+								willChange: "transform",
+							}}
+						/>
+						{/* legibility scrims (fixed) */}
+						<div
+							aria-hidden
+							style={{
+								position: "absolute",
+								inset: 0,
+								zIndex: 1,
+								pointerEvents: "none",
+								background:
+									"linear-gradient(270deg, rgba(2,1,3,0.92) 0%, rgba(2,1,3,0.5) 28%, rgba(2,1,3,0.05) 60%, rgba(2,1,3,0.28) 100%), linear-gradient(0deg, rgba(2,1,3,0.82) 0%, transparent 32%)",
+							}}
+						/>
+						{/* cinematic vignette (fixed) — dark corners + inset shadow for framed depth */}
+						<div
+							aria-hidden
+							style={{
+								position: "absolute",
+								inset: 0,
+								zIndex: 1,
+								pointerEvents: "none",
+								background: "radial-gradient(ellipse 82% 82% at 50% 42%, transparent 40%, rgba(0,0,0,0.74) 100%)",
+								boxShadow: "inset 0 0 20vh 7vh rgba(0,0,0,0.6)",
+							}}
+						/>
+						<div className="relative z-10 flex flex-col gap-6 text-[7.9vw] font-bold uppercase tracking-tight mt-12 items-end text-right">
 							<Link href="/" onClick={() => setMenuOpen(false)}>
 								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">HOME</span>
 							</Link>
@@ -316,7 +364,7 @@ export function ScrollHero() {
 								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">DASHBOARD</span>
 							</Link>
 						</div>
-						<div className="text-sm opacity-50 font-mono uppercase tracking-widest">
+						<div className="relative z-10 text-sm opacity-50 font-mono uppercase tracking-widest">
 							ECONOMIC OS FOR THE AGENT ECONOMY · CASPER
 						</div>
 					</motion.div>
