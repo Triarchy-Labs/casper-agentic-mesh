@@ -115,9 +115,8 @@ export function CrystalForge() {
 			}
 			return -1;
 		}
-		// Draw one sharp frame. Smoothness comes from motion blur BAKED into the frames (ffmpeg tmix):
-		// a single opaque blurred image per frame bridges the step to the next with no alpha-sum
-		// brightness dip (the crossfade's strobe) and no double image.
+		// Draw one sharp frame. Smoothness = frame DENSITY (472 optical-flow interpolated frames), not
+		// blur/blend — each step is a real intermediate rotation, sharp.
 		function drawFrame(idx: number) {
 			const i = nearestLoaded(Math.round(Math.max(0, Math.min(N - 1, idx))));
 			if (i < 0) return;
@@ -127,16 +126,11 @@ export function CrystalForge() {
 			ctx!.drawImage(im, 0, 0);
 		}
 
-		// The exact soft scrub-lag that was smooth BEFORE the texts were added (the judder came from
-		// backdrop-blur / crossfade added around the text work, not from this or the frames).
-		let target = 0, cur = 0, raf = 0;
-		function tick() {
-			cur += (target - cur) * 0.14;
-			if (Math.abs(target - cur) < 0.35) { cur = target; drawFrame(cur); raf = 0; return; }
-			drawFrame(cur);
-			raf = requestAnimationFrame(tick);
-		}
-		function nudge() { if (!raf) raf = requestAnimationFrame(tick); }
+		// NO separate requestAnimationFrame for drawing. The frame is drawn synchronously inside the
+		// ScrollTrigger onUpdate, which fires from ScrollTrigger.update() — already driven by gsap.ticker
+		// (see SmoothScroller). So the canvas draw lands in the SAME tick as the Lenis scroll update,
+		// killing the 1-frame desync that caused the micro-jitter on the settle. Density (472 interpolated
+		// frames) + Lenis's own smoothing give the smoothness; no extra lag needed.
 
 		const ctxq = gsap.context(() => {
 			let headlineShown = false, labelsShown = false;
@@ -166,8 +160,7 @@ export function CrystalForge() {
 				invalidateOnRefresh: true,
 				onUpdate: (self) => {
 					const p = self.progress;
-					target = p * (N - 1);
-					nudge();
+					drawFrame(p * (N - 1));
 					const charge = Math.max(0, (p - 0.15)) * 1.1;
 					gsap.set(sparksRef.current, { opacity: charge });
 					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
@@ -181,7 +174,7 @@ export function CrystalForge() {
 			});
 		}, sectionRef);
 
-		return () => { io.disconnect(); ctxq.revert(); if (raf) cancelAnimationFrame(raf); };
+		return () => { io.disconnect(); ctxq.revert(); };
 	}, []);
 
 	return (
