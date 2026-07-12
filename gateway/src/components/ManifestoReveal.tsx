@@ -2,36 +2,63 @@
 import { Fragment, useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 
-// produx's manifesto reveal, ported: text is split per character (<span class="char">),
-// and a wave of "reveal" runs through it on scroll-scrub — each char goes
-// dim -> ACCENT (the glitching leading edge) -> settled, with a small positional glitch.
-// produx's edge is lime-green; ours is brand red.
+// produx's manifesto reveal, ported. Each character has two layers:
+//  1) a base glyph that colour-shifts dim -> settled (white, or red for accent words);
+//  2) a RED pixel-dither overlay whose "wipe" edge sweeps across the glyph on scroll —
+//     a fine pixel grid intersected with a moving hard edge, so the glyph materialises in
+//     pixel chunks (produx does this in green; ours is brand red), then fades to the clean base.
 const TEXT =
 	"Everyone is racing to make machines more autonomous. We build the part that makes autonomy safe to trust — accountability, written in code, settled on Casper.";
-const ACCENT_WORDS = new Set(["accountability,", "Casper."]); // settle red instead of white
+const ACCENT_WORDS = new Set(["accountability,", "Casper."]);
 
 const RED = "#f13242";
 const DIM = "rgba(190,190,196,0.22)";
+// pixel grid (checker) + a moving hard wipe edge; intersected -> pixelated reveal
+const MASK = "linear-gradient(90deg, #000 var(--wipe, 0%), transparent var(--wipe, 0%)), repeating-conic-gradient(#000 0% 25%, transparent 0% 50%)";
+const MASK_SIZE = "100% 100%, 3px 3px";
 
 function Char({ ch, progress, start, end, accent }: { ch: string; progress: MotionValue<number>; start: number; end: number; accent: boolean }) {
-	const p = useTransform(progress, [start, end], [0, 1]); // this char's local 0..1
-	// dim grey -> red flash (the decoding edge) -> white (or red for accent words)
-	const color = useTransform(p, [0, 0.45, 1], [DIM, RED, accent ? RED : "#ffffff"]);
-	const opacity = useTransform(p, [0, 0.12], [0.28, 1]);
-	// unstable "datamosh" jitter that resolves as the char settles
-	const x = useTransform(p, [0, 0.18, 0.45, 0.72, 1], [0, -2.4, 2.2, -1, 0]);
-	const skewX = useTransform(p, [0, 0.22, 0.55, 1], [0, -9, 5, 0]);
+	const p = useTransform(progress, [start, end], [0, 1]);
+	const color = useTransform(p, [0.2, 0.9], [DIM, accent ? RED : "#ffffff"]);
+	const x = useTransform(p, [0, 0.22, 0.5, 0.8, 1], [0, -2.2, 2, -1, 0]);
+	const wipe = useTransform(p, [0, 1], ["-15%", "120%"]);
+	const pixOpacity = useTransform(p, [0, 0.12, 0.72, 1], [0, 1, 1, 0]);
+
 	return (
-		<motion.span style={{ color, opacity, x, skewX, display: "inline-block", willChange: "transform, color, opacity" }}>
-			{ch}
-		</motion.span>
+		<span style={{ position: "relative", display: "inline-block" }}>
+			<motion.span style={{ color, x, display: "inline-block", willChange: "transform, color" }}>{ch}</motion.span>
+			<motion.span
+				aria-hidden
+				style={{
+					position: "absolute",
+					left: 0,
+					top: 0,
+					color: RED,
+					x,
+					opacity: pixOpacity,
+					pointerEvents: "none",
+					userSelect: "none",
+					display: "inline-block",
+					maskImage: MASK,
+					WebkitMaskImage: MASK,
+					maskSize: MASK_SIZE,
+					WebkitMaskSize: MASK_SIZE,
+					maskComposite: "intersect",
+					WebkitMaskComposite: "source-in",
+					// @ts-expect-error CSS var driven by a motion value
+					"--wipe": wipe,
+				}}
+			>
+				{ch}
+			</motion.span>
+		</span>
 	);
 }
 
 function DecodeReveal({ text, progress }: { text: string; progress: MotionValue<number> }) {
 	const words = text.split(" ");
 	const total = text.replace(/ /g, "").length;
-	const span = 0.72; // whole reveal completes within the first 72% of the scroll range
+	const span = 0.72;
 	let idx = 0;
 	return (
 		<>
