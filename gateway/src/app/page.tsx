@@ -80,30 +80,39 @@ export default function Page() {
     //      1.7s power4.out at "top 85%", set open instantly if already in view (their exact code).
     //    - parallax: ScrollTrigger.create + onUpdate set(yPercent, mapRange(0,1,-10,10, progress)),
     //      trigger the frame, "top bottom" -> "bottom top", scrub: true. gsap never touches scale.
-    const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
-    photos.forEach((photo) => {
-      const frame = (photo.closest(".synergy-section") as HTMLElement | null) ?? photo;
-
-      gsap.set(photo, { clipPath: "inset(100% 100% 0% 0%)" });
-      ScrollTrigger.create({
-        trigger: frame,
-        start: "top 85%",
-        onEnter: () => gsap.to(photo, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" }),
-      });
-      if (frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
-        gsap.set(photo, { clipPath: "inset(0% 0% 0% 0%)" });
+    // Driven off the LIVE getBoundingClientRect instead of precomputed trigger positions.
+    // Measured live: ScrollTrigger was failing to add the hero pin-spacer offset (4752px) to these
+    // triggers across gsap contexts (cards start=552 vs real doc top 5304 — while the crystal pin
+    // DID get the offset), so their progress sat at 1 and the parallax froze at yPercent +10 = the
+    // persistent top bar. Live rects are immune to spacer/refresh races; the math is the same
+    // produx formula: progress = (vh - top) / (vh + height) -> yPercent -10..+10.
+    const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => ({
+      photo,
+      frame: (photo.closest(".synergy-section") as HTMLElement | null) ?? photo,
+      clipped: true,
+    }));
+    photoState.forEach((s) => {
+      if (s.frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
+        s.clipped = false; // already in view on arrival — open instantly (produx guard)
+      } else {
+        gsap.set(s.photo, { clipPath: "inset(100% 100% 0% 0%)" });
       }
-
-      ScrollTrigger.create({
-        trigger: frame,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: (self) => {
-          gsap.set(photo, { yPercent: gsap.utils.mapRange(0, 1, -10, 10, self.progress) });
-        },
-      });
     });
+    const onCardScroll = () => {
+      const vh = window.innerHeight;
+      photoState.forEach((s) => {
+        const r = s.frame.getBoundingClientRect();
+        if (r.bottom < -60 || r.top > vh + 60) return; // offscreen — skip
+        const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
+        gsap.set(s.photo, { yPercent: -10 + 20 * p });
+        if (s.clipped && r.top < vh * 0.85) {
+          s.clipped = false;
+          gsap.to(s.photo, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" });
+        }
+      });
+    };
+    window.addEventListener("scroll", onCardScroll, { passive: true });
+    onCardScroll();
 
     // 5. Produx parity — focus grid. EXACT values traced from the minified card handler.
     // Hovered: opacity 1, scale 1.02, no blur. Siblings: opacity 0.5, scale 0.98,
@@ -132,7 +141,16 @@ export default function Page() {
       });
     });
 
+    // CRITICAL: these triggers race the hero/crystal pins — measured live, the card triggers were
+    // computed in a layout WITHOUT the pin spacers (starts ~714-2792 while the hero pin alone spans
+    // 0-3672), so past the hero they sat at progress=1 forever: parallax frozen at yPercent +10 =
+    // the persistent top bar. A deferred global refresh re-measures everything with all pin
+    // spacers registered. Second pass catches late image/layout shifts.
+    gsap.delayedCall(0.3, () => ScrollTrigger.refresh());
+    gsap.delayedCall(1.5, () => ScrollTrigger.refresh());
+
     return () => {
+      window.removeEventListener("scroll", onCardScroll);
       focusCleanups.forEach((fn) => fn());
     };
   }, { dependencies: [booted], scope: containerRef });
@@ -193,7 +211,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/vector_escrow.jpeg)",
                           transform: "scale(1.15)",
@@ -231,7 +249,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/card-omni-mesh.jpg)",
                           transform: "scale(1.15)",
@@ -269,7 +287,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/vector_oracle.jpeg)",
                           transform: "scale(1.15)",
@@ -305,7 +323,7 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group">
                       <CornerMarks />
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-tribunal.jpg)",
                           transform: "scale(1.15)",
@@ -342,7 +360,7 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group">
                       <CornerMarks />
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.42] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
+                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-x402.jpg)",
                           transform: "scale(1.15)",
