@@ -198,8 +198,6 @@ export default function Page() {
                           backgroundImage: "url(/vector_escrow.jpeg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
-                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
-                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
                       />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
@@ -238,8 +236,6 @@ export default function Page() {
                           backgroundImage: "url(/card-omni-mesh.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
-                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
-                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
                       />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
@@ -278,8 +274,6 @@ export default function Page() {
                           backgroundImage: "url(/vector_oracle.jpeg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
-                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
-                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
                       />
                       <div className="relative z-10 flex flex-col items-center">
@@ -316,8 +310,6 @@ export default function Page() {
                           backgroundImage: "url(/card-tribunal.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
-                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
-                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
                       />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
@@ -355,8 +347,6 @@ export default function Page() {
                           backgroundImage: "url(/card-x402.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
-                          maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
-                          WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
                       />
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
