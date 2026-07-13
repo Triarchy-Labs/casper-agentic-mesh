@@ -272,7 +272,8 @@ export function ScrollHero() {
 					0.55 + (p.pri / C) * 0.42
 				);
 			});
-			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 1, duration: 0.22, ease: "power2.inOut" }, 1.28);
+			// settle into the card-idle dim (0.15 ≈ art at 85%, same as non-hovered cards below)
+			tl.fromTo(".assembly-scrim", { opacity: 0 }, { opacity: 0.15, duration: 0.22, ease: "power2.inOut" }, 1.28);
 			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.22, ease: "power3.out", stagger: 0.06 }, 1.4);
 			// reveal the crystal aura once the image is assembled (it keeps CSS-pulsing on its own)
 			tl.to(".crystal-reveal", { opacity: 1, duration: 0.24, ease: "power2.out" }, 1.42);
@@ -537,11 +538,20 @@ export function ScrollHero() {
 				{/* Mosaic — in the hero screen (produx: image-container below the phrases). Scatters in
 				    while the phrases are still rising, then converges into the image as they roll out. */}
 				<div className="assembly-rise absolute inset-0 z-[30] flex items-center justify-center pointer-events-none" style={{ perspective: "1400px" }}>
-					<div className="assembly-image-container relative w-[120vw] max-w-[2300px] aspect-[1.784/1] mt-[8vh] max-lg:w-[150vw]" style={{ maskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(34% 42% at 105% -5%, transparent, transparent 24%, black 42%)", maskComposite: "intersect", WebkitMaskImage: "radial-gradient(ellipse at 50% 44%, black 62%, transparent 100%), radial-gradient(34% 42% at 105% -5%, transparent, transparent 24%, black 42%)", WebkitMaskComposite: "source-in" }}>
+					{/* Card-sized mosaic (matches the RWA Risk Oracle card footprint ~col-10 of the grid below)
+				    for harmony with the overlapping cards section. Crisp edges like a card — the radial
+				    edge masks belonged to the old 120vw full-bleed version. Hover = full brightness. */}
+				<div
+					className="assembly-image-container relative w-[74vw] max-w-[1430px] aspect-[1.784/1] mt-[8vh] max-lg:w-[92vw] pointer-events-auto"
+					onMouseEnter={() => gsap.to(".assembly-scrim", { opacity: 0, duration: 0.6, ease: "power2.out", overwrite: "auto" })}
+					onMouseLeave={() => gsap.to(".assembly-scrim", { opacity: 0.15, duration: 0.6, ease: "power2.out", overwrite: "auto" })}
+				>
 						{HERO_PIECES.map((p) => (
 							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
 						))}
-						<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
+						{/* Uniform idle dim (like a non-hovered card: art ~85%), not the old gradient scrim —
+					    the gradient landed oddly on the card-sized image. Hover lifts it to full. */}
+					<div className="absolute inset-0 bg-black z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 						{/* pulsing red aura pinned over the Casper crystal — wrapper handles reveal, inner CSS-pulses */}
 						<div className="crystal-reveal" style={{ position: "absolute", left: "61.5%", top: "39.5%", width: "5%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)", opacity: 0, pointerEvents: "none", zIndex: 12 }}>
 							<div className="crystal-pulse" style={{ width: "100%", height: "100%", borderRadius: "50%", background: "radial-gradient(circle, rgba(241,50,66,0.9) 0%, rgba(241,50,66,0.4) 38%, transparent 68%)", mixBlendMode: "screen" }} />
