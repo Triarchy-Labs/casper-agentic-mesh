@@ -37,28 +37,13 @@ export default function Page() {
     // 2. ScrollTrigger animations for sections
     CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1");
 
-    // Card rise, the way produx ACTUALLY does it (verified in their bundle): a DISCRETE duration
-    // tween fired once the section enters the viewport (natureSway, ~1.1s), NOT scrub-tied. A
-    // scrub-tied translate adds its speed to the scroll speed for the whole window (~1.4x perceived
-    // = the "site got faster" jerk after the mosaic); a 1.1s play reads as an entrance instead.
-    const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
-    sections.forEach((section) => {
-      gsap.fromTo(section,
-        { opacity: 0, y: 100, scale: 0.97 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.1,
-          ease: "natureSway",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          }
-        }
-      );
-    });
+    // Card entrance — produx's real technique, applied to the RIGHT element this time. In their
+    // bundle the clip-wipe targets the WHOLE visible block (hero canvas / whole image container):
+    // before it fires there is only page void, then the block "stretches out of nothing" — clip
+    // inset(100% 100% 0 0) -> 0 WHILE scale 1.3 -> 1 from "left bottom", 1.7s power4.out (their
+    // hero-canvas pairing). Clipping only the photo INSIDE an already-visible framed panel (my
+    // earlier attempt) produced the black-hole glitch. So: wipe the ENTIRE panel, done in the
+    // live-rect scroll handler below (ScrollTrigger start/end race the pin spacers here).
 
     // Header tag blur-fade; the h2 itself is the canvas pixel-decode (PixelDecodeText playOnEnter),
     // which self-triggers at top 65% with produx's 1.75s sine.out — the decompressor beat.
@@ -86,14 +71,21 @@ export default function Page() {
     // DID get the offset), so their progress sat at 1 and the parallax froze at yPercent +10 = the
     // persistent top bar. Live rects are immune to spacer/refresh races; the math is the same
     // produx formula: progress = (vh - top) / (vh + height) -> yPercent -10..+10.
-    // NOTE: no clip-wipe entrance. produx's corner wipe (inset(100% 100% 0 0) -> 0) works on their
-    // bright unframed photos; on our dark framed arts the mid-wipe state reads as a black hole with
-    // an art chunk sliding left-to-right — looked like a render glitch (user video). Cards already
-    // enter via the section rise; the art is simply present.
-    const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => ({
-      photo,
-      frame: (photo.closest(".synergy-section") as HTMLElement | null) ?? photo,
-    }));
+    const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => {
+      const frame = (photo.closest(".synergy-section") as HTMLElement | null) ?? photo;
+      // wipe state: whole panel hidden (void) until it crosses top 85% — produx guard: if already
+      // in view on arrival, it is simply open, no animation.
+      let wipe = true;
+      if (frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
+        wipe = false;
+      } else {
+        // NB: no scale pairing — that's their hero-canvas variant only; on a grid a scaled panel
+        // would bleed over neighbours. The "stretch" read comes from the inner art being
+        // scale(1.15) + parallax-shifted while the container wipes open — which we have.
+        gsap.set(frame, { clipPath: "inset(100% 100% 0% 0%)" });
+      }
+      return { photo, frame, wipe };
+    });
     const onCardScroll = () => {
       const vh = window.innerHeight;
       photoState.forEach((s) => {
@@ -101,6 +93,10 @@ export default function Page() {
         if (r.bottom < -60 || r.top > vh + 60) return; // offscreen — skip
         const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
         gsap.set(s.photo, { yPercent: -10 + 20 * p });
+        if (s.wipe && r.top < vh * 0.85) {
+          s.wipe = false;
+          gsap.to(s.frame, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" });
+        }
       });
     };
     window.addEventListener("scroll", onCardScroll, { passive: true });
