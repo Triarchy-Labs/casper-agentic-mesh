@@ -86,18 +86,14 @@ export default function Page() {
     // DID get the offset), so their progress sat at 1 and the parallax froze at yPercent +10 = the
     // persistent top bar. Live rects are immune to spacer/refresh races; the math is the same
     // produx formula: progress = (vh - top) / (vh + height) -> yPercent -10..+10.
+    // NOTE: no clip-wipe entrance. produx's corner wipe (inset(100% 100% 0 0) -> 0) works on their
+    // bright unframed photos; on our dark framed arts the mid-wipe state reads as a black hole with
+    // an art chunk sliding left-to-right — looked like a render glitch (user video). Cards already
+    // enter via the section rise; the art is simply present.
     const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => ({
       photo,
       frame: (photo.closest(".synergy-section") as HTMLElement | null) ?? photo,
-      clipped: true,
     }));
-    photoState.forEach((s) => {
-      if (s.frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
-        s.clipped = false; // already in view on arrival — open instantly (produx guard)
-      } else {
-        gsap.set(s.photo, { clipPath: "inset(100% 100% 0% 0%)" });
-      }
-    });
     const onCardScroll = () => {
       const vh = window.innerHeight;
       photoState.forEach((s) => {
@@ -105,10 +101,6 @@ export default function Page() {
         if (r.bottom < -60 || r.top > vh + 60) return; // offscreen — skip
         const p = Math.max(0, Math.min(1, (vh - r.top) / (vh + r.height)));
         gsap.set(s.photo, { yPercent: -10 + 20 * p });
-        if (s.clipped && r.top < vh * 0.85) {
-          s.clipped = false;
-          gsap.to(s.photo, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" });
-        }
       });
     };
     window.addEventListener("scroll", onCardScroll, { passive: true });
