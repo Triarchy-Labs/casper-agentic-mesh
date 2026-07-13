@@ -36,6 +36,7 @@ export default function Page() {
 
     // 2. ScrollTrigger animations for sections
     CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1");
+    CustomEase.create("premiumGlide", "M0,0 C0.1,0.4 0.15,1 1,1"); // from the produx bundle
 
     // Card entrance — produx's real technique, applied to the RIGHT element this time. In their
     // bundle the clip-wipe targets the WHOLE visible block (hero canvas / whole image container):
@@ -71,20 +72,37 @@ export default function Page() {
     // DID get the offset), so their progress sat at 1 and the parallax froze at yPercent +10 = the
     // persistent top bar. Live rects are immune to spacer/refresh races; the math is the same
     // produx formula: progress = (vh - top) / (vh + height) -> yPercent -10..+10.
+    // produx caption reveal (their card "reveal" batch): title words roll from masks (natureSway
+    // .9s stagger .1), description words fast variant (premiumGlide .65s), pointer square scales in
+    // (natureSway .7s). Words split at runtime into the same mask structure as their nf.default.
+    const splitWords = (el: HTMLElement | null) => {
+      if (!el) return [] as HTMLElement[];
+      const words = (el.textContent || "").trim().split(/\s+/);
+      el.innerHTML = words.map((w) => `<span class="cwm"><span class="cw">${w}</span></span>`).join(" ");
+      return Array.from(el.querySelectorAll<HTMLElement>(".cw"));
+    };
+
     const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => {
       const frame = (photo.closest(".synergy-section") as HTMLElement | null) ?? photo;
+      // caption elements live in the same grid cell as the panel
+      const cell = (frame.closest(".focus-cards > div") as HTMLElement | null) ?? frame.parentElement!;
+      const pointer = cell.querySelector<HTMLElement>(".card-pointer");
+      const titleWords = splitWords(cell.querySelector<HTMLElement>(".card-title"));
+      const descWords = splitWords(cell.querySelector<HTMLElement>(".card-desc"));
       // wipe state: whole panel hidden (void) until it crosses top 85% — produx guard: if already
-      // in view on arrival, it is simply open, no animation.
+      // in view on arrival, it is simply open, captions visible, no animation.
       let wipe = true;
       if (frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
         wipe = false;
+        gsap.set([...titleWords, ...descWords], { y: "0%", opacity: 1 });
       } else {
         // NB: no scale pairing — that's their hero-canvas variant only; on a grid a scaled panel
         // would bleed over neighbours. The "stretch" read comes from the inner art being
         // scale(1.15) + parallax-shifted while the container wipes open — which we have.
         gsap.set(frame, { clipPath: "inset(100% 100% 0% 0%)" });
+        if (pointer) gsap.set(pointer, { scale: 0 });
       }
-      return { photo, frame, wipe };
+      return { photo, frame, wipe, pointer, titleWords, descWords };
     });
     const onCardScroll = () => {
       const vh = window.innerHeight;
@@ -96,6 +114,10 @@ export default function Page() {
         if (s.wipe && r.top < vh * 0.85) {
           s.wipe = false;
           gsap.to(s.frame, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" });
+          // produx card "reveal" batch — their exact values
+          if (s.pointer) gsap.to(s.pointer, { scale: 1, duration: 0.7, ease: "natureSway" });
+          gsap.to(s.titleWords, { y: "0%", opacity: 1, duration: 0.9, stagger: 0.1, ease: "natureSway" });
+          gsap.to(s.descWords, { y: "0%", opacity: 1, duration: 0.65, stagger: 0.03, ease: "premiumGlide", delay: 0.1 });
         }
       });
     };
@@ -228,10 +250,10 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
-                      <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                      <div className="card-pointer my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
                       <div className="flex flex-col gap-[0.73vw]">
-                        <h3 className="heading-32 leading-tight">Autonomous Escrow</h3>
-                        <p className="label-13-mono text-[var(--gray-800)] uppercase">The zero-trust bedrock of the mesh. Rust/WASM smart contracts with real on-chain settlement.</p>
+                        <h3 className="card-title heading-32 leading-tight">Autonomous Escrow</h3>
+                        <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The zero-trust bedrock of the mesh. Rust/WASM smart contracts with real on-chain settlement.</p>
                       </div>
                     </div>
                   </div>
@@ -266,10 +288,10 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
-                      <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                      <div className="card-pointer my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
                       <div className="flex flex-col gap-[0.73vw]">
-                        <h3 className="heading-32 leading-tight">The Omni-Mesh</h3>
-                        <p className="label-13-mono text-[var(--gray-800)] uppercase">The economic OS for AI agents. All vectors converging into one organism.</p>
+                        <h3 className="card-title heading-32 leading-tight">The Omni-Mesh</h3>
+                        <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The economic OS for AI agents. All vectors converging into one organism.</p>
                       </div>
                     </div>
                   </div>
@@ -302,10 +324,10 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
-                      <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                      <div className="card-pointer my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
                       <div className="flex flex-col gap-[0.73vw]">
-                        <h3 className="heading-32 leading-tight">RWA Risk Oracle</h3>
-                        <p className="label-13-mono text-[var(--gray-800)] uppercase">The Sentinel. A live on-chain data feed with agent identity and accruing reputation.</p>
+                        <h3 className="card-title heading-32 leading-tight">RWA Risk Oracle</h3>
+                        <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The Sentinel. A live on-chain data feed with agent identity and accruing reputation.</p>
                       </div>
                     </div>
                   </div>
@@ -340,10 +362,10 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
-                      <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                      <div className="card-pointer my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
                       <div className="flex flex-col gap-[0.73vw]">
-                        <h3 className="heading-32 leading-tight">Agent Tribunal</h3>
-                        <p className="label-13-mono text-[var(--gray-800)] uppercase">An adversarial court of real models that rules on work and moves CSPR on-chain.</p>
+                        <h3 className="card-title heading-32 leading-tight">Agent Tribunal</h3>
+                        <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">An adversarial court of real models that rules on work and moves CSPR on-chain.</p>
                       </div>
                     </div>
                   </div>
@@ -377,10 +399,10 @@ export default function Page() {
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
-                      <div className="my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                      <div className="card-pointer my-[1.5vh] mr-[0.73vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
                       <div className="flex flex-col gap-[0.73vw]">
-                        <h3 className="heading-32 leading-tight">x402 Payment Layer</h3>
-                        <p className="label-13-mono text-[var(--gray-800)] uppercase">HTTP 402 native. Agents pay per API call with real CSPR — no subscriptions, no keys, just value for value.</p>
+                        <h3 className="card-title heading-32 leading-tight">x402 Payment Layer</h3>
+                        <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">HTTP 402 native. Agents pay per API call with real CSPR — no subscriptions, no keys, just value for value.</p>
                       </div>
                     </div>
                   </div>

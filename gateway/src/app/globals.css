@@ -308,6 +308,20 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 30px 70px -22px rgba(0, 0, 0, 0.95);
   z-index: 12;
 }
+
+/* HOME focus cards: borderless like produx (their cards are raw full-bleed blocks; our 1px frame
+   strobed under hover scale). Scoped — dashboards/bounties keep the framed editorial-panel.
+   CSS hover shadow also dropped here: gsap (0.6s power2.out, their exact values) is the only
+   animation authority on these cards — no mixed-speed feel. */
+.focus-cards .editorial-panel,
+.focus-cards .editorial-panel:hover {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* produx word-mask primitives for the card captions (nf.default equivalent) */
+.cwm { display: inline-flex; overflow: hidden; }
+.cw { display: inline-block; transform: translateY(115%); opacity: 0; will-change: transform; }
 /* Focus-the-rest-away: siblings shrink + dim + blur (produx scale-down pattern). */
 .editorial-grid:has(.editorial-panel:hover) .editorial-panel:not(:hover),
 .focus-cards:has(.editorial-panel:hover) .editorial-panel:not(:hover) {
