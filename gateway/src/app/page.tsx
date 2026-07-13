@@ -9,6 +9,7 @@ import { ManifestoReveal } from "@/components/ManifestoReveal";
 import { PixelDecodeText } from "@/components/PixelDecodeText";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
+import { MeshFooter } from "@/components/MeshFooter";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -139,14 +140,12 @@ export default function Page() {
         // produx sets sibling opacity 0.5, but their bg is near-black so it reads as pure dimming.
         // Our bg is the red carbon fabric, so opacity shows through — keep cards opaque and
         // dim via brightness+blur only (matches their look on our background).
-        // Measured live: no hidden opacity/mask layers (cells opacity 1, clips open, CinematicDim
-        // sits below the content z-index). The vanish was brightness() itself: it MULTIPLIES
-        // pixels, and our near-black arts crush to mush at any real factor (produx's bright
-        // billboards survive 0.5). So the dim is BLUR-dominant (their neighbour's main cue in the
-        // live video) with only a whisper of darkening — the art stays readable.
+        // The REAL culprit was found (measured live): a leftover CSS :has() rule stacked
+        // opacity 0.38 + blur on the panels under this tween — the see-through cards. That rule
+        // no longer touches .focus-cards; this tween is now the ONLY dim system, produx values.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.88)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.8)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
@@ -428,6 +427,9 @@ export default function Page() {
             {/* Crystal forge — produx rock section rebuilt: scroll-scrubbed crystal charging red,
                 gradient headline, then the three verdict points pop in on the hero pose */}
             <CrystalForge />
+
+            {/* Footer — produx skeleton fused with our content; CASPER anchors the bottom */}
+            <MeshFooter />
           </div>
         </main>
       )}

@@ -322,9 +322,12 @@ input:focus, textarea:focus, select:focus {
 /* produx word-mask primitives for the card captions (nf.default equivalent) */
 .cwm { display: inline-flex; overflow: hidden; }
 .cw { display: inline-block; transform: translateY(115%); opacity: 0; will-change: transform; }
-/* Focus-the-rest-away: siblings shrink + dim + blur (produx scale-down pattern). */
-.editorial-grid:has(.editorial-panel:hover) .editorial-panel:not(:hover),
-.focus-cards:has(.editorial-panel:hover) .editorial-panel:not(:hover) {
+/* Focus-the-rest-away (CSS :has() variant) — kept ONLY for .editorial-grid (other pages).
+   The .focus-cards selector is REMOVED: it was a phantom second dim system stacking
+   opacity 0.38 + blur + scale on the panels UNDER the gsap focus tween — the cards went
+   see-through to the fabric and no gsap brightness tuning could ever fix it (measured live).
+   The home grid is dimmed exclusively by the gsap handler in page.tsx. */
+.editorial-grid:has(.editorial-panel:hover) .editorial-panel:not(:hover) {
   opacity: 0.38;
   filter: blur(2px) saturate(0.82);
   transform: scale(0.97);

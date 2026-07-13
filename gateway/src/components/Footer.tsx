@@ -1,8 +1,13 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+	// The home page carries the full MeshFooter (produx skeleton + CASPER anchor); this telemetry
+	// strip stays for inner pages only, its phrases were merged into MeshFooter's bottom bar.
+	const pathname = usePathname();
+	if (pathname === "/") return null;
 	return (
 		<footer className="w-full border-t border-white/10 bg-black/40 backdrop-blur-md py-8 px-6 md:px-16 mt-auto z-20 relative">
 			<div className="max-w-7xl mx-auto">
