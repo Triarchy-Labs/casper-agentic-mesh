@@ -73,28 +73,36 @@ export default function Page() {
 
 
 
-    // 4. Produx photo parallax inside each card frame — EXACT dump mechanics this time:
-    // wrapper pre-scaled 1.15 (headroom), image drifts yPercent -10 -> +10 over the card's full
-    // viewport transit, scrub: true (no lag — theirs is immediate; our old ±5 + scrub 1.5 was half
-    // the travel smeared by lag, which is why it read as static).
+    // 4. Produx card-image mechanics — 1:1 from their bundle, no improvisation:
+    //    - scale(1.15) lives INLINE in the markup (like their wrapper), so no tween-cache accident
+    //      can drop it (a lost scale = zero headroom = the black bars that appeared).
+    //    - clip-path ENTRANCE: image starts inset(100% 100% 0% 0%) and wipes open to inset(0) over
+    //      1.7s power4.out at "top 85%", set open instantly if already in view (their exact code).
+    //    - parallax: ScrollTrigger.create + onUpdate set(yPercent, mapRange(0,1,-10,10, progress)),
+    //      trigger the frame, "top bottom" -> "bottom top", scrub: true. gsap never touches scale.
     const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
     photos.forEach((photo) => {
-      gsap.set(photo, { scale: 1.15, transformOrigin: "center center" });
-      const frame = photo.closest(".synergy-section") as HTMLElement | null;
-      gsap.fromTo(
-        photo,
-        { yPercent: -10 },
-        {
-          yPercent: 10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: frame ?? photo,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
+      const frame = (photo.closest(".synergy-section") as HTMLElement | null) ?? photo;
+
+      gsap.set(photo, { clipPath: "inset(100% 100% 0% 0%)" });
+      ScrollTrigger.create({
+        trigger: frame,
+        start: "top 85%",
+        onEnter: () => gsap.to(photo, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.7, ease: "power4.out" }),
+      });
+      if (frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
+        gsap.set(photo, { clipPath: "inset(0% 0% 0% 0%)" });
+      }
+
+      ScrollTrigger.create({
+        trigger: frame,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+        onUpdate: (self) => {
+          gsap.set(photo, { yPercent: gsap.utils.mapRange(0, 1, -10, 10, self.progress) });
+        },
+      });
     });
 
     // 5. Produx parity — focus grid. EXACT values traced from the minified card handler.
@@ -188,6 +196,8 @@ export default function Page() {
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/vector_escrow.jpeg)",
+                          transform: "scale(1.15)",
+                          transformOrigin: "center center",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
@@ -226,6 +236,8 @@ export default function Page() {
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/card-omni-mesh.jpg)",
+                          transform: "scale(1.15)",
+                          transformOrigin: "center center",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
@@ -264,6 +276,8 @@ export default function Page() {
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/vector_oracle.jpeg)",
+                          transform: "scale(1.15)",
+                          transformOrigin: "center center",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
@@ -300,6 +314,8 @@ export default function Page() {
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.40] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-tribunal.jpg)",
+                          transform: "scale(1.15)",
+                          transformOrigin: "center center",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
@@ -337,6 +353,8 @@ export default function Page() {
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.42] group-hover:opacity-[0.95] transition-opacity duration-500 pointer-events-none mix-blend-screen z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-x402.jpg)",
+                          transform: "scale(1.15)",
+                          transformOrigin: "center center",
                           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)",
                           WebkitMaskImage: "radial-gradient(ellipse at center, black 40%, transparent 100%)"
                         }}
