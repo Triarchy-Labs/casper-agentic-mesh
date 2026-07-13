@@ -542,7 +542,7 @@ export function ScrollHero() {
 				    for harmony with the overlapping cards section. Crisp edges like a card — the radial
 				    edge masks belonged to the old 120vw full-bleed version. Hover = full brightness. */}
 				<div
-					className="assembly-image-container relative w-[74vw] max-w-[1430px] aspect-[1.784/1] mt-[8vh] max-lg:w-[92vw] pointer-events-auto"
+					className="assembly-image-container relative w-[74vw] aspect-[1.784/1] mt-[8vh] max-lg:w-[92vw] pointer-events-auto"
 					onMouseEnter={() => gsap.to(".assembly-scrim", { opacity: 0, duration: 0.6, ease: "power2.out", overwrite: "auto" })}
 					onMouseLeave={() => gsap.to(".assembly-scrim", { opacity: 0.15, duration: 0.6, ease: "power2.out", overwrite: "auto" })}
 				>
