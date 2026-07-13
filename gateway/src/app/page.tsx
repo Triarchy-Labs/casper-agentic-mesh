@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CustomEase } from "gsap/CustomEase";
 import { ScrollHero } from "@/components/ScrollHero";
 import { ManifestoReveal } from "@/components/ManifestoReveal";
+import { PixelDecodeText } from "@/components/PixelDecodeText";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
@@ -59,9 +60,8 @@ export default function Page() {
       );
     });
 
-    // "Absolute Synergy" = the decompressor right after the mosaic pin (user call): a LONG oily
-    // masked roll-up (1.6s natureSway, like the hero phrases) that catches the eye at pin exit,
-    // so the transition out of the mosaic reads slow and deliberate instead of a speed bump.
+    // Header tag blur-fade; the h2 itself is the canvas pixel-decode (PixelDecodeText playOnEnter),
+    // which self-triggers at top 65% with produx's 1.75s sine.out — the decompressor beat.
     gsap.fromTo(".synergy-header .nb-tag",
       { opacity: 0, y: 14, filter: "blur(6px)" },
       {
@@ -69,32 +69,29 @@ export default function Page() {
         scrollTrigger: { trigger: ".synergy-header", start: "top 95%", toggleActions: "play none none reverse" },
       }
     );
-    gsap.to(".synergy-title-inner", {
-      y: "0%", duration: 1.6, ease: "natureSway",
-      scrollTrigger: { trigger: ".synergy-header", start: "top 95%", toggleActions: "play none none reverse" },
-    });
 
 
 
 
-    // 4. Produx parity — photo parallax inside each card frame.
-    // Image pre-scaled 1.15 for headroom, drifts yPercent on scroll with scrub 1.5 (dump values).
+    // 4. Produx photo parallax inside each card frame — EXACT dump mechanics this time:
+    // wrapper pre-scaled 1.15 (headroom), image drifts yPercent -10 -> +10 over the card's full
+    // viewport transit, scrub: true (no lag — theirs is immediate; our old ±5 + scrub 1.5 was half
+    // the travel smeared by lag, which is why it read as static).
     const photos = gsap.utils.toArray<HTMLElement>(".card-photo");
     photos.forEach((photo) => {
       gsap.set(photo, { scale: 1.15, transformOrigin: "center center" });
       const frame = photo.closest(".synergy-section") as HTMLElement | null;
-      // Dump: yPercent magnitude 10, ease none, start "top bottom" → end "bottom top".
       gsap.fromTo(
         photo,
-        { yPercent: -5 },
+        { yPercent: -10 },
         {
-          yPercent: 5,
+          yPercent: 10,
           ease: "none",
           scrollTrigger: {
             trigger: frame ?? photo,
             start: "top bottom",
             end: "bottom top",
-            scrub: 1.5,
+            scrub: true,
           },
         }
       );
@@ -166,12 +163,14 @@ export default function Page() {
                 empty runway was why the wheel got spun hard at the mosaic exit -> the jerk. */}
             <div ref={sectionsRef} className="w-full -mt-[17.5vh] px-[5.5vw] pt-[17vh] pb-[120px] flex flex-col gap-12">
               
-              {/* Section header — its own long reveal (decompressor after the mosaic pin), NOT the
-                  generic .synergy-section rise. h2 is masked; inner span rolls up produx-style. */}
+              {/* Section header — the decompressor after the mosaic pin. The h2 is produx's exact
+                  heading treatment ('Selected projects' in their bundle = the nP.default CANVAS
+                  pixel-decode, time-based: 1.75s sine.out, fired once at top 65% — and being a
+                  canvas it's not cursor-selectable, same as theirs). Red edge instead of lime. */}
               <div className="synergy-header flex flex-col gap-4 mb-2">
                 <span className="nb-tag w-max"><span className="text-[var(--red-700)]">◆</span> the mesh · five vectors</span>
-                <h2 className="nb-display text-[clamp(40px,6vw,84px)] overflow-hidden">
-                  <span className="synergy-title-inner block translate-y-full will-change-transform">Absolute Synergy</span>
+                <h2 className="max-w-[46vw] max-lg:max-w-none">
+                  <PixelDecodeText text="Absolute Synergy" playOnEnter fontVw={0.06} fsMax={112} />
                 </h2>
               </div>
 

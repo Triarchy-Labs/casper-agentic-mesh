@@ -8,7 +8,15 @@ import { useEffect, useRef } from "react";
 // resolving to clean white). Rendered on a canvas -> not selectable, like theirs.
 const PIXEL = 5;
 
-export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?: React.RefObject<HTMLElement | null> }) {
+export function PixelDecodeText({ text, scrollRef, playOnEnter, fontVw, fsMax }: {
+	text: string;
+	scrollRef?: React.RefObject<HTMLElement | null>;
+	// produx heading mode (nP.default with triggerOnScroll): TIME-based decode fired ONCE when the
+	// block reaches 65% of the viewport — revealDuration 1.75s, ease sine.out (dump values).
+	playOnEnter?: boolean;
+	fontVw?: number; // font-size as vw fraction (default 0.043); headings pass bigger
+	fsMax?: number;  // clamp cap in px (default 82)
+}) {
 	const wrapRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -37,7 +45,7 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 		function layout() {
 			dpr = Math.min(window.devicePixelRatio || 1, 1.75);
 			W = Math.max(1, Math.floor(wrap!.clientWidth));
-			fs = Math.min(Math.max(window.innerWidth * 0.043, 28), 82);
+			fs = Math.min(Math.max(window.innerWidth * (fontVw ?? 0.043), 28), fsMax ?? 82);
 			lineH = fs * 1.16;
 			ctx!.font = font(fs);
 
@@ -168,7 +176,29 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 			raf = requestAnimationFrame(tick);
 		}
 
+		// produx heading mode: fire ONCE at "top 65%", then a 1.75s sine.out time-decode (dump values).
+		let played = false;
+		function playReveal() {
+			if (played) return;
+			played = true;
+			const t0 = performance.now();
+			const dur = 1750;
+			const step = () => {
+				const k = Math.min(1, (performance.now() - t0) / dur);
+				reveal = Math.sin((k * Math.PI) / 2); // sine.out
+				draw();
+				if (k < 1) raf = requestAnimationFrame(step);
+				else raf = 0;
+			};
+			if (raf) cancelAnimationFrame(raf);
+			raf = requestAnimationFrame(step);
+		}
+
 		function onScroll() {
+			if (playOnEnter) {
+				if (!played && wrap!.getBoundingClientRect().top < window.innerHeight * 0.65) playReveal();
+				return;
+			}
 			computeTarget();
 			if (!raf) raf = requestAnimationFrame(tick);
 		}
@@ -183,7 +213,7 @@ export function PixelDecodeText({ text, scrollRef }: { text: string; scrollRef?:
 			window.removeEventListener("scroll", onScroll);
 			if (raf) cancelAnimationFrame(raf);
 		};
-	}, [text]);
+	}, [text, playOnEnter, fontVw, fsMax]);
 
 	return (
 		<div ref={wrapRef} className="w-full">
