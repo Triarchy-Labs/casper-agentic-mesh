@@ -298,13 +298,14 @@ input:focus, textarea:focus, select:focus {
     transform 320ms cubic-bezier(0.32,0.72,0,1);
 }
 /* Hover: the focused card lifts and scales up (produx focus pattern). */
+/* Hover: border brightens + drop shadow only. The transform lives EXCLUSIVELY in the gsap focus
+   tween (cell scale 1.02) — the old CSS scale here ran a second animation system against gsap on
+   nested elements, making the 1px border strobe on subpixels. The 0 0 0 1px ring doubled the
+   border ("micro white frames"); removed. */
 .editorial-panel:hover {
   background-color: #000000;
   border-color: rgba(255, 255, 255, 0.25);
-  box-shadow:
-    0 30px 70px -22px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 30px 70px -22px rgba(0, 0, 0, 0.95);
   z-index: 12;
 }
 /* Focus-the-rest-away: siblings shrink + dim + blur (produx scale-down pattern). */

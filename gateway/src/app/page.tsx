@@ -106,6 +106,11 @@ export default function Page() {
     // Hovered: opacity 1, scale 1.02, no blur. Siblings: opacity 0.5, scale 0.98,
     // filter blur(4px) brightness(0.4). duration 0.6, ease power2.out, overwrite true.
     const focusCards = gsap.utils.toArray<HTMLElement>(".focus-cards > div");
+    // Pre-warm GPU layers: the first hover used to apply blur(4px) to 4 huge panels at once,
+    // forcing first-time layer promotion + rasterization of giant textures = one long frame where
+    // layers weren't ready ("the screen blinked black"). Setting a non-none filter + force3D at
+    // mount creates those layers up-front during idle, so the first hover only animates them.
+    gsap.set(focusCards, { filter: "blur(0px) brightness(1)", force3D: true, willChange: "transform, opacity, filter" });
     const focusCleanups: Array<() => void> = [];
     focusCards.forEach((card) => {
       const enter = () => {
