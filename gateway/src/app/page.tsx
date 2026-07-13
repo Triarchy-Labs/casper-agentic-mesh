@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CustomEase } from "gsap/CustomEase";
 import { ScrollHero } from "@/components/ScrollHero";
 import { ManifestoReveal } from "@/components/ManifestoReveal";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
@@ -13,7 +14,7 @@ import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
 import { CinematicDim } from "@/components/CinematicDim";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, CustomEase);
 
 export default function Page() {
   const [booted, setBooted] = useState(false);
@@ -33,29 +34,44 @@ export default function Page() {
 
 
     // 2. ScrollTrigger animations for sections
-    // NOTE: no big y-translation here. A section translating up 100px WHILE the page scrolls adds
-    // its speed to the scroll speed (~1.4x perceived) — right after the pinned mosaic (where visuals
-    // sat still) that read as a jerk + "the site scrolls faster below". Fade + tiny scale keeps the
-    // life without adding visible velocity, so the oily pace feels uniform top to bottom.
+    CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1");
+
+    // Card rise, the way produx ACTUALLY does it (verified in their bundle): a DISCRETE duration
+    // tween fired once the section enters the viewport (natureSway, ~1.1s), NOT scrub-tied. A
+    // scrub-tied translate adds its speed to the scroll speed for the whole window (~1.4x perceived
+    // = the "site got faster" jerk after the mosaic); a 1.1s play reads as an entrance instead.
     const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
     sections.forEach((section) => {
       gsap.fromTo(section,
-        { opacity: 0, y: 18, scale: 0.985 },
+        { opacity: 0, y: 100, scale: 0.97 },
         {
           opacity: 1,
           y: 0,
           scale: 1,
-          duration: 1,
-          ease: "power3.out",
+          duration: 1.1,
+          ease: "natureSway",
           scrollTrigger: {
             trigger: section,
             start: "top 85%",
-            end: "center center",
-            scrub: 1.2,
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none reverse",
           }
         }
       );
+    });
+
+    // "Absolute Synergy" = the decompressor right after the mosaic pin (user call): a LONG oily
+    // masked roll-up (1.6s natureSway, like the hero phrases) that catches the eye at pin exit,
+    // so the transition out of the mosaic reads slow and deliberate instead of a speed bump.
+    gsap.fromTo(".synergy-header .nb-tag",
+      { opacity: 0, y: 14, filter: "blur(6px)" },
+      {
+        opacity: 1, y: 0, filter: "blur(0px)", duration: 1, ease: "natureSway", delay: 0.1,
+        scrollTrigger: { trigger: ".synergy-header", start: "top 95%", toggleActions: "play none none reverse" },
+      }
+    );
+    gsap.to(".synergy-title-inner", {
+      y: "0%", duration: 1.6, ease: "natureSway",
+      scrollTrigger: { trigger: ".synergy-header", start: "top 95%", toggleActions: "play none none reverse" },
     });
 
 
@@ -143,13 +159,20 @@ export default function Page() {
 
 
 
-            {/* Synergy Dashboard Cinematic Chapters */}
-            <div ref={sectionsRef} className="w-full px-[5.5vw] py-[120px] flex flex-col gap-12">
+            {/* Synergy Dashboard Cinematic Chapters.
+                produx overlap (their hero has -mb-[17.5vh]): this block rides 17.5vh up onto the
+                mosaic's tail — the overlap zone is top PADDING, so nothing covers the image, but the
+                heading enters the frame right at pin release instead of after an empty runway. That
+                empty runway was why the wheel got spun hard at the mosaic exit -> the jerk. */}
+            <div ref={sectionsRef} className="w-full -mt-[17.5vh] px-[5.5vw] pt-[17vh] pb-[120px] flex flex-col gap-12">
               
-              {/* Section header */}
-              <div className="synergy-section flex flex-col gap-4 mb-2">
+              {/* Section header — its own long reveal (decompressor after the mosaic pin), NOT the
+                  generic .synergy-section rise. h2 is masked; inner span rolls up produx-style. */}
+              <div className="synergy-header flex flex-col gap-4 mb-2">
                 <span className="nb-tag w-max"><span className="text-[var(--red-700)]">◆</span> the mesh · five vectors</span>
-                <h2 className="nb-display text-[clamp(40px,6vw,84px)]">Absolute Synergy</h2>
+                <h2 className="nb-display text-[clamp(40px,6vw,84px)] overflow-hidden">
+                  <span className="synergy-title-inner block translate-y-full will-change-transform">Absolute Synergy</span>
+                </h2>
               </div>
 
               {/* Produx-style: 3 grid rows, flex-col gap-[13.67vh] between rows (from dump) */}
