@@ -139,13 +139,14 @@ export default function Page() {
         // produx sets sibling opacity 0.5, but their bg is near-black so it reads as pure dimming.
         // Our bg is the red carbon fabric, so opacity shows through — keep cards opaque and
         // dim via brightness+blur only (matches their look on our background).
-        // produx dims siblings to ~50% luminance — but their photos are BRIGHT (white billboards),
-        // clearly readable dimmed (verified against their live hover, user video). Our arts are
-        // dark to begin with, so we crush less: brightness 0.75 on our palette lands at the same
-        // "darker + blurred but the photo still reads" perception as their 0.5-ish.
+        // Measured live: no hidden opacity/mask layers (cells opacity 1, clips open, CinematicDim
+        // sits below the content z-index). The vanish was brightness() itself: it MULTIPLIES
+        // pixels, and our near-black arts crush to mush at any real factor (produx's bright
+        // billboards survive 0.5). So the dim is BLUR-dominant (their neighbour's main cue in the
+        // live video) with only a whisper of darkening — the art stays readable.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.75)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.88)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
