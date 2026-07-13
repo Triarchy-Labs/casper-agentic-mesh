@@ -33,12 +33,16 @@ export default function Page() {
 
 
     // 2. ScrollTrigger animations for sections
+    // NOTE: no big y-translation here. A section translating up 100px WHILE the page scrolls adds
+    // its speed to the scroll speed (~1.4x perceived) — right after the pinned mosaic (where visuals
+    // sat still) that read as a jerk + "the site scrolls faster below". Fade + tiny scale keeps the
+    // life without adding visible velocity, so the oily pace feels uniform top to bottom.
     const sections = gsap.utils.toArray(".synergy-section") as HTMLElement[];
     sections.forEach((section) => {
-      gsap.fromTo(section, 
-        { opacity: 0, y: 100, scale: 0.95 },
+      gsap.fromTo(section,
+        { opacity: 0, y: 18, scale: 0.985 },
         {
-          opacity: 1, 
+          opacity: 1,
           y: 0,
           scale: 1,
           duration: 1,

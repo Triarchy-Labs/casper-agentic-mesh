@@ -2,6 +2,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from "lenis/react";
+import type Lenis from "lenis";
 
 // produx's rock section, rebuilt for our crystal. Their rock is a WebGL scene; we use the same
 // underlying technique as their canvas path — a scroll-scrubbed frame sequence drawn to a canvas
@@ -79,6 +81,10 @@ export function CrystalForge() {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const sparksRef = useRef<HTMLDivElement>(null);
 	const glowRef = useRef<HTMLDivElement>(null);
+	// Lenis instance (updated every render) — the settle logic reads targetScroll from it lazily.
+	const lenisRef = useRef<Lenis | null>(null);
+	const lenis = useLenis();
+	if (lenis) lenisRef.current = lenis;
 
 	useEffect(() => {
 		gsap.registerPlugin(ScrollTrigger);
@@ -132,9 +138,16 @@ export function CrystalForge() {
 		// killing the 1-frame desync that caused the micro-jitter on the settle. Density (472 interpolated
 		// frames) + Lenis's own smoothing give the smoothness; no extra lag needed.
 
-		const CF_VMIN = 60; // px/s: below this the coast is "settling" — freeze the crystal frame
+		// Settle logic: while scrolling fast the frame tracks scroll 1:1. Once velocity drops below
+		// SETTLE_V (gesture released, Lenis coasting), we DON'T ride the slow coast tail frame-by-frame
+		// (that's the visible end-ticks) — instead we read Lenis's final destination (targetScroll),
+		// and glide the remaining frames there in ONE short eased tween (~0.35s ≈ 30+fps = fluid).
+		const SETTLE_V = 250; // px/s
+		const frameProxy = { f: 0 };
+		let settleTween: gsap.core.Tween | null = null;
+		let settleTarget = -1;
 		const ctxq = gsap.context(() => {
-			let headlineShown = false, labelsShown = false, frameP = 0;
+			let headlineShown = false, labelsShown = false;
 			// produx uses gsap `y:"0%"` (NOT yPercent): `y` reads the element's current transform matrix,
 			// so it correctly animates FROM the Tailwind `translate-y-full` (translateY 100%) baseline.
 			// yPercent is a separate gsap prop with a 0 baseline -> it never moved the words off-screen.
@@ -161,12 +174,35 @@ export function CrystalForge() {
 				invalidateOnRefresh: true,
 				onUpdate: (self) => {
 					const p = self.progress;
-					// Advance the crystal frame only while actively scrolling. Through the slow inertia coast
-					// tail (velocity below CF_VMIN) HOLD the last frame, so the crystal stops crisply instead
-					// of ticking through the last few coast frames. The page's oily scroll is untouched —
-					// only the crystal's frame ignores the coast tail. (charge/reveals still follow real p.)
-					if (Math.abs(self.getVelocity()) > CF_VMIN) frameP = p;
-					drawFrame(frameP * (N - 1));
+					const v = Math.abs(self.getVelocity());
+					if (v > SETTLE_V) {
+						// actively scrolling: track 1:1, kill any settle glide
+						if (settleTween) { settleTween.kill(); settleTween = null; settleTarget = -1; }
+						frameProxy.f = p * (N - 1);
+						drawFrame(frameProxy.f);
+					} else {
+						// coasting: glide the frames to Lenis's final destination in one smooth move
+						const L = lenisRef.current;
+						const span = self.end - self.start;
+						const finalP = L && span > 0
+							? Math.max(0, Math.min(1, (L.targetScroll - self.start) / span))
+							: p;
+						const targetF = finalP * (N - 1);
+						if (Math.abs(targetF - frameProxy.f) < 0.5) {
+							// already there — just settle exactly
+							if (!settleTween) { frameProxy.f = targetF; drawFrame(targetF); }
+						} else if (settleTarget < 0 || Math.abs(targetF - settleTarget) > 0.75) {
+							settleTarget = targetF;
+							if (settleTween) settleTween.kill();
+							settleTween = gsap.to(frameProxy, {
+								f: targetF,
+								duration: 0.35,
+								ease: "power3.out",
+								onUpdate: () => drawFrame(frameProxy.f),
+								onComplete: () => { settleTween = null; settleTarget = -1; },
+							});
+						}
+					}
 					const charge = Math.max(0, (p - 0.15)) * 1.1;
 					gsap.set(sparksRef.current, { opacity: charge });
 					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
@@ -180,7 +216,7 @@ export function CrystalForge() {
 			});
 		}, sectionRef);
 
-		return () => { io.disconnect(); ctxq.revert(); };
+		return () => { io.disconnect(); if (settleTween) settleTween.kill(); ctxq.revert(); };
 	}, []);
 
 	return (
