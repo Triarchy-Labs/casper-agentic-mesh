@@ -140,13 +140,15 @@ export default function Page() {
         // produx sets sibling opacity 0.5, but their bg is near-black so it reads as pure dimming.
         // Our bg is the red carbon fabric, so opacity shows through — keep cards opaque and
         // dim via brightness+blur only (matches their look on our background).
-        // PRODUX EXACT (their minified hover handler, verbatim): siblings opacity .5,
-        // blur(4px) brightness(0.4), scale .98, 0.6s power2.out. All earlier softening was
-        // tuned while the phantom 0.38 CSS rule polluted every test — with a single clean
-        // system these are the true 1:1 values.
+        // produx values ADAPTED for the compositing target (user's side-by-side proof): their
+        // opacity .5 composites the sibling toward their BLACK page bg = the card darkens but
+        // stays an object. Our bg is BRIGHT red fabric — opacity lets it bleed THROUGH the card,
+        // erasing it instead of darkening. So: opacity stays 1 (fabric never shows through) and
+        // the darkening comes from brightness alone — the card sinks toward black exactly like
+        // theirs does. blur 4px / scale .98 / 0.6s power2.out = their handler.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 0.5, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
