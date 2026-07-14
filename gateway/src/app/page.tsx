@@ -146,9 +146,11 @@ export default function Page() {
         // erasing it instead of darkening. So: opacity stays 1 (fabric never shows through) and
         // the darkening comes from brightness alone — the card sinks toward black exactly like
         // theirs does. blur 4px / scale .98 / 0.6s power2.out = their handler.
+        // ...with a WHISPER of see-through (user call): 12% keeps produx's opacity logic — the
+        // fabric faintly breathes through the dimmed card, tying it to the bg without erasing it.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 0.88, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
