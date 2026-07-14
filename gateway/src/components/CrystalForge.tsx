@@ -93,19 +93,41 @@ export function CrystalForge() {
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		// preload the sequence (~8MB) LAZILY — only once the section is near the viewport, so it
-		// never blocks the initial page load. Draw the nearest loaded frame so scrub never blanks.
+		// TRICKLE preload (~27MB, 472 frames). The old one-shot loop fired all 472 Image()s in a
+		// single synchronous burst right around the cards area (rootMargin) — network + decode
+		// stampede on the main thread = the first-visit micro-stall the user felt. produx avoids
+		// this class of jank because their heavy media is a streaming <video> (progressive,
+		// off-thread decode). Ours: max 12 concurrent, COARSE-FIRST order (every 8th frame, then
+		// 4th, 2nd, all) so the scrub works almost immediately at low density and refines while
+		// you approach; nearestLoaded() already bridges the gaps.
 		const imgs: HTMLImageElement[] = [];
 		let preloaded = false;
 		function preload() {
 			if (preloaded) return;
 			preloaded = true;
-			for (let i = 0; i < N; i++) {
-				const im = new Image();
-				im.src = frameSrc(i);
-				imgs[i] = im;
+			const queue: number[] = [];
+			const seen = new Set<number>();
+			for (const step of [8, 4, 2, 1]) {
+				for (let i = 0; i < N; i += step) {
+					if (!seen.has(i)) { seen.add(i); queue.push(i); }
+				}
 			}
-			imgs[0].onload = () => drawFrame(0);
+			let qi = 0, inflight = 0;
+			const MAXC = 12;
+			const pump = () => {
+				while (inflight < MAXC && qi < queue.length) {
+					const i = queue[qi++];
+					const im = new Image();
+					im.decoding = "async";
+					imgs[i] = im;
+					inflight++;
+					const done = () => { inflight--; if (i === 0) drawFrame(0); pump(); };
+					im.onload = done;
+					im.onerror = done;
+					im.src = frameSrc(i);
+				}
+			};
+			pump();
 		}
 		const io = new IntersectionObserver(
 			(entries) => { if (entries[0].isIntersecting) { preload(); io.disconnect(); } },
