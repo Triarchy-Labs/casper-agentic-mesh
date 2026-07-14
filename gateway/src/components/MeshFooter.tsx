@@ -132,15 +132,17 @@ export function MeshFooter() {
 
 				{/* ---- the big-logo slot: CASPER girl banner + giant wordmark ---- */}
 				<div className="mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
+					{/* native image ratio (5504x3072 = 1.792/1) — nothing cropped, the girl sits whole */}
 					<div
-						className="footer-casper-banner w-full aspect-[2.5/1] max-sm:aspect-[1.6/1] bg-cover"
-						style={{ backgroundImage: "url(/footer-casper.jpg)", backgroundPosition: "50% 22%" }}
+						className="footer-casper-banner w-full aspect-[1.792/1] bg-cover"
+						style={{ backgroundImage: "url(/footer-casper.jpg)", backgroundPosition: "50% 50%" }}
 						aria-label="CASPER — overseer of the mesh"
 					/>
 				</div>
 				<div className="mt-[4vh] flex items-end justify-between gap-4 flex-wrap">
+					{/* ghost wordmark: 95% transparent, wakes +5% on hover (user spec) */}
 					<div
-						className="uppercase leading-[0.85] text-white select-none"
+						className="uppercase leading-[0.85] text-white select-none opacity-[0.05] hover:opacity-[0.10] transition-opacity duration-500 cursor-default"
 						style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(64px, 11vw, 220px)", fontWeight: 400, letterSpacing: "0.02em" }}
 					>
 						C<span className="text-[var(--red-700)]">Λ</span>SPER
