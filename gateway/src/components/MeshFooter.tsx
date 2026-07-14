@@ -131,15 +131,25 @@ export function MeshFooter() {
 				</div>
 
 				{/* ---- the big-logo slot: CASPER girl banner + giant wordmark ---- */}
-				<div className="mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
+				<div className="relative mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
 					{/* native image ratio (5504x3072 = 1.792/1) — nothing cropped, the girl sits whole */}
 					<div
 						className="footer-casper-banner w-full aspect-[1.792/1] bg-cover"
 						style={{ backgroundImage: "url(/footer-casper.jpg)", backgroundPosition: "50% 50%" }}
 						aria-label="CASPER — overseer of the mesh"
 					/>
+					{/* cinematic vignette: edges sink into the footer's black, bottom melts into it */}
+					<div
+						className="pointer-events-none absolute inset-0"
+						style={{
+							background:
+								"radial-gradient(ellipse at 50% 42%, transparent 50%, rgba(0,0,0,0.55) 100%), linear-gradient(to top, rgba(10,5,8,0.9), rgba(10,5,8,0.25) 14%, transparent 28%), linear-gradient(to bottom, rgba(10,5,8,0.4), transparent 12%)",
+						}}
+					/>
 				</div>
-				<div className="mt-[4vh] flex items-end justify-between gap-4 flex-wrap">
+
+				{/* ---- compact bottom: ghost wordmark LEFT, everything else stacked RIGHT under the photo ---- */}
+				<div className="mt-[2.5vh] flex items-end justify-between gap-[3vw] flex-wrap">
 					{/* ghost wordmark: 95% transparent, wakes +5% on hover (user spec) */}
 					<div
 						className="uppercase leading-[0.85] text-white select-none opacity-[0.05] hover:opacity-[0.10] transition-opacity duration-500 cursor-default"
@@ -147,30 +157,25 @@ export function MeshFooter() {
 					>
 						C<span className="text-[var(--red-700)]">Λ</span>SPER
 					</div>
-					<p className="label-13-mono text-white/40 pb-[1.2vh]">forged by TRIARCHY // the mesh settles here</p>
-				</div>
-
-				{/* ---- telemetry strip (merged from the old site footer) ---- */}
-				<div className="mt-[6vh] flex items-center gap-4 label-12-mono text-[var(--gray-600)] border-t border-white/10 pt-[3.9vh]">
-					<span className="text-[var(--red-700)]">///</span>
-					<span>REV 2.6</span>
-					<span className="text-[var(--gray-500)]">·</span>
-					<span>UNIT / MESH-01</span>
-					<span className="text-[var(--gray-500)]">·</span>
-					<span>BUILD 2026.07</span>
-					<span className="text-[var(--gray-500)]">·</span>
-					<span>INSTANTIATED ON CASPER NETWORK</span>
-					<div className="hr-brutal flex-1 ml-2" />
-				</div>
-
-				{/* ---- bottom bar ---- */}
-				<div className="mt-[2.5vh] flex items-center justify-between flex-wrap gap-[1.5vh]">
-					<div className="flex gap-[1.69vw] max-sm:w-full max-sm:justify-between flex-wrap">
-						<Roller label="x402 spec" href="https://www.x402.org/" external />
-						<Roller label="casper.network" href="https://casper.network" external />
-						<Roller label="Odra framework" href="https://odra.dev" external />
+					<div className="flex flex-col items-end gap-[1.4vh] pb-[0.8vh] max-sm:items-start max-sm:w-full">
+						<p className="label-13-mono text-white/40">forged by TRIARCHY // the mesh settles here</p>
+						<div className="flex items-center gap-3 label-12-mono text-[var(--gray-600)] flex-wrap justify-end max-sm:justify-start">
+							<span className="text-[var(--red-700)]">///</span>
+							<span>REV 2.6</span>
+							<span className="text-[var(--gray-500)]">·</span>
+							<span>UNIT / MESH-01</span>
+							<span className="text-[var(--gray-500)]">·</span>
+							<span>BUILD 2026.07</span>
+							<span className="text-[var(--gray-500)]">·</span>
+							<span>INSTANTIATED ON CASPER NETWORK</span>
+						</div>
+						<div className="flex gap-[1.69vw] flex-wrap justify-end max-sm:justify-start">
+							<Roller label="x402 spec" href="https://www.x402.org/" external />
+							<Roller label="casper.network" href="https://casper.network" external />
+							<Roller label="Odra framework" href="https://odra.dev" external />
+						</div>
+						<p className="label-13-mono text-white/40">© 2026 TRIARCHY LABS — ALL VERDICTS FINAL.</p>
 					</div>
-					<p className="label-13-mono text-white/40">© 2026 TRIARCHY LABS — ALL VERDICTS FINAL.</p>
 				</div>
 			</div>
 		</footer>

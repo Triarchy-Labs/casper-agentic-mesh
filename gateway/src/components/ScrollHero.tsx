@@ -188,7 +188,9 @@ export function ScrollHero() {
 				scrollTrigger: {
 					trigger: heroRef.current,
 					start: "top top",
-					end: "+=340%",
+					// 400%: same px-per-timeline-unit rate as the approved 340%/1.67 pacing — the extra
+					// scroll feeds the shatter finale (1.67 -> 1.96) that masks the pin release.
+					end: "+=400%",
 					pin: true,
 					scrub: 1.2,
 					anticipatePin: 1,
@@ -277,6 +279,35 @@ export function ScrollHero() {
 			tl.fromTo(".assembly-text-overlay", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.22, ease: "power3.out", stagger: 0.06 }, 1.4);
 			// reveal the crystal aura once the image is assembled (it keeps CSS-pulsing on its own)
 			tl.to(".crystal-reveal", { opacity: 1, duration: 0.24, ease: "power2.out" }, 1.42);
+
+			// FINALE — the exit masked by motion (user call). The wall was only visible because a
+			// high-contrast STATIC image sat on screen at the pin release. So the frame never
+			// freezes: after a short assembled beat the image SHATTERS back into squares with
+			// rising blur while the frame sinks toward black; the crystal's pulse is the last
+			// light to dissolve. The release lands on a nearly-black, still-moving frame — a
+			// velocity seam the eye cannot see. Scrolling back re-assembles it (scrub symmetry).
+			tl.to(".assembly-text-overlay", { opacity: 0, y: -12, duration: 0.07, ease: "power2.in", stagger: 0.02 }, 1.7);
+			HERO_PIECES.forEach((p) => {
+				tl.to(
+					`.assembly-slice-${p.id}`,
+					{
+						xPercent: p.sx * 0.6,
+						yPercent: p.sy * 0.6,
+						z: p.sz * 0.4,
+						scale: 0.72,
+						opacity: 0,
+						filter: "blur(12px)",
+						force3D: true,
+						ease: "power2.in",
+						duration: 0.18,
+					},
+					1.72 + (p.pri / C) * 0.06
+				);
+			});
+			tl.to(".assembly-scrim", { opacity: 0.8, duration: 0.2, ease: "power1.in" }, 1.72);
+			// the crystal dies last — a red heartbeat over the dark as the page starts to flow
+			tl.to(".crystal-reveal", { opacity: 0, scale: 0.6, duration: 0.12, ease: "power2.in" }, 1.84);
+			tl.to(".assembly-rise", { autoAlpha: 0, duration: 0.06, ease: "none" }, 1.9);
 		}, heroRef);
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
