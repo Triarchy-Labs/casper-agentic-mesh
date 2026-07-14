@@ -140,12 +140,13 @@ export default function Page() {
         // produx sets sibling opacity 0.5, but their bg is near-black so it reads as pure dimming.
         // Our bg is the red carbon fabric, so opacity shows through — keep cards opaque and
         // dim via brightness+blur only (matches their look on our background).
-        // The REAL culprit was found (measured live): a leftover CSS :has() rule stacked
-        // opacity 0.38 + blur on the panels under this tween — the see-through cards. That rule
-        // no longer touches .focus-cards; this tween is now the ONLY dim system, produx values.
+        // PRODUX EXACT (their minified hover handler, verbatim): siblings opacity .5,
+        // blur(4px) brightness(0.4), scale .98, 0.6s power2.out. All earlier softening was
+        // tuned while the phantom 0.38 CSS rule polluted every test — with a single clean
+        // system these are the true 1:1 values.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 1, scale: 0.98, filter: "blur(4px) brightness(0.8)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 0.5, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
