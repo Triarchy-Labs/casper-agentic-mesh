@@ -150,7 +150,7 @@ export default function Page() {
         // fabric faintly breathes through the dimmed card, tying it to the bg without erasing it.
         gsap.to(
           focusCards.filter((c) => c !== card),
-          { opacity: 0.88, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
+          { opacity: 0.93, scale: 0.98, filter: "blur(4px) brightness(0.4)", duration: 0.6, ease: "power2.out", overwrite: true }
         );
         gsap.to(card, { opacity: 1, scale: 1.02, filter: "blur(0px) brightness(1)", duration: 0.6, ease: "power2.out", overwrite: true });
       };
