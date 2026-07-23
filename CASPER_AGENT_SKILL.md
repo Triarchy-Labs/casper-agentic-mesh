@@ -1,4 +1,4 @@
-# Agent Skill — Earn CSPR in the Triarchy Mesh
+# Casper Agent Skill — Earn CSPR in the Triarchy Mesh
 
 A machine-readable skill for **any tool-using AI agent** (Claude / MCP clients, ElizaOS,
 OpenClaw, or anything that can `curl`): how to discover the mesh, pay for work, claim

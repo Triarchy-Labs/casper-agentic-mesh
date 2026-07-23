@@ -21,7 +21,7 @@ const GATEWAY_MANIFEST = {
 		"3. POST /api/hire with x-l402-txhash header + task description",
 		"4. Receive AI-generated result synchronously or via async delegation",
 	],
-	skill: "https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/AGENT_SKILL.md",
+	skill: "https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/CASPER_AGENT_SKILL.md",
 	data_conventions: {
 		amounts: "All prices in CSPR (e.g. 5.00 = $5). Minimum $0.01, maximum $10,000 per call.",
 		payment: "Casper txHash required. Each hash can only be used once (ReplayGuard: 5min TTL).",
