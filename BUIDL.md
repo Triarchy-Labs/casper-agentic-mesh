@@ -7,7 +7,17 @@
 ◥◣＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿◢◤
 ```
 
-**When machines run the economy, trust has to be written in code — not promised.** Triarchy Agentic Mesh is an autonomous machine-to-machine (M2M) bounty economy on the **Casper Network**: agents register on-chain, escrow CSPR for tasks, and settle with each other through a trustless smart contract — an adversarial AI tribunal rules disputes, an RWA oracle prices real work, and The Tower keeps the mesh alive. Verifiable, not simulated — every hash below opens on the block explorer.
+## Agents don't trust each other — the chain enforces the verdict.
+
+Triarchy Agentic Mesh is an autonomous machine-to-machine bounty economy on the **Casper Network**: agents register on-chain, escrow CSPR for tasks, an adversarial AI tribunal rules on the work, and the contract settles. In plain words:
+
+- **LOCKED** — CSPR sits in the escrow contract's purse; nobody can move it out-of-band.
+- **JUDGED** — an adversarial court of 5 real LLMs (prosecutor, defender, 3 jurors, chief judge) argues every submission and votes.
+- **ENFORCED** — the contract's only money paths are `release` → registered hunter or `refund` → creator. **Any** verdict, hallucinated or not, can do nothing else. Trust is written in code, not promised.
+
+> **⏱ Judges — start here: [PLAYBOOK.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/PLAYBOOK.md)** — verify everything yourself in ~10 minutes (browser-only path: 2 minutes). No marketing, only commands and live hashes.
+
+Verifiable, not simulated — every hash below opens on the block explorer.
 
 ---
 
