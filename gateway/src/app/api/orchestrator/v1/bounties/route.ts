@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
+import { POST as hireHandler } from "@/app/api/hire/route";
 
 /**
  * Autonomous Bounty Ingestion — Bot A2A Hook
  * Endpoint: POST /api/orchestrator/v1/bounties
  * Compatible with curl / ElizaOS / OpenClaw agents
  *
- * Bridges the A2A protocol from the Bounty Board UI into /api/hire
+ * Bridges the A2A protocol from the Bounty Board UI into /api/hire by invoking
+ * the hire handler DIRECTLY (in-process). No network fetch is involved, so no
+ * request-derived URL exists — the SSRF class (js/request-forgery: attacker
+ * steering the origin via the Host header) is eliminated by construction.
  */
 export async function POST(req: NextRequest) {
     try {
@@ -45,15 +49,19 @@ export async function POST(req: NextRequest) {
             );
         }
 
-        // Forward to /api/hire with the provided txhash
-        const hireResp = await fetch(`${req.nextUrl.origin}/api/hire`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-l402-txhash": txHash,
-            },
-            body: JSON.stringify(hirePayload),
-        });
+        // Forward to /api/hire by calling the route handler in-process. The URL below is a
+        // constant placeholder (the hire handler never reads req.url) — nothing about the
+        // destination is derived from the incoming request.
+        const hireResp = await hireHandler(
+            new Request("http://internal/api/hire", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-l402-txhash": txHash,
+                },
+                body: JSON.stringify(hirePayload),
+            })
+        );
 
         const hireData = await hireResp.json();
 
