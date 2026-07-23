@@ -1,3 +1,7 @@
+//go:build ignore
+
+// Standalone helper: `go run print_key.go <pem_path> <algo>`.
+// Tagged ignore so it never collides with the real binary's main() in `go build ./...`.
 package main
 
 import (
