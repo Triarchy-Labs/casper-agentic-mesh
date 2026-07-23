@@ -11,6 +11,9 @@ members = [
     "swarm/x402-polymarket",
     "swarm/x402-memory",
     "swarm/core-ipc",
+    "swarm/tribunal",
+    "swarm/bounty-judge",
+    "swarm/tower",
 ]
 
 [workspace.package]
