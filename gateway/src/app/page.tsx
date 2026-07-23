@@ -10,6 +10,7 @@ import { PixelDecodeText } from "@/components/PixelDecodeText";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
 import { MeshFooter } from "@/components/MeshFooter";
+import { VectorDossier } from "@/components/VectorDossier";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -20,6 +21,7 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 
 export default function Page() {
   const [booted, setBooted] = useState(false);
+  const [dossier, setDossier] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
@@ -256,6 +258,7 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("escrow"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deposit · release · refund</li>
@@ -294,6 +297,7 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("omni-mesh"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> escrow · oracle · tribunal</li>
@@ -332,6 +336,7 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("oracle"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <div className="relative z-10 flex flex-col items-center">
                         <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 02 · RWA Risk Oracle · Vector Beta</span>
                         <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">RWA Risk Oracle</h2>
@@ -368,6 +373,7 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("tribunal"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> prosecutor · defender · jury</li>
@@ -405,6 +411,7 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("x402"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> pay-per-call micro-settlements</li>
@@ -452,6 +459,7 @@ export default function Page() {
           </div>
         </main>
       )}
+      <VectorDossier slug={dossier} onClose={() => setDossier(null)} />
     </>
   );
 }
