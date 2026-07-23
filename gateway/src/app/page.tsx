@@ -78,9 +78,23 @@ export default function Page() {
     // (natureSway .7s). Words split at runtime into the same mask structure as their nf.default.
     const splitWords = (el: HTMLElement | null) => {
       if (!el) return [] as HTMLElement[];
+      // Built with DOM APIs, never innerHTML: the source text goes through textContent only,
+      // so it can never be re-interpreted as markup (kills js/xss-through-dom by construction).
       const words = (el.textContent || "").trim().split(/\s+/);
-      el.innerHTML = words.map((w) => `<span class="cwm"><span class="cw">${w}</span></span>`).join(" ");
-      return Array.from(el.querySelectorAll<HTMLElement>(".cw"));
+      el.replaceChildren();
+      const out: HTMLElement[] = [];
+      words.forEach((w, i) => {
+        const mask = document.createElement("span");
+        mask.className = "cwm";
+        const word = document.createElement("span");
+        word.className = "cw";
+        word.textContent = w;
+        mask.appendChild(word);
+        el.appendChild(mask);
+        if (i < words.length - 1) el.appendChild(document.createTextNode(" "));
+        out.push(word);
+      });
+      return out;
     };
 
     const photoState = gsap.utils.toArray<HTMLElement>(".card-photo").map((photo) => {
