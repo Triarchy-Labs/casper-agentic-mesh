@@ -16,11 +16,12 @@ const GATEWAY_MANIFEST = {
 	version: "1.0.0",
 	description: "Pay-per-use AI compute gateway. Submit CSPR, receive AI task results. Casper/Casper native.",
 	onboarding: [
-		"1. Connect CSPR.click wallet (Casper)",
-		"2. Submit CSPR payment via Casper transaction",
+		"1. Hold a funded Casper testnet account (any wallet or raw key; faucet: https://testnet.cspr.live/tools/faucet)",
+		"2. Submit CSPR payment via a native Casper transfer; keep the transaction hash",
 		"3. POST /api/hire with x-l402-txhash header + task description",
 		"4. Receive AI-generated result synchronously or via async delegation",
 	],
+	skill: "https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/AGENT_SKILL.md",
 	data_conventions: {
 		amounts: "All prices in CSPR (e.g. 5.00 = $5). Minimum $0.01, maximum $10,000 per call.",
 		payment: "Casper txHash required. Each hash can only be used once (ReplayGuard: 5min TTL).",
@@ -56,7 +57,8 @@ const GATEWAY_MANIFEST = {
 		wasm_sandbox: "Foreign payloads validated via Extism WASI plugin",
 	},
 	links: {
-		docs: "https://github.com/Triarchy-Labs",
+		docs: "https://github.com/Triarchy-Labs/casper-agentic-mesh",
+		playbook: "https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/PLAYBOOK.md",
 		dashboard: "/dashboard",
 		bounties: "/bounties",
 	},
