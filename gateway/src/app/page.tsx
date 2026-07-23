@@ -10,7 +10,7 @@ import { PixelDecodeText } from "@/components/PixelDecodeText";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
 import { MeshFooter } from "@/components/MeshFooter";
-import { VectorDossier } from "@/components/VectorDossier";
+import { VectorDossier, CursorInspect, type DossierOpen } from "@/components/VectorDossier";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -21,7 +21,11 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 
 export default function Page() {
   const [booted, setBooted] = useState(false);
-  const [dossier, setDossier] = useState<string | null>(null);
+  const [dossier, setDossier] = useState<DossierOpen | null>(null);
+  const openDossier = (slug: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setDossier({ slug, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
+  };
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionsRef = useRef<HTMLDivElement>(null);
 
@@ -247,7 +251,7 @@ export default function Page() {
                 <div className="focus-cards grid grid-cols-12 gap-x-[1.39vw] gap-y-[13.67vh] max-sm:grid-cols-1 max-sm:gap-y-[6vh]">
                   {/* 01 ESCROW — col-span-7, big left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden" data-dossier="escrow" onClick={openDossier("escrow")}>
                       <CornerMarks />
                       {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
                       <div
@@ -258,7 +262,6 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
-                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("escrow"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deposit · release · refund</li>
@@ -286,7 +289,7 @@ export default function Page() {
 
                   {/* 03 OMNI-MESH — col-span-4, right, pushed down (mt-auto) */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:col-end-13 md:mt-auto md:h-fit cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden min-h-[48.8vh] md:min-h-0 md:aspect-[1.04/1]">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative group overflow-hidden min-h-[48.8vh] md:min-h-0 md:aspect-[1.04/1]" data-dossier="omni-mesh" onClick={openDossier("omni-mesh")}>
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
@@ -297,7 +300,6 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
-                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("omni-mesh"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> escrow · oracle · tribunal</li>
@@ -325,7 +327,7 @@ export default function Page() {
 
                   {/* Row 2: wide centered (10) — RWA Risk Oracle */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-10 md:col-start-2 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] md:min-h-0 md:aspect-[1.9/1] flex flex-col justify-center group">
+                    <div className="synergy-section editorial-panel p-[3.5vw] md:p-[4.5vw] relative overflow-hidden border-[var(--red-900)] text-center min-h-[58vh] md:min-h-0 md:aspect-[1.9/1] flex flex-col justify-center group" data-dossier="oracle" onClick={openDossier("oracle")}>
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
@@ -336,7 +338,6 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
-                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("oracle"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <div className="relative z-10 flex flex-col items-center">
                         <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 02 · RWA Risk Oracle · Vector Beta</span>
                         <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">RWA Risk Oracle</h2>
@@ -363,7 +364,7 @@ export default function Page() {
                   {/* Row 3: small-left (4) + big-right (7) */}
                   {/* 04 TRIBUNAL — col-span-4, small left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-4 md:h-fit cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group" data-dossier="tribunal" onClick={openDossier("tribunal")}>
                       <CornerMarks />
                       <div
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
@@ -373,7 +374,6 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
-                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("tribunal"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> prosecutor · defender · jury</li>
@@ -401,7 +401,7 @@ export default function Page() {
 
                   {/* 05 x402 PAYMENT — col-span-7, big right */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 md:col-end-13 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group">
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group" data-dossier="x402" onClick={openDossier("x402")}>
                       <CornerMarks />
                       <div
                         className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
@@ -411,7 +411,6 @@ export default function Page() {
                           transformOrigin: "center center",
                         }}
                       />
-                      <button type="button" onClick={(e) => { e.stopPropagation(); setDossier("x402"); }} className="cf-inspect absolute bottom-[1.4vw] left-[1.4vw] z-30 flex items-center gap-2 label-13-mono uppercase tracking-[0.14em] text-white/85 bg-black/45 backdrop-blur-sm px-3 py-2 border border-white/15 hover:border-[var(--red-700)] opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">inspect <span className="text-[var(--red-700)]">↗</span></button>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> pay-per-call micro-settlements</li>
@@ -459,7 +458,8 @@ export default function Page() {
           </div>
         </main>
       )}
-      <VectorDossier slug={dossier} onClose={() => setDossier(null)} />
+      <CursorInspect />
+      <VectorDossier open={dossier} onClose={() => setDossier(null)} />
     </>
   );
 }

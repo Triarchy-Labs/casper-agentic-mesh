@@ -1,30 +1,39 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState, useCallback } from "react";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
 
-// produx project-detail mechanic, our substance. A card's art expands into a full-screen dossier
-// hero (clip-wipe, their natureSway ease), then their Art Direction section rhythm carries our
-// verifiable content: what it is / how it works / how it synergizes / verify on-chain. Media frames
-// are deliberate placeholders (user fills bespoke art later). Close via ×, ESC, or backdrop.
+gsap.registerPlugin(CustomEase);
+
+// produx project-detail mechanics, faithfully:
+// 1) a VIEW-style pill that FOLLOWS THE CURSOR over a card (their exact rig: fixed element,
+//    xPercent/yPercent -50, gsap.quickTo x/y 0.7s power3.out on window mousemove);
+// 2) click → the card's art MORPHS into the detail hero (FLIP: fixed clone animates from the
+//    card rect to the hero rect on natureSway) — the in-page equivalent of their
+//    startViewTransition shared-element morph;
+// 3) their Art-Direction section rhythm below, carrying our verifiable content;
+// 4) [ CLOSE × ] / ESC reverses the morph back into the card.
 
 const EX = "https://testnet.cspr.live";
 const REPO = "https://github.com/Triarchy-Labs/casper-agentic-mesh";
-const nature: [number, number, number, number] = [0.08, 0.494, 0.14, 1];
 const glide: [number, number, number, number] = [0.1, 0.4, 0.15, 1];
+
+export type DossierOpen = { slug: string; rect: { top: number; left: number; width: number; height: number } };
 
 type Proof = { label: string; href: string };
 type Vector = {
 	slug: string;
-	index: string; // 01..05
+	index: string;
 	kicker: string;
 	title: string;
 	art: string;
 	tags: string[];
-	lede: string; // one-line what-it-is
-	how: string[]; // mechanism, step lines
-	synergy: string; // how it plugs into the other vectors
+	lede: string;
+	how: string[];
+	synergy: string;
 	proof: Proof[];
-	frames: number; // placeholder media frames
+	frames: number;
 };
 
 export const VECTORS: Vector[] = [
@@ -131,6 +140,60 @@ export const VECTORS: Vector[] = [
 	},
 ];
 
+/* ────────────────────────────────────────────────────────────────────────────
+   CURSOR PILL — produx rig verbatim: fixed, centered on cursor, quickTo 0.7s
+   power3.out, appears (opacity/blur/y) while hovering a [data-dossier] panel.
+   ──────────────────────────────────────────────────────────────────────────── */
+export function CursorInspect() {
+	const pillRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const el = pillRef.current;
+		if (!el) return;
+		if (window.matchMedia("(pointer: coarse)").matches) return; // touch: no cursor pill
+
+		gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0, y: 12, filter: "blur(6px)" });
+		const xTo = gsap.quickTo(el, "x", { duration: 0.7, ease: "power3.out" });
+		const yTo = gsap.quickTo(el, "y", { duration: 0.7, ease: "power3.out" });
+
+		const move = (e: MouseEvent) => { xTo(e.clientX); yTo(e.clientY); };
+		window.addEventListener("mousemove", move, { passive: true });
+
+		let inside = false;
+		const over = (e: MouseEvent) => {
+			const panel = (e.target as HTMLElement | null)?.closest?.("[data-dossier]");
+			const nowInside = !!panel;
+			if (nowInside === inside) return;
+			inside = nowInside;
+			gsap.to(el, inside
+				? { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", overwrite: "auto" }
+				: { opacity: 0, y: 12, filter: "blur(6px)", duration: 0.35, ease: "power2.in", overwrite: "auto" });
+			document.body.style.cursor = inside ? "none" : "";
+		};
+		window.addEventListener("mouseover", over, { passive: true });
+
+		return () => {
+			window.removeEventListener("mousemove", move);
+			window.removeEventListener("mouseover", over);
+			document.body.style.cursor = "";
+		};
+	}, []);
+
+	return (
+		<div ref={pillRef} className="pointer-events-none fixed left-0 top-0 z-[9000] flex items-center" aria-hidden>
+			<span className="grid aspect-square h-[1.95vw] min-h-[30px] place-items-center overflow-hidden bg-white mr-[0.6vw]">
+				<span className="text-black leading-none" style={{ fontSize: "0.9vw" }}>↗</span>
+			</span>
+			<span className="label-13-mono uppercase tracking-[0.18em] text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}>
+				inspect
+			</span>
+		</div>
+	);
+}
+
+/* ────────────────────────────────────────────────────────────────────────────
+   DOSSIER — FLIP morph open/close + produx section rhythm.
+   ──────────────────────────────────────────────────────────────────────────── */
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
 	return (
 		<motion.div
@@ -149,63 +212,94 @@ function Section({ n, title, children }: { n: string; title: string; children: R
 	);
 }
 
-export function VectorDossier({ slug, onClose }: { slug: string | null; onClose: () => void }) {
-	const v = VECTORS.find((x) => x.slug === slug) || null;
+export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onClose: () => void }) {
+	const v = open ? VECTORS.find((x) => x.slug === open.slug) || null : null;
+	const [phase, setPhase] = useState<"idle" | "morphing" | "open" | "closing">("idle");
+	const overlayRef = useRef<HTMLDivElement>(null);
+	const scrollerRef = useRef<HTMLDivElement>(null);
+	const heroRef = useRef<HTMLDivElement>(null);
+	const cloneRef = useRef<HTMLDivElement>(null);
+	const srcRect = useRef<DossierOpen["rect"] | null>(null);
 
+	// OPEN: mount → morph clone from card rect to hero rect
 	useEffect(() => {
-		if (!v) return;
+		if (!open || !v) return;
+		srcRect.current = open.rect;
+		setPhase("morphing");
 		const prev = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
-		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+		document.body.style.cursor = "";
+
+		requestAnimationFrame(() => {
+			const clone = cloneRef.current, hero = heroRef.current, ov = overlayRef.current;
+			if (!clone || !hero || !ov) return;
+			try { CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1"); } catch { /* exists */ }
+			const t = hero.getBoundingClientRect();
+			const s = open.rect;
+			gsap.set(clone, { top: s.top, left: s.left, width: s.width, height: s.height, opacity: 1 });
+			gsap.to(ov, { opacity: 1, duration: 0.45, ease: "power2.out" });
+			gsap.to(clone, {
+				top: t.top, left: t.left, width: t.width, height: t.height,
+				duration: 1.0, ease: "natureSway",
+				onComplete: () => setPhase("open"),
+			});
+		});
+
+		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") requestClose(); };
 		window.addEventListener("keydown", onKey);
-		return () => { document.body.style.overflow = prev; window.removeEventListener("keydown", onKey); };
-	}, [v, onClose]);
+		return () => {
+			document.body.style.overflow = prev;
+			window.removeEventListener("keydown", onKey);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [open?.slug]);
+
+	const requestClose = useCallback(() => {
+		const clone = cloneRef.current, hero = heroRef.current, ov = overlayRef.current, sc = scrollerRef.current;
+		const s = srcRect.current;
+		if (!clone || !hero || !ov || !s || !sc) { setPhase("idle"); onClose(); return; }
+		setPhase("closing");
+		const heroVisible = sc.scrollTop < window.innerHeight * 0.6;
+		if (heroVisible) {
+			// reverse morph: hero → card rect
+			const t = hero.getBoundingClientRect();
+			gsap.set(clone, { top: t.top, left: t.left, width: t.width, height: t.height, opacity: 1 });
+			gsap.to(clone, { top: s.top, left: s.left, width: s.width, height: s.height, duration: 0.85, ease: "natureSway" });
+			gsap.to(ov, { opacity: 0, duration: 0.6, ease: "power2.inOut", delay: 0.25, onComplete: () => { setPhase("idle"); onClose(); } });
+		} else {
+			gsap.to(ov, { opacity: 0, duration: 0.5, ease: "power2.inOut", onComplete: () => { setPhase("idle"); onClose(); } });
+		}
+	}, [onClose]);
+
+	if (!open || !v) return null;
+	const showContent = phase === "open";
 
 	return (
-		<AnimatePresence>
-			{v && (
-				<motion.div
-					key={v.slug}
-					className="fixed inset-0 z-[9999] overflow-y-auto overflow-x-hidden"
-					style={{ backgroundColor: "#050305" }}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					exit={{ opacity: 0 }}
-					transition={{ duration: 0.4, ease: glide }}
-				>
-					{/* close */}
-					<button
-						onClick={onClose}
-						aria-label="Close"
-						className="group fixed top-[3vh] right-[3vw] z-[10000] flex items-center gap-2 label-13-mono text-white/70 hover:text-white transition-colors"
-					>
-						<span className="tracking-[0.16em]">[ CLOSE</span>
-						<span className="inline-block transition-transform duration-300 group-hover:rotate-90">✕</span>
-						<span className="tracking-[0.16em]">]</span>
-					</button>
-
+		<div>
+			{/* overlay */}
+			<div
+				ref={overlayRef}
+				className="fixed inset-0 z-[9990]"
+				style={{ backgroundColor: "#050305", opacity: 0 }}
+			>
+				<div ref={scrollerRef} className="h-full w-full overflow-y-auto overflow-x-hidden">
 					<div className="mx-auto w-full max-w-[1500px] px-[5.5vw] pb-[16vh]">
-						{/* HERO — the card art expands to the top (clip-wipe, their mechanic) */}
+						{/* HERO target (real element; clone lands exactly here) */}
 						<div className="pt-[12vh]">
-							<motion.div
-								initial={{ clipPath: "inset(0% 0% 100% 0%)", scale: 1.06 }}
-								animate={{ clipPath: "inset(0% 0% 0% 0%)", scale: 1 }}
-								transition={{ duration: 1, ease: nature }}
-								className="relative w-full aspect-[2.2/1] max-sm:aspect-[1.4/1] overflow-hidden bg-black"
-							>
+							<div ref={heroRef} className="relative w-full aspect-[2.2/1] max-sm:aspect-[1.4/1] overflow-hidden bg-black">
 								<div
 									className="absolute inset-0 bg-cover bg-center"
-									style={{ backgroundImage: `url(${v.art})`, transform: "scale(1.04)" }}
+									style={{ backgroundImage: `url(${v.art})`, opacity: showContent ? 1 : 0 }}
 								/>
-								<div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(5,3,5,0.85), transparent 55%)" }} />
-							</motion.div>
+								<div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(5,3,5,0.85), transparent 55%)", opacity: showContent ? 1 : 0, transition: "opacity 0.4s" }} />
+							</div>
 						</div>
 
 						{/* title block */}
 						<motion.div
-							initial={{ opacity: 0, y: 24 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.9, ease: glide, delay: 0.15 }}
+							initial={false}
+							animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 26 }}
+							transition={{ duration: 0.9, ease: glide }}
 							className="mt-[5vh] flex flex-wrap items-end justify-between gap-6"
 						>
 							<div>
@@ -220,69 +314,85 @@ export function VectorDossier({ slug, onClose }: { slug: string | null; onClose:
 						</motion.div>
 
 						<motion.p
-							initial={{ opacity: 0, y: 20 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.9, ease: glide, delay: 0.25 }}
+							initial={false}
+							animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+							transition={{ duration: 0.9, ease: glide, delay: 0.1 }}
 							className="mt-[4vh] max-w-[62ch] text-white/80"
 							style={{ fontFamily: "var(--font-DM-mono), var(--font-mono), monospace", fontSize: "clamp(16px, 1.35vw, 26px)", lineHeight: 1.5 }}
 						>
 							{v.lede}
 						</motion.p>
 
-						{/* SECTIONS — produx Art Direction rhythm */}
-						<div className="mt-[12vh] flex flex-col gap-[10vh]">
-							<Section n="/01" title="How it works">
-								<div className="flex flex-col gap-[1.2vw]">
-									{v.how.map((line, i) => (
-										<p key={i} className="label-13-mono text-white/75 leading-[1.7] flex gap-3">
-											<span className="text-[var(--red-700)]">→</span>
-											<span>{line}</span>
-										</p>
-									))}
-								</div>
-							</Section>
-
-							{/* placeholder media band — user drops bespoke art here later */}
-							<div className="grid grid-cols-12 gap-[1.39vw]">
-								{Array.from({ length: v.frames }).map((_, i) => (
-									<div
-										key={i}
-										className={`relative overflow-hidden border border-white/10 bg-white/[0.02] ${v.frames === 2 ? "col-span-12 md:col-span-6 aspect-[1.4/1]" : i === 0 ? "col-span-12 aspect-[2.6/1]" : "col-span-12 md:col-span-6 aspect-[1.6/1]"}`}
-									>
-										<div className="absolute inset-0 flex items-center justify-center">
-											<span className="label-12-mono text-white/25 tracking-[0.2em]">◢ MEDIA {v.index}.{i + 1} ◣</span>
-										</div>
-										<div className="absolute left-3 top-3 label-12-mono text-white/20">{v.slug}-img-{i + 1}</div>
+						{showContent && (
+							<div className="mt-[12vh] flex flex-col gap-[10vh]">
+								<Section n="/01" title="How it works">
+									<div className="flex flex-col gap-[1.2vw]">
+										{v.how.map((line, i) => (
+											<p key={i} className="label-13-mono text-white/75 leading-[1.7] flex gap-3">
+												<span className="text-[var(--red-700)]">→</span>
+												<span>{line}</span>
+											</p>
+										))}
 									</div>
-								))}
-							</div>
+								</Section>
 
-							<Section n="/02" title="How it synergizes">
-								<p className="text-white/75 leading-[1.6]" style={{ fontFamily: "var(--font-DM-mono), var(--font-mono), monospace", fontSize: "clamp(15px, 1.2vw, 22px)" }}>
-									{v.synergy}
-								</p>
-							</Section>
-
-							<Section n="/03" title="Verify on-chain">
-								<div className="flex flex-wrap gap-x-[1.6vw] gap-y-3">
-									{v.proof.map((p) => (
-										<a
-											key={p.href}
-											href={p.href}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="group label-13-mono uppercase tracking-[0.12em] text-white/70 hover:text-[var(--red-700)] transition-colors"
+								<div className="grid grid-cols-12 gap-[1.39vw]">
+									{Array.from({ length: v.frames }).map((_, i) => (
+										<div
+											key={i}
+											className={`relative overflow-hidden border border-white/10 bg-white/[0.02] ${v.frames === 2 ? "col-span-12 md:col-span-6 aspect-[1.4/1]" : i === 0 ? "col-span-12 aspect-[2.6/1]" : "col-span-12 md:col-span-6 aspect-[1.6/1]"}`}
 										>
-											[ {p.label} ]
-										</a>
+											<div className="absolute inset-0 flex items-center justify-center">
+												<span className="label-12-mono text-white/25 tracking-[0.2em]">◢ MEDIA {v.index}.{i + 1} ◣</span>
+											</div>
+											<div className="absolute left-3 top-3 label-12-mono text-white/20">{v.slug}-img-{i + 1}</div>
+										</div>
 									))}
 								</div>
-								<p className="mt-6 label-12-mono text-white/35">Don't trust this panel — open the hashes. Full path: PLAYBOOK.md</p>
-							</Section>
-						</div>
+
+								<Section n="/02" title="How it synergizes">
+									<p className="text-white/75 leading-[1.6]" style={{ fontFamily: "var(--font-DM-mono), var(--font-mono), monospace", fontSize: "clamp(15px, 1.2vw, 22px)" }}>
+										{v.synergy}
+									</p>
+								</Section>
+
+								<Section n="/03" title="Verify on-chain">
+									<div className="flex flex-wrap gap-x-[1.6vw] gap-y-3">
+										{v.proof.map((p) => (
+											<a key={p.href} href={p.href} target="_blank" rel="noopener noreferrer" className="label-13-mono uppercase tracking-[0.12em] text-white/70 hover:text-[var(--red-700)] transition-colors">
+												[ {p.label} ]
+											</a>
+										))}
+									</div>
+									<p className="mt-6 label-12-mono text-white/35">Don't trust this panel — open the hashes. Full path: PLAYBOOK.md</p>
+								</Section>
+							</div>
+						)}
 					</div>
-				</motion.div>
+				</div>
+
+				{/* close */}
+				<button
+					onClick={requestClose}
+					aria-label="Close"
+					className="group fixed top-[3vh] right-[3vw] z-[10000] flex items-center gap-2 label-13-mono text-white/70 hover:text-white transition-colors"
+				>
+					<span className="tracking-[0.16em]">[ CLOSE</span>
+					<span className="inline-block transition-transform duration-300 group-hover:rotate-90">✕</span>
+					<span className="tracking-[0.16em]">]</span>
+				</button>
+			</div>
+
+			{/* MORPH CLONE — the card art travelling to/from the hero */}
+			{(phase === "morphing" || phase === "closing") && (
+				<div
+					ref={cloneRef}
+					className="fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
+					style={{ backgroundImage: `url(${v.art})` }}
+				/>
 			)}
-		</AnimatePresence>
+			{/* keep ref mounted during open phase for reverse-measure */}
+			{phase === "open" && <div ref={cloneRef} className="hidden" />}
+		</div>
 	);
 }
