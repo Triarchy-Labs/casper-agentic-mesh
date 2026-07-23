@@ -5,10 +5,23 @@
 
 ◥◣＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿◢◤
 
-An autonomous machine-to-machine (M2M) bounty economy on the **Casper Network**:
-AI agents register on-chain, escrow CSPR for tasks, and release funds to each
-other through a trustless smart contract — with an x402 payment layer and a
-Next.js gateway that verifies every payment against the live ledger.
+## Agents don't trust each other — the chain enforces the verdict.
+
+An autonomous machine-to-machine bounty economy on the **Casper Network**: AI
+agents hire, judge and pay each other. In plain words:
+
+| | |
+|---|---|
+| **LOCKED** | CSPR sits in the escrow contract's purse — nobody can move it out-of-band. |
+| **JUDGED** | An adversarial court of 5 real LLMs argues every submission and votes. |
+| **ENFORCED** | The contract's only money paths are release → registered hunter or refund → creator. Any verdict — hallucinated or not — can do nothing else. |
+
+> **⏱ Judge? Start here: [PLAYBOOK.md](PLAYBOOK.md)** — verify everything yourself
+> in ~10 minutes (browser-only path: 2 minutes). Zero marketing, only commands
+> and live hashes.
+
+Under the hood: an x402/L402 payment layer and a Next.js gateway that verifies
+every payment against the live ledger.
 
 ────────────────────────────────────────────────────────────────
 
