@@ -7,8 +7,7 @@ import { CustomEase } from "gsap/CustomEase";
 gsap.registerPlugin(CustomEase);
 
 // produx project-detail mechanics, faithfully:
-// 1) a VIEW-style pill that FOLLOWS THE CURSOR over a card (their exact rig: fixed element,
-//    xPercent/yPercent -50, gsap.quickTo x/y 0.7s power3.out on window mousemove);
+// 1) the cursor VIEW pill lives in CustomCursor (site-wide, drifting followers);
 // 2) click → the card's art MORPHS into the detail hero (FLIP: fixed clone animates from the
 //    card rect to the hero rect on natureSway) — the in-page equivalent of their
 //    startViewTransition shared-element morph;
@@ -139,64 +138,6 @@ export const VECTORS: Vector[] = [
 		frames: 2,
 	},
 ];
-
-/* ────────────────────────────────────────────────────────────────────────────
-   CURSOR PILL — produx rig verbatim: fixed, centered on cursor, quickTo 0.7s
-   power3.out, appears (opacity/blur/y) while hovering a [data-dossier] panel.
-   ──────────────────────────────────────────────────────────────────────────── */
-export function CursorInspect() {
-	// TWO elements on purpose: the OUTER only ever receives cursor x/y (quickTo), the INNER only
-	// ever receives the reveal tween (opacity/blur/y). Sharing one element let the reveal tween
-	// overwrite-kill quickTo's y driver — the pill froze at the top of the screen (measured live).
-	const posRef = useRef<HTMLDivElement>(null);
-	const revealRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const pos = posRef.current, rev = revealRef.current;
-		if (!pos || !rev) return;
-		if (window.matchMedia("(pointer: coarse)").matches) return; // touch: no cursor pill
-
-		gsap.set(pos, { xPercent: -50, yPercent: -50 });
-		gsap.set(rev, { autoAlpha: 0, y: 12, filter: "blur(6px)" });
-		const xTo = gsap.quickTo(pos, "x", { duration: 0.7, ease: "power3.out" });
-		const yTo = gsap.quickTo(pos, "y", { duration: 0.7, ease: "power3.out" });
-
-		const move = (e: MouseEvent) => { xTo(e.clientX); yTo(e.clientY); };
-		window.addEventListener("mousemove", move, { passive: true });
-
-		let inside = false;
-		const over = (e: MouseEvent) => {
-			const panel = (e.target as HTMLElement | null)?.closest?.("[data-dossier]");
-			const nowInside = !!panel;
-			if (nowInside === inside) return;
-			inside = nowInside;
-			gsap.to(rev, inside
-				? { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", overwrite: "auto" }
-				: { autoAlpha: 0, y: 12, filter: "blur(6px)", duration: 0.35, ease: "power2.in", overwrite: "auto" });
-			document.body.style.cursor = inside ? "none" : "";
-		};
-		window.addEventListener("mouseover", over, { passive: true });
-
-		return () => {
-			window.removeEventListener("mousemove", move);
-			window.removeEventListener("mouseover", over);
-			document.body.style.cursor = "";
-		};
-	}, []);
-
-	return (
-		<div ref={posRef} className="pointer-events-none fixed left-0 top-0 z-[9000]" aria-hidden>
-			<div ref={revealRef} className="flex items-center">
-				<span className="grid aspect-square h-[1.95vw] min-h-[30px] place-items-center overflow-hidden bg-white mr-[0.6vw]">
-					<span className="text-black leading-none" style={{ fontSize: "0.9vw" }}>↗</span>
-				</span>
-				<span className="label-13-mono uppercase tracking-[0.18em] text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}>
-					inspect
-				</span>
-			</div>
-		</div>
-	);
-}
 
 /* ────────────────────────────────────────────────────────────────────────────
    DOSSIER — FLIP morph open/close + produx section rhythm.

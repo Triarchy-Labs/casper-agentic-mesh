@@ -10,7 +10,7 @@ import { PixelDecodeText } from "@/components/PixelDecodeText";
 import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
 import { MeshFooter } from "@/components/MeshFooter";
-import { VectorDossier, CursorInspect, type DossierOpen } from "@/components/VectorDossier";
+import { VectorDossier, type DossierOpen } from "@/components/VectorDossier";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -22,6 +22,12 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 export default function Page() {
   const [booted, setBooted] = useState(false);
   const [dossier, setDossier] = useState<DossierOpen | null>(null);
+  const openFromLink = (slug: string) => (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const panel = document.querySelector(`[data-dossier="${slug}"]`);
+    const r = (panel ?? (e.currentTarget as HTMLElement)).getBoundingClientRect();
+    setDossier({ slug, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
+  };
   const openDossier = (slug: string) => (e: React.MouseEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     setDossier({ slug, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
@@ -108,6 +114,7 @@ export default function Page() {
       // caption elements live in the same grid cell as the panel
       const cell = (frame.closest(".focus-cards > div") as HTMLElement | null) ?? frame.parentElement!;
       const pointer = cell.querySelector<HTMLElement>(".card-pointer");
+      const viewlink = cell.querySelector<HTMLElement>(".card-viewlink");
       const titleWords = splitWords(cell.querySelector<HTMLElement>(".card-title"));
       const descWords = splitWords(cell.querySelector<HTMLElement>(".card-desc"));
       // wipe state: whole panel hidden (void) until it crosses top 85% — produx guard: if already
@@ -116,6 +123,7 @@ export default function Page() {
       if (frame.getBoundingClientRect().top < 0.85 * window.innerHeight) {
         wipe = false;
         gsap.set([...titleWords, ...descWords], { y: "0%", opacity: 1 });
+        if (viewlink) gsap.set(viewlink, { y: 0, opacity: 1, filter: "blur(0px)" });
       } else {
         // NB: no scale pairing — that's their hero-canvas variant only; on a grid a scaled panel
         // would bleed over neighbours. The "stretch" read comes from the inner art being
@@ -123,7 +131,7 @@ export default function Page() {
         gsap.set(frame, { clipPath: "inset(100% 100% 0% 0%)" });
         if (pointer) gsap.set(pointer, { scale: 0 });
       }
-      return { photo, frame, wipe, pointer, titleWords, descWords };
+      return { photo, frame, wipe, pointer, viewlink, titleWords, descWords };
     });
     const onCardScroll = () => {
       const vh = window.innerHeight;
@@ -139,6 +147,8 @@ export default function Page() {
           if (s.pointer) gsap.to(s.pointer, { scale: 1, duration: 0.7, ease: "natureSway" });
           gsap.to(s.titleWords, { y: "0%", opacity: 1, duration: 0.9, stagger: 0.1, ease: "natureSway" });
           gsap.to(s.descWords, { y: "0%", opacity: 1, duration: 0.65, stagger: 0.03, ease: "premiumGlide", delay: 0.1 });
+          // .project-view-link-static reveal from their bundle: 0.7s natureSway, slight delay
+          if (s.viewlink) gsap.to(s.viewlink, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "natureSway", delay: 0.15 });
         }
       });
     };
@@ -283,6 +293,7 @@ export default function Page() {
                       <div className="flex flex-col gap-[0.73vw]">
                         <h3 className="card-title heading-32 leading-tight">Autonomous Escrow</h3>
                         <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The zero-trust bedrock of the mesh. Rust/WASM smart contracts with real on-chain settlement.</p>
+                        <button type="button" onClick={openFromLink("escrow")} aria-label="View vector" className="card-viewlink group/vl mt-[0.5vh] flex w-fit items-center opacity-0 translate-y-3 blur-[6px] cursor-pointer"><span className="mr-[0.6vw] grid aspect-square h-[1.6vw] min-h-[26px] place-items-center overflow-hidden bg-white"><span className="text-black leading-none text-[0.8vw] transition-transform duration-300 group-hover/vl:translate-x-[2px] group-hover/vl:-translate-y-[2px]">↗</span></span><span className="label-13-mono uppercase tracking-[0.16em] text-white/80 group-hover/vl:text-white transition-colors">view vector</span></button>
                       </div>
                     </div>
                   </div>
@@ -321,6 +332,7 @@ export default function Page() {
                       <div className="flex flex-col gap-[0.73vw]">
                         <h3 className="card-title heading-32 leading-tight">The Omni-Mesh</h3>
                         <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The economic OS for AI agents. All vectors converging into one organism.</p>
+                        <button type="button" onClick={openFromLink("omni-mesh")} aria-label="View vector" className="card-viewlink group/vl mt-[0.5vh] flex w-fit items-center opacity-0 translate-y-3 blur-[6px] cursor-pointer"><span className="mr-[0.6vw] grid aspect-square h-[1.6vw] min-h-[26px] place-items-center overflow-hidden bg-white"><span className="text-black leading-none text-[0.8vw] transition-transform duration-300 group-hover/vl:translate-x-[2px] group-hover/vl:-translate-y-[2px]">↗</span></span><span className="label-13-mono uppercase tracking-[0.16em] text-white/80 group-hover/vl:text-white transition-colors">view vector</span></button>
                       </div>
                     </div>
                   </div>
@@ -357,6 +369,7 @@ export default function Page() {
                       <div className="flex flex-col gap-[0.73vw]">
                         <h3 className="card-title heading-32 leading-tight">RWA Risk Oracle</h3>
                         <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">The Sentinel. A live on-chain data feed with agent identity and accruing reputation.</p>
+                        <button type="button" onClick={openFromLink("oracle")} aria-label="View vector" className="card-viewlink group/vl mt-[0.5vh] flex w-fit items-center opacity-0 translate-y-3 blur-[6px] cursor-pointer"><span className="mr-[0.6vw] grid aspect-square h-[1.6vw] min-h-[26px] place-items-center overflow-hidden bg-white"><span className="text-black leading-none text-[0.8vw] transition-transform duration-300 group-hover/vl:translate-x-[2px] group-hover/vl:-translate-y-[2px]">↗</span></span><span className="label-13-mono uppercase tracking-[0.16em] text-white/80 group-hover/vl:text-white transition-colors">view vector</span></button>
                       </div>
                     </div>
                   </div>
@@ -395,6 +408,7 @@ export default function Page() {
                       <div className="flex flex-col gap-[0.73vw]">
                         <h3 className="card-title heading-32 leading-tight">Agent Tribunal</h3>
                         <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">An adversarial court of real models that rules on work and moves CSPR on-chain.</p>
+                        <button type="button" onClick={openFromLink("tribunal")} aria-label="View vector" className="card-viewlink group/vl mt-[0.5vh] flex w-fit items-center opacity-0 translate-y-3 blur-[6px] cursor-pointer"><span className="mr-[0.6vw] grid aspect-square h-[1.6vw] min-h-[26px] place-items-center overflow-hidden bg-white"><span className="text-black leading-none text-[0.8vw] transition-transform duration-300 group-hover/vl:translate-x-[2px] group-hover/vl:-translate-y-[2px]">↗</span></span><span className="label-13-mono uppercase tracking-[0.16em] text-white/80 group-hover/vl:text-white transition-colors">view vector</span></button>
                       </div>
                     </div>
                   </div>
@@ -432,6 +446,7 @@ export default function Page() {
                       <div className="flex flex-col gap-[0.73vw]">
                         <h3 className="card-title heading-32 leading-tight">x402 Payment Layer</h3>
                         <p className="card-desc label-13-mono text-[var(--gray-800)] uppercase">HTTP 402 native. Agents pay per API call with real CSPR — no subscriptions, no keys, just value for value.</p>
+                        <button type="button" onClick={openFromLink("x402")} aria-label="View vector" className="card-viewlink group/vl mt-[0.5vh] flex w-fit items-center opacity-0 translate-y-3 blur-[6px] cursor-pointer"><span className="mr-[0.6vw] grid aspect-square h-[1.6vw] min-h-[26px] place-items-center overflow-hidden bg-white"><span className="text-black leading-none text-[0.8vw] transition-transform duration-300 group-hover/vl:translate-x-[2px] group-hover/vl:-translate-y-[2px]">↗</span></span><span className="label-13-mono uppercase tracking-[0.16em] text-white/80 group-hover/vl:text-white transition-colors">view vector</span></button>
                       </div>
                     </div>
                   </div>
@@ -458,7 +473,6 @@ export default function Page() {
           </div>
         </main>
       )}
-      <CursorInspect />
       <VectorDossier open={dossier} onClose={() => setDossier(null)} />
     </>
   );
