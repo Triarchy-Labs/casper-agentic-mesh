@@ -194,10 +194,10 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		if (sc) sc.scrollTop = 0;
 		const t = hero.getBoundingClientRect();
 		gsap.set(clone, { top: s.top, left: s.left, width: s.width, height: s.height, autoAlpha: 1 });
-		gsap.to(ov, { opacity: 1, duration: 0.45, ease: "power2.out" });
+		gsap.to(ov, { opacity: 1, duration: 0.6, ease: "power2.out" });
 		const tween = gsap.to(clone, {
 			top: t.top, left: t.left, width: t.width, height: t.height,
-			duration: 1.0, ease: "natureSway",
+			duration: 1.25, ease: "power2.inOut",
 			onComplete: () => setPhase("open"),
 		});
 		return () => { tween.kill(); };
@@ -225,7 +225,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		if (heroVisible) {
 			const t = hero.getBoundingClientRect();
 			gsap.set(clone, { top: t.top, left: t.left, width: t.width, height: t.height, autoAlpha: 1 });
-			gsap.to(clone, { top: s.top, left: s.left, width: s.width, height: s.height, duration: 0.85, ease: "natureSway" });
+			gsap.to(clone, { top: s.top, left: s.left, width: s.width, height: s.height, duration: 1.0, ease: "power2.inOut" });
 			gsap.to(ov, { opacity: 0, duration: 0.6, ease: "power2.inOut", delay: 0.25, onComplete: finish });
 		} else {
 			gsap.to(ov, { opacity: 0, duration: 0.5, ease: "power2.inOut", onComplete: finish });
@@ -247,7 +247,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 				className="fixed inset-0 z-[9990]"
 				style={{ backgroundColor: "#050305", opacity: 0 }}
 			>
-				<div ref={scrollerRef} className="h-full w-full overflow-y-auto overflow-x-hidden">
+				<div ref={scrollerRef} data-lenis-prevent className="h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain">
 					{/* ── TEXT HERO — produx /projects layout: kicker + big title LEFT, lede below-left,
 					       tags RIGHT; dark block first, image comes after it, full-bleed. Visible from
 					       the very start of the morph (like their page nav), not gated on it. ── */}
