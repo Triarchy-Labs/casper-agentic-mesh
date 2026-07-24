@@ -110,6 +110,7 @@ const HERO_PIECES = [
 
 export function ScrollHero() {
 	const heroRef = useRef<HTMLElement>(null);
+	const montageRef = useRef<HTMLVideoElement>(null);
 	const wordmarkRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<HTMLDivElement>(null);
 	const subtitleRef = useRef<HTMLDivElement>(null);
@@ -188,13 +189,22 @@ export function ScrollHero() {
 				scrollTrigger: {
 					trigger: heroRef.current,
 					start: "top top",
-					// 400%: same px-per-timeline-unit rate as the approved 340%/1.67 pacing — the extra
-					// scroll feeds the shatter finale (1.67 -> 1.96) that masks the pin release.
-					end: "+=400%",
+					// 490%: same px-per-timeline-unit rate as the approved 400%/1.96 pacing — the extra
+					// scroll now feeds the MONTAGE ZOOM finale (1.6 -> 2.4): the assembled image hands
+					// off to a video that the scroll inflates from the mosaic rect to near-fullscreen.
+					end: "+=490%",
 					pin: true,
 					scrub: 1.2,
 					anticipatePin: 1,
 					invalidateOnRefresh: true,
+					// montage video: starts DOWNLOADING+playing only once the mosaic is assembling
+					// (progress ~0.55); pausing when scrubbed back out. preload="none" until then.
+					onUpdate: (self) => {
+						const v = montageRef.current;
+						if (!v) return;
+						if (self.progress > 0.55 && v.paused) v.play().catch(() => {});
+						else if (self.progress < 0.5 && !v.paused) v.pause();
+					},
 				},
 			});
 			// 1. subtitle melts out as the REVERSE of the nav fog-reveal — fade + blur in place,
@@ -280,41 +290,61 @@ export function ScrollHero() {
 			// reveal the crystal aura once the image is assembled (it keeps CSS-pulsing on its own)
 			tl.to(".crystal-reveal", { opacity: 1, duration: 0.24, ease: "power2.out" }, 1.42);
 
-			// FINALE — the exit masked by motion (user call). The wall was only visible because a
-			// high-contrast STATIC image sat on screen at the pin release. So the frame never
-			// freezes: after a short assembled beat the image SHATTERS back into squares with
-			// rising blur while the frame sinks toward black; the crystal's pulse is the last
-			// light to dissolve. The release lands on a nearly-black, still-moving frame — a
-			// velocity seam the eye cannot see. Scrolling back re-assembles it (scrub symmetry).
-			tl.to(".assembly-text-overlay", { opacity: 0, y: -12, duration: 0.07, ease: "power2.in", stagger: 0.02 }, 1.7);
-			HERO_PIECES.forEach((p) => {
-				tl.to(
-					`.assembly-slice-${p.id}`,
-					{
-						xPercent: p.sx * 0.6,
-						yPercent: p.sy * 0.6,
-						z: p.sz * 0.4,
-						scale: 0.72,
-						opacity: 0,
-						filter: "blur(12px)",
-						force3D: true,
-						ease: "power2.in",
-						duration: 0.18,
-					},
-					1.72 + (p.pri / C) * 0.06
-				);
-			});
-			tl.to(".assembly-scrim", { opacity: 0.8, duration: 0.2, ease: "power1.in" }, 1.72);
-			// the crystal dies last — a red heartbeat over the dark as the page starts to flow
-			tl.to(".crystal-reveal", { opacity: 0, scale: 0.6, duration: 0.12, ease: "power2.in" }, 1.84);
-			tl.to(".assembly-rise", { autoAlpha: 0, duration: 0.06, ease: "none" }, 1.9);
+			// FINALE — produx montage-zoom (replaces the shatter, which existed only to mask the
+			// pin release with motion; a living fullscreen video does that job outright). As soon
+			// as the image is assembled: the video fades in EXACTLY over the mosaic rect, then the
+			// remaining scroll doesn't travel the page — it INFLATES the video to near-fullscreen.
+			// The pin releases on a full-frame moving shot: a velocity seam the eye cannot see.
+			// Rect measured through the transform-free offset chain (immune to mid-tween measures).
+			const frameRect = () => {
+				const hero = heroRef.current as HTMLElement | null;
+				const frame = hero?.querySelector<HTMLElement>(".assembly-image-container");
+				if (!hero || !frame) {
+					const w = window.innerWidth * 0.74;
+					return { top: window.innerHeight * 0.2, left: window.innerWidth * 0.13, w, h: w / 1.784 };
+				}
+				let top = 0, left = 0;
+				let el: HTMLElement | null = frame;
+				while (el && el !== hero) { top += el.offsetTop; left += el.offsetLeft; el = el.offsetParent as HTMLElement | null; }
+				return { top, left, w: frame.offsetWidth, h: frame.offsetHeight };
+			};
+			// overlays step aside; the crystal's pulse hands over to the moving image
+			tl.to(".assembly-text-overlay", { opacity: 0, y: -12, duration: 0.08, ease: "power2.in", stagger: 0.02 }, 1.58);
+			tl.to(".crystal-reveal", { opacity: 0, duration: 0.08, ease: "power2.in" }, 1.58);
+			// the video materialises in the mosaic's exact rect
+			tl.set(".montage-zoom", {
+				top: () => frameRect().top, left: () => frameRect().left,
+				width: () => frameRect().w, height: () => frameRect().h,
+			}, 1.6);
+			tl.to(".montage-zoom", { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 1.62);
+			// THE ZOOM — scroll inflates it to ~96vw/94vh while the pin holds (produx signature)
+			tl.to(".montage-zoom", {
+				top: () => window.innerHeight * 0.03,
+				left: () => window.innerWidth * 0.02,
+				width: () => window.innerWidth * 0.96,
+				height: () => window.innerHeight * 0.94,
+				duration: 0.5, ease: "power2.inOut",
+			}, 1.78);
+			// the mosaic below quietly leaves once fully covered
+			tl.to(".assembly-rise", { autoAlpha: 0, duration: 0.1, ease: "none" }, 1.86);
+			// hold the full living frame a beat, then the pin lets go
+			tl.to({}, { duration: 0.12 }, 2.28);
 		}, heroRef);
+
+		const onScrollPause = () => {
+			const v = montageRef.current, hero = heroRef.current;
+			if (!v || !hero) return;
+			const r = hero.getBoundingClientRect();
+			if (r.bottom <= 0 && !v.paused) v.pause();
+			else if (r.bottom > 0 && v.paused && v.currentTime > 0) v.play().catch(() => {});
+		};
+		window.addEventListener("scroll", onScrollPause, { passive: true });
 
 		// Fonts change the measured widths — re-measure once they load so the landing is exact.
 		if (typeof document !== "undefined" && document.fonts) {
 			document.fonts.ready.then(() => ScrollTrigger.refresh());
 		}
-		return () => ctx.revert();
+		return () => { window.removeEventListener("scroll", onScrollPause); ctx.revert(); };
 	}, []);
 
 	return (
@@ -601,6 +631,24 @@ export function ScrollHero() {
 							<span className="nb-index">2026</span>
 						</div>
 					</div>
+				</div>
+
+				{/* MONTAGE ZOOM — produx finale: video takes the assembled image's exact rect, then the
+				    scroll inflates it to near-fullscreen while the pin holds. Lazy by construction:
+				    preload="none", playback (= download) starts only when the mosaic is assembling. */}
+				<div className="montage-zoom absolute z-[35] overflow-hidden pointer-events-none" style={{ top: 0, left: 0, width: 0, height: 0, opacity: 0, visibility: "hidden" }}>
+					<video
+						ref={montageRef}
+						muted
+						loop
+						playsInline
+						preload="none"
+						poster="/hero-montage-poster.jpg"
+						className="h-full w-full object-cover"
+					>
+						<source src="/hero-montage.webm" type="video/webm" />
+						<source src="/hero-montage.mp4" type="video/mp4" />
+					</video>
 				</div>
 				</section>
 		</>
