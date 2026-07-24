@@ -156,7 +156,7 @@ export function MeshFooter() {
 						<img
 							src="/footer-crimson-poster.jpg"
 							alt="CASPER — the crimson megacity"
-							className="absolute inset-0 h-full w-full object-cover"
+							className="absolute left-1/2 top-1/2 h-[116%] w-[116%] -translate-x-1/2 -translate-y-1/2 object-cover"
 						/>
 						<video
 							ref={vidRef}
@@ -165,7 +165,7 @@ export function MeshFooter() {
 							playsInline
 							preload="none"
 							poster="/footer-crimson-poster.jpg"
-							className="absolute inset-0 h-full w-full object-cover"
+							className="absolute left-1/2 top-1/2 h-[116%] w-[116%] -translate-x-1/2 -translate-y-1/2 object-cover"
 							style={{ opacity: playing ? 1 : 0, transition: "opacity 1.4s ease" }}
 						>
 							<source src="/footer-crimson.webm" type="video/webm" />
