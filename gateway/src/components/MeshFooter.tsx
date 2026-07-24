@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
 // produx footer skeleton (from their static HTML), fused with our content:
@@ -57,6 +57,25 @@ function SocialSquare({ glyph, href, title }: { glyph: string; href: string; tit
 export function MeshFooter() {
 	const footRef = useRef<HTMLElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
+	const vidRef = useRef<HTMLVideoElement>(null);
+	const bannerRef = useRef<HTMLDivElement>(null);
+	const [playing, setPlaying] = useState(false);
+
+	// Lazy cinematic banner: preload="none" keeps the network silent until the banner actually
+	// enters the viewport — only then play() (which triggers the download). Leaving the section
+	// pauses playback, so an idle tab/page never burns cycles on an off-screen loop.
+	useEffect(() => {
+		const vid = vidRef.current, banner = bannerRef.current;
+		if (!vid || !banner) return;
+		const onPlaying = () => setPlaying(true);
+		vid.addEventListener("playing", onPlaying);
+		const io = new IntersectionObserver(
+			([e]) => { if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause(); },
+			{ threshold: 0.12 }
+		);
+		io.observe(banner);
+		return () => { vid.removeEventListener("playing", onPlaying); io.disconnect(); };
+	}, []);
 
 	useEffect(() => {
 		const foot = footRef.current;
@@ -130,14 +149,29 @@ export function MeshFooter() {
 					</div>
 				</div>
 
-				{/* ---- the big-logo slot: CASPER girl banner + giant wordmark ---- */}
-				<div className="relative mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
-					{/* native image ratio (5504x3072 = 1.792/1) — nothing cropped, the girl sits whole */}
-					<div
-						className="footer-casper-banner w-full aspect-[1.792/1] bg-cover"
-						style={{ backgroundImage: "url(/footer-casper.jpg)", backgroundPosition: "50% 50%" }}
-						aria-label="CASPER — overseer of the mesh"
-					/>
+				{/* ---- the big-logo slot: crimson megacity LIVE banner ---- */}
+				<div ref={bannerRef} className="relative mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
+					<div className="relative w-full aspect-[16/9]">
+						{/* poster paints instantly (412KB), the 4s loop cross-fades over it once playing */}
+						<img
+							src="/footer-crimson-poster.jpg"
+							alt="CASPER — the crimson megacity"
+							className="absolute inset-0 h-full w-full object-cover"
+						/>
+						<video
+							ref={vidRef}
+							muted
+							loop
+							playsInline
+							preload="none"
+							poster="/footer-crimson-poster.jpg"
+							className="absolute inset-0 h-full w-full object-cover"
+							style={{ opacity: playing ? 1 : 0, transition: "opacity 1.4s ease" }}
+						>
+							<source src="/footer-crimson.webm" type="video/webm" />
+							<source src="/footer-crimson.mp4" type="video/mp4" />
+						</video>
+					</div>
 					{/* cinematic vignette: edges sink into the footer's black, bottom melts into it */}
 					<div
 						className="pointer-events-none absolute inset-0"

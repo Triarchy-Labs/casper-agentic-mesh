@@ -11,6 +11,7 @@ import { EcosystemStrips } from "@/components/EcosystemStrips";
 import { CrystalForge } from "@/components/CrystalForge";
 import { MeshFooter } from "@/components/MeshFooter";
 import { VectorDossier, type DossierOpen } from "@/components/VectorDossier";
+import { OneClickHub } from "@/components/OneClickHub";
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -486,6 +487,7 @@ export default function Page() {
           </div>
         </main>
       )}
+      <OneClickHub />
       <VectorDossier open={dossier} onClose={() => setDossier(null)} />
     </>
   );
