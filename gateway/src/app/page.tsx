@@ -136,8 +136,8 @@ export default function Page() {
       let vlCleanup: (() => void) | null = null;
       if (viewlink) {
         if (window.matchMedia("(pointer: fine)").matches) {
-          const show = () => gsap.to(viewlink, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "natureSway", overwrite: "auto" });
-          const hide = () => gsap.to(viewlink, { y: 12, opacity: 0, filter: "blur(6px)", duration: 0.35, ease: "power2.in", overwrite: "auto" });
+          const show = () => gsap.to(viewlink, { y: 0, opacity: 1, filter: "blur(0px)", duration: 0.7, ease: "natureSway", overwrite: "auto" });
+          const hide = () => gsap.to(viewlink, { y: 14, opacity: 0, filter: "blur(8px)", duration: 0.5, ease: "power2.inOut", overwrite: "auto" });
           cell.addEventListener("mouseenter", show);
           cell.addEventListener("mouseleave", hide);
           vlCleanup = () => { cell.removeEventListener("mouseenter", show); cell.removeEventListener("mouseleave", hide); };

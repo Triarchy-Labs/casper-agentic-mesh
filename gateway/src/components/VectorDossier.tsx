@@ -220,7 +220,8 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		const s = srcRect.current;
 		const finish = () => { setPhase("idle"); onClose(); };
 		if (!clone || !hero || !ov || !s || !sc) { finish(); return; }
-		const heroVisible = sc.scrollTop < window.innerHeight * 0.6;
+		const hr = hero.getBoundingClientRect();
+		const heroVisible = hr.bottom > 0 && hr.top < window.innerHeight;
 		if (heroVisible) {
 			const t = hero.getBoundingClientRect();
 			gsap.set(clone, { top: t.top, left: t.left, width: t.width, height: t.height, autoAlpha: 1 });
@@ -247,46 +248,45 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 				style={{ backgroundColor: "#050305", opacity: 0 }}
 			>
 				<div ref={scrollerRef} className="h-full w-full overflow-y-auto overflow-x-hidden">
-					<div className="mx-auto w-full max-w-[1500px] px-[5.5vw] pb-[16vh]">
-						{/* HERO target (real element; clone lands exactly here) */}
-						<div className="pt-[12vh]">
-							<div ref={heroRef} className="relative w-full aspect-[2.2/1] max-sm:aspect-[1.4/1] overflow-hidden bg-black">
-								<div
-									className="absolute inset-0 bg-cover bg-center"
-									style={{ backgroundImage: `url(${v.art})`, opacity: showContent ? 1 : 0 }}
-								/>
-								<div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(to top, rgba(5,3,5,0.85), transparent 55%)", opacity: showContent ? 1 : 0, transition: "opacity 0.4s" }} />
-							</div>
-						</div>
-
-						{/* title block */}
+					{/* ── TEXT HERO — produx /projects layout: kicker + big title LEFT, lede below-left,
+					       tags RIGHT; dark block first, image comes after it, full-bleed. Visible from
+					       the very start of the morph (like their page nav), not gated on it. ── */}
+					<div className="mx-auto w-full max-w-[1500px] px-[5.5vw] pt-[16vh] pb-[8vh] max-sm:pt-[12vh]">
 						<motion.div
-							initial={false}
-							animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 26 }}
-							transition={{ duration: 0.9, ease: glide }}
+							initial={{ opacity: 0, y: 26 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.9, ease: glide, delay: 0.15 }}
+						>
+							<span className="label-14-mono text-[var(--red-700)]">{v.index} // {v.kicker}</span>
+							<h2 className="mt-3 uppercase leading-[0.95]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(40px, 6vw, 104px)", fontWeight: 400 }}>
+								{v.title}
+							</h2>
+						</motion.div>
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.9, ease: glide, delay: 0.3 }}
 							className="mt-[5vh] flex flex-wrap items-end justify-between gap-6"
 						>
-							<div>
-								<span className="label-14-mono text-[var(--red-700)]">{v.index} // {v.kicker}</span>
-								<h2 className="mt-3 uppercase leading-[0.95]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(40px, 6vw, 104px)", fontWeight: 400 }}>
-									{v.title}
-								</h2>
-							</div>
-							<div className="flex gap-2 flex-wrap pb-2">
+							<p className="max-w-[52ch] text-white/80" style={{ fontFamily: "var(--font-DM-mono), var(--font-mono), monospace", fontSize: "clamp(15px, 1.15vw, 22px)", lineHeight: 1.55 }}>
+								{v.lede}
+							</p>
+							<div className="flex gap-2 flex-wrap pb-1">
 								{v.tags.map((t) => <span key={t} className="nb-tag">{t}</span>)}
 							</div>
 						</motion.div>
+					</div>
 
-						<motion.p
-							initial={false}
-							animate={showContent ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-							transition={{ duration: 0.9, ease: glide, delay: 0.1 }}
-							className="mt-[4vh] max-w-[62ch] text-white/80"
-							style={{ fontFamily: "var(--font-DM-mono), var(--font-mono), monospace", fontSize: "clamp(16px, 1.35vw, 26px)", lineHeight: 1.5 }}
-						>
-							{v.lede}
-						</motion.p>
+					{/* ── FULL-BLEED IMAGE — the morph target: the card art lands edge-to-edge, like
+					       their project photo taking the whole page width. ── */}
+					<div ref={heroRef} className="relative w-full aspect-[1.9/1] max-sm:aspect-[1.3/1] overflow-hidden bg-black">
+						<div
+							className="absolute inset-0 bg-cover bg-center"
+							style={{ backgroundImage: `url(${v.art})`, opacity: showContent ? 1 : 0 }}
+						/>
+					</div>
 
+					<div className="mx-auto w-full max-w-[1500px] px-[5.5vw] pb-[16vh]">
 						{showContent && (
 							<div className="mt-[12vh] flex flex-col gap-[10vh]">
 								<Section n="/01" title="How it works">
