@@ -932,3 +932,10 @@ html.lenis, html.lenis body { height: auto; }
 	50%  { opacity: 0.9; }
 	100% { transform: translate3d(6px, -22px, 0); opacity: 0.4; }
 }
+
+/* Dossier scroll hint — soft breathing pulse with a downward nudge */
+.scroll-hint-pulse { display: inline-block; animation: scrollHintPulse 2.2s ease-in-out infinite; }
+@keyframes scrollHintPulse {
+	0%, 100% { opacity: 0.3; transform: translateY(0); }
+	50%      { opacity: 0.8; transform: translateY(4px); }
+}

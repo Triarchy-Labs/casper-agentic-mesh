@@ -164,6 +164,7 @@ function Section({ n, title, children }: { n: string; title: string; children: R
 export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onClose: () => void }) {
 	const v = open ? VECTORS.find((x) => x.slug === open.slug) || null : null;
 	const [phase, setPhase] = useState<"idle" | "morphing" | "open" | "closing">("idle");
+	const [hintGone, setHintGone] = useState(false);
 	const overlayRef = useRef<HTMLDivElement>(null);
 	const scrollerRef = useRef<HTMLDivElement>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -195,9 +196,12 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		const wrapper = scrollerRef.current, content = contentRef.current;
 		if (!wrapper || !content) return;
 		const lenis = new Lenis({ wrapper, content, lerp: 0.05, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.6 });
+		setHintGone(false);
+		const onScroll = () => { if (wrapper.scrollTop > 60) setHintGone(true); };
+		wrapper.addEventListener("scroll", onScroll, { passive: true });
 		const raf = (time: number) => lenis.raf(time * 1000);
 		gsap.ticker.add(raf);
-		return () => { gsap.ticker.remove(raf); lenis.destroy(); };
+		return () => { wrapper.removeEventListener("scroll", onScroll); gsap.ticker.remove(raf); lenis.destroy(); };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [open?.slug]);
 
@@ -352,6 +356,17 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 						)}
 					</div>
 					</div>
+				</div>
+
+				{/* scroll hint — pulses over the full-bleed art, dies on first scroll */}
+				<div
+					className="pointer-events-none fixed bottom-[4vh] left-1/2 -translate-x-1/2 z-[9998] flex items-center gap-2 transition-opacity duration-700"
+					style={{ opacity: phase === "open" && !hintGone ? 0.65 : 0 }}
+					aria-hidden
+				>
+					<span className="scroll-hint-pulse label-12-mono uppercase tracking-[0.3em] text-white/45" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}>
+						[ scroll <span className="text-[var(--red-700)]/70">↓</span> ]
+					</span>
 				</div>
 
 				{/* close */}
