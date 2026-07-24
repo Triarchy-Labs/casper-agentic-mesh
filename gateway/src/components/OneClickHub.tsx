@@ -53,11 +53,11 @@ export function OneClickHub() {
 						exit={{ opacity: 0, y: 26 }}
 						transition={{ duration: 0.5, ease: glide }}
 						onClick={() => setOpenHub(true)}
-						className="fixed bottom-[3.2vh] left-1/2 -translate-x-1/2 z-[8500] flex items-center gap-3 border border-white/15 bg-[#0a0508]/90 backdrop-blur-md px-5 py-3 cursor-pointer hover:border-[var(--red-700)] transition-colors duration-300"
+						className="group fixed bottom-[3.2vh] left-1/2 -translate-x-1/2 z-[8500] flex items-center justify-center gap-3.5 border border-white/[0.08] bg-[#0a0508]/45 backdrop-blur-md px-10 py-3.5 min-w-[240px] cursor-pointer transition-all duration-500 hover:border-[var(--red-700)] hover:bg-[#0a0508]/95"
 						aria-label="Open the one-click hub"
 					>
-						<span className="size-[7px] bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
-						<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">one click</span>
+						<span className="size-[7px] bg-[var(--red-700)] opacity-40 transition-opacity duration-500 group-hover:opacity-100" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
+						<span className="label-13-mono uppercase tracking-[0.26em] text-white/55 transition-colors duration-500 group-hover:text-white">one click</span>
 					</motion.button>
 				)}
 			</AnimatePresence>
