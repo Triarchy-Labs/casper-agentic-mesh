@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
+import Lenis from "lenis";
 import { CustomEase } from "gsap/CustomEase";
 
 gsap.registerPlugin(CustomEase);
@@ -165,6 +166,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 	const [phase, setPhase] = useState<"idle" | "morphing" | "open" | "closing">("idle");
 	const overlayRef = useRef<HTMLDivElement>(null);
 	const scrollerRef = useRef<HTMLDivElement>(null);
+	const contentRef = useRef<HTMLDivElement>(null);
 	const heroRef = useRef<HTMLDivElement>(null);
 	const cloneRef = useRef<HTMLDivElement>(null);
 	const srcRect = useRef<DossierOpen["rect"] | null>(null);
@@ -181,6 +183,21 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		document.body.style.overflow = "hidden";
 		document.body.style.cursor = "";
 		return () => { document.body.style.overflow = prev; };
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [open?.slug]);
+
+	// LOCAL smooth scroll for the dossier: the root Lenis is told to ignore this subtree
+	// (data-lenis-prevent), which left the overlay with raw native wheel. A scoped Lenis
+	// instance (wrapper/content mode) restores the exact site-wide oil (lerp 0.05) inside,
+	// living only while the dossier is open.
+	useEffect(() => {
+		if (!open) return;
+		const wrapper = scrollerRef.current, content = contentRef.current;
+		if (!wrapper || !content) return;
+		const lenis = new Lenis({ wrapper, content, lerp: 0.05, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.6 });
+		const raf = (time: number) => lenis.raf(time * 1000);
+		gsap.ticker.add(raf);
+		return () => { gsap.ticker.remove(raf); lenis.destroy(); };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [open?.slug]);
 
@@ -248,6 +265,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 				style={{ backgroundColor: "#050305", opacity: 0 }}
 			>
 				<div ref={scrollerRef} data-lenis-prevent className="h-full w-full overflow-y-auto overflow-x-hidden overscroll-contain">
+					<div ref={contentRef}>
 					{/* ── TEXT HERO — produx /projects layout: kicker + big title LEFT, lede below-left,
 					       tags RIGHT; dark block first, image comes after it, full-bleed. Visible from
 					       the very start of the morph (like their page nav), not gated on it. ── */}
@@ -332,6 +350,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 								</Section>
 							</div>
 						)}
+					</div>
 					</div>
 				</div>
 
