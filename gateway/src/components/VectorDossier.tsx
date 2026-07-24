@@ -145,16 +145,21 @@ export const VECTORS: Vector[] = [
    power3.out, appears (opacity/blur/y) while hovering a [data-dossier] panel.
    ──────────────────────────────────────────────────────────────────────────── */
 export function CursorInspect() {
-	const pillRef = useRef<HTMLDivElement>(null);
+	// TWO elements on purpose: the OUTER only ever receives cursor x/y (quickTo), the INNER only
+	// ever receives the reveal tween (opacity/blur/y). Sharing one element let the reveal tween
+	// overwrite-kill quickTo's y driver — the pill froze at the top of the screen (measured live).
+	const posRef = useRef<HTMLDivElement>(null);
+	const revealRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const el = pillRef.current;
-		if (!el) return;
+		const pos = posRef.current, rev = revealRef.current;
+		if (!pos || !rev) return;
 		if (window.matchMedia("(pointer: coarse)").matches) return; // touch: no cursor pill
 
-		gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0, y: 12, filter: "blur(6px)" });
-		const xTo = gsap.quickTo(el, "x", { duration: 0.7, ease: "power3.out" });
-		const yTo = gsap.quickTo(el, "y", { duration: 0.7, ease: "power3.out" });
+		gsap.set(pos, { xPercent: -50, yPercent: -50 });
+		gsap.set(rev, { autoAlpha: 0, y: 12, filter: "blur(6px)" });
+		const xTo = gsap.quickTo(pos, "x", { duration: 0.7, ease: "power3.out" });
+		const yTo = gsap.quickTo(pos, "y", { duration: 0.7, ease: "power3.out" });
 
 		const move = (e: MouseEvent) => { xTo(e.clientX); yTo(e.clientY); };
 		window.addEventListener("mousemove", move, { passive: true });
@@ -165,9 +170,9 @@ export function CursorInspect() {
 			const nowInside = !!panel;
 			if (nowInside === inside) return;
 			inside = nowInside;
-			gsap.to(el, inside
-				? { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", overwrite: "auto" }
-				: { opacity: 0, y: 12, filter: "blur(6px)", duration: 0.35, ease: "power2.in", overwrite: "auto" });
+			gsap.to(rev, inside
+				? { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.5, ease: "power3.out", overwrite: "auto" }
+				: { autoAlpha: 0, y: 12, filter: "blur(6px)", duration: 0.35, ease: "power2.in", overwrite: "auto" });
 			document.body.style.cursor = inside ? "none" : "";
 		};
 		window.addEventListener("mouseover", over, { passive: true });
@@ -180,13 +185,15 @@ export function CursorInspect() {
 	}, []);
 
 	return (
-		<div ref={pillRef} className="pointer-events-none fixed left-0 top-0 z-[9000] flex items-center" aria-hidden>
-			<span className="grid aspect-square h-[1.95vw] min-h-[30px] place-items-center overflow-hidden bg-white mr-[0.6vw]">
-				<span className="text-black leading-none" style={{ fontSize: "0.9vw" }}>↗</span>
-			</span>
-			<span className="label-13-mono uppercase tracking-[0.18em] text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}>
-				inspect
-			</span>
+		<div ref={posRef} className="pointer-events-none fixed left-0 top-0 z-[9000]" aria-hidden>
+			<div ref={revealRef} className="flex items-center">
+				<span className="grid aspect-square h-[1.95vw] min-h-[30px] place-items-center overflow-hidden bg-white mr-[0.6vw]">
+					<span className="text-black leading-none" style={{ fontSize: "0.9vw" }}>↗</span>
+				</span>
+				<span className="label-13-mono uppercase tracking-[0.18em] text-white" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.8)" }}>
+					inspect
+				</span>
+			</div>
 		</div>
 	);
 }
@@ -221,7 +228,10 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 	const cloneRef = useRef<HTMLDivElement>(null);
 	const srcRect = useRef<DossierOpen["rect"] | null>(null);
 
-	// OPEN: mount → morph clone from card rect to hero rect
+	// OPEN: set phase + lock body. All measuring/animating happens in the phase effect below,
+	// which React guarantees runs AFTER the overlay+clone are committed to the DOM — the old
+	// requestAnimationFrame version raced React's commit and could measure a not-yet-mounted
+	// clone, leaving an invisible full-screen overlay that swallowed every click (measured live).
 	useEffect(() => {
 		if (!open || !v) return;
 		srcRect.current = open.rect;
@@ -229,47 +239,60 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 		const prev = document.body.style.overflow;
 		document.body.style.overflow = "hidden";
 		document.body.style.cursor = "";
-
-		requestAnimationFrame(() => {
-			const clone = cloneRef.current, hero = heroRef.current, ov = overlayRef.current;
-			if (!clone || !hero || !ov) return;
-			try { CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1"); } catch { /* exists */ }
-			const t = hero.getBoundingClientRect();
-			const s = open.rect;
-			gsap.set(clone, { top: s.top, left: s.left, width: s.width, height: s.height, opacity: 1 });
-			gsap.to(ov, { opacity: 1, duration: 0.45, ease: "power2.out" });
-			gsap.to(clone, {
-				top: t.top, left: t.left, width: t.width, height: t.height,
-				duration: 1.0, ease: "natureSway",
-				onComplete: () => setPhase("open"),
-			});
-		});
-
-		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") requestClose(); };
-		window.addEventListener("keydown", onKey);
-		return () => {
-			document.body.style.overflow = prev;
-			window.removeEventListener("keydown", onKey);
-		};
+		return () => { document.body.style.overflow = prev; };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [open?.slug]);
 
-	const requestClose = useCallback(() => {
+	// PHASE: morphing → run the forward morph (DOM is committed by the time effects fire)
+	useEffect(() => {
+		if (phase !== "morphing") return;
 		const clone = cloneRef.current, hero = heroRef.current, ov = overlayRef.current, sc = scrollerRef.current;
 		const s = srcRect.current;
-		if (!clone || !hero || !ov || !s || !sc) { setPhase("idle"); onClose(); return; }
-		setPhase("closing");
+		if (!clone || !hero || !ov || !s) { setPhase("open"); return; }
+		try { CustomEase.create("natureSway", "M0,0 C0.08,0.494 0.14,1 1,1"); } catch { /* registered */ }
+		if (sc) sc.scrollTop = 0;
+		const t = hero.getBoundingClientRect();
+		gsap.set(clone, { top: s.top, left: s.left, width: s.width, height: s.height, autoAlpha: 1 });
+		gsap.to(ov, { opacity: 1, duration: 0.45, ease: "power2.out" });
+		const tween = gsap.to(clone, {
+			top: t.top, left: t.left, width: t.width, height: t.height,
+			duration: 1.0, ease: "natureSway",
+			onComplete: () => setPhase("open"),
+		});
+		return () => { tween.kill(); };
+	}, [phase]);
+
+	// PHASE: open → hand off from clone to the real hero (no flicker), listen for ESC
+	useEffect(() => {
+		if (phase !== "open") return;
+		const clone = cloneRef.current;
+		if (clone) gsap.to(clone, { autoAlpha: 0, duration: 0.15, delay: 0.05 });
+		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setPhase("closing"); };
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+	}, [phase]);
+
+	// PHASE: closing → reverse morph (or plain fade when scrolled deep), then unmount
+	useEffect(() => {
+		if (phase !== "closing") return;
+		const clone = cloneRef.current, hero = heroRef.current, ov = overlayRef.current, sc = scrollerRef.current;
+		const s = srcRect.current;
+		const finish = () => { setPhase("idle"); onClose(); };
+		if (!clone || !hero || !ov || !s || !sc) { finish(); return; }
 		const heroVisible = sc.scrollTop < window.innerHeight * 0.6;
 		if (heroVisible) {
-			// reverse morph: hero → card rect
 			const t = hero.getBoundingClientRect();
-			gsap.set(clone, { top: t.top, left: t.left, width: t.width, height: t.height, opacity: 1 });
+			gsap.set(clone, { top: t.top, left: t.left, width: t.width, height: t.height, autoAlpha: 1 });
 			gsap.to(clone, { top: s.top, left: s.left, width: s.width, height: s.height, duration: 0.85, ease: "natureSway" });
-			gsap.to(ov, { opacity: 0, duration: 0.6, ease: "power2.inOut", delay: 0.25, onComplete: () => { setPhase("idle"); onClose(); } });
+			gsap.to(ov, { opacity: 0, duration: 0.6, ease: "power2.inOut", delay: 0.25, onComplete: finish });
 		} else {
-			gsap.to(ov, { opacity: 0, duration: 0.5, ease: "power2.inOut", onComplete: () => { setPhase("idle"); onClose(); } });
+			gsap.to(ov, { opacity: 0, duration: 0.5, ease: "power2.inOut", onComplete: finish });
 		}
-	}, [onClose]);
+	}, [phase, onClose]);
+
+	const requestClose = useCallback(() => {
+		setPhase((p) => (p === "open" || p === "morphing" ? "closing" : p));
+	}, []);
 
 	if (!open || !v) return null;
 	const showContent = phase === "open";
@@ -383,16 +406,13 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 				</button>
 			</div>
 
-			{/* MORPH CLONE — the card art travelling to/from the hero */}
-			{(phase === "morphing" || phase === "closing") && (
-				<div
-					ref={cloneRef}
-					className="fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
-					style={{ backgroundImage: `url(${v.art})` }}
-				/>
-			)}
-			{/* keep ref mounted during open phase for reverse-measure */}
-			{phase === "open" && <div ref={cloneRef} className="hidden" />}
+			{/* MORPH CLONE — the card art travelling to/from the hero. Always mounted while the
+			    dossier exists (phases only animate it), so measuring never races React's commit. */}
+			<div
+				ref={cloneRef}
+				className="fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
+				style={{ backgroundImage: `url(${v.art})`, visibility: "hidden" }}
+			/>
 		</div>
 	);
 }
