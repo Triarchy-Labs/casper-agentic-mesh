@@ -1,6 +1,11 @@
 [workspace]
 resolver = "2"
-exclude = ["contracts/casper-mesh-contract"]
+exclude = [
+    "contracts/casper-mesh-contract",
+    "contracts/casper_escrow",
+    "contracts/deposit-proxy",
+    "contracts/oracle-contract"
+]
 members = [
     "swarm/casper-client",
     "swarm/ouroboros-brain",
