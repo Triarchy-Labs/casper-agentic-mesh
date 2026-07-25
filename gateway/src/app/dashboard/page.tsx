@@ -349,6 +349,9 @@ export default function Dashboard() {
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 20% 80%, var(--red-500) 0%, transparent 70%)" }} />
+                            {/* the crimson rooftop — dilutes the terminal black, stays under the mono text */}
+                            <div className="absolute inset-0 bg-cover bg-center opacity-[0.5] group-hover:opacity-[0.62] transition-opacity duration-700" style={{ backgroundImage: "url(/cards/terminal-rooftop.webp)" }} />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20" />
                             <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
                             <div className="p-[2.22vw] relative z-10 h-full flex flex-col flex-1">
