@@ -46,6 +46,7 @@ const AGENT_ART: Record<string, string> = {
 	cortex_reviewer: "/cards/agent-cortex.webp",
 	credio_risk_monitor: "/cards/agent-credio.webp",
 	liquidity_sniper: "/cards/agent-sniper.webp",
+	agent_alpha_arbitrage: "/cards/agent-alpha.webp",
 };
 
 function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
