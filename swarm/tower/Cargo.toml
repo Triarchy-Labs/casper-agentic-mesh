@@ -5,7 +5,7 @@ edition = "2021"
 description = "The Tower: overseer meta-agent that reads the on-chain world and dispatches sub-agents"
 
 [[bin]]
-name = "tower"
+name = "tower-overseer"
 path = "src/main.rs"
 
 [dependencies]

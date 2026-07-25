@@ -179,6 +179,13 @@ func main() {
 						os.Exit(1)
 					}
 					args.AddArgument(argName, clvalue.NewCLKey(parsedKey))
+				case "uref":
+					parsedURef, err := key.NewURef(argVal)
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "Error: invalid URef value '%s': %v\n", argVal, err)
+						os.Exit(1)
+					}
+					args.AddArgument(argName, clvalue.NewCLUref(parsedURef))
 				default:
 					fmt.Fprintf(os.Stderr, "Error: unsupported argument type '%s'\n", argType)
 					os.Exit(1)

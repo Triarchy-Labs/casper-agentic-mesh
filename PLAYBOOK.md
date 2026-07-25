@@ -82,7 +82,7 @@ that is the class of transaction you already opened in Path A, step 3.
 
 ```bash
 # The overseer: scans the on-chain world, applies Proof-of-Liveness (read-only)
-cargo run -p tower
+cargo run -p tower-overseer
 ```
 
 ---
