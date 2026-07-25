@@ -1,0 +1,16 @@
+# One-click Render blueprint: THE TOWER as a 24/7 live overseer.
+# Read-only by construction — no keys, no funds, no write path. It scans the on-chain
+# world (oracle feed, agent reputation, proof-of-liveness) every few minutes and
+# publishes the latest report as a public plain-text status page.
+services:
+  - type: web
+    name: triarchy-tower
+    runtime: rust
+    plan: free
+    buildCommand: cargo build --release -p tower-overseer
+    startCommand: ./target/release/tower-overseer --serve
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: TOWER_SCAN_INTERVAL_SECS
+        value: "300"

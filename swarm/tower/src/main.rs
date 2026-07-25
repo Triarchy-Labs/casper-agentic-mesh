@@ -106,8 +106,18 @@ fn reading_value(record: &str) -> Option<u64> {
     record.split(';').find_map(|p| p.strip_prefix("value=")).and_then(|v| v.parse().ok())
 }
 
-#[tokio::main]
-async fn main() {
+macro_rules! say {
+    ($buf:expr, $($arg:tt)*) => {{
+        let line = format!($($arg)*);
+        println!("{}", line);
+        $buf.push_str(&line);
+        $buf.push('\n');
+    }};
+}
+
+/// One full overseer scan. Returns (human-readable report, node_reachable).
+async fn scan() -> (String, bool) {
+    let mut out = String::new();
     let readings_uref = env_or("CASPER_ORACLE_READINGS_UREF", "uref-0635112c4d2ae2dd60d333bbcc5c9ec1858361101435a1e2d7a2bd7fd2242105-007");
     let reputation_uref = env_or("CASPER_ORACLE_REPUTATION_UREF", "uref-87be256170aab9d412b2e3ee649943ab082b07b1fcf40816c7a017183e8b4567-007");
     let agent = env_or("CASPER_AGENT_ACCOUNT", "334f6577fd29b3c939d35f8c3c386b5eaebbb1435f088487485980ed2acb6867");
@@ -116,30 +126,30 @@ async fn main() {
 
     let rpc = Rpc::new();
 
-    println!("\n🗼 ════ THE TOWER · overseer scan ════");
+    say!(out, "\n🗼 ════ THE TOWER · overseer scan ════");
     let srh = match rpc.state_root().await {
         Ok(s) => s,
         Err(e) => {
-            println!("🛑 SERVICE DEGRADED: cannot reach the Casper node ({e}). Functions are frozen — we are working on it.");
-            std::process::exit(2);
+            say!(out, "🛑 SERVICE DEGRADED: cannot reach the Casper node ({e}). Functions are frozen — we are working on it.");
+            return (out, false);
         }
     };
-    println!("   ledger state root: {}\n", &srh[..16]);
+    say!(out, "   ledger state root: {}\n", &srh[..16]);
 
     // ── World model ────────────────────────────────────────────────
     let price = rpc.dict_string(&srh, &readings_uref, "CSPR-USD").await;
     let reputation = rpc.dict_u64(&srh, &reputation_uref, &agent).await;
     let heartbeat = rpc.dict_string(&srh, &readings_uref, &format!("HEARTBEAT-{agent}")).await;
 
-    println!("📡 WORLD MODEL");
+    say!(out, "📡 WORLD MODEL");
     match &price {
         Some(r) => {
             let micro = reading_value(r).unwrap_or(0);
-            println!("   • Oracle CSPR-USD : ${:.6} (on-chain)", micro as f64 / 1e6);
+            say!(out, "   • Oracle CSPR-USD : ${:.6} (on-chain)", micro as f64 / 1e6);
         }
-        None => println!("   • Oracle CSPR-USD : (no reading yet)"),
+        None => say!(out, "   • Oracle CSPR-USD : (no reading yet)"),
     }
-    println!("   • Agent reputation: {}", reputation.unwrap_or(0));
+    say!(out, "   • Agent reputation: {}", reputation.unwrap_or(0));
 
     // ── Antifragile Mesh: Proof-of-Liveness ───────────────────────
     let now = now_secs();
@@ -154,30 +164,84 @@ async fn main() {
         }
         None => (false, "NO HEARTBEAT on record".to_string()),
     };
-    println!("   • Agent liveness  : {liveness_line}");
+    say!(out, "   • Agent liveness  : {liveness_line}");
 
     // ── Dispatch decisions (dry-run by default) ───────────────────
-    println!("\n🧠 DISPATCH DECISIONS (dry-run)");
+    say!(out, "\n🧠 DISPATCH DECISIONS (dry-run)");
     let mut actions = 0;
     if price.is_none() {
         actions += 1;
-        println!("   {actions}. Oracle has no CSPR-USD reading → dispatch `rwa-oracle` to seed the feed.");
+        say!(out, "   {actions}. Oracle has no CSPR-USD reading → dispatch `rwa-oracle` to seed the feed.");
     }
     if !alive {
         actions += 1;
-        println!("   {actions}. 🚨 Agent {} is not alive → AUTONOMOUS SUCCESSION:", &agent[..12]);
-        println!("        nominate the highest-reputation LIVE agent as successor and have the");
-        println!("        Tribunal ratify the handover; open escrows are rescued, never frozen.");
+        say!(out, "   {actions}. 🚨 Agent {} is not alive → AUTONOMOUS SUCCESSION:", &agent[..12]);
+        say!(out, "        nominate the highest-reputation LIVE agent as successor and have the");
+        say!(out, "        Tribunal ratify the handover; open escrows are rescued, never frozen.");
     }
     if alive && reputation.unwrap_or(0) == 0 {
         actions += 1;
-        println!("   {actions}. Agent alive but reputation 0 → require Tribunal sign-off before high-value payouts.");
+        say!(out, "   {actions}. Agent alive but reputation 0 → require Tribunal sign-off before high-value payouts.");
     }
     if actions == 0 {
-        println!("   ✓ Mesh healthy: oracle fresh, agent alive, reputation sufficient. No action needed.");
+        say!(out, "   ✓ Mesh healthy: oracle fresh, agent alive, reputation sufficient. No action needed.");
     }
 
-    println!("\n🗼 Scan complete. (read-only; no funds moved — dispatch shown as recommendations.)");
+    say!(out, "\n🗼 Scan complete. (read-only; no funds moved — dispatch shown as recommendations.)");
+    (out, true)
+}
+
+#[tokio::main]
+async fn main() {
+    let serve = std::env::args().any(|a| a == "--serve");
+    if !serve {
+        let (_report, ok) = scan().await;
+        if !ok { std::process::exit(2); }
+        return;
+    }
+
+    // ── SERVE MODE (Render / any PaaS): scan on a loop, publish the latest report over
+    //    plain HTTP so anyone — a judge included — can watch the mesh live. Read-only,
+    //    no keys, no funds; pure std/tokio, zero extra dependencies. ──
+    let interval: u64 = env_or("TOWER_SCAN_INTERVAL_SECS", "300").parse().unwrap_or(300);
+    let report = std::sync::Arc::new(tokio::sync::RwLock::new(String::from("🗼 first scan in progress…\n")));
+    let scanned_at = std::sync::Arc::new(std::sync::atomic::AtomicU64::new(0));
+
+    let r2 = report.clone();
+    let t2 = scanned_at.clone();
+    tokio::spawn(async move {
+        loop {
+            let (rep, _ok) = scan().await;
+            *r2.write().await = rep;
+            t2.store(now_secs(), std::sync::atomic::Ordering::Relaxed);
+            tokio::time::sleep(std::time::Duration::from_secs(interval)).await;
+        }
+    });
+
+    let port: u16 = env_or("PORT", "10000").parse().unwrap_or(10000);
+    let listener = tokio::net::TcpListener::bind(("0.0.0.0", port))
+        .await
+        .expect("cannot bind status port");
+    println!("🗼 TOWER serve mode: status on 0.0.0.0:{port}, scan every {interval}s");
+
+    loop {
+        let Ok((mut sock, _)) = listener.accept().await else { continue };
+        let rep = report.read().await.clone();
+        let age = now_secs().saturating_sub(scanned_at.load(std::sync::atomic::Ordering::Relaxed));
+        tokio::spawn(async move {
+            use tokio::io::{AsyncReadExt, AsyncWriteExt};
+            let mut buf = [0u8; 2048];
+            let _ = sock.read(&mut buf).await;
+            let body = format!(
+                "TRIARCHY // THE TOWER — live overseer (24/7, read-only)\nlast scan: {age}s ago · rescans every few minutes · https://github.com/Triarchy-Labs/casper-agentic-mesh\n\n{rep}"
+            );
+            let resp = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: text/plain; charset=utf-8\r\nAccess-Control-Allow-Origin: *\r\nCache-Control: no-store\r\nContent-Length: {}\r\n\r\n{}",
+                body.len(), body
+            );
+            let _ = sock.write_all(resp.as_bytes()).await;
+        });
+    }
 }
 
 #[cfg(test)]
