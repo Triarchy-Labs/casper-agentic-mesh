@@ -85,13 +85,16 @@ const BountiesPage = () => {
 
 	// Sandbox Log cycling
 	useEffect(() => {
+		// PIPELINE PREVIEW — replays the REAL build steps this repo performs (documented in
+		// DEPLOYMENTS.md), no invented tech: wasm32 target, bulk-memory lowering via
+		// wasm-opt --signext-lowering + casper-wasm-utils, ts-mode stripping, size gate.
 		const steps = [
-			{ status: "INGESTING", text: "Oracle detected new bounty deploy. Sandbox initialization..." },
-			{ status: "COMPILING", text: "Compiling cargo project target wasm32-unknown-unknown..." },
-			{ status: "ANALYZING", text: "Static analysis: Zero unsafe blocks, zero external network accesses." },
-			{ status: "SHADOW DEPLOY", text: "Shadow deploying target bin against Casper Fork Block #2,940,102." },
-			{ status: "PROOF GENERATION", text: "Generating ZK-Proof (Bulletproofs) of execution safety." },
-			{ status: "SUCCESS", text: "ZK-Proof verification: VALID. Signature 0x9a8f...b27e published to Escrow." }
+			{ status: "INGESTING", text: "Bounty deploy detected. Preparing sandbox (preview of the documented pipeline)..." },
+			{ status: "COMPILING", text: "cargo build --release --target wasm32-unknown-unknown" },
+			{ status: "LOWERING", text: "wasm-opt: lowering bulk-memory + sign-ext for Casper VM 1.x (the real-world gotcha from our DEPLOYMENTS notes)" },
+			{ status: "VALIDATING", text: "casper-wasm-utils: stripping custom sections, size gate < 1 MiB, zero external imports" },
+			{ status: "DRY RUN", text: "tribunal --dry-run available: 5-LLM court deliberates without moving funds" },
+			{ status: "READY", text: "Artifact matches the deployed escrow lineage — every real hash lives in DEPLOYMENTS.md" }
 		];
 		let stepIdx = 0;
 		const interval = setInterval(() => {
@@ -181,7 +184,7 @@ const BountiesPage = () => {
 			}
 
 			setEscrowStatus("success");
-			setEscrowResult(`✓ ESCROW SECURED (Casper: ${userPubKey.substring(0,6)}...${userPubKey.slice(-4)})`);
+			setEscrowResult(`✓ DIRECTIVE REGISTERED · wallet ${userPubKey.substring(0,6)}…${userPubKey.slice(-4)} · on-chain escrow settles via deposit-proxy (PLAYBOOK §B)`);
 		} catch (e: unknown) {
 			setEscrowStatus("error");
 			setEscrowResult(`WALLET REJECTED: ${e instanceof Error ? (e instanceof Error ? e.message : String(e)) : "Connection denied"}`);
