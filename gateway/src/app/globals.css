@@ -24,8 +24,10 @@
   --gray-900: #a0a0a0;
   --gray-1000: #ededed;
   
-  --background-100: #000000;
-  --background-200: #000000;
+  /* produx-measured base: rgb(14,14,14) on their live site — soft near-black, panels
+     (#0a0a0a) sit DARKER than the page, which is where the expensive depth comes from. */
+  --background-100: #0e0e0e;
+  --background-200: #0e0e0e;
 
   /* Translucent gray-alpha tokens */
   --gray-alpha-100: #ffffff12;
@@ -989,5 +991,9 @@ html.lenis, html.lenis body { height: auto; }
 /* ─── Viewer preferences (ONE CLICK hub toggles, persisted): pure-black produx mode and
    art-free editorial mode. Classes live on <html>. ─── */
 html.bg-off .carbon-stage { display: none !important; }
+/* fabric off -> the produx-measured base black (#0e0e0e): panels (#0a0a0a) sit slightly
+   darker than the page, the exact depth trick their site runs on. Fabric mode keeps its
+   warm #060203 under the weave. */
+html.bg-off body { background-color: var(--background) !important; }
 html.art-off .card-art,
 html.art-off .hover-reel { opacity: 0 !important; visibility: hidden !important; }
