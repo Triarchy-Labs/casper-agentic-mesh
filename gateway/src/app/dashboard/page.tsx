@@ -5,7 +5,7 @@ import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Nav } from "@/components/Nav";
-import { AgentOrb, AgentState } from "@/components/AgentOrb";
+import { AgentState } from "@/components/AgentOrb";
 import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
 import { payForTask } from "@/lib/pay";
 import { MeshControl } from "@/components/MeshControl";
@@ -321,11 +321,12 @@ export default function Dashboard() {
                             <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
                             <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
-                            <div className="absolute inset-0 flex items-center justify-center z-10">
-                                <AgentOrb state={agentState} size={360} />
-                                {agentState === "exhausted" && (
-                                    <div className="absolute top-4 right-4 text-white/40 text-xs tracking-widest uppercase z-10">Zzz</div>
-                                )}
+                            {/* the watcher — torn-reveal eyes over the panel; the orb never matched the
+                                editorial language. The state machine stays, spoken in mono. */}
+                            <div className="absolute inset-0 bg-cover bg-center opacity-[0.92] group-hover:opacity-100 transition-opacity duration-700" style={{ backgroundImage: "url(/cards/telemetry-eyes.webp)" }} />
+                            <div className="absolute top-6 left-6 z-20 flex items-center gap-3">
+                                <span className={`size-[7px] ${agentState === "danger" ? "bg-[var(--red-700)]" : agentState === "success" ? "bg-green-500" : "bg-white/60"}`} style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
+                                <span className="label-12-mono text-white/70 tracking-[0.22em]">state: {agentState}{agentState === "exhausted" ? " · zzz" : ""}</span>
                             </div>
                             <div className="absolute bottom-6 right-6 flex gap-3 z-20">
                                 <span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Emotional State</span>
