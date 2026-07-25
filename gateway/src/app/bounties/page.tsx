@@ -260,7 +260,7 @@ const BountiesPage = () => {
 										style={{ backgroundImage: `url(${KPI_ART[idx]})` }}
 									/>
 								)}
-								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								{/* Overlay Gradient */}
 								<div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/40 to-transparent h-2/3 pointer-events-none" />
@@ -354,7 +354,7 @@ const BountiesPage = () => {
 						<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] w-full min-h-[48.8vh] flex flex-col justify-between">
 							<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 							<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 30%, var(--red-500) 0%, transparent 70%)" }} />
-							<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+							<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 							
 							<div className="p-[2.22vw] relative z-10 flex flex-col h-full">
 								<CornerMarks />
@@ -430,7 +430,7 @@ const BountiesPage = () => {
 							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[420px] flex flex-col justify-between">
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 70%, var(--red-500) 0%, transparent 70%)" }} />
-								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								<div className="p-[32px] relative z-10 h-full flex flex-col justify-between">
 									<CornerMarks />
@@ -490,7 +490,7 @@ const BountiesPage = () => {
 							<div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] min-h-[50vh] flex flex-col justify-between">
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 30%, var(--red-500) 0%, transparent 70%)" }} />
-								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								<div className="p-[32px] relative z-10 h-full flex flex-col justify-between">
 									<CornerMarks />

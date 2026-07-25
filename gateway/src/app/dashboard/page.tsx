@@ -319,7 +319,7 @@ export default function Dashboard() {
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.25]" style={{ background: "radial-gradient(circle at 50% 50%, var(--red-500) 0%, transparent 70%)" }} />
-                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
                             <div className="absolute inset-0 flex items-center justify-center z-10">
                                 <AgentOrb state={agentState} size={360} />
@@ -348,7 +348,7 @@ export default function Dashboard() {
                             {/* Produx Visual Background */}
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 20% 80%, var(--red-500) 0%, transparent 70%)" }} />
-                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
                             <div className="p-[2.22vw] relative z-10 h-full flex flex-col flex-1">
                                 <CornerMarks />
@@ -397,7 +397,7 @@ export default function Dashboard() {
                             <div className="editorial-panel relative overflow-hidden group border border-white/5 bg-[#0a0a0a] mt-8">
                                 <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                                 <div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 80% 20%, var(--red-500) 0%, transparent 70%)" }} />
-                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                                <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                                 
                                 <div className="p-6 relative z-10">
                                     <CornerMarks />
@@ -437,7 +437,7 @@ export default function Dashboard() {
                         <div className="focus-card editorial-panel block relative w-full aspect-[4/3] max-sm:aspect-auto max-sm:min-h-[50vh] overflow-hidden group border border-white/5 bg-[#0a0a0a]">
                             <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
                             <div className="absolute inset-0 opacity-[0.1]" style={{ background: "radial-gradient(circle at 50% 100%, var(--red-500) 0%, transparent 70%)" }} />
-                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            <div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
                             
                             <div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center">
                                 <div className="text-xs tracking-widest text-white/40 uppercase mb-5 pb-3 border-b border-white/10 z-10">
@@ -486,7 +486,7 @@ export default function Dashboard() {
 								{/* Produx Visual Background */}
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
-								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								<div className="absolute inset-0 p-[2vw] z-10 flex flex-col justify-center overflow-y-auto">
 									<div className="z-10">
@@ -573,7 +573,7 @@ export default function Dashboard() {
 								{/* Produx Visual Background */}
 								<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
-								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+								<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								<div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center overflow-y-auto">
 									<div className="z-10">
