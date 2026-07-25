@@ -92,7 +92,7 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 				<div className="flex flex-col gap-[0.73vw]">
 					<h3 className="heading-32 text-[var(--gray-1000)] m-0">{agent.id}</h3>
 					<p className="label-13-mono text-[var(--gray-700)] uppercase max-w-[85%] leading-relaxed max-sm:max-w-full">
-						{agent.task}. SECURING {agent.staked} ON CASPER NETWORK. PASSPORT: {agent.passport}.
+						{agent.task}. SECURING {agent.staked} ON CASPER NETWORK. {agent.passport.startsWith("on-chain") ? `IDENTITY: ${agent.passport}` : `PASSPORT SLOT (CEP-78 mint reserved): ${agent.passport}`}.
 					</p>
 				</div>
 			</div>
