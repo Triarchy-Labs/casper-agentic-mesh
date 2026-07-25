@@ -71,7 +71,7 @@ export default function Dashboard() {
 	const [gasPrice, setGasPrice] = useState(0.002840);
 	const [gasHedged, setGasHedged] = useState(450000);
 	const [l402Console, setL402Console] = useState<string>("// Ready to challenge L402 gate");
-	const [l402Status, setL402Status] = useState<"IDLE" | "CHALLENGED" | "SUCCESS">("IDLE");
+	const [l402Status, setL402Status] = useState<string>("IDLE");
 	const [meshLoad, setMeshLoad] = useState<number[]>([12, 45, 89, 23, 67, 10, 34, 56, 88, 92, 14, 41]);
 
     const mainRef = useRef<HTMLDivElement>(null);
@@ -617,21 +617,42 @@ export default function Dashboard() {
 												<div className="flex justify-between items-center pt-2 border-t border-white/10">
 													<span className="text-[10px] text-white/40">Status: <span className="text-white font-bold">{l402Status}</span></span>
 													<button 
-														onClick={() => {
+														onClick={async () => {
+															// LIVE console — every line below is a real request to this very
+															// gateway. Nothing scripted (it used to be; the audit caught it).
 															if (l402Status === "IDLE") {
-																setL402Status("CHALLENGED");
-																setL402Console(">>> GET /api/v1/cargo-payload HTTP/1.1\n<<< HTTP/1.1 402 Payment Required\n<<< WWW-Authenticate: L402 token=\"500c8aef\", invoice=\"01b4c...f201\"\n// Challenge received: Send 1 CSPR to obtain client authorization key.");
+																setL402Status("...");
+																setL402Console(">>> POST /api/hire  (no x-l402-txhash header)\n// hitting the live gate…");
+																try {
+																	const r = await fetch("/api/hire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: `l402_probe_${Date.now()}`, description: "L402 gate probe", bounty_cspr: 1, client_id: "dashboard-console" }) });
+																	const body = (await r.text()).slice(0, 260);
+																	setL402Console(`>>> POST /api/hire  (no x-l402-txhash header)\n<<< HTTP ${r.status}\n<<< ${body}\n// real response, real refusal — the x402 gate working as intended.`);
+																	setL402Status(r.status === 402 ? "CHALLENGED" : `HTTP ${r.status}`);
+																} catch (e) {
+																	setL402Console(`// network error: ${(e as Error).message}`);
+																	setL402Status("IDLE");
+																}
 															} else if (l402Status === "CHALLENGED") {
-																setL402Status("SUCCESS");
-																setL402Console(">>> POST /api/v1/casper-verify\n>>> Pay invoice hash: 01b4c...f201 (1 CSPR settled)\n<<< HTTP/1.1 200 OK\n<<< Authorization: L402 credentials=\"token=500c8aef:preimage=cf201\"\n// Access granted. Decoded payload signature verified.");
+																setL402Status("...");
+																setL402Console("// probing with a FABRICATED tx hash — the server must check the ledger and refuse…");
+																try {
+																	const fake = "deadbeef".repeat(8);
+																	const r = await fetch("/api/hire", { method: "POST", headers: { "Content-Type": "application/json", "x-l402-txhash": fake }, body: JSON.stringify({ task_id: `l402_fake_${Date.now()}`, description: "fabricated hash probe", bounty_cspr: 1, client_id: "dashboard-console" }) });
+																	const body = (await r.text()).slice(0, 260);
+																	setL402Console(`>>> POST /api/hire  x-l402-txhash: ${fake.slice(0, 12)}… (fabricated)\n<<< HTTP ${r.status}\n<<< ${body}\n// the ledger check threw the fake out. We never trust a string.`);
+																	setL402Status("FAKE REJECTED");
+																} catch (e) {
+																	setL402Console(`// network error: ${(e as Error).message}`);
+																	setL402Status("CHALLENGED");
+																}
 															} else {
 																setL402Status("IDLE");
-																setL402Console("// Console reset. Ready to challenge L402 gate");
+																setL402Console("// Console reset. Ready to challenge the live x402 gate");
 															}
 														}}
 														className="font-DM-mono border border-white/5 bg-black/25 px-[1.5vw] py-[0.5vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[2.2vw] max-lg:py-[0.7vw] max-sm:text-[9px] max-sm:px-3 max-sm:py-1.5 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
 													>
-														{l402Status === "IDLE" ? "SEND GET REQUEST" : l402Status === "CHALLENGED" ? "PAY 1 CSPR & AUTHORIZE" : "RESET GATE"}
+														{l402Status === "IDLE" ? "CHALLENGE THE GATE (LIVE)" : l402Status === "CHALLENGED" ? "PROBE WITH FAKE HASH" : l402Status === "..." ? "…" : "RESET GATE"}
 													</button>
 												</div>
 											</div>
