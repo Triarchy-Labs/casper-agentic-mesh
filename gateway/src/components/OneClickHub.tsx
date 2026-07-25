@@ -20,6 +20,31 @@ const ROWS: { label: string; sub: string; href?: string; anchor?: string }[] = [
 export function OneClickHub() {
 	const [visible, setVisible] = useState(false);
 	const [openHub, setOpenHub] = useState(false);
+	// viewer preferences: pure-black background (produx mode) & art-free cards. Persisted.
+	const [bgOn, setBgOn] = useState(true);
+	const [artOn, setArtOn] = useState(true);
+
+	useEffect(() => {
+		const bg = localStorage.getItem("mesh-bg") !== "off";
+		const art = localStorage.getItem("mesh-art") !== "off";
+		setBgOn(bg);
+		setArtOn(art);
+		document.documentElement.classList.toggle("bg-off", !bg);
+		document.documentElement.classList.toggle("art-off", !art);
+	}, []);
+
+	const toggleBg = () => setBgOn((v) => {
+		const next = !v;
+		localStorage.setItem("mesh-bg", next ? "on" : "off");
+		document.documentElement.classList.toggle("bg-off", !next);
+		return next;
+	});
+	const toggleArt = () => setArtOn((v) => {
+		const next = !v;
+		localStorage.setItem("mesh-art", next ? "on" : "off");
+		document.documentElement.classList.toggle("art-off", !next);
+		return next;
+	});
 
 	useEffect(() => {
 		const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.8);
@@ -128,7 +153,25 @@ export function OneClickHub() {
 								</div>
 							</motion.div>
 
-							{/* bottom buttons */}
+							{/* viewer preferences — one-tap taste switches */}
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.45, delay: 0.46 }}
+							className="mx-5 mb-4 flex items-center justify-between gap-3"
+						>
+							<span className="label-12-mono text-white/35 tracking-[0.18em]">viewer/</span>
+							<div className="flex gap-3">
+								<button onClick={toggleBg} className="label-12-mono border border-white/12 px-3 py-2 text-white/70 hover:text-white hover:border-[var(--red-700)] transition-colors cursor-pointer">
+									[ fabric · <span className={bgOn ? "text-[var(--red-700)]" : "text-white/35"}>{bgOn ? "on" : "off"}</span> ]
+								</button>
+								<button onClick={toggleArt} className="label-12-mono border border-white/12 px-3 py-2 text-white/70 hover:text-white hover:border-[var(--red-700)] transition-colors cursor-pointer">
+									[ card art · <span className={artOn ? "text-[var(--red-700)]" : "text-white/35"}>{artOn ? "on" : "off"}</span> ]
+								</button>
+							</div>
+						</motion.div>
+
+						{/* bottom buttons */}
 							<motion.div
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}

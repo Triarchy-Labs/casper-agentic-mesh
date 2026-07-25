@@ -59,9 +59,11 @@ export default function RootLayout({
 		<html
 			lang="en"
 			className={`${geistSans.variable} ${geistMono.variable} ${dmMono.variable} ${chakra.variable} ${michroma.variable} antialiased`}
-		>
+		 suppressHydrationWarning>
 			<head />
 			<body className="flex flex-col min-h-screen">
+				{/* viewer prefs (ONE CLICK toggles) — applied before paint on EVERY page */}
+				<script dangerouslySetInnerHTML={{ __html: "try{var d=document.documentElement;if(localStorage.getItem('mesh-bg')==='off')d.classList.add('bg-off');if(localStorage.getItem('mesh-art')==='off')d.classList.add('art-off');}catch(e){}" }} />
 				<div className="edge-aura" aria-hidden />
 				<div className="fx-overlay" aria-hidden />
 				<CursorProvider />

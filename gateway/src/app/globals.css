@@ -985,3 +985,9 @@ html.lenis, html.lenis body { height: auto; }
    (added after the 0.9s dwell) cross-fades the reel in over the still. */
 .hover-reel { opacity: 0; transition: opacity 0.65s ease; pointer-events: none; }
 .hover-reel.hr-on { opacity: 1; }
+
+/* ─── Viewer preferences (ONE CLICK hub toggles, persisted): pure-black produx mode and
+   art-free editorial mode. Classes live on <html>. ─── */
+html.bg-off .carbon-stage { display: none !important; }
+html.art-off .card-art,
+html.art-off .hover-reel { opacity: 0 !important; visibility: hidden !important; }

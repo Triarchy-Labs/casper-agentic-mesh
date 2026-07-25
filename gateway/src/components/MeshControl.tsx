@@ -83,7 +83,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 					{/* the overseer's control room — near-full brightness (5% veil at rest, none on hover) */}
-					<div className="absolute inset-0 bg-cover bg-center opacity-[0.95] group-hover:opacity-100 transition-opacity duration-700" style={{ backgroundImage: "url(/cards/tower-control.webp)" }} />
+					<div className="card-art absolute inset-0 bg-cover bg-center opacity-[0.95] group-hover:opacity-100 transition-opacity duration-700" style={{ backgroundImage: "url(/cards/tower-control.webp)" }} />
 					<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					

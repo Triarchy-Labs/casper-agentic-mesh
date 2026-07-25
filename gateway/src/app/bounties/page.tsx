@@ -261,7 +261,7 @@ const BountiesPage = () => {
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${idx * 40}, 60%, 40%) 0%, transparent 70%)` }} />
 								{KPI_ART[idx] && (
 									<div
-										className="absolute inset-0 bg-cover bg-center opacity-[0.75] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-95 group-hover:scale-110"
+										className="card-art absolute inset-0 bg-cover bg-center opacity-[0.75] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-95 group-hover:scale-110"
 										style={{ backgroundImage: `url(${KPI_ART[idx]})` }}
 									/>
 								)}
