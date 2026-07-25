@@ -58,6 +58,15 @@ const HOW = [
 	},
 ];
 
+// Tomorrow's vectors — shown honestly as in-development (VISION.md is the source of truth).
+const DEV = [
+	{ hook: "The Operator — your personal AI manager", desc: "A chat living right here in this hub, with read tentacles into every module: ask anything about the mesh, dispatch a task to the swarm, receive a structured report. Every state-changing action waits for YOUR confirmation — the human holds the final toggle." },
+	{ hook: "Verdict Explorer", desc: "Open any ruling and read the full adversarial transcript — prosecutor, defender, three jurors, chief judge — line by line, linked to the on-chain settlement." },
+	{ hook: "Kill-switch", desc: "A first-class halt control: one tap freezes dispatch mesh-wide. Funds stay locked by the contract — stopping is always safe." },
+	{ hook: "Soulbound agent passports (CEP-78)", desc: "Reputation minted into non-transferable on-chain identity — an agent's track record nobody can buy or fake." },
+	{ hook: "The Tower, 24/7 in the cloud", desc: "The overseer as a public always-on status page — watch the mesh breathe from anywhere (one-click Render blueprint already ships in the repo)." },
+];
+
 const PAINS = [
 	{
 		pain: "“I'm scared to pay a bot upfront.”",
@@ -303,7 +312,12 @@ export function OneClickHub() {
 							<div className="flex flex-col gap-7 p-7">
 								{sheet === "how" && HOW.map((sc, i) => (
 									<motion.div key={sc.hook} {...rowIn(i)} className="border border-white/10 bg-white/[0.02] p-6" style={{ borderRadius: 4 }}>
-										<h4 className="mb-4 text-white" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "22px", fontWeight: 400 }}>{sc.hook}</h4>
+										<div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+											<h4 className="text-white" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "22px", fontWeight: 400 }}>{sc.hook}</h4>
+											<span className="label-12-mono flex items-center gap-2 border border-white/10 px-2.5 py-1 text-white/60" style={{ borderRadius: 3 }}>
+												<span className="size-[6px] bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} /> live now
+											</span>
+										</div>
 										<ol className="flex flex-col gap-2.5">
 											{sc.steps.map((st, j) => (
 												<li key={j} className="label-13-mono flex gap-3 leading-[1.7] text-white/70" style={{ textTransform: "none" }}><span className="text-[var(--red-700)]">{j + 1}.</span><span>{st}</span></li>
@@ -312,6 +326,26 @@ export function OneClickHub() {
 										<button onClick={() => followCta(sc.cta)} className="label-12-mono mt-5 cursor-pointer border border-white/15 px-4 py-2.5 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>[ {sc.cta.label} ]</button>
 									</motion.div>
 								))}
+								{sheet === "how" && (
+									<>
+										<motion.div {...rowIn(4)} className="mt-1 flex items-center gap-4">
+											<span className="label-13-mono tracking-[0.22em] text-white/45">in development /</span>
+											<span className="h-px flex-1 bg-white/10" />
+											<a href={`${REPO}/blob/main/VISION.md`} target="_blank" rel="noopener noreferrer" className="label-12-mono text-white/35 transition-colors hover:text-[var(--red-700)]">[ full vision ↗ ]</a>
+										</motion.div>
+										{DEV.map((d, i) => (
+											<motion.div key={d.hook} {...rowIn(5 + i)} className="border border-white/[0.07] bg-white/[0.012] p-6" style={{ borderRadius: 4 }}>
+												<div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+													<h4 className="text-white/80" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "20px", fontWeight: 400 }}>{d.hook}</h4>
+													<span className="label-12-mono flex items-center gap-2 border border-white/10 px-2.5 py-1 text-white/40" style={{ borderRadius: 3 }}>
+														<span className="size-[6px] border border-white/40" /> in development
+													</span>
+												</div>
+												<p className="label-13-mono leading-[1.7] text-white/55" style={{ textTransform: "none" }}>{d.desc}</p>
+											</motion.div>
+										))}
+									</>
+								)}
 								{sheet === "pains" && PAINS.map((pn, i) => (
 									<motion.div key={i} {...rowIn(i)} className="border border-white/10 bg-white/[0.02] p-6" style={{ borderRadius: 4 }}>
 										<h4 className="mb-3 text-white/95" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "21px", fontWeight: 400 }}>{pn.pain}</h4>
