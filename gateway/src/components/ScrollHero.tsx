@@ -329,11 +329,14 @@ export function ScrollHero() {
 			// Target box keeps the CARD's aspect (1.784), maxed within 96vw/94vh and centered:
 			// start and end share one aspect -> scaleX === scaleY (UNIFORM). Mismatched axes here
 			// squashed the video at the start of the zoom (user caught it; produx never distorts).
+			// Measured on produx's LIVE hero (1920x1080): the reel grows 1332x747 -> 1920x1076,
+			// left 0 — FULL viewport width, aspect locked at 1.784 the whole way. So: 100vw wide,
+			// height follows the aspect, vertically centered.
 			const targetBox = () => {
 				const ar = 1.784;
-				const tw = Math.min(window.innerWidth * 0.96, window.innerHeight * 0.94 * ar);
+				const tw = window.innerWidth;
 				const th = tw / ar;
-				return { top: (window.innerHeight - th) / 2, left: (window.innerWidth - tw) / 2, w: tw, h: th };
+				return { top: (window.innerHeight - th) / 2, left: 0, w: tw, h: th };
 			};
 			tl.set(".montage-zoom", {
 				top: () => targetBox().top,
