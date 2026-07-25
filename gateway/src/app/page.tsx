@@ -62,7 +62,7 @@ export default function Page() {
 
     // Header tag blur-fade; the h2 itself is the canvas pixel-decode (PixelDecodeText playOnEnter),
     // which self-triggers at top 65% with produx's 1.75s sine.out — the decompressor beat.
-    gsap.fromTo(".synergy-header .nb-tag",
+    gsap.fromTo(".synergy-header .nb-tag, .synergy-header .synergy-lede",
       { opacity: 0, y: 14, filter: "blur(6px)" },
       {
         opacity: 1, y: 0, filter: "blur(0px)", duration: 1, ease: "natureSway", delay: 0.1,
@@ -261,7 +261,14 @@ export default function Page() {
                   heading treatment ('Selected projects' in their bundle = the nP.default CANVAS
                   pixel-decode, time-based: 1.75s sine.out, fired once at top 65% — and being a
                   canvas it's not cursor-selectable, same as theirs). Red edge instead of lime. */}
-              <div className="synergy-header flex flex-col gap-4 mb-2">
+              <div className="synergy-header relative flex flex-col gap-4 mb-2">
+              {/* the WHY, relocated from the hero (it was crowding the right column there):
+                  it introduces exactly these five cards. Same fog-reveal as the nb-tag. */}
+              <p className="synergy-lede md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 md:max-w-[34vw] text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(13px, 0.95vw, 20px)", lineHeight: 1.75, letterSpacing: "0.01em" }}>
+                But value can’t flow to a machine you can’t hold accountable. Triarchy is the
+                command deck for that economy — escrow, a real-world oracle, and an adversarial
+                tribunal, under one overseer.
+              </p>
                 <span className="nb-tag w-max"><span className="text-[var(--red-700)]">◆</span> the mesh · five vectors</span>
                 <h2 className="max-w-[46vw] max-lg:max-w-none">
                   <PixelDecodeText text="Absolute Synergy" playOnEnter fontVw={0.06} fsMax={112} />
