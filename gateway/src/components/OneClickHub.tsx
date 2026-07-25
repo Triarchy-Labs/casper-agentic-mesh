@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // ONE CLICK — the navigation hub. Lama-Lama mechanics, measured from their live site:
 // panel 584px wide, 67px rows at ~21px type, a whisper of radius (5.33px), and — the key —
@@ -98,6 +98,43 @@ const EDGE = [
 	{ them: "Python glue over bare LLM calls", us: "a Rust + WASM core: the swarm is compiled Rust agents (tribunal, tower, oracle) and the contract is wasm32 on Casper's VM — LLMs argue, typed Rust settles" },
 	{ them: "autonomy as a buzzword", us: "one law everywhere, from the footer's [ run ] to the escrow: the human holds the final toggle" },
 ];
+
+function ScrambleCta({ label, href, primary }: { label: string; href: string; primary?: boolean }) {
+	const [display, setDisplay] = useState(label);
+	const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+	const GLYPHS = "!<>-_\\/[]{}=+*^?#";
+	const scramble = () => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		if (timer.current) clearInterval(timer.current);
+		let frame = 0;
+		timer.current = setInterval(() => {
+			frame++;
+			const progress = frame / 12;
+			setDisplay(label.split("").map((ch, i) => {
+				if (ch === " " || ch === "[" || ch === "]") return ch;
+				if (i / label.length < progress) return ch;
+				return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+			}).join(""));
+			if (progress >= 1) { if (timer.current) clearInterval(timer.current); setDisplay(label); }
+		}, 28);
+	};
+	return (
+		<a
+			href={href}
+			target="_blank"
+			rel="noopener noreferrer"
+			onMouseEnter={scramble}
+			className={primary
+				? "label-13-mono flex h-[56px] items-center justify-center bg-white font-bold text-black transition-colors hover:bg-[#f0f0f0]"
+				: "label-13-mono flex h-[56px] items-center justify-center border border-white/15 text-white/85 transition-colors hover:border-[var(--red-700)] hover:text-white"}
+			style={primary
+				? { borderRadius: 4, boxShadow: "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" }
+				: { borderRadius: 4 }}
+		>
+			{display}
+		</a>
+	);
+}
 
 export function OneClickHub() {
 	const [visible, setVisible] = useState(false);
@@ -223,7 +260,7 @@ export function OneClickHub() {
 						style={{ borderRadius: 6 }}
 						className={`fixed bottom-[3.2vh] left-1/2 w-[min(584px,92vw)] -translate-x-1/2 z-[8600] overflow-hidden border backdrop-blur-xl ${
 							openHub
-								? "border-white/15 bg-[#0a0508]/96"
+								? "border-white/15 bg-[#0a0508]/70 backdrop-saturate-150"
 								: "border-white/[0.08] bg-[#0a0508]/45"
 						}`}
 					>
@@ -264,9 +301,10 @@ export function OneClickHub() {
 											onClick={() => go(row)}
 											className="group flex min-h-[64px] cursor-pointer items-center justify-between gap-4 border-b border-white/[0.07] px-6 text-left transition-colors hover:bg-white/[0.04]"
 										>
-											<span className="text-white/90 transition-colors group-hover:text-white" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "21px", fontWeight: 400 }}>
-												{row.label}
-											</span>
+											<span className="relative flex flex-col justify-center overflow-hidden" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "21px", fontWeight: 400 }}>
+											<span className="block text-white/90 transition-transform duration-300 ease-out group-hover:-translate-y-[120%]">{row.label}</span>
+											<span className="absolute left-0 block translate-y-[120%] text-[var(--red-700)] transition-transform duration-300 ease-out group-hover:translate-y-0">{row.label}</span>
+										</span>
 											<span className="label-12-mono whitespace-nowrap text-white/35 transition-colors group-hover:text-[var(--red-700)]">
 												{row.sub}
 											</span>
@@ -302,8 +340,8 @@ export function OneClickHub() {
 
 								{/* bottom CTA pair — lama's light-primary move */}
 								<motion.div {...rowIn(6)} className="grid grid-cols-2 gap-3 px-6 pb-6">
-									<a href={REPO} target="_blank" rel="noopener noreferrer" className="label-13-mono flex h-[56px] items-center justify-center border border-white/15 text-white/85 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>[ github ]</a>
-									<a href="https://dorahacks.io/buidl/46714" target="_blank" rel="noopener noreferrer" className="label-13-mono flex h-[56px] items-center justify-center bg-white font-bold text-black transition-colors hover:bg-[#f0f0f0]" style={{ borderRadius: 4, boxShadow: "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" }}>[ dorahacks ]</a>
+									<ScrambleCta label="[ github ]" href={REPO} />
+									<ScrambleCta label="[ dorahacks ]" href="https://dorahacks.io/buidl/46714" primary />
 								</motion.div>
 
 								{/* judges find their lane in one quiet line */}
@@ -328,10 +366,10 @@ export function OneClickHub() {
 							exit={{ opacity: 0, y: 24, scale: 0.99 }}
 							transition={{ duration: 0.5, ease: lamaEase }}
 							style={{ borderRadius: 6 }}
-							className="fixed left-1/2 top-1/2 z-[8710] max-h-[86vh] w-[min(860px,94vw)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-white/15 bg-[#0a0508]/97 backdrop-blur-2xl"
+							className="fixed left-1/2 top-1/2 z-[8710] max-h-[86vh] w-[min(860px,94vw)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-white/15 bg-[#0a0508]/80 backdrop-blur-2xl backdrop-saturate-150"
 							data-lenis-prevent
 						>
-							<div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-white/10 bg-[#0a0508]/97 px-7 backdrop-blur-xl">
+							<div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-white/10 bg-[#0a0508]/70 px-7 backdrop-blur-xl">
 								<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">{sheet === "how" ? "how it works /" : sheet === "pains" ? "pains we kill /" : sheet === "try" ? "try it live /" : "only here /"}</span>
 								<button onClick={() => setSheet(null)} className="label-13-mono cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close">[ close ✕ ]</button>
 							</div>
