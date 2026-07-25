@@ -521,7 +521,7 @@ export default function Dashboard() {
 								<div className="absolute inset-0 p-[2vw] z-10 flex flex-col justify-center overflow-y-auto">
 									<div className="z-10">
 										<div className="flex justify-between items-center mb-6 pb-3 border-b border-white/10">
-											<span className="text-[10px] font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE</span>
+											<span className="text-[10px] font-mono text-[var(--gray-1000)] font-bold tracking-widest">COGNITIVE_ARBITRAGE <span className="text-white/30 font-normal">· SIM</span></span>
 											<span className="nb-tag">ACTIVE</span>
 										</div>
 

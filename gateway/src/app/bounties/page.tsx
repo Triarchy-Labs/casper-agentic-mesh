@@ -247,10 +247,10 @@ const BountiesPage = () => {
 					{/* KPI Matrix (Produx Accordion) */}
 					<div className="w-full h-[55vh] flex gap-2 mb-[15vh] max-sm:flex-col max-sm:h-[80vh]">
 						{[
-							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false },
-							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false },
-							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "Fastest: 45ms", isFloat: true },
-							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "Agent-to-Agent" }
+							{ label: "TOTAL CSPR VOLUME", rawValue: 1450220, prefix: "$", isFloat: false, sub: "mainnet projection" },
+							{ label: "COMPLETED QUESTS", rawValue: 12450, isFloat: false, sub: `projection · live registry: ${bounties.length} directives` },
+							{ label: "AVERAGE EXECUTION", rawValue: 1.2, suffix: "s", sub: "sandbox benchmark · projection", isFloat: true },
+							{ label: "AUTONOMOUS EFFICIENCY", value: "98.4%", sub: "agent-to-agent · projection" }
 						].map((kpi, idx) => (
 							<div 
 								key={idx} 
@@ -448,7 +448,7 @@ const BountiesPage = () => {
 
 									{/* Streaming Counter */}
 									<div className="mb-[24px] p-[16px] bg-[var(--background-200)] border border-[var(--gray-400)]">
-										<div className="label-12-mono text-[var(--gray-600)] mb-[4px]">REAL-TIME MICROPAYMENTS STREAM (CSPR/SEC)</div>
+										<div className="label-12-mono text-[var(--gray-600)] mb-[4px]">MICROPAYMENTS STREAM (CSPR/SEC) · SIM PREVIEW</div>
 										<div className="heading-40 font-mono text-[var(--gray-1000)] tracking-tight">
 											{streamedTokens.toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })}
 										</div>
@@ -457,7 +457,7 @@ const BountiesPage = () => {
 
 									{/* Jury Swarm Disputes */}
 									<div>
-										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">ACTIVE JURY SWARM DISPUTES:</h4>
+										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">ACTIVE JURY SWARM DISPUTES · SIM:</h4>
 										<div className="flex flex-col gap-[12px]">
 											{[
 												{ id: "DISPUTE_C-8902", desc: "WASM mismatch on cargo-run hash", status: "8/12 SENTINELS", votes: "YES (Slash Operator): 78% | NO (Pay): 22%", border: "border-[var(--gray-400)]" },
@@ -522,7 +522,7 @@ const BountiesPage = () => {
 
 									{/* Sentinel Threat Gossip */}
 									<div>
-										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">SENTINEL THREAT GOSSIP (P2P):</h4>
+										<h4 className="label-14-mono text-[var(--gray-900)] mb-[12px]">SENTINEL THREAT GOSSIP (P2P) · SIM:</h4>
 										<div className="bg-[var(--background-200)] border border-[var(--gray-400)] p-[16px] flex flex-col gap-[8px]">
 											{gossipLogs.map((log, idx) => (
 												<div key={idx} className="label-12-mono text-[var(--gray-800)] truncate">
