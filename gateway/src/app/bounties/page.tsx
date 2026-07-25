@@ -53,6 +53,8 @@ interface Bounty {
 	difficulty: string;
 }
 
+const KPI_ART = ["/cards/kpi-volume.webp", "/cards/kpi-quests.webp", "/cards/kpi-execution.webp", "/cards/kpi-efficiency.webp"];
+
 const BountiesPage = () => {
 	const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 	const [directive, setDirective] = useState("");
@@ -252,6 +254,12 @@ const BountiesPage = () => {
 								{/* Produx Background */}
 								<div className="absolute inset-0 bg-gradient-to-t from-[#111] to-[#050505]" />
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${idx * 40}, 60%, 40%) 0%, transparent 70%)` }} />
+								{KPI_ART[idx] && (
+									<div
+										className="absolute inset-0 bg-cover bg-center opacity-[0.75] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-95 group-hover:scale-110"
+										style={{ backgroundImage: `url(${KPI_ART[idx]})` }}
+									/>
+								)}
 								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								{/* Overlay Gradient */}

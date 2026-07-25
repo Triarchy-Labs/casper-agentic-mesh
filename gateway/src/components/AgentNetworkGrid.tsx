@@ -36,6 +36,18 @@ export function CornerMarks() {
 	);
 }
 
+// Bespoke art per agent (user-generated, /public/cards). Cards without an entry keep the
+// gradient look — the map is additive, zero risk to unknown/api-fed agents.
+const AGENT_ART: Record<string, string> = {
+	malicious_node_x9: "/cards/agent-malicious.webp",
+	mark_53_sarcophagus: "/cards/agent-sarcophagus.webp",
+	"x402-AEGIS-NODE": "/cards/agent-aegis.webp",
+	casper_scrapper_v2: "/cards/agent-scrapper.webp",
+	cortex_reviewer: "/cards/agent-cortex.webp",
+	credio_risk_monitor: "/cards/agent-credio.webp",
+	liquidity_sniper: "/cards/agent-sniper.webp",
+};
+
 function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
 	return (
 		<motion.div
@@ -48,6 +60,12 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 			<div className="focus-card editorial-panel relative overflow-hidden bg-[#0a0a0a] border border-white/5 w-full aspect-[4/3] max-sm:aspect-[4/5]">
 				<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 				<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
+				{AGENT_ART[agent.id] && (
+					<div
+						className="absolute inset-0 bg-cover bg-center opacity-[0.82] transition-[transform,opacity] duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-105"
+						style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
+					/>
+				)}
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
 				
 				<div className="absolute bottom-6 right-6 flex gap-2 z-10 max-sm:bottom-4 max-sm:right-4">
@@ -84,6 +102,12 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 					<div className="absolute inset-0 bg-gradient-to-t from-[#111] to-[#050505]" />
 					{/* Unique subtle tint per card */}
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${i * 60}, 60%, 40%) 0%, transparent 70%)` }} />
+					{AGENT_ART[agent.id] && (
+						<div
+							className="absolute inset-0 bg-cover bg-center opacity-[0.8] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-110"
+							style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
+						/>
+					)}
 					<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
 					
 					{/* Overlay Gradient for Text */}
