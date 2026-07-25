@@ -99,10 +99,10 @@ export function OneClickHub() {
 						exit={{ opacity: 0, y: 26 }}
 						transition={{ layout: { duration: 0.55, ease: lamaEase }, duration: 0.45, ease: lamaEase }}
 						style={{ borderRadius: 6 }}
-						className={`fixed bottom-[3.2vh] left-1/2 -translate-x-1/2 z-[8600] overflow-hidden border backdrop-blur-xl ${
+						className={`fixed bottom-[3.2vh] left-1/2 w-[min(584px,92vw)] -translate-x-1/2 z-[8600] overflow-hidden border backdrop-blur-xl ${
 							openHub
-								? "w-[min(584px,92vw)] border-white/15 bg-[#0a0508]/96"
-								: "w-[240px] border-white/[0.08] bg-[#0a0508]/45"
+								? "border-white/15 bg-[#0a0508]/96"
+								: "border-white/[0.08] bg-[#0a0508]/45"
 						}`}
 					>
 						{!openHub ? (
@@ -111,11 +111,15 @@ export function OneClickHub() {
 								key="capsule"
 								layout="position"
 								onClick={() => setOpenHub(true)}
-								className="group flex h-[52px] w-full cursor-pointer items-center justify-center gap-3.5 transition-colors duration-500 hover:bg-[#0a0508]/60"
+								className="group flex h-[64px] w-full cursor-pointer items-center justify-between px-6 transition-colors duration-500 hover:bg-[#0a0508]/60"
 								aria-label="Open the one-click hub"
 							>
-								<span className="size-[7px] bg-[var(--red-700)] opacity-40 transition-opacity duration-500 group-hover:opacity-100" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
-								<span className="label-13-mono uppercase tracking-[0.26em] text-white/55 transition-colors duration-500 group-hover:text-white">one click</span>
+								<span className="flex items-center gap-3.5">
+									<span className="size-[7px] bg-[var(--red-700)] opacity-40 transition-opacity duration-500 group-hover:opacity-100" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
+									<span className="label-13-mono uppercase tracking-[0.26em] text-white/70 transition-colors duration-500 group-hover:text-white">one click</span>
+								</span>
+								<span className="label-12-mono hidden tracking-[0.18em] text-white/25 transition-colors duration-500 group-hover:text-white/45 sm:block">your mesh · one touch</span>
+								<span className="text-[18px] leading-none text-white/50 transition-colors duration-500 group-hover:text-white">≡</span>
 							</motion.button>
 						) : (
 							/* ── panel state ── */

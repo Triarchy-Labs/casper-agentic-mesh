@@ -60,22 +60,27 @@ export function MeshFooter() {
 	const vidRef = useRef<HTMLVideoElement>(null);
 	const bannerRef = useRef<HTMLDivElement>(null);
 	const [playing, setPlaying] = useState(false);
+	const [ended, setEnded] = useState(false);
 
-	// Lazy cinematic banner: preload="none" keeps the network silent until the banner actually
-	// enters the viewport — only then play() (which triggers the download). Leaving the section
-	// pauses playback, so an idle tab/page never burns cycles on an off-screen loop.
+	// USER-RUN banner (the user's call): no autoplay at all. The still holds the frame;
+	// [ run ] plays the 8s take ONCE (click = download, still zero bytes for passers-by),
+	// the final frame stays, [ replay ] appears. The human holds the toggle — same law as
+	// everywhere else in the mesh.
+	const runBanner = () => {
+		const vid = vidRef.current;
+		if (!vid) return;
+		setEnded(false);
+		try { vid.currentTime = 0; } catch { /* not loaded yet */ }
+		vid.play().catch(() => {});
+	};
 	useEffect(() => {
-		const vid = vidRef.current, banner = bannerRef.current;
-		if (!vid || !banner) return;
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // poster only
+		const vid = vidRef.current;
+		if (!vid) return;
 		const onPlaying = () => setPlaying(true);
+		const onEnded = () => setEnded(true);
 		vid.addEventListener("playing", onPlaying);
-		const io = new IntersectionObserver(
-			([e]) => { if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause(); },
-			{ threshold: 0.12 }
-		);
-		io.observe(banner);
-		return () => { vid.removeEventListener("playing", onPlaying); io.disconnect(); };
+		vid.addEventListener("ended", onEnded);
+		return () => { vid.removeEventListener("playing", onPlaying); vid.removeEventListener("ended", onEnded); };
 	}, []);
 
 	useEffect(() => {
@@ -162,7 +167,6 @@ export function MeshFooter() {
 						<video
 							ref={vidRef}
 							muted
-							loop
 							playsInline
 							preload="none"
 							poster="/footer-crimson-poster.jpg"
@@ -173,6 +177,20 @@ export function MeshFooter() {
 							<source src="/footer-crimson.mp4" type="video/mp4" />
 						</video>
 					</div>
+					{/* run control — top-right, mono, lore verb; the only way the take plays */}
+					{(!playing || ended) && (
+						<button
+							onClick={runBanner}
+							className="group absolute right-5 top-5 z-30 flex cursor-pointer items-center gap-2.5 border border-white/20 bg-black/35 px-4 py-2.5 backdrop-blur-md transition-colors duration-300 hover:border-[var(--red-700)]"
+							style={{ borderRadius: 4 }}
+							aria-label="Run the banner take"
+						>
+							<span className="size-[6px] bg-[var(--red-700)] opacity-70 group-hover:opacity-100 transition-opacity" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
+							<span className="label-12-mono uppercase tracking-[0.22em] text-white/80 group-hover:text-white transition-colors">
+								{ended ? "[ replay ]" : "[ run ]"}
+							</span>
+						</button>
+					)}
 					{/* film finish: living grain + inner micro-vignette over the moving image */}
 					<div className="film-grain" aria-hidden />
 					<div className="micro-vignette" aria-hidden />
