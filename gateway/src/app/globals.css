@@ -939,3 +939,14 @@ html.lenis, html.lenis body { height: auto; }
 	0%, 100% { opacity: 0.3; transform: translateY(0); }
 	50%      { opacity: 0.8; transform: translateY(4px); }
 }
+
+/* ─── prefers-reduced-motion: calm the autonomous motion. Scroll-scrubbed moves stay (they
+   follow the user's own gesture); infinite pulses and ambient loops go quiet. ─── */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

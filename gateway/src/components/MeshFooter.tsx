@@ -67,6 +67,7 @@ export function MeshFooter() {
 	useEffect(() => {
 		const vid = vidRef.current, banner = bannerRef.current;
 		if (!vid || !banner) return;
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // poster only
 		const onPlaying = () => setPlaying(true);
 		vid.addEventListener("playing", onPlaying);
 		const io = new IntersectionObserver(

@@ -202,6 +202,7 @@ export function ScrollHero() {
 					onUpdate: (self) => {
 						const v = montageRef.current;
 						if (!v) return;
+						if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // poster only
 						if (self.progress > 0.55 && v.paused) v.play().catch(() => {});
 						else if (self.progress < 0.5 && !v.paused) v.pause();
 					},

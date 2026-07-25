@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import type { ReactNode } from 'react';
 
@@ -24,6 +24,11 @@ export default function ClickPrompt({
   children,
 }: ClickPromptProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Portal mounts only AFTER hydration: SSR HTML has no canvas, so the first client render
+  // must not have one either — rendering it behind `typeof window` was the React #418 source
+  // (and forced a full client re-render of the tree on every load).
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const particlesRef = useRef<Particle[]>([]);
   const isRunningRef = useRef<boolean>(false);
   const animationIdRef = useRef<number | null>(null);
@@ -121,7 +126,7 @@ export default function ClickPrompt({
         {children}
       </div>
 
-      {typeof window !== 'undefined' &&
+      {mounted &&
         createPortal(
           <canvas
             ref={canvasRef}
