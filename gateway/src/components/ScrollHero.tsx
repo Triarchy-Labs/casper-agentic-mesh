@@ -197,14 +197,23 @@ export function ScrollHero() {
 					scrub: 1.2,
 					anticipatePin: 1,
 					invalidateOnRefresh: true,
-					// montage video: starts DOWNLOADING+playing only once the mosaic is assembling
-					// (progress ~0.55); pausing when scrubbed back out. preload="none" until then.
+					// montage video: quiet DOWNLOAD once the mosaic starts assembling, but playback
+					// begins FROM FRAME 0 exactly when the layer reveals over the assembled image
+					// (produx: the video starts when it appears, it never runs in the background).
+					// Scrubbing back pauses and rewinds so the next reveal starts clean again.
 					onUpdate: (self) => {
 						const v = montageRef.current;
 						if (!v) return;
 						if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; // poster only
-						if (self.progress > 0.55 && v.paused) v.play().catch(() => {});
-						else if (self.progress < 0.5 && !v.paused) v.pause();
+						const REVEAL = 1.62 / 2.4;
+						if (self.progress > 0.5 && v.preload === "none") { v.preload = "auto"; try { v.load(); } catch { /* noop */ } }
+						if (self.progress >= REVEAL && v.paused) {
+							try { v.currentTime = 0; } catch { /* not ready yet */ }
+							v.play().catch(() => {});
+						} else if (self.progress < REVEAL - 0.02 && !v.paused) {
+							v.pause();
+							try { v.currentTime = 0; } catch { /* noop */ }
+						}
 					},
 				},
 			});
@@ -317,16 +326,25 @@ export function ScrollHero() {
 			// (translate + scale). Animating top/left/width/height here caused a visible sideways
 			// drift: layout thrash + object-cover re-cropping every frame as the box aspect morphed.
 			// Transforms ride the compositor: no reflow, no re-crop, sub-pixel smooth.
+			// Target box keeps the CARD's aspect (1.784), maxed within 96vw/94vh and centered:
+			// start and end share one aspect -> scaleX === scaleY (UNIFORM). Mismatched axes here
+			// squashed the video at the start of the zoom (user caught it; produx never distorts).
+			const targetBox = () => {
+				const ar = 1.784;
+				const tw = Math.min(window.innerWidth * 0.96, window.innerHeight * 0.94 * ar);
+				const th = tw / ar;
+				return { top: (window.innerHeight - th) / 2, left: (window.innerWidth - tw) / 2, w: tw, h: th };
+			};
 			tl.set(".montage-zoom", {
-				top: () => window.innerHeight * 0.03,
-				left: () => window.innerWidth * 0.02,
-				width: () => window.innerWidth * 0.96,
-				height: () => window.innerHeight * 0.94,
+				top: () => targetBox().top,
+				left: () => targetBox().left,
+				width: () => targetBox().w,
+				height: () => targetBox().h,
 				transformOrigin: "0 0",
-				x: () => frameRect().left - window.innerWidth * 0.02,
-				y: () => frameRect().top - window.innerHeight * 0.03,
-				scaleX: () => frameRect().w / (window.innerWidth * 0.96),
-				scaleY: () => frameRect().h / (window.innerHeight * 0.94),
+				x: () => frameRect().left - targetBox().left,
+				y: () => frameRect().top - targetBox().top,
+				scaleX: () => frameRect().w / targetBox().w,
+				scaleY: () => frameRect().w / targetBox().w,
 				force3D: true,
 			}, 1.6);
 			tl.to(".montage-zoom", { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 1.62);
