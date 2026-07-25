@@ -950,3 +950,33 @@ html.lenis, html.lenis body { height: auto; }
 		scroll-behavior: auto !important;
 	}
 }
+
+/* ─── Film finish: living grain + micro-vignette (footer banner, reusable).
+   Grain = local SVG turbulence in a data-URI (no external fetch), oversized and jumped in
+   8 steps like real film weave; overlay blend keeps it invisible as texture, felt as tone. ─── */
+.film-grain {
+	position: absolute;
+	inset: -60%;
+	pointer-events: none;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	opacity: 0.07;
+	mix-blend-mode: overlay;
+	animation: grainWeave 0.9s steps(8) infinite;
+}
+@keyframes grainWeave {
+	0% { transform: translate(0, 0); }
+	12.5% { transform: translate(-2%, 1%); }
+	25% { transform: translate(1%, -2%); }
+	37.5% { transform: translate(-1%, 2%); }
+	50% { transform: translate(2%, 1%); }
+	62.5% { transform: translate(-2%, -1%); }
+	75% { transform: translate(1%, 2%); }
+	87.5% { transform: translate(2%, -2%); }
+	100% { transform: translate(0, 0); }
+}
+.micro-vignette {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	box-shadow: inset 0 0 110px 34px rgba(5, 3, 5, 0.5);
+}

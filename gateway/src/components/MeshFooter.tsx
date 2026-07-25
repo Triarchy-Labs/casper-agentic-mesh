@@ -173,6 +173,9 @@ export function MeshFooter() {
 							<source src="/footer-crimson.mp4" type="video/mp4" />
 						</video>
 					</div>
+					{/* film finish: living grain + inner micro-vignette over the moving image */}
+					<div className="film-grain" aria-hidden />
+					<div className="micro-vignette" aria-hidden />
 					{/* cinematic vignette: edges sink into the footer's black, bottom melts into it */}
 					<div
 						className="pointer-events-none absolute inset-0"
