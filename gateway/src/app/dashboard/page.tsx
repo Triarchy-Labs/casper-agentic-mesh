@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { HoverReel } from "@/components/HoverReel";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -324,6 +325,7 @@ export default function Dashboard() {
                             {/* the watcher — torn-reveal eyes over the panel; the orb never matched the
                                 editorial language. The state machine stays, spoken in mono. */}
                             <div className="absolute inset-0 bg-cover bg-center opacity-[0.92] group-hover:opacity-100 transition-opacity duration-700" style={{ backgroundImage: "url(/cards/telemetry-eyes.webp)" }} />
+                            <HoverReel name="reel-telemetry" />
                             <div className="absolute top-6 left-6 z-20 flex items-center gap-3">
                                 <span className={`size-[7px] ${agentState === "danger" ? "bg-[var(--red-700)]" : agentState === "success" ? "bg-green-500" : "bg-white/60"}`} style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
                                 <span className="label-12-mono text-white/70 tracking-[0.22em]">state: {agentState}{agentState === "exhausted" ? " · zzz" : ""}</span>

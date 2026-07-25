@@ -980,3 +980,8 @@ html.lenis, html.lenis body { height: auto; }
 	pointer-events: none;
 	box-shadow: inset 0 0 110px 34px rgba(5, 3, 5, 0.5);
 }
+
+/* HoverReel: still art -> living take. Hidden until the hover lingers; the .hr-on class
+   (added after the 0.9s dwell) cross-fades the reel in over the still. */
+.hover-reel { opacity: 0; transition: opacity 0.65s ease; pointer-events: none; }
+.hover-reel.hr-on { opacity: 1; }

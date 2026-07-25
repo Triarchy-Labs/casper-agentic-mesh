@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { HoverReel } from "@/components/HoverReel";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { Nav } from "@/components/Nav";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
@@ -53,6 +54,7 @@ interface Bounty {
 	difficulty: string;
 }
 
+const KPI_REEL: (string | null)[] = [null, "reel-quests", "reel-execution", "reel-efficiency"];
 const KPI_ART = ["/cards/kpi-volume.webp", "/cards/kpi-quests.webp", "/cards/kpi-execution.webp", "/cards/kpi-efficiency.webp"];
 
 const BountiesPage = () => {
@@ -260,6 +262,7 @@ const BountiesPage = () => {
 										style={{ backgroundImage: `url(${KPI_ART[idx]})` }}
 									/>
 								)}
+								{KPI_REEL[idx] && <HoverReel name={KPI_REEL[idx]!} />}
 								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 								
 								{/* Overlay Gradient */}

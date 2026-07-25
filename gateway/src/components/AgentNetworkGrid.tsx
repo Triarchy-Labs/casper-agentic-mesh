@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import type { AgentRecord } from "@/lib/agent_registry";
+import { HoverReel } from "@/components/HoverReel";
 
 // Fallback data if /api/agents is unreachable
 // Fallback data if /api/agents is unreachable
@@ -49,6 +50,11 @@ const AGENT_ART: Record<string, string> = {
 	agent_alpha_arbitrage: "/cards/agent-alpha.webp",
 };
 
+const AGENT_REEL: Record<string, string> = {
+	malicious_node_x9: "reel-malicious",
+	mark_53_sarcophagus: "reel-sarcophagus",
+};
+
 function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
 	return (
 		<motion.div
@@ -67,6 +73,7 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 						style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
 					/>
 				)}
+				{AGENT_REEL[agent.id] && <HoverReel name={AGENT_REEL[agent.id]} />}
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay" />
 				
 				<div className="absolute bottom-6 right-6 flex gap-2 z-10 max-sm:bottom-4 max-sm:right-4">
@@ -109,6 +116,7 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 							style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
 						/>
 					)}
+					{AGENT_REEL[agent.id] && <HoverReel name={AGENT_REEL[agent.id]} />}
 					<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay" />
 					
 					{/* Overlay Gradient for Text */}
