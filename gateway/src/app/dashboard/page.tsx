@@ -660,7 +660,7 @@ export default function Dashboard() {
             </section>
 
             {/* Sticky Execution Input */}
-            <section className="sticky bottom-0 z-50 w-full bg-black border-t border-white/20 px-8 md:px-16 py-6">
+            <section className="sticky bottom-0 z-50 w-full border-t border-white/15 px-8 md:px-16 py-6 bg-[#0a0508]/55 backdrop-blur-2xl backdrop-saturate-150" style={{ boxShadow: "0 -18px 50px rgba(0,0,0,0.45)" }}>
                 <div className="w-full flex flex-col md:flex-row gap-6 items-end">
                     
                     <div className="flex-1 w-full">
@@ -689,8 +689,10 @@ export default function Dashboard() {
                         <button 
                             onClick={handleExecute}
                             disabled={!inputValue.trim() || agentState === "working"}
-                            className="w-full button-primary label-12-mono font-bold tracking-widest uppercase active:scale-[0.98] transition-transform"
-                            style={{ height: "48px" }}
+                            className="w-full label-12-mono font-bold tracking-widest uppercase active:scale-[0.98] bg-white text-black border border-white transition-[transform,box-shadow,background-color] duration-300 hover:bg-[#f5f5f5] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                            style={{ height: "48px", boxShadow: "0 0 0 1px rgba(224,53,41,0.55), 0 0 14px rgba(224,53,41,0.30)" }}
+                            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 0 1px rgba(224,53,41,0.9), 0 0 26px rgba(224,53,41,0.55)"; }}
+                            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 0 0 1px rgba(224,53,41,0.55), 0 0 14px rgba(224,53,41,0.30)"; }}
                         >
                             {agentState === "working" ? "EXECUTING..." : "EXECUTE_SEQ"}
                         </button>
