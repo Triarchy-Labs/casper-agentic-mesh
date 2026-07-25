@@ -312,19 +312,28 @@ export function ScrollHero() {
 			// overlays step aside; the crystal's pulse hands over to the moving image
 			tl.to(".assembly-text-overlay", { opacity: 0, y: -12, duration: 0.08, ease: "power2.in", stagger: 0.02 }, 1.58);
 			tl.to(".crystal-reveal", { opacity: 0, duration: 0.08, ease: "power2.in" }, 1.58);
-			// the video materialises in the mosaic's exact rect
+			// the video materialises in the mosaic's exact rect — FLIP style: the box is laid out
+			// at its FINAL fullscreen rect from the start, and the "small" state is pure transform
+			// (translate + scale). Animating top/left/width/height here caused a visible sideways
+			// drift: layout thrash + object-cover re-cropping every frame as the box aspect morphed.
+			// Transforms ride the compositor: no reflow, no re-crop, sub-pixel smooth.
 			tl.set(".montage-zoom", {
-				top: () => frameRect().top, left: () => frameRect().left,
-				width: () => frameRect().w, height: () => frameRect().h,
-			}, 1.6);
-			tl.to(".montage-zoom", { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 1.62);
-			// THE ZOOM — scroll inflates it to ~96vw/94vh while the pin holds (produx signature)
-			tl.to(".montage-zoom", {
 				top: () => window.innerHeight * 0.03,
 				left: () => window.innerWidth * 0.02,
 				width: () => window.innerWidth * 0.96,
 				height: () => window.innerHeight * 0.94,
-				duration: 0.5, ease: "power2.inOut",
+				transformOrigin: "0 0",
+				x: () => frameRect().left - window.innerWidth * 0.02,
+				y: () => frameRect().top - window.innerHeight * 0.03,
+				scaleX: () => frameRect().w / (window.innerWidth * 0.96),
+				scaleY: () => frameRect().h / (window.innerHeight * 0.94),
+				force3D: true,
+			}, 1.6);
+			tl.to(".montage-zoom", { autoAlpha: 1, duration: 0.12, ease: "power2.out" }, 1.62);
+			// THE ZOOM — scroll drives a pure transform to identity (produx signature, buttery)
+			tl.to(".montage-zoom", {
+				x: 0, y: 0, scaleX: 1, scaleY: 1,
+				duration: 0.5, ease: "power2.inOut", force3D: true,
 			}, 1.78);
 			// the mosaic below quietly leaves once fully covered
 			tl.to(".assembly-rise", { autoAlpha: 0, duration: 0.1, ease: "none" }, 1.86);
@@ -637,7 +646,7 @@ export function ScrollHero() {
 				{/* MONTAGE ZOOM — produx finale: video takes the assembled image's exact rect, then the
 				    scroll inflates it to near-fullscreen while the pin holds. Lazy by construction:
 				    preload="none", playback (= download) starts only when the mosaic is assembling. */}
-				<div className="montage-zoom absolute z-[35] overflow-hidden pointer-events-none" style={{ top: 0, left: 0, width: 0, height: 0, opacity: 0, visibility: "hidden" }}>
+				<div className="montage-zoom absolute z-[35] overflow-hidden pointer-events-none will-change-transform" style={{ top: 0, left: 0, width: 0, height: 0, opacity: 0, visibility: "hidden" }}>
 					<video
 						ref={montageRef}
 						muted
