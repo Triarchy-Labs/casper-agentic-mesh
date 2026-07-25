@@ -62,6 +62,21 @@ A liquid signal layer over agent decisions — "Augur for agent rulings".
 ✅ RWA oracle agent ✅ Bounty-judge (LLM→on-chain) ✅ Tribunal (adversarial court,
 fault-tolerant) ✅ Gateway with live on-chain panel + RWA-pegged pricing.
 
+## The Operator (ONE CLICK hub, next phase)
+The hub already gives one-touch navigation and viewer preferences. Its end state is an
+**embedded mesh operator AI** (OpenRouter-backed) with read tentacles into every module
+of the mesh — site, registry, oracle, tribunal transcripts, live contract state:
+- **Ask** — answer any question about the project from its own sources;
+- **Dispatch** — hand a task to the swarm and receive a structured report;
+- **Review** — pull up any verdict with the full adversarial transcript;
+- **Halt** — a kill-switch surfaced as a first-class control.
+
+One law governs all of it, the same law the escrow already enforces on-chain:
+**the human holds the final toggle.** Every state-changing action the operator proposes
+waits behind an explicit human confirmation (opt-out only by conscious choice), exactly
+as the Tribunal's verdict can only pick between release and refund. LLMs advise and
+orchestrate; authority stays with the person and the contract.
+
 ## Operating principles (non-negotiable)
 - **Click-triggered only.** No autonomous background hammering. Heavy/LLM/spending
   actions run on a button; only cheap reads poll.

@@ -122,6 +122,11 @@ trust every claim.
 - **Mesh Control UI** — the dashboard surfaces all of the above as click-triggered
   panels in the Vercel-Geist / Casper aesthetic ([`gateway/src/components/MeshControl.tsx`](gateway/src/components/MeshControl.tsx)),
   backed by `/api/tower`, `/api/tribunal` (dry-run) and `/api/onchain` (live reads).
+- **ONE CLICK hub** — one-touch personal experience: a single capsule opens navigation
+  to every proof surface (playbook, live contract, roadmap), the machine-readable
+  [Casper Agent Skill](CASPER_AGENT_SKILL.md), and viewer preferences (pure-black
+  produx mode / art-free mode — your taste, one tap, remembered). Next step on the
+  [roadmap](VISION.md): an embedded mesh operator AI living in this hub.
 
 ### Roadmap (clearly not yet on-chain)
 Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution
