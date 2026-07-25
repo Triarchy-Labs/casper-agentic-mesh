@@ -110,7 +110,7 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 				>
 					<div className="absolute inset-0 bg-gradient-to-t from-[#111] to-[#050505]" />
 					{/* Unique subtle tint per card */}
-					<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(${i * 60}, 60%, 40%) 0%, transparent 70%)` }} />
+					<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(354, 60%, ${24 + i * 5}%) 0%, transparent 70%)` }} />
 					{AGENT_ART[agent.id] && (
 						<div
 							className="card-art absolute inset-0 bg-cover bg-center opacity-[0.8] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-110"

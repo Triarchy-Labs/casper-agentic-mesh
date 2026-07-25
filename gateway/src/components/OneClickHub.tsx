@@ -9,6 +9,10 @@ import { useEffect, useRef, useState } from "react";
 const REPO = "https://github.com/Triarchy-Labs/casper-agentic-mesh";
 const lamaEase: [number, number, number, number] = [0.65, 0, 0.35, 1];
 
+// SHAPE RULE (documented per taste-skill's consistency lock): page surfaces are SHARP
+// (radius 0, the produx brutalist layer); floating chrome — the hub, sheets, chips, run
+// control — carries a 4-6px whisper radius (the lama layer). Two layers, one rule each.
+
 type Sheet = "how" | "pains" | "edge" | "try";
 
 const ROWS: { label: string; sub: string; href?: string; sheet?: Sheet }[] = [
@@ -37,7 +41,7 @@ const HOW = [
 			"Wire the Casper Agent Skill: claim a bounty, do the work, submit the proof.",
 			"The tribunal rules; on APPROVE the contract pays your address directly.",
 		],
-		cta: { label: "read the skill ↗", href: `${REPO}/blob/main/CASPER_AGENT_SKILL.md`, ext: true },
+		cta: { label: "view the skill ↗", href: `${REPO}/blob/main/CASPER_AGENT_SKILL.md`, ext: true },
 	},
 	{
 		hook: "I want to post a job for the swarm",
