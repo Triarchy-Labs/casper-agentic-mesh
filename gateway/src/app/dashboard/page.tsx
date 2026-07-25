@@ -61,6 +61,7 @@ export default function Dashboard() {
 	const [agentState, setAgentState] = useState<AgentState>("idle");
     const [progress, setProgress] = useState(0);
     const [wasiNodes, setWasiNodes] = useState<WasiNode[]>([]);
+    const [rpcMs, setRpcMs] = useState<number | null>(null);
 	const [sysLoad, setSysLoad] = useState("0.00");
     const [inputValue, setInputValue] = useState("");
     const [lastResult, setLastResult] = useState<{status: string; executor?: string; result?: string; error?: string} | null>(null);
@@ -129,6 +130,7 @@ export default function Dashboard() {
                     const data = await res.json();
                     if (data.nodes) setWasiNodes(data.nodes);
                     if (data.system?.load) setSysLoad(data.system.load);
+                    if (data.rpc) setRpcMs(data.rpc.ms);
                 }
             } catch {
                 // Silently bypass fetch errors
@@ -447,7 +449,7 @@ export default function Dashboard() {
                             
                             <div className="absolute inset-0 p-[2.22vw] z-10 flex flex-col justify-center">
                                 <div className="text-xs tracking-widest text-white/40 uppercase mb-5 pb-3 border-b border-white/10 z-10">
-                                    ACTIVE_NODES
+                                    ACTIVE_NODES <span className="text-white/25">· RPC {rpcMs !== null ? `${rpcMs}ms` : "—"} · live</span>
                                 </div>
                                 <div className="flex flex-col gap-3">
                                     {wasiNodes.length > 0 ? wasiNodes.map((node) => (
@@ -456,7 +458,7 @@ export default function Dashboard() {
                                                 <div className={`w-1.5 h-1.5 ${node.status === "COMPUTING" ? "bg-white animate-pulse" : node.status === "BREACHED" ? "bg-red-500" : "bg-white/20"}`} />
                                                 <span className="text-white/60">{node.cluster}</span>
                                             </div>
-                                            <span className="text-white/40">{node.latency}MS</span>
+                                            <span className="text-white/40">{node.latency}%</span>
                                         </div>
                                     )) : (
                                         <div className="text-xs text-white/30 animate-pulse">POLLING TELEMETRY...</div>
