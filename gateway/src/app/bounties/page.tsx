@@ -54,7 +54,7 @@ interface Bounty {
 	difficulty: string;
 }
 
-const KPI_REEL: (string | null)[] = [null, "reel-quests", "reel-execution", "reel-efficiency"];
+const KPI_REEL: (string | null)[] = ["reel-volume", "reel-quests", "reel-execution", "reel-efficiency"];
 const KPI_ART = ["/cards/kpi-volume.webp", "/cards/kpi-quests.webp", "/cards/kpi-execution.webp", "/cards/kpi-efficiency.webp"];
 
 const BountiesPage = () => {
