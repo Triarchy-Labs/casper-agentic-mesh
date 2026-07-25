@@ -56,7 +56,7 @@ function SocialSquare({ glyph, href, title }: { glyph: string; href: string; tit
 
 export function MeshFooter() {
 	const footRef = useRef<HTMLElement>(null);
-	const contentRef = useRef<HTMLDivElement>(null);
+	const bottomRef = useRef<HTMLDivElement>(null);
 	const vidRef = useRef<HTMLVideoElement>(null);
 	const bannerRef = useRef<HTMLDivElement>(null);
 	const [playing, setPlaying] = useState(false);
@@ -79,18 +79,18 @@ export function MeshFooter() {
 
 	useEffect(() => {
 		const foot = footRef.current;
-		const content = contentRef.current;
-		if (!foot || !content) return;
-		// slide-from-under reveal (their .footer-content will-change-transform): as the footer
-		// enters, the content catches up from -38% — reads as the footer emerging from beneath
-		// the page. Live rects, same pattern as the cards (immune to pin-spacer trigger races).
+		const bottom = bottomRef.current;
+		if (!foot || !bottom) return;
+		// slide-from-under reveal — SCOPED to the bottom text strip only. Transforming the whole
+		// footer content dragged the video banner through a transform every scroll frame, which
+		// read as stutter; text is free to move. The columns + banner are static page content now.
 		const onScroll = () => {
 			const r = foot.getBoundingClientRect();
 			const vh = window.innerHeight;
 			if (r.top > vh + 80) return;
 			const span = Math.min(r.height, vh * 0.9);
 			const p = Math.max(0, Math.min(1, (vh - r.top) / span));
-			gsap.set(content, { yPercent: (1 - p) * -32 });
+			gsap.set(bottom, { yPercent: (1 - p) * -55 });
 		};
 		window.addEventListener("scroll", onScroll, { passive: true });
 		onScroll();
@@ -103,7 +103,7 @@ export function MeshFooter() {
 			className="relative w-full overflow-hidden px-[5.5vw] pt-[11.7vh] pb-[3.9vh] max-lg:px-[4.10vw] max-lg:pt-[9vh] max-sm:px-[5.97vw] z-10"
 			style={{ backgroundColor: "#0a0508" }}
 		>
-			<div ref={contentRef} className="footer-content will-change-transform">
+			<div className="footer-content">
 				{/* ---- columns (produx grid) ---- */}
 				<div className="grid grid-cols-12 gap-y-[4vh] max-lg:grid-cols-8">
 					{/* Menu/ */}
@@ -182,8 +182,10 @@ export function MeshFooter() {
 					/>
 				</div>
 
-				{/* ---- compact bottom: ghost wordmark LEFT, everything else stacked RIGHT under the photo ---- */}
-				<div className="mt-[2.5vh] flex items-end justify-between gap-[3vw] flex-wrap">
+				{/* ---- compact bottom: ghost wordmark LEFT, everything else stacked RIGHT under the photo.
+				       The ONLY part that slides from under the page (see effect above). ---- */}
+				<div className="overflow-hidden">
+				<div ref={bottomRef} className="mt-[2.5vh] flex items-end justify-between gap-[3vw] flex-wrap will-change-transform">
 					{/* ghost wordmark: 95% transparent, wakes +5% on hover (user spec) */}
 					<div
 						className="uppercase leading-[0.85] text-white select-none opacity-[0.05] hover:opacity-[0.10] transition-opacity duration-500 cursor-default"
@@ -210,6 +212,7 @@ export function MeshFooter() {
 						</div>
 						<p className="label-13-mono text-white/40">© 2026 TRIARCHY LABS — ALL VERDICTS FINAL.</p>
 					</div>
+				</div>
 				</div>
 			</div>
 		</footer>
