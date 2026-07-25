@@ -57,6 +57,8 @@ interface WasiNode {
 	status: "BREACHED" | "COMPUTING" | "IDLE";
 }
 
+const MESH_EPS = ["/api/mcp", "/api/onchain", "/api/agents", "/api/bounties", "/api/telemetry", "/api/tower"];
+
 export default function Dashboard() {
 	const [agentState, setAgentState] = useState<AgentState>("idle");
     const [progress, setProgress] = useState(0);
@@ -73,7 +75,7 @@ export default function Dashboard() {
 	const [gasHedged, setGasHedged] = useState(450000);
 	const [l402Console, setL402Console] = useState<string>("// Ready to challenge L402 gate");
 	const [l402Status, setL402Status] = useState<string>("IDLE");
-	const [meshLoad, setMeshLoad] = useState<number[]>([12, 45, 89, 23, 67, 10, 34, 56, 88, 92, 14, 41]);
+	const [meshLoad, setMeshLoad] = useState<number[]>([]);
 
     const mainRef = useRef<HTMLDivElement>(null);
     const heroRef = useRef<HTMLElement>(null);
@@ -119,6 +121,26 @@ export default function Dashboard() {
         }, mainRef);
 
         return () => ctx.revert();
+    }, []);
+
+    // MESH MATRIX — real endpoint latency measured from THIS browser (audit item C5).
+    // 6 live gateway endpoints x 2 rounds = 12 cells; no synthetic numbers.
+    useEffect(() => {
+        let stop = false;
+        const probe = async () => {
+            const out: number[] = [];
+            for (let round = 0; round < 2; round++) {
+                for (const ep of MESH_EPS) {
+                    const t0 = performance.now();
+                    try { await fetch(ep, { cache: "no-store" }); } catch { /* unreachable counts as slow */ }
+                    out.push(Math.min(999, Math.round(performance.now() - t0)));
+                }
+            }
+            if (!stop) setMeshLoad(out);
+        };
+        probe();
+        const int = setInterval(probe, 20000);
+        return () => { stop = true; clearInterval(int); };
     }, []);
 
     // Live Telemetry Polling
@@ -592,17 +614,18 @@ export default function Dashboard() {
 
 										{/* P2P Load Balancer / Latency Map */}
 										<div className="mb-8">
-											<div className="text-[10px] text-white/40 mb-3 uppercase">P2P Node Latency & Capacity (Mesh Matrix)</div>
+											<div className="text-[10px] text-white/40 mb-3 uppercase">Mesh endpoint latency · measured live from your browser</div>
 											<div className="grid grid-cols-6 gap-2">
-												{meshLoad.map((val, idx) => {
+												{(meshLoad.length ? meshLoad : Array(12).fill(null)).map((val, idx) => {
 													let boxColor = "bg-white/10 border-white/10";
-													if (val > 80) boxColor = "bg-[var(--gray-1000)] border-[var(--gray-1000)] shadow-[0_0_10px_rgba(255,255,255,0.3)] animate-pulse";
-													else if (val > 40) boxColor = "bg-white/40 border-white/40";
+													if (val !== null && val > 400) boxColor = "bg-[var(--red-700)] border-[var(--red-700)] shadow-[0_0_10px_rgba(224,53,41,0.4)] animate-pulse";
+													else if (val !== null && val > 150) boxColor = "bg-white/40 border-white/40";
+													else if (val !== null) boxColor = "bg-[var(--gray-1000)] border-[var(--gray-1000)]";
 													
 													return (
-														<div key={idx} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
+														<div key={idx} title={MESH_EPS[idx % MESH_EPS.length]} className="flex flex-col gap-1 items-center bg-white/5 border border-white/10 p-2">
 															<div className={`w-3 h-3 ${boxColor} rounded-none`} />
-															<span className="text-[9px] font-mono text-white/50">{val}%</span>
+															<span className="text-[9px] font-mono text-white/50">{val === null ? "…" : `${val}ms`}</span>
 														</div>
 													);
 												})}
