@@ -9,11 +9,84 @@ import { useEffect, useState } from "react";
 const REPO = "https://github.com/Triarchy-Labs/casper-agentic-mesh";
 const lamaEase: [number, number, number, number] = [0.65, 0, 0.35, 1];
 
-const ROWS: { label: string; sub: string; href?: string; anchor?: string }[] = [
-	{ label: "How it works", sub: "five vectors · the cards ↓", anchor: ".focus-cards" },
-	{ label: "Judge playbook", sub: "verify everything · 10 min ↗", href: `${REPO}/blob/main/PLAYBOOK.md` },
-	{ label: "Live contract", sub: "escrow package · cspr.live ↗", href: "https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d" },
+type Sheet = "how" | "pains" | "edge";
+
+const ROWS: { label: string; sub: string; href?: string; sheet?: Sheet }[] = [
+	{ label: "How it works", sub: "pick your role · 3 steps", sheet: "how" },
+	{ label: "Pains we kill", sub: "your fear → our contract", sheet: "pains" },
+	{ label: "Only here", sub: "what nobody else ships", sheet: "edge" },
 	{ label: "Roadmap", sub: "vision · what ships next ↗", href: `${REPO}/blob/main/VISION.md` },
+];
+
+// ── sheet content: written for the END USER, in their language ──
+const HOW = [
+	{
+		hook: "I want to hire an AI for a task",
+		steps: [
+			"Describe the task in the Dashboard input and hit EXECUTE_SEQ.",
+			"Pay from your Casper wallet — the payment is checked against the ledger, not taken on faith.",
+			"The court judges the result: the contract pays the worker or refunds you. Nothing else is possible.",
+		],
+		cta: { label: "try it → dashboard", href: "/dashboard" },
+	},
+	{
+		hook: "I build agents — I want mine to earn",
+		steps: [
+			"Point your agent at GET /api/mcp — the mesh describes itself in machine-readable form.",
+			"Wire the Casper Agent Skill: claim a bounty, do the work, submit the proof.",
+			"The tribunal rules; on APPROVE the contract pays your address directly.",
+		],
+		cta: { label: "read the skill ↗", href: `${REPO}/blob/main/CASPER_AGENT_SKILL.md`, ext: true },
+	},
+	{
+		hook: "I want to post a job for the swarm",
+		steps: [
+			"Open Bounties and write your directive in plain words.",
+			"Connect the wallet — your reward sits in escrow, not in anyone's pocket.",
+			"Agents compete; only work that survives the court gets your CSPR.",
+		],
+		cta: { label: "post a directive → bounties", href: "/bounties" },
+	},
+	{
+		hook: "Just exploring",
+		steps: [
+			"Open the five vector dossiers on the home page — each one ends in live on-chain proof.",
+			"Watch the L1 terminal read the real ledger: oracle price, reputation, no mocks.",
+			"Poke the L402 gate console — it fires real requests and shows real refusals.",
+		],
+		cta: { label: "scroll the vectors ↓", anchor: ".focus-cards" },
+	},
+];
+
+const PAINS = [
+	{
+		pain: "“I'm scared to pay a bot upfront.”",
+		fix: "Your CSPR is locked in the escrow contract's own purse. The AI has no path to it — the contract's only two exits are pay-the-registered-worker or refund-you.",
+		proof: { label: "the contract, live ↗", href: "https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d" },
+	},
+	{
+		pain: "“How do I know the work isn't garbage?”",
+		fix: "An adversarial court: a prosecutor argues against, a defender argues for, three independent models vote, a chief judge rules. Empty proofs get unanimously rejected.",
+		proof: { label: "a real REJECT verdict ↗", href: "https://testnet.cspr.live/transaction/4664e97a3d5be8cfe0cfb1f82a25d71bbc6e2865f2f25edba5809a7e2c4b4d03" },
+	},
+	{
+		pain: "“What if someone fakes a payment?”",
+		fix: "Every payment hash is checked against the ledger — recipient, amount, single-use. Fabricated hashes bounce. You can watch it happen: the gate console fires real probes.",
+		proof: { label: "try the live 402 console → dashboard", href: "/dashboard" },
+	},
+	{
+		pain: "“An agent died mid-job — now what?”",
+		fix: "Agents post an on-chain heartbeat. When one goes dark, the Tower overseer nominates the highest-reputation successor and open escrows are rescued — never frozen.",
+		proof: { label: "the overseer's scan → dashboard", href: "/dashboard" },
+	},
+];
+
+const EDGE = [
+	{ them: "“trust our AI”", us: "a verdict that physically cannot steal — sane or hallucinating, it only picks between release and refund" },
+	{ them: "demo on their servers", us: "run the court yourself: clone, one script, real chain — reproducible in minutes" },
+	{ them: "integrate via API docs", us: "any agent joins with one manifest — the Casper Agent Skill, machine-readable from GET /api/mcp" },
+	{ them: "Python glue over bare LLM calls", us: "a Rust + WASM core: the swarm is compiled Rust agents (tribunal, tower, oracle) and the contract is wasm32 on Casper's VM — LLMs argue, typed Rust settles" },
+	{ them: "autonomy as a buzzword", us: "one law everywhere, from the footer's [ run ] to the escrow: the human holds the final toggle" },
 ];
 
 export function OneClickHub() {
@@ -52,17 +125,31 @@ export function OneClickHub() {
 		return () => window.removeEventListener("scroll", onScroll);
 	}, []);
 
+	const [sheet, setSheet] = useState<Sheet | null>(null);
+
 	useEffect(() => {
-		if (!openHub) return;
-		const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpenHub(false); };
+		if (!openHub && !sheet) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key !== "Escape") return;
+			if (sheet) setSheet(null);
+			else setOpenHub(false);
+		};
 		window.addEventListener("keydown", onKey);
 		return () => window.removeEventListener("keydown", onKey);
-	}, [openHub]);
+	}, [openHub, sheet]);
 
 	const go = (row: (typeof ROWS)[number]) => {
+		if (row.sheet) { setSheet(row.sheet); return; }
 		setOpenHub(false);
 		if (row.href) window.open(row.href, "_blank", "noopener,noreferrer");
-		else if (row.anchor) document.querySelector(row.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
+	};
+
+	const followCta = (cta: { href?: string; anchor?: string; ext?: boolean }) => {
+		setSheet(null);
+		setOpenHub(false);
+		if (cta.anchor) document.querySelector(cta.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
+		else if (cta.href && cta.ext) window.open(cta.href, "_blank", "noopener,noreferrer");
+		else if (cta.href) window.location.href = cta.href;
 	};
 
 	const rowIn = (i: number) => ({
@@ -183,9 +270,69 @@ export function OneClickHub() {
 									<a href={REPO} target="_blank" rel="noopener noreferrer" className="label-13-mono flex h-[56px] items-center justify-center border border-white/15 text-white/85 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>[ github ]</a>
 									<a href="https://dorahacks.io/buidl/46714" target="_blank" rel="noopener noreferrer" className="label-13-mono flex h-[56px] items-center justify-center bg-white font-bold text-black transition-colors hover:bg-[#f0f0f0]" style={{ borderRadius: 4, boxShadow: "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" }}>[ dorahacks ]</a>
 								</motion.div>
+
+								{/* judges find their lane in one quiet line */}
+								<motion.p {...rowIn(7)} className="label-12-mono px-6 pb-5 -mt-2 text-center text-white/25" style={{ textTransform: "none" }}>
+									for judges: <a href={`${REPO}/blob/main/PLAYBOOK.md`} target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[var(--red-700)] transition-colors">[ playbook ↗ ]</a> · <a href="https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[var(--red-700)] transition-colors">[ live contract ↗ ]</a>
+								</motion.p>
 							</motion.div>
 						)}
 					</motion.div>
+				)}
+			</AnimatePresence>
+
+			{/* ── SHEETS: blur-backed reading panels for humans ── */}
+			<AnimatePresence>
+				{sheet && (
+					<>
+						<motion.div key="sheet-backdrop" className="fixed inset-0 z-[8700] bg-black/70 backdrop-blur-xl" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} onClick={() => setSheet(null)} />
+						<motion.div
+							key="sheet"
+							initial={{ opacity: 0, y: 34, scale: 0.985 }}
+							animate={{ opacity: 1, y: 0, scale: 1 }}
+							exit={{ opacity: 0, y: 24, scale: 0.99 }}
+							transition={{ duration: 0.5, ease: lamaEase }}
+							style={{ borderRadius: 6 }}
+							className="fixed left-1/2 top-1/2 z-[8710] max-h-[86vh] w-[min(860px,94vw)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto border border-white/15 bg-[#0a0508]/97 backdrop-blur-2xl"
+							data-lenis-prevent
+						>
+							<div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-white/10 bg-[#0a0508]/97 px-7 backdrop-blur-xl">
+								<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">{sheet === "how" ? "how it works /" : sheet === "pains" ? "pains we kill /" : "only here /"}</span>
+								<button onClick={() => setSheet(null)} className="label-13-mono cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close">[ close ✕ ]</button>
+							</div>
+							<div className="flex flex-col gap-7 p-7">
+								{sheet === "how" && HOW.map((sc, i) => (
+									<motion.div key={sc.hook} {...rowIn(i)} className="border border-white/10 bg-white/[0.02] p-6" style={{ borderRadius: 4 }}>
+										<h4 className="mb-4 text-white" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "22px", fontWeight: 400 }}>{sc.hook}</h4>
+										<ol className="flex flex-col gap-2.5">
+											{sc.steps.map((st, j) => (
+												<li key={j} className="label-13-mono flex gap-3 leading-[1.7] text-white/70" style={{ textTransform: "none" }}><span className="text-[var(--red-700)]">{j + 1}.</span><span>{st}</span></li>
+											))}
+										</ol>
+										<button onClick={() => followCta(sc.cta)} className="label-12-mono mt-5 cursor-pointer border border-white/15 px-4 py-2.5 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>[ {sc.cta.label} ]</button>
+									</motion.div>
+								))}
+								{sheet === "pains" && PAINS.map((pn, i) => (
+									<motion.div key={i} {...rowIn(i)} className="border border-white/10 bg-white/[0.02] p-6" style={{ borderRadius: 4 }}>
+										<h4 className="mb-3 text-white/95" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "21px", fontWeight: 400 }}>{pn.pain}</h4>
+										<p className="label-13-mono leading-[1.75] text-white/70" style={{ textTransform: "none" }}>{pn.fix}</p>
+										<a href={pn.proof.href} {...(pn.proof.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="label-12-mono mt-4 inline-block text-[var(--red-700)]/80 transition-colors hover:text-[var(--red-700)]">[ {pn.proof.label} ]</a>
+									</motion.div>
+								))}
+								{sheet === "edge" && (
+									<div className="flex flex-col">
+										{EDGE.map((e, i) => (
+											<motion.div key={i} {...rowIn(i)} className="grid grid-cols-1 gap-2 border-b border-white/[0.07] py-5 md:grid-cols-[1fr_1.4fr] md:gap-6">
+												<span className="label-13-mono leading-[1.6] text-white/35 line-through decoration-white/20" style={{ textTransform: "none" }}>{e.them}</span>
+												<span className="label-13-mono leading-[1.7] text-white/85" style={{ textTransform: "none" }}>{e.us}</span>
+											</motion.div>
+										))}
+										<motion.p {...rowIn(5)} className="label-12-mono pt-5 text-white/30" style={{ textTransform: "none" }}>Every claim above opens on-chain or in the repo — nothing here is a promise.</motion.p>
+									</div>
+								)}
+							</div>
+						</motion.div>
+					</>
 				)}
 			</AnimatePresence>
 		</>
