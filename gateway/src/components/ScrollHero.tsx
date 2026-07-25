@@ -111,6 +111,13 @@ const HERO_PIECES = [
 export function ScrollHero() {
 	const heroRef = useRef<HTMLElement>(null);
 	const montageRef = useRef<HTMLVideoElement>(null);
+	// hero live strip — one read of the real ledger (oracle price + agent reputation)
+	const [live, setLive] = useState<{ price: string; rep: number } | null>(null);
+	useEffect(() => {
+		fetch("/api/onchain").then(r => r.ok ? r.json() : null).then(d => {
+			if (d && d.priceUsd) setLive({ price: `$${Number(d.priceUsd).toFixed(6)}`, rep: d.reputation ?? 0 });
+		}).catch(() => { /* strip simply stays quiet */ });
+	}, []);
 	const wordmarkRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<HTMLDivElement>(null);
 	const subtitleRef = useRef<HTMLDivElement>(null);
@@ -623,6 +630,10 @@ export function ScrollHero() {
 						<div className="flex flex-col items-start gap-5 shrink-0 max-w-[34vw] max-lg:max-w-[45vw] max-sm:max-w-none">
 							<p className="text-[var(--gray-800)]" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(14px, 1.05vw, 22px)", lineHeight: 1.7, letterSpacing: "0.01em" }}><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">But value can’t flow to a machine</span></span><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">you can’t hold accountable. Triarchy</span></span><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">is the command deck for that economy —</span></span><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">escrow, a real-world oracle, and an</span></span><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">adversarial tribunal, under one overseer.</span></span></p>
 							<p className="text-white uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(12px, 0.92vw, 19px)", letterSpacing: "0.12em" }}><span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap">Every settlement live on Casper. <span className="text-[var(--red-700)]">Not a simulation.</span></span></span></p>
+							<p className="uppercase" style={{ fontFamily: "ui-monospace, 'Geist Mono', monospace", fontSize: "clamp(11px, 0.8vw, 16px)", letterSpacing: "0.14em" }}>
+								<span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap text-[var(--gray-800)]"><span className="text-[var(--red-700)]">◆</span> finalist · casper agentic buildathon 2026</span></span>
+								<span className="block overflow-hidden"><span className="hero-line dstrip inline-block whitespace-nowrap text-[var(--gray-800)]">{live ? <>‹● mesh online› oracle {live.price} · agent rep {live.rep} — <span className="text-white/70">read from the ledger just now</span></> : <>‹○ reading the ledger…›</>}</span></span>
+							</p>
 						</div>
 					</div>
 				</div>

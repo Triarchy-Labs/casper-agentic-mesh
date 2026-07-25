@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 const REPO = "https://github.com/Triarchy-Labs/casper-agentic-mesh";
 const lamaEase: [number, number, number, number] = [0.65, 0, 0.35, 1];
 
-type Sheet = "how" | "pains" | "edge";
+type Sheet = "how" | "pains" | "edge" | "try";
 
 const ROWS: { label: string; sub: string; href?: string; sheet?: Sheet }[] = [
+	{ label: "Try it live", sub: "no wallet · 30 seconds", sheet: "try" },
 	{ label: "How it works", sub: "pick your role · 3 steps", sheet: "how" },
 	{ label: "Pains we kill", sub: "your fear → our contract", sheet: "pains" },
 	{ label: "Only here", sub: "what nobody else ships", sheet: "edge" },
@@ -135,6 +136,31 @@ export function OneClickHub() {
 	}, []);
 
 	const [sheet, setSheet] = useState<Sheet | null>(null);
+	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
+	const [tryBusy, setTryBusy] = useState(false);
+
+	const probeLedger = async () => {
+		if (tryBusy) return;
+		setTryBusy(true);
+		setTryOut(">>> GET /api/onchain\n// reading the Casper testnet ledger…");
+		try {
+			const r = await fetch("/api/onchain", { cache: "no-store" });
+			const d = await r.json();
+			setTryOut(`>>> GET /api/onchain\n<<< HTTP ${r.status}\n<<< oracle CSPR-USD: $${Number(d.priceUsd).toFixed(6)}\n<<< agent reputation: ${d.reputation}\n<<< $${d.peg?.usd} bounty = ${d.peg?.cspr} CSPR at the live rate\n<<< source: ${d.source} · ${d.fetchedAt}\n// that was the real ledger, read just now. No cache, no mock.`);
+		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
+		setTryBusy(false);
+	};
+	const probeGate = async () => {
+		if (tryBusy) return;
+		setTryBusy(true);
+		setTryOut(">>> POST /api/hire (no payment header)\n// hitting the live x402 gate…");
+		try {
+			const r = await fetch("/api/hire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: `try_${Date.now()}`, description: "hub probe", bounty_cspr: 1, client_id: "one-click-try" }) });
+			const body = (await r.text()).slice(0, 220);
+			setTryOut(`>>> POST /api/hire (no payment header)\n<<< HTTP ${r.status}\n<<< ${body}\n// a real refusal from the real gate: no verified CSPR payment, no work. That IS the product.`);
+		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
+		setTryBusy(false);
+	};
 
 	useEffect(() => {
 		if (!openHub && !sheet) return;
@@ -306,10 +332,27 @@ export function OneClickHub() {
 							data-lenis-prevent
 						>
 							<div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-white/10 bg-[#0a0508]/97 px-7 backdrop-blur-xl">
-								<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">{sheet === "how" ? "how it works /" : sheet === "pains" ? "pains we kill /" : "only here /"}</span>
+								<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">{sheet === "how" ? "how it works /" : sheet === "pains" ? "pains we kill /" : sheet === "try" ? "try it live /" : "only here /"}</span>
 								<button onClick={() => setSheet(null)} className="label-13-mono cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close">[ close ✕ ]</button>
 							</div>
 							<div className="flex flex-col gap-7 p-7">
+								{sheet === "try" && (
+									<>
+										<motion.p {...rowIn(0)} className="label-13-mono leading-[1.7] text-white/60" style={{ textTransform: "none" }}>
+											Thirty seconds, nothing to install, nothing to connect. Two buttons, two real answers
+											from the live mesh — the same endpoints the agents themselves use.
+										</motion.p>
+										<motion.div {...rowIn(1)} className="flex flex-wrap gap-3">
+											<button onClick={probeLedger} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ read the ledger — live oracle + reputation ]</button>
+											<button onClick={probeGate} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ challenge the x402 gate — watch it refuse ]</button>
+										</motion.div>
+										<motion.pre {...rowIn(2)} className="label-12-mono max-h-[300px] overflow-y-auto whitespace-pre-wrap border border-white/10 bg-black/50 p-5 leading-[1.8] text-white/70" style={{ textTransform: "none", borderRadius: 4 }}>{tryOut}</motion.pre>
+										<motion.p {...rowIn(3)} className="label-12-mono text-white/30" style={{ textTransform: "none" }}>
+											Want the full ride — hire, escrow, verdict, payout? That path costs real testnet CSPR:
+											grab the wallet flow on the Dashboard, or run the judge playbook from the repo.
+										</motion.p>
+									</>
+								)}
 								{sheet === "how" && HOW.map((sc, i) => (
 									<motion.div key={sc.hook} {...rowIn(i)} className="border border-white/10 bg-white/[0.02] p-6" style={{ borderRadius: 4 }}>
 										<div className="mb-4 flex flex-wrap items-center justify-between gap-3">
