@@ -53,6 +53,7 @@ const AGENT_ART: Record<string, string> = {
 const AGENT_REEL: Record<string, string> = {
 	malicious_node_x9: "reel-malicious",
 	mark_53_sarcophagus: "reel-sarcophagus",
+	cortex_reviewer: "reel-cortex",
 };
 
 function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: string }) {
