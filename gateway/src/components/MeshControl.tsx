@@ -82,6 +82,9 @@ export function MeshControl() {
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
+					{/* the overseer's control room — dimmed hard so the terminal text owns the panel */}
+					<div className="absolute inset-0 bg-cover bg-center opacity-[0.3] group-hover:opacity-[0.42] transition-opacity duration-[1.2s]" style={{ backgroundImage: "url(/cards/tower-control.webp)" }} />
+					<div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/20" />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
 					<div className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col justify-center overflow-y-auto">
