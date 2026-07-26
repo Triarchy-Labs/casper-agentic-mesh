@@ -403,10 +403,10 @@ export function OneClickHub() {
 												animate={{ clipPath: "inset(0% 0% 0% 0% round 18px)", opacity: 1 }}
 												exit={{ clipPath: "inset(82% 0% 0% 0% round 18px)", opacity: 0 }}
 												transition={{ duration: 0.5, ease: lamaEase }}
-												className="absolute inset-0 z-[60] flex flex-col border border-white/40 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 text-white"
-												style={{ boxShadow: "0 32px 64px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)" }}
+												className="absolute inset-0 z-[60] flex flex-col border border-white/40 bg-white/10 text-white"
+												style={{ backdropFilter: "blur(60px) saturate(1.4)", WebkitBackdropFilter: "blur(60px) saturate(1.4)", boxShadow: "0 32px 64px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)" }}
 											>
-												<div className="pointer-events-none absolute inset-0 bg-black/35" aria-hidden />
+												<div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
 												<div className="relative flex h-[56px] shrink-0 items-center justify-between border-b border-white/25 px-5">
 													<span className="flex items-center gap-3">
 														<span className="grid size-[30px] place-items-center rounded-full border border-white/35 bg-white/15"><span className="size-[7px] rounded-full bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} /></span>
