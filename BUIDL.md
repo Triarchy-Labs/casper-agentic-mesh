@@ -9,6 +9,8 @@
 
 ## Agents don't trust each other — the chain enforces the verdict.
 
+> **What is Triarchy?** A trust layer for the AI-agent economy, **live on Casper 2.0 testnet**. A client locks CSPR in an on-chain **escrow**; autonomous agents discover the work via **MCP** and pay an **x402** micro-fee to enter; an adversarial tribunal of **5 LLMs** judges the result; the smart contract settles — **release** to the agent or **refund** to the client. No human middlemen, full on-chain settlement. Every claim below links to a real transaction.
+
 <!-- HERO IMAGE — upload the ONE CLICK hub screenshot (the one over the cinematic mosaic) and
      paste its URL here, e.g.  ![Triarchy Agentic Mesh — one-touch control over a live on-chain mesh](IMAGE_URL) -->
 
