@@ -184,12 +184,14 @@ export function OneClickHub() {
 	const [aiMsg, setAiMsg] = useState("");
 	const [aiLog, setAiLog] = useState<string[]>([]);
 	const [chipsOpen, setChipsOpen] = useState(false);
+	const [chatFull, setChatFull] = useState(false); // glass overlay covers the whole menu
 	const logRef = useRef<HTMLDivElement>(null);
 	const ask = (q: string) => {
 		if (!q.trim()) return;
 		setAiLog((log) => [...log, `you: ${q.trim()}`, OPERATOR_REPLY]);
 		setAiMsg("");
 		setChipsOpen(false);
+		setChatFull(true);
 	};
 	useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [aiLog]);
 	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
@@ -307,7 +309,7 @@ export function OneClickHub() {
 							</motion.button>
 						) : (
 							/* ── panel state ── */
-							<motion.div key="panel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.12 }}>
+							<motion.div key="panel" className="relative" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.12 }}>
 								{/* header strip */}
 								<div className="flex h-[56px] items-center justify-between border-b border-white/10 px-6">
 									<span className="flex items-center gap-3">
@@ -379,84 +381,78 @@ export function OneClickHub() {
 										action waits for your confirmation. The human holds the final toggle.
 									</p>
 
-									{/* THE GLASS — one frosted pane; log + input live inside */}
-									<div className="mt-3 border border-white/15 bg-white/[0.07] p-3 backdrop-blur-2xl backdrop-saturate-150" style={{ borderRadius: 18, boxShadow: "0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
-										{aiLog.length > 0 && (
-											<div ref={logRef} className="mb-3 flex max-h-[46vh] flex-col gap-2.5 overflow-y-auto px-1" data-lenis-prevent>
-												{aiLog.map((l, i) => {
-													const isYou = l.startsWith("you:");
-													return (
-														<div key={i} className={`max-w-[85%] ${isYou ? "self-end" : "self-start"}`}>
-															<p className={`label-12-mono leading-[1.6] ${isYou ? "border border-white/15 bg-white/[0.1] text-white/85" : "border border-[var(--red-700)]/25 bg-[#120608]/60 text-white/70"} px-3 py-2`} style={{ textTransform: "none", borderRadius: 12 }}>
-																{l.replace(/^(you|operator): /, "")}
-															</p>
-														</div>
-													);
-												})}
-											</div>
-										)}
-										{/* input INSIDE the glass, with the ? morphing to chips at its left */}
-										<div className="relative flex items-center gap-2">
-											<div className="relative shrink-0">
-												<AnimatePresence initial={false} mode="wait">
-													{!chipsOpen ? (
-														<motion.button
-															key="q"
-															layoutId="ai-quick"
-															onClick={() => setChipsOpen(true)}
-															initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
-															transition={{ duration: 0.25, ease: lamaEase }}
-															className="grid size-[44px] cursor-pointer place-items-center rounded-full border border-white/15 bg-white/[0.08] text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black"
-															aria-label="Quick questions"
-														>?</motion.button>
-													) : (
-														<motion.button
-															key="qx"
-															onClick={() => setChipsOpen(false)}
-															initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
-															transition={{ duration: 0.25, ease: lamaEase }}
-															className="grid size-[44px] cursor-pointer place-items-center rounded-full border border-[var(--red-700)]/40 bg-white/[0.08] text-white/70 backdrop-blur-md"
-															aria-label="Close quick questions"
-														>×</motion.button>
-													)}
-												</AnimatePresence>
-											</div>
-											<input
-												value={aiMsg}
-												onChange={(e) => setAiMsg(e.target.value)}
-												onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); ask(aiMsg); } }}
-												placeholder="ask the mesh anything…"
-												className="label-12-mono h-[44px] flex-1 border border-white/12 bg-white/[0.05] px-4 text-white placeholder:text-white/25 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
-												style={{ borderRadius: 12, textTransform: "none" }}
-											/>
-										</div>
-										{/* the chips morph out from under the ? — inside the glass, bottom */}
-										<AnimatePresence>
-											{chipsOpen && (
-												<motion.div
-													initial={{ opacity: 0, y: -8, height: 0 }} animate={{ opacity: 1, y: 0, height: "auto" }} exit={{ opacity: 0, y: -8, height: 0 }}
-													transition={{ duration: 0.35, ease: lamaEase }}
-													className="mt-2.5 flex flex-wrap gap-2 overflow-hidden"
-												>
-													{QUICK_Qs.map((q) => (
-														<motion.button
-															key={q}
-															layout
-															onClick={() => ask(q)}
-															className="label-12-mono cursor-pointer border border-white/15 bg-white/[0.06] px-3 py-2 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black"
-															style={{ borderRadius: 999, textTransform: "none" }}
-														>{q}</motion.button>
-													))}
-												</motion.div>
-											)}
-										</AnimatePresence>
-									</div>
-
-									{/* send — UNDER the glass window */}
-									<button onClick={() => ask(aiMsg)} className="label-13-mono mt-3 flex h-[48px] w-full cursor-pointer items-center justify-center border border-white/15 bg-white/[0.06] text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 12 }}>
-										send →
+									{/* COLLAPSED trigger — a glass input bar; tapping it opens the overlay */}
+									<button
+										onClick={() => setChatFull(true)}
+										className="mt-3 flex h-[56px] w-full cursor-pointer items-center gap-3 border border-white/15 bg-white/[0.06] px-3 text-left backdrop-blur-md transition-colors hover:border-[var(--red-700)]"
+										style={{ borderRadius: 16 }}
+									>
+										<span className="grid size-[38px] shrink-0 place-items-center rounded-full border border-white/15 bg-white/[0.08] text-white/60">?</span>
+										<span className="label-12-mono flex-1 text-white/30" style={{ textTransform: "none" }}>ask the mesh anything…</span>
+										<span className="grid size-[38px] shrink-0 place-items-center rounded-full border border-white/15 bg-white/[0.08] text-white/70">→</span>
 									</button>
 								</motion.div>
+
+									{/* CHAT OVERLAY — glass layer ABOVE the menu (screen-protector), grows from the
+									    input bar to fill the whole panel; collapse returns to the menu. */}
+									<AnimatePresence>
+										{chatFull && (
+											<motion.div
+												key="chat-overlay"
+												initial={{ clipPath: "inset(82% 0% 0% 0% round 18px)", opacity: 0.5 }}
+												animate={{ clipPath: "inset(0% 0% 0% 0% round 18px)", opacity: 1 }}
+												exit={{ clipPath: "inset(82% 0% 0% 0% round 18px)", opacity: 0 }}
+												transition={{ duration: 0.5, ease: lamaEase }}
+												className="absolute inset-0 z-[60] flex flex-col border border-white/15 bg-[#0a0508]/72 backdrop-blur-2xl backdrop-saturate-150"
+												style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)" }}
+											>
+												<div className="flex h-[56px] shrink-0 items-center justify-between border-b border-white/10 px-5">
+													<span className="flex items-center gap-3">
+														<span className="grid size-[30px] place-items-center rounded-full border border-white/15 bg-white/[0.08]"><span className="size-[7px] rounded-full bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} /></span>
+														<ScrambleText text="MESH SESSION · CASPER AI" className="label-12-mono tracking-[0.2em] text-white/80" />
+													</span>
+													<button onClick={() => setChatFull(false)} className="grid size-[34px] cursor-pointer place-items-center rounded-full border border-white/15 text-white/60 transition-colors hover:bg-white hover:text-black" aria-label="Collapse">⤢</button>
+												</div>
+												<div ref={logRef} className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-4" data-lenis-prevent>
+													<div className="max-w-[86%] self-start rounded-2xl rounded-bl-md border border-[var(--red-700)]/25 bg-[#120608]/50 px-3.5 py-2.5 backdrop-blur-md">
+														<p className="label-12-mono leading-[1.6] text-white/60" style={{ textTransform: "none" }}><span className="text-[var(--red-700)]">⟡ operator:</span> in development — I answer from the mesh&apos;s own sources when I wake. Every action waits for your confirmation.</p>
+													</div>
+													{aiLog.map((l, i) => {
+														const isYou = l.startsWith("you:");
+														return (
+															<div key={i} className={`max-w-[86%] ${isYou ? "self-end" : "self-start"}`}>
+																<p className={`label-12-mono leading-[1.6] backdrop-blur-md ${isYou ? "rounded-2xl rounded-br-md border border-white/25 bg-white/[0.12] text-white/85" : "rounded-2xl rounded-bl-md border border-[var(--red-700)]/25 bg-[#120608]/50 text-white/65"} px-3.5 py-2.5`} style={{ textTransform: "none" }}>
+																	{l.replace(/^(you|operator): /, "")}
+																</p>
+															</div>
+														);
+													})}
+												</div>
+												<AnimatePresence>
+													{chipsOpen && (
+														<motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3, ease: lamaEase }} className="flex shrink-0 flex-wrap gap-2 overflow-hidden px-4 pb-1">
+															{QUICK_Qs.map((q) => (
+																<button key={q} onClick={() => ask(q)} className="label-12-mono cursor-pointer rounded-full border border-white/20 bg-white/[0.08] px-3 py-2 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ textTransform: "none" }}>{q}</button>
+															))}
+														</motion.div>
+													)}
+												</AnimatePresence>
+												<div className="flex shrink-0 items-center gap-2 border-t border-white/10 p-3">
+													<button onClick={() => setChipsOpen((v) => !v)} className={`grid size-[44px] shrink-0 cursor-pointer place-items-center rounded-full border backdrop-blur-md transition-colors ${chipsOpen ? "border-[var(--red-700)]/50 text-white" : "border-white/20 text-white/60 hover:bg-white hover:text-black"} bg-white/[0.08]`} aria-label="Quick questions">{chipsOpen ? "×" : "?"}</button>
+													<input
+														value={aiMsg}
+														autoFocus
+														onChange={(e) => setAiMsg(e.target.value)}
+														onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); ask(aiMsg); } }}
+														placeholder="ask the mesh anything…"
+														className="label-12-mono h-[48px] flex-1 rounded-full border border-white/15 bg-white/[0.06] px-4 text-white placeholder:text-white/30 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
+														style={{ textTransform: "none" }}
+													/>
+													<button onClick={() => ask(aiMsg)} className="grid size-[48px] shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-white/[0.1] text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" aria-label="Send">→</button>
+												</div>
+											</motion.div>
+										)}
+									</AnimatePresence>
 
 
 															</motion.div>
