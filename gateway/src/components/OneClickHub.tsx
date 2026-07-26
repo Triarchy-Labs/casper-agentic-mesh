@@ -211,6 +211,22 @@ export function OneClickHub() {
 
 		setAiLog((log) => [...log, OPERATOR_REPLY]);
 	};
+
+	// The one request the operator CAN already fulfill: kill/restore the cinematic skin.
+	// Same mechanic as the MENU toggle (bg-off/art-off + localStorage), phrased as a chat turn.
+	const toggleVisuals = () => {
+		setChipsOpen(false);
+		setChatFull(true);
+		const turningOff = !document.documentElement.classList.contains("bg-off");
+		setAiLog((log) => [...log, turningOff ? "you: too much red — visuals off, please" : "you: bring the visuals back"]);
+		document.documentElement.classList.toggle("bg-off", turningOff);
+		document.documentElement.classList.toggle("art-off", turningOff);
+		localStorage.setItem("mesh-bg", turningOff ? "off" : "on");
+		localStorage.setItem("mesh-art", turningOff ? "off" : "on");
+		setAiLog((log) => [...log, turningOff
+			? "operator: done — minimal terminal. The mesh runs the same underneath; the skin is a choice, not a wall. Ask again to bring it back."
+			: "operator: welcome back to the cinema. Same mesh, same chain — just louder."]);
+	};
 	useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [aiLog]);
 	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
 	const [tryBusy, setTryBusy] = useState(false);
@@ -480,6 +496,7 @@ export function OneClickHub() {
 															{QUICK_Qs.map((q) => (
 																<button key={q} onClick={() => ask(q)} className="label-12-mono cursor-pointer rounded-full border border-white/40 bg-white/20 px-3 py-2 text-white/85 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ textTransform: "none" }}>{q}</button>
 															))}
+															<button onClick={toggleVisuals} className="label-12-mono cursor-pointer rounded-full border border-[var(--red-700)]/50 bg-white/20 px-3 py-2 text-white/85 backdrop-blur-md transition-colors hover:bg-[var(--red-700)] hover:text-white" style={{ textTransform: "none" }}>Too much red? Visuals off</button>
 														</motion.div>
 													)}
 												</AnimatePresence>
