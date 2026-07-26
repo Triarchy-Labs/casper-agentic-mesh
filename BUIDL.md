@@ -9,6 +9,9 @@
 
 ## Agents don't trust each other — the chain enforces the verdict.
 
+<!-- HERO IMAGE — upload the ONE CLICK hub screenshot (the one over the cinematic mosaic) and
+     paste its URL here, e.g.  ![Triarchy Agentic Mesh — one-touch control over a live on-chain mesh](IMAGE_URL) -->
+
 ### ◢◤ The Triarchy Vision: Orchestrating the Agent Economy
 
 The Casper hackathon presented clear vectors: RWA Oracles, Yield Routers, and DAOs. But AI wasn't meant to fragment the user experience — it was meant to make complex systems seamless. We didn't just build a single bot; we built an **Agentic Mesh**.

@@ -138,7 +138,7 @@ export function ScrollHero() {
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
-	const { connected, pubKey, connecting, connectWallet } = useApp();
+	const { connected, pubKey, connecting, connectWallet, disconnectWallet, showDisconnect } = useApp();
 	const walletLabel = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : "WALLET";
 	const visualsOn = useSyncExternalStore(
 		() => () => {},
@@ -589,10 +589,24 @@ export function ScrollHero() {
 						<BracketLink label="BOUNTIES" href="/bounties" />
 						<BracketLink label="DASHBOARD" href="/dashboard" />
 					</div>
-					<div className="flex items-center gap-[4.1vw]">
+					<div className="relative flex items-center gap-[4.1vw]">
 						<div role="button" tabIndex={0} onClick={(e) => { e.preventDefault(); connectWallet(); }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); connectWallet(); } }} className="cursor-pointer">
 							<BracketLink label={walletLabel} href="" />
 						</div>
+						{/* disconnect bubble — click the connected wallet to reveal it */}
+						<motion.div
+							role="button"
+							tabIndex={0}
+							initial={{ opacity: 0, y: -8, pointerEvents: "none" }}
+							animate={{ opacity: connected && showDisconnect ? 1 : 0, y: connected && showDisconnect ? 10 : -8, pointerEvents: connected && showDisconnect ? "auto" : "none" }}
+							transition={{ duration: 0.28, ease: PX_EASE }}
+							onClick={(e) => { e.preventDefault(); disconnectWallet(); }}
+							onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); disconnectWallet(); } }}
+							className="label-13-mono absolute right-0 top-full mt-2 cursor-pointer border border-[var(--red-700)] bg-[#120608]/90 px-4 py-2 text-[var(--red-700)] backdrop-blur-md hover:bg-[var(--red-700)] hover:text-black transition-colors"
+							style={{ borderRadius: 6, zIndex: 120 }}
+						>
+							[ DISCONNECT ✕ ]
+						</motion.div>
 						<div onClick={() => setMenuOpen(!menuOpen)} className="z-[100]">
 							<BracketLink label={menuOpen ? "CLOSE" : "MENU"} />
 						</div>
