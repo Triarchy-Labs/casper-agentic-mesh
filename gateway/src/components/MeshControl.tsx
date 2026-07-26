@@ -20,7 +20,11 @@ function lineClass(line: string): string {
 
 function Console({ lines }: { lines: string[] }) {
 	return (
-		<div className="mt-4 max-h-[420px] overflow-auto bg-black/60 border border-[var(--gray-500)] p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap">
+		<div
+			data-lenis-prevent
+			className="mt-4 max-h-[420px] overflow-y-auto overscroll-contain bg-black/60 border border-[var(--gray-500)] p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+			style={{ scrollbarWidth: "thin", scrollbarColor: "var(--red-700) rgba(255,255,255,0.08)", scrollbarGutter: "stable" }}
+		>
 			{lines.map((l, i) => (
 				<div key={i} className={lineClass(l)}>{l || " "}</div>
 			))}
@@ -110,24 +114,26 @@ export function MeshControl() {
 					>
 						{towerBusy ? "scanning..." : "scan mesh"}
 					</button>
-					<button
-						onClick={fireLiveTx}
-						disabled={txBusy || towerBusy}
-						className="font-DM-mono border border-[var(--red-700)]/40 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-[calc(2.5vw+140px)] max-sm:left-auto max-sm:right-6 max-sm:bottom-16 z-20 transition-all hover:bg-[var(--red-700)]/20 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-					>
-						{txBusy ? "signing on-chain..." : "fire live tx"}
-					</button>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Overseer</span>
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Liveness</span>
 					</div>
 				</div>
-				<div className="mt-[4vh] project-info-trigger relative flex w-full">
-					<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
-					<div className="flex flex-col gap-[0.73vw]">
-						<h3 className="heading-32 leading-tight">The Tower</h3>
-						<p className="label-13-mono text-[var(--gray-800)] uppercase">Mesh Overseer. Analyzes chain state.</p>
+				<div className="mt-[4vh] project-info-trigger relative flex w-full items-start justify-between gap-4">
+					<div className="flex">
+						<div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0 mt-1 transition-colors group-hover:bg-white/20"></div>
+						<div className="flex flex-col gap-[0.73vw]">
+							<h3 className="heading-32 leading-tight">The Tower</h3>
+							<p className="label-13-mono text-[var(--gray-800)] uppercase">Mesh Overseer. Analyzes chain state.</p>
+						</div>
 					</div>
+					<button
+						onClick={fireLiveTx}
+						disabled={txBusy || towerBusy}
+						className="font-DM-mono shrink-0 border border-[var(--red-700)]/40 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none transition-all hover:bg-[var(--red-700)]/20 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						{txBusy ? "signing on-chain..." : "fire live tx"}
+					</button>
 				</div>
 			</div>
 
@@ -144,7 +150,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/25" />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto">
+					<div data-lenis-prevent className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto overscroll-contain" style={{ scrollbarWidth: "thin", scrollbarColor: "var(--red-700) rgba(255,255,255,0.08)" }}>
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
