@@ -34,6 +34,10 @@ type Vector = {
 	synergy: string;
 	proof: Proof[];
 	frames: number;
+	marks: { tag: string; note: string }[];
+	stats: { v: string; k: string }[];
+	quote: [string, string, string]; // [before, red word, after]
+	media: { src: string; cap: string }[];
 };
 
 export const VECTORS: Vector[] = [
@@ -57,6 +61,21 @@ export const VECTORS: Vector[] = [
 			{ label: "refund_bounty tx ↗", href: `${EX}/transaction/895eb5531398c44a85554c11c622d3f528ef73ac9e541619f163ec392e120d87` },
 		],
 		frames: 2,
+		marks: [
+			{ tag: "Escrow", note: "Your CSPR sits in the contract's own purse — not in anyone's wallet, not in ours." },
+			{ tag: "Proxy", note: "Funding runs through session code — the canonical Casper way into a contract purse." },
+			{ tag: "Deterministic", note: "Two exits exist. No verdict, sane or insane, can invent a third." },
+		],
+		stats: [
+			{ v: "2", k: "money paths — release or refund" },
+			{ v: "10 CSPR", k: "settled in the live on-chain demo" },
+			{ v: "0", k: "other exits, by construction" },
+		],
+		quote: ["Trust isn't promised here. ", "It's compiled", "."],
+		media: [
+			{ src: "/cards/kpi-volume.webp", cap: "the stake, crystallized — value the contract holds until the verdict" },
+			{ src: "/cards/agent-alpha.webp", cap: "the triarchy mark — three powers, one law" },
+		],
 	},
 	{
 		slug: "omni-mesh",
@@ -77,6 +96,21 @@ export const VECTORS: Vector[] = [
 			{ label: "Casper Agent Skill ↗", href: `${REPO}/blob/main/CASPER_AGENT_SKILL.md` },
 		],
 		frames: 3,
+		marks: [
+			{ tag: "Gateway", note: "One front door for humans and machines — the same endpoints serve both." },
+			{ tag: "A2A", note: "Agents hire agents: the bounty flow speaks bot-to-bot, no human in the loop required." },
+			{ tag: "MCP", note: "A manifest any AI can read and act on. No docs, no onboarding call." },
+		],
+		stats: [
+			{ v: "5", k: "vectors under one roof" },
+			{ v: "1", k: "manifest to join — GET /api/mcp" },
+			{ v: "30s", k: "from curl to your first answer" },
+		],
+		quote: ["Five vectors. ", "One organism", "."],
+		media: [
+			{ src: "/cards/telemetry-eyes.webp", cap: "the mesh watches its own — every agent under the same eyes" },
+			{ src: "/cards/terminal-rooftop.webp", cap: "the city the agents work — settlement never sleeps" },
+		],
 	},
 	{
 		slug: "oracle",
@@ -97,6 +131,21 @@ export const VECTORS: Vector[] = [
 			{ label: "live CSPR/USD feed tx ↗", href: `${EX}/transaction/da7ac22bc69c801a3600d43d408a29c85170f9205d224c3345b3f482d1949300` },
 		],
 		frames: 2,
+		marks: [
+			{ tag: "Oracle", note: "A real data feed written to the chain — not an API promise you can't audit." },
+			{ tag: "Price Feed", note: "CSPR-USD, read back live on this very site. Refresh and watch it." },
+			{ tag: "Reputation", note: "Minted from settled outcomes only. No self-rating. No purchase." },
+		],
+		stats: [
+			{ v: "live", k: "CSPR-USD feed, open on cspr.live" },
+			{ v: "7", k: "reputation minted from real outcomes" },
+			{ v: "1", k: "append-only event log — history can't be rewritten" },
+		],
+		quote: ["Reputation you can't buy. ", "Only earn", ", on the record."],
+		media: [
+			{ src: "/cards/tower-control.webp", cap: "the reading room — every screen is a corner of the world" },
+			{ src: "/cards/kpi-efficiency.webp", cap: "unit 110 weighing a reading — machines checking machines" },
+		],
 	},
 	{
 		slug: "tribunal",
@@ -117,6 +166,21 @@ export const VECTORS: Vector[] = [
 			{ label: "APPROVE → release tx ↗", href: `${EX}/transaction/702132683a246c1e07e7c49f0e403b680d85b7114b8ec25772af5991a959c375` },
 		],
 		frames: 3,
+		marks: [
+			{ tag: "Adversarial", note: "A prosecutor attacks every submission before it earns a single coin." },
+			{ tag: "5 LLMs", note: "Five real models from different vendors, arguing in the open — transcripts included." },
+			{ tag: "Chief Judge", note: "One ruling, bounded by the contract: release or refund. Nothing else exists." },
+		],
+		stats: [
+			{ v: "5", k: "real models on the bench" },
+			{ v: "3", k: "jurors, deliberately diverse vendors" },
+			{ v: "2", k: "verdict paths — both proven on-chain" },
+		],
+		quote: ["The court argues. ", "The contract obeys no one's eloquence", "."],
+		media: [
+			{ src: "/cards/kpi-quests.webp", cap: "the prosecution never sleeps — every claim faces the dragon" },
+			{ src: "/cards/tribunal-arena.webp", cap: "the arena — verdicts land over a living city" },
+		],
 	},
 	{
 		slug: "x402",
@@ -137,6 +201,21 @@ export const VECTORS: Vector[] = [
 			{ label: "Casper Agent Skill ↗", href: `${REPO}/blob/main/CASPER_AGENT_SKILL.md` },
 		],
 		frames: 2,
+		marks: [
+			{ tag: "HTTP 402", note: "The status code the web reserved for payment since 1997. We finally use it." },
+			{ tag: "Pay-per-call", note: "No subscriptions, no API keys. One payment, one job, one receipt." },
+			{ tag: "Replay Guard", note: "Every hash is single-use. Fabrications die at the ledger, not at our word." },
+		],
+		stats: [
+			{ v: "402", k: "the honest refusal — try it live" },
+			{ v: "1", k: "use per payment hash, ever" },
+			{ v: "5 min", k: "receipt TTL — stale proofs expire" },
+		],
+		quote: ["No keys. No subscriptions. ", "Value for value", ", verified."],
+		media: [
+			{ src: "/cards/agent-aegis.webp", cap: "x402, engraved — payment as a blade's oath" },
+			{ src: "/cards/agent-sarcophagus.webp", cap: "the toll gate — pay to pass, provably" },
+		],
 	},
 ];
 
@@ -310,6 +389,16 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 
 					<div className="mx-auto w-full max-w-[1500px] px-[5.5vw] pb-[16vh]">
 						{showContent && (
+							<div className="mt-[7vh] grid grid-cols-1 gap-6 md:grid-cols-3">
+								{v.marks.map((m, i) => (
+									<motion.div key={m.tag} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: glide, delay: 0.15 + i * 0.08 }}>
+										<p className="label-13-mono text-[var(--red-700)] tracking-[0.16em]">{m.tag}</p>
+										<p className="label-13-mono mt-2 leading-[1.7] text-white/60" style={{ textTransform: "none" }}>{m.note}</p>
+									</motion.div>
+								))}
+							</div>
+						)}
+						{showContent && (
 							<div className="mt-[12vh] flex flex-col gap-[10vh]">
 								<Section n="/01" title="How it works">
 									<div className="flex flex-col gap-[1.2vw]">
@@ -322,17 +411,25 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 									</div>
 								</Section>
 
-								<div className="grid grid-cols-12 gap-[1.39vw]">
-									{Array.from({ length: v.frames }).map((_, i) => (
-										<div
-											key={i}
-											className={`relative overflow-hidden border border-white/10 bg-white/[0.02] ${v.frames === 2 ? "col-span-12 md:col-span-6 aspect-[1.4/1]" : i === 0 ? "col-span-12 aspect-[2.6/1]" : "col-span-12 md:col-span-6 aspect-[1.6/1]"}`}
-										>
-											<div className="absolute inset-0 flex items-center justify-center">
-												<span className="label-12-mono text-white/25 tracking-[0.2em]">◢ MEDIA {v.index}.{i + 1} ◣</span>
-											</div>
-											<div className="absolute left-3 top-3 label-12-mono text-white/20">{v.slug}-img-{i + 1}</div>
+								<div className="grid grid-cols-1 gap-8 border-t border-white/10 pt-[5vh] md:grid-cols-3">
+									{v.stats.map((st) => (
+										<div key={st.k}>
+											<p className="leading-none text-white" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(34px, 3.6vw, 64px)", fontWeight: 400 }}>{st.v}</p>
+											<p className="label-12-mono mt-3 text-white/45" style={{ textTransform: "none" }}>{st.k}</p>
 										</div>
+									))}
+								</div>
+
+								<motion.p initial={{ opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10% 0px" }} transition={{ duration: 0.9, ease: glide }} className="max-w-[24ch] uppercase leading-[1.08]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(30px, 3.4vw, 58px)", fontWeight: 400 }}>
+									{v.quote[0]}<span className="text-[var(--red-700)]">{v.quote[1]}</span>{v.quote[2]}
+								</motion.p>
+
+								<div className="grid grid-cols-1 gap-[1.39vw] md:grid-cols-2">
+									{v.media.map((mm) => (
+										<motion.figure key={mm.src} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-8% 0px" }} transition={{ duration: 0.8, ease: glide }} className="m-0">
+											<div className="card-art relative aspect-[1.5/1] overflow-hidden border border-white/10 bg-cover bg-center" style={{ backgroundImage: `url(${mm.src})` }} />
+											<figcaption className="label-12-mono mt-3 text-white/40" style={{ textTransform: "none" }}>{mm.cap}</figcaption>
+										</motion.figure>
 									))}
 								</div>
 
