@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useApp } from "@/context/AppContext";
 import Image from "next/image";
 import { motion, useScroll, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -137,6 +138,8 @@ export function ScrollHero() {
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const { connected, pubKey, connecting, connectWallet } = useApp();
+	const walletLabel = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : "WALLET";
 	const visualsOn = useSyncExternalStore(
 		() => () => {},
 		() => typeof document !== "undefined" && !document.documentElement.classList.contains("bg-off") && !document.documentElement.classList.contains("art-off"),
@@ -587,7 +590,9 @@ export function ScrollHero() {
 						<BracketLink label="DASHBOARD" href="/dashboard" />
 					</div>
 					<div className="flex items-center gap-[4.1vw]">
-						<BracketLink label="WALLET" />
+						<div role="button" tabIndex={0} onClick={(e) => { e.preventDefault(); connectWallet(); }} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); connectWallet(); } }} className="cursor-pointer">
+							<BracketLink label={walletLabel} href="" />
+						</div>
 						<div onClick={() => setMenuOpen(!menuOpen)} className="z-[100]">
 							<BracketLink label={menuOpen ? "CLOSE" : "MENU"} />
 						</div>
