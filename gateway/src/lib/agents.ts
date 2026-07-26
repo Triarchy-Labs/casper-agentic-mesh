@@ -19,13 +19,14 @@ export function runAgent(
 	bin: string,
 	args: string[],
 	timeoutMs: number,
+	extraEnv?: Record<string, string>,
 ): Promise<AgentRun> {
 	const binPath = path.join(REPO_ROOT, "target", "debug", bin);
 	return new Promise((resolve) => {
 		execFile(
 			binPath,
 			args,
-			{ cwd: REPO_ROOT, timeout: timeoutMs, env: process.env, maxBuffer: 1024 * 1024 },
+			{ cwd: REPO_ROOT, timeout: timeoutMs, env: { ...process.env, ...extraEnv }, maxBuffer: 1024 * 1024 },
 			(err, stdout, stderr) => {
 				const output = `${stdout || ""}${stderr ? `\n${stderr}` : ""}`.trim();
 				if (err && !output) {

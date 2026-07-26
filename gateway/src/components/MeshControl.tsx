@@ -36,6 +36,7 @@ export function MeshControl() {
 	const [proof, setProof] = useState("PR #1 merged (commit 4ad2744). All three escrow modules processed; redundant def-use edges removed 18412->11067; Coq-checked equivalence + 10k proptests confirm identical behaviour; coverage 71->94%; 59 tests pass; CI green; artifacts linked.");
 	const [arena, setArena] = useState<string[] | null>(null);
 	const [arenaBusy, setArenaBusy] = useState(false);
+	const [judgeKey, setJudgeKey] = useState("");
 
 	const scanTower = async () => {
 		setTowerBusy(true); setTowerLines(null);
@@ -54,7 +55,7 @@ export function MeshControl() {
 			const r = await fetch("/api/tribunal", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ description: desc, proof }),
+				body: JSON.stringify({ description: desc, proof, ...(judgeKey.trim() ? { apiKey: judgeKey.trim() } : {}) }),
 			});
 			const d = await r.json();
 			setArena(d.transcript ? d.transcript.split("\n") : [d.error ?? "Tribunal unavailable."]);
@@ -144,6 +145,12 @@ export function MeshControl() {
 								value={proof} onChange={(e) => setProof(e.target.value)} rows={3}
 								placeholder="Submitted proof"
 								className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/80 focus:border-[var(--gray-1000)] outline-none resize-none"
+							/>
+							<input
+								value={judgeKey} onChange={(e) => setJudgeKey(e.target.value)}
+								type="password" autoComplete="off" spellCheck={false}
+								placeholder="own OpenRouter key (optional — used once, never stored)"
+								className="bg-black/60 border border-white/10 p-3 font-mono text-xs text-white/60 focus:border-[var(--red-700)] outline-none"
 							/>
 						</div>
 						{arenaBusy && !arena && (
