@@ -286,7 +286,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/vector_escrow.jpeg)",
                           transform: "scale(1.15)",
@@ -325,7 +325,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/card-omni-mesh.jpg)",
                           transform: "scale(1.15)",
@@ -364,7 +364,7 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
                           backgroundImage: "url(/vector_oracle.jpeg)",
                           transform: "scale(1.15)",
@@ -401,7 +401,7 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group" data-dossier="tribunal" onClick={openDossier("tribunal")}>
                       <CornerMarks />
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-tribunal.jpg)",
                           transform: "scale(1.15)",
@@ -439,7 +439,7 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group" data-dossier="x402" onClick={openDossier("x402")}>
                       <CornerMarks />
                       <div
-                        className="card-photo absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
                           backgroundImage: "url(/card-x402.jpg)",
                           transform: "scale(1.15)",

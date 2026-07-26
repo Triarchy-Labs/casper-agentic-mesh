@@ -128,12 +128,8 @@ function ScrambleCta({ label, href, primary }: { label: string; href: string; pr
 			target="_blank"
 			rel="noopener noreferrer"
 			onMouseEnter={scramble}
-			className={primary
-				? "label-13-mono flex h-[56px] items-center justify-center bg-white font-bold text-black transition-colors hover:bg-[#f0f0f0]"
-				: "label-13-mono flex h-[56px] items-center justify-center border border-white/15 text-white/85 transition-colors hover:border-[var(--red-700)] hover:text-white"}
-			style={primary
-				? { borderRadius: 4, boxShadow: "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" }
-				: { borderRadius: 4 }}
+			className="label-13-mono flex h-[56px] items-center justify-center border border-white bg-white font-bold text-black transition-colors duration-300 hover:bg-[#0a0508] hover:text-white"
+			style={{ borderRadius: 4, boxShadow: primary ? "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" : undefined }}
 		>
 			{display}
 		</a>
@@ -177,6 +173,10 @@ export function OneClickHub() {
 	}, []);
 
 	const [sheet, setSheet] = useState<Sheet | null>(null);
+	const [skillOpen, setSkillOpen] = useState(false);
+	const [aiOpen, setAiOpen] = useState(false);
+	const [aiMsg, setAiMsg] = useState("");
+	const [aiLog, setAiLog] = useState<string[]>([]);
 	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
 	const [tryBusy, setTryBusy] = useState(false);
 
@@ -316,30 +316,83 @@ export function OneClickHub() {
 									))}
 								</div>
 
-								{/* the skill scroll — neco frame (their 'OUR PITCHDECK' ghost slot) */}
-								<motion.div {...rowIn(4)} className="mx-6 my-5 border border-[var(--red-700)]/35 bg-[#120608]/80 px-4 py-3.5" style={{ borderRadius: 4 }}>
-									<p className="label-12-mono text-[var(--red-700)] tracking-[0.18em]">◢◤ casper agent skill ◥◣</p>
-									<p className="label-12-mono mt-2 leading-[1.6] text-white/55" style={{ textTransform: "none" }}>
-										A machine-readable skill: any AI agent can discover the mesh, pay in CSPR and get
-										judged — starting from <span className="text-white/80">GET /api/mcp</span>.
-									</p>
-									<div className="mt-3 flex gap-5">
-										<a href={`${REPO}/blob/main/CASPER_AGENT_SKILL.md`} target="_blank" rel="noopener noreferrer" className="label-12-mono text-white/75 transition-colors hover:text-[var(--red-700)]">[ view skill ↗ ]</a>
-										<a href={`${REPO}/raw/main/CASPER_AGENT_SKILL.md`} target="_blank" rel="noopener noreferrer" className="label-12-mono text-white/45 transition-colors hover:text-white">[ raw ↘ ]</a>
-									</div>
+								{/* the skill scroll — collapsible, so the panel stays light */}
+								<motion.div {...rowIn(4)} className="mx-6 my-5 border border-[var(--red-700)]/35 bg-[#120608]/80" style={{ borderRadius: 4 }}>
+									<button onClick={() => setSkillOpen((v) => !v)} className="flex w-full cursor-pointer items-center justify-between px-4 py-3.5">
+										<span className="label-12-mono text-[var(--red-700)] tracking-[0.18em]">◢◤ casper agent skill ◥◣</span>
+										<span className="label-13-mono text-white/50">{skillOpen ? "—" : "+"}</span>
+									</button>
+									<AnimatePresence initial={false}>
+										{skillOpen && (
+											<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.4, ease: lamaEase }} className="overflow-hidden">
+												<div className="px-4 pb-3.5">
+													<p className="label-12-mono leading-[1.6] text-white/55" style={{ textTransform: "none" }}>
+														A machine-readable skill: any AI agent can discover the mesh, pay in CSPR and get
+														judged — starting from <span className="text-white/80">GET /api/mcp</span>.
+													</p>
+													<div className="mt-3 flex gap-5">
+														<a href={`${REPO}/blob/main/CASPER_AGENT_SKILL.md`} target="_blank" rel="noopener noreferrer" className="label-12-mono text-white/75 transition-colors hover:text-[var(--red-700)]">[ view skill ↗ ]</a>
+														<a href={`${REPO}/raw/main/CASPER_AGENT_SKILL.md`} target="_blank" rel="noopener noreferrer" className="label-12-mono text-white/45 transition-colors hover:text-white">[ raw ↘ ]</a>
+													</div>
+												</div>
+											</motion.div>
+										)}
+									</AnimatePresence>
 								</motion.div>
 
-								{/* viewer preferences */}
-								<motion.div {...rowIn(5)} className="mx-6 mb-5 flex items-center justify-between gap-3">
-									<span className="label-12-mono tracking-[0.18em] text-white/35">viewer/</span>
-									<div className="flex gap-3">
-										<button onClick={toggleBg} className="label-12-mono cursor-pointer border border-white/15 px-3 py-2 text-white/70 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>
-											[ fabric · <span className={bgOn ? "text-[var(--red-700)]" : "text-white/35"}>{bgOn ? "on" : "off"}</span> ]
-										</button>
-										<button onClick={toggleArt} className="label-12-mono cursor-pointer border border-white/15 px-3 py-2 text-white/70 transition-colors hover:border-[var(--red-700)] hover:text-white" style={{ borderRadius: 4 }}>
-											[ card art · <span className={artOn ? "text-[var(--red-700)]" : "text-white/35"}>{artOn ? "on" : "off"}</span> ]
-										</button>
-									</div>
+								{/* casper ai assistant — the Operator's future seat, honest about its status */}
+								<motion.div {...rowIn(5)} className="mx-6 mb-5 border border-[var(--red-700)]/35 bg-[#120608]/80" style={{ borderRadius: 4 }}>
+									<button onClick={() => setAiOpen((v) => !v)} className="flex w-full cursor-pointer items-center justify-between px-4 py-3.5">
+										<span className="label-12-mono text-[var(--red-700)] tracking-[0.18em]">◢◤ casper ai assistant ◥◣</span>
+										<span className="label-13-mono text-white/50">{aiOpen ? "—" : "+"}</span>
+									</button>
+									<AnimatePresence initial={false}>
+										{aiOpen && (
+											<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.4, ease: lamaEase }} className="overflow-hidden">
+												<div className="px-4 pb-4">
+													<div className="mb-3 flex max-h-[160px] flex-col gap-2 overflow-y-auto border border-white/10 bg-black/40 p-3" style={{ borderRadius: 3 }}>
+														<p className="label-12-mono leading-[1.6] text-white/55" style={{ textTransform: "none" }}>
+															<span className="text-[var(--red-700)]">⟡ operator:</span> in development — I'm being wired
+															into every module of the mesh. When I wake, I answer from the mesh's own sources and
+															every action waits for your confirmation. The human holds the final toggle.
+														</p>
+														{aiLog.map((l, i) => (
+															<p key={i} className="label-12-mono leading-[1.6] text-white/70" style={{ textTransform: "none" }}>{l}</p>
+														))}
+													</div>
+													<form
+														className="flex items-center gap-2"
+														onSubmit={(e) => {
+															e.preventDefault();
+															if (!aiMsg.trim()) return;
+															setAiLog((log) => [...log, `you: ${aiMsg.trim()}`, "operator: // in development — the tentacles aren't wired yet. Meanwhile: Try it live, or the playbook."]);
+															setAiMsg("");
+														}}
+													>
+														<input
+															value={aiMsg}
+															onChange={(e) => setAiMsg(e.target.value)}
+															placeholder="ask the mesh anything…"
+															className="label-12-mono h-[44px] flex-1 border border-white/15 bg-black/40 px-3 text-white placeholder:text-white/25 outline-none focus:border-[var(--red-700)]"
+															style={{ borderRadius: 3, textTransform: "none" }}
+														/>
+														<button type="submit" className="label-13-mono h-[44px] cursor-pointer border border-white/15 px-4 text-white/70 transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 3 }}>→</button>
+													</form>
+												</div>
+											</motion.div>
+										)}
+									</AnimatePresence>
+								</motion.div>
+
+								{/* the one switch — fabric + card art together (lama's long pitchdeck row) */}
+								<motion.div {...rowIn(5)} className="px-6 pb-3">
+									<button
+										onClick={() => { const next = !(bgOn && artOn); if (next !== bgOn) toggleBg(); if (next !== artOn) toggleArt(); }}
+										className="label-13-mono flex h-[56px] w-full cursor-pointer items-center justify-center gap-3 border border-white/15 text-white/75 transition-colors duration-300 hover:bg-white hover:text-black hover:border-white"
+										style={{ borderRadius: 4 }}
+									>
+										[ visuals · <span className={bgOn && artOn ? "text-[var(--red-700)]" : "opacity-60"}>{bgOn && artOn ? "on" : "off"}</span> ] — fabric + card art, one switch
+									</button>
 								</motion.div>
 
 								{/* bottom CTA pair — lama's light-primary move */}

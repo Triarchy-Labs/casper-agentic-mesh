@@ -382,7 +382,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 					       their project photo taking the whole page width. ── */}
 					<div ref={heroRef} className="relative w-full aspect-[1.9/1] max-sm:aspect-[1.3/1] overflow-hidden bg-black">
 						<div
-							className="absolute inset-0 bg-cover bg-center"
+							className="card-art absolute inset-0 bg-cover bg-center"
 							style={{ backgroundImage: `url(${v.art})`, opacity: showContent ? 1 : 0 }}
 						/>
 					</div>
@@ -482,7 +482,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 			    dossier exists (phases only animate it), so measuring never races React's commit. */}
 			<div
 				ref={cloneRef}
-				className="fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
+				className="card-art fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
 				style={{ backgroundImage: `url(${v.art})`, visibility: "hidden" }}
 			/>
 		</div>
