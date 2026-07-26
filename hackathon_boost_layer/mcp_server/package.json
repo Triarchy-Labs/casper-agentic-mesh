@@ -1,0 +1,24 @@
+{
+  "name": "casper-agentic-mesh-mcp",
+  "version": "1.0.0",
+  "description": "MCP Server for Casper Agentic Mesh",
+  "main": "build/server.js",
+  "type": "module",
+  "bin": {
+    "casper-mcp": "./build/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.24.3",
+    "casper-js-sdk": "^2.12.1",
+    "zod": "3.22.4",
+    "zod-to-json-schema": "3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "20.0.0",
+    "typescript": "5.4.5"
+  }
+}

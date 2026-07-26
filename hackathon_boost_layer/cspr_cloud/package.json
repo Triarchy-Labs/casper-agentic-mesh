@@ -1,0 +1,19 @@
+{
+  "name": "cspr-cloud-client",
+  "version": "1.0.0",
+  "description": "CSPR Cloud REST and WebSocket Client for Casper Mesh",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "ws": "^8.21.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.0.0",
+    "@types/ws": "8.5.10",
+    "typescript": "5.4.5"
+  }
+}
