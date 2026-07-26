@@ -39,10 +39,24 @@ export async function POST(req: Request) {
 			client_id?: string;
 			task_id?: string;
 		}
-		let body: HireRequest = {};
-		try { body = await req.json() as HireRequest; } catch {
-			// Ignore parse errors, fall back to empty object
+		let rawBody: unknown;
+		try {
+			rawBody = await req.json();
+		} catch {
+			return NextResponse.json(
+				{ error: "Invalid JSON body" },
+				{ status: 400 }
+			);
 		}
+
+		if (rawBody === null || typeof rawBody !== "object" || Array.isArray(rawBody)) {
+			return NextResponse.json(
+				{ error: "Request body must be a non-null JSON object" },
+				{ status: 400 }
+			);
+		}
+
+		const body = rawBody as HireRequest;
 
 		const ctx: TransactorContext = {
 			txHash,
@@ -114,37 +128,51 @@ export async function POST(req: Request) {
 
 				if (OPENROUTER_KEY) {
 					// Production path: OpenRouter cloud API
-					const orResp = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer ${OPENROUTER_KEY}`,
-							"X-Title": "x402 Triarchy Gateway",
-						},
-						body: JSON.stringify({
-							model: "anthropic/claude-3.5-sonnet",
-							messages: [{ role: "user", content: `You are an AI agent fulfilling a micro-bounty via x402. Task: ${description}` }],
-							max_tokens: 4096,
-						}),
-					});
-					if (orResp.ok) {
-						const orData = await orResp.json();
-						result = orData.choices?.[0]?.message?.content || "No response";
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 15000);
+					try {
+						const orResp = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								"Authorization": `Bearer ${OPENROUTER_KEY}`,
+								"X-Title": "x402 Triarchy Gateway",
+							},
+							body: JSON.stringify({
+								model: "anthropic/claude-3.5-sonnet",
+								messages: [{ role: "user", content: `You are an AI agent fulfilling a micro-bounty via x402. Task: ${description}` }],
+								max_tokens: 4096,
+							}),
+							signal: controller.signal,
+						});
+						if (orResp.ok) {
+							const orData = await orResp.json();
+							result = orData.choices?.[0]?.message?.content || "No response";
+						}
+					} finally {
+						clearTimeout(timeoutId);
 					}
 				} else if (OLLAMA_URL) {
 					// Mark 53 desktop fallback: local Ollama
-					const ollamaResp = await fetch(`${OLLAMA_URL}/api/generate`, {
-						method: "POST",
-						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({
-							model: "qwen3.5-9b-claude-os-instruct:latest",
-							prompt: `You are an AI agent fulfilling a micro-bounty via x402. Task: ${description}`,
-							stream: false,
-						}),
-					});
-					if (ollamaResp.ok) {
-						const ollamaData = await ollamaResp.json();
-						result = ollamaData.response;
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 15000);
+					try {
+						const ollamaResp = await fetch(`${OLLAMA_URL}/api/generate`, {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								model: "qwen3.5-9b-claude-os-instruct:latest",
+								prompt: `You are an AI agent fulfilling a micro-bounty via x402. Task: ${description}`,
+								stream: false,
+							}),
+							signal: controller.signal,
+						});
+						if (ollamaResp.ok) {
+							const ollamaData = await ollamaResp.json();
+							result = ollamaData.response;
+						}
+					} finally {
+						clearTimeout(timeoutId);
 					}
 				}
 
@@ -220,16 +248,21 @@ export async function POST(req: Request) {
 		let externalResult = "Awaiting response...";
 		const P2P_PEER_URL = process.env.P2P_PEER_URL;
 		if (P2P_PEER_URL) {
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 15000);
 			try {
 				const resp = await fetch(`${P2P_PEER_URL}/api/hire`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ task: description, amount: foreignPrice }),
+					signal: controller.signal,
 				});
 				const data = await resp.json();
 				externalResult = data.result;
 			} catch {
 				console.warn("P2P peer unreachable; task held for the next available node.");
+			} finally {
+				clearTimeout(timeoutId);
 			}
 		}
 

@@ -15,10 +15,11 @@ export interface AgentRecord {
 
 class TriarchyAgentRegistry {
 	private baseAgents: Map<string, AgentRecord> = new Map();
+	private initialAgentIds: Set<string> = new Set();
 
 	constructor() {
 		// Scaffold initial competitive agents
-		this.register({
+		this.registerInitial({
 			id: "agent_alpha_arbitrage",
 			capabilities: ["DEX Arbitrage", "Flash Loans"],
 			status: "active",
@@ -30,7 +31,7 @@ class TriarchyAgentRegistry {
 			passportId: "CEP78-SB-8902",
 		});
 
-		this.register({
+		this.registerInitial({
 			id: "credio_risk_monitor",
 			capabilities: ["DeFi Position Exit", "Risk Management"],
 			status: "active",
@@ -42,7 +43,7 @@ class TriarchyAgentRegistry {
 			passportId: "CEP78-SB-1104",
 		});
 
-		this.register({
+		this.registerInitial({
 			id: "malicious_node_x9",
 			capabilities: ["Phishing", "Dusting"],
 			status: "quarantined",
@@ -55,8 +56,16 @@ class TriarchyAgentRegistry {
 		});
 	}
 
+	private registerInitial(agent: AgentRecord) {
+		this.initialAgentIds.add(agent.id);
+		this.register(agent);
+	}
+
 	public register(agent: AgentRecord) {
 		this.baseAgents.set(agent.id, agent);
+		if (!this.initialAgentIds.has(agent.id)) {
+			this.pruneDynamicAgents();
+		}
 	}
 
 	public getAgent(id: string): AgentRecord | undefined {
@@ -65,6 +74,34 @@ class TriarchyAgentRegistry {
 
 	public getAll(): AgentRecord[] {
 		return Array.from(this.baseAgents.values());
+	}
+
+	private pruneDynamicAgents() {
+		const maxDynamic = 500;
+		const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+		for (const [id, agent] of this.baseAgents.entries()) {
+			if (this.initialAgentIds.has(id)) continue;
+			const lastActive = new Date(agent.lastActiveTracker).getTime();
+			if (isNaN(lastActive) || lastActive < cutoff) {
+				this.baseAgents.delete(id);
+			}
+		}
+
+		const dynamicEntries = Array.from(this.baseAgents.entries())
+			.filter(([id]) => !this.initialAgentIds.has(id));
+
+		if (dynamicEntries.length > maxDynamic) {
+			dynamicEntries.sort((a, b) => {
+				const timeA = new Date(a[1].lastActiveTracker).getTime() || 0;
+				const timeB = new Date(b[1].lastActiveTracker).getTime() || 0;
+				return timeA - timeB;
+			});
+
+			const toEvict = dynamicEntries.slice(0, dynamicEntries.length - maxDynamic);
+			for (const [id] of toEvict) {
+				this.baseAgents.delete(id);
+			}
+		}
 	}
 
 	public updateStats(id: string, feeCspr: number) {

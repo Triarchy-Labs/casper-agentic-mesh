@@ -21,13 +21,16 @@ export class CSPRCloudRestClient {
         
         let lastError: any;
         for (let i = 0; i < retries; i++) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
             try {
                 // Native Web Fetch! No node-fetch dependency. 100% universal.
                 const response = await fetch(url, {
                     headers: {
                         "authorization": this.apiKey,
                         "accept": "application/json"
-                    }
+                    },
+                    signal: controller.signal,
                 });
 
                 if (response.status === 429 || response.status >= 500) {
@@ -44,6 +47,8 @@ export class CSPRCloudRestClient {
             } catch (error: any) {
                 lastError = error;
                 const isTransient = error instanceof Error && (
+                    error.name === "AbortError" ||
+                    error.message.includes("aborted") ||
                     error.message.includes("Transient") || 
                     error.message.includes("ECONNRESET") || 
                     error.message.includes("ETIMEDOUT") || 
@@ -59,6 +64,8 @@ export class CSPRCloudRestClient {
                 if (i < retries - 1) {
                     await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
                 }
+            } finally {
+                clearTimeout(timeoutId);
             }
         }
         

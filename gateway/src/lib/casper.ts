@@ -48,13 +48,20 @@ interface Transfer {
 }
 
 async function rpcCall(method: string, params: unknown): Promise<any> {
-	const response = await fetch(CASPER_TESTNET_RPC, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
-	});
-	if (!response.ok) throw new Error(`Casper RPC HTTP ${response.status}`);
-	return response.json();
+	const controller = new AbortController();
+	const timeoutId = setTimeout(() => controller.abort(), 8000);
+	try {
+		const response = await fetch(CASPER_TESTNET_RPC, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+			signal: controller.signal,
+		});
+		if (!response.ok) throw new Error(`Casper RPC HTTP ${response.status}`);
+		return await response.json();
+	} finally {
+		clearTimeout(timeoutId);
+	}
 }
 
 /** Normalizes a transfer `to`/`from` field to a bare lowercase account-hash hex. */

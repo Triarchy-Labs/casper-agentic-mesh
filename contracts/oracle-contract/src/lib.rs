@@ -12,27 +12,170 @@ extern crate alloc;
 
 use alloc::string::{String, ToString};
 use alloc::vec;
+use alloc::vec::Vec;
 use alloc::format;
 use casper_contract::{
     contract_api::{runtime, storage},
     unwrap_or_revert::UnwrapOrRevert,
 };
 use casper_types::{
-    ApiError, CLType, Key, U512,
+    ApiError, CLType, Key, U512, CLTyped,
+    bytesrepr::{FromBytes, ToBytes, Error as BytesreprError},
     EntryPoints, EntityEntryPoint, EntryPointAccess, EntryPointType, EntryPointPayment,
-    Parameter,
+    Parameter, URef,
 };
 
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-const ORACLES_DICT: &str = "oracles_dict";       // agent identity:   pubkey -> metadata
-const READINGS_DICT: &str = "readings_dict";     // latest reading:   asset  -> "value=..;by=..;seq=.."
-const REPUTATION_DICT: &str = "reputation_dict"; // accuracy/score:   account_hash -> u64
-const EVENTS_DICT: &str = "events_dict";         // append-only log:  seq(string) -> event string
+const ORACLES_DICT: &str = "oracles_dict";       // agent identity:   caller (account_hash str) -> OracleRecord
+const READINGS_DICT: &str = "readings_dict";     // latest reading:   asset -> ReadingRecord
+const REPUTATION_DICT: &str = "reputation_dict"; // accuracy/score:   caller (account_hash str) -> u64
+const EVENTS_DICT: &str = "events_dict";         // append-only log:  seq(string) -> EventRecord
 const EVENT_COUNT: &str = "event_count";         // monotonic counter (uref<u64>)
 
-fn dict_uref(name: &str) -> casper_types::URef {
+// ───────────────────────── Data Structures ─────────────────────────
+
+pub struct OracleRecord {
+    pub public_key: String,
+    pub metadata_uri: String,
+    pub registered_at: u64,
+}
+
+impl CLTyped for OracleRecord {
+    fn cl_type() -> CLType {
+        CLType::Any
+    }
+}
+
+impl ToBytes for OracleRecord {
+    fn serialized_length(&self) -> usize {
+        self.public_key.serialized_length()
+            + self.metadata_uri.serialized_length()
+            + self.registered_at.serialized_length()
+    }
+
+    fn to_bytes(&self) -> Result<Vec<u8>, BytesreprError> {
+        let mut buffer = Vec::with_capacity(self.serialized_length());
+        buffer.extend(self.public_key.to_bytes()?);
+        buffer.extend(self.metadata_uri.to_bytes()?);
+        buffer.extend(self.registered_at.to_bytes()?);
+        Ok(buffer)
+    }
+}
+
+impl FromBytes for OracleRecord {
+    fn from_bytes(bytes: &[u8]) -> Result<(Self, &[u8]), BytesreprError> {
+        let (public_key, remainder) = String::from_bytes(bytes)?;
+        let (metadata_uri, remainder) = String::from_bytes(remainder)?;
+        let (registered_at, remainder) = u64::from_bytes(remainder)?;
+        Ok((
+            OracleRecord {
+                public_key,
+                metadata_uri,
+                registered_at,
+            },
+            remainder,
+        ))
+    }
+}
+
+pub struct ReadingRecord {
+    pub value: U512,
+    pub by: String,
+    pub seq: u64,
+    pub timestamp: u64,
+}
+
+impl CLTyped for ReadingRecord {
+    fn cl_type() -> CLType {
+        CLType::Any
+    }
+}
+
+impl ToBytes for ReadingRecord {
+    fn serialized_length(&self) -> usize {
+        self.value.serialized_length()
+            + self.by.serialized_length()
+            + self.seq.serialized_length()
+            + self.timestamp.serialized_length()
+    }
+
+    fn to_bytes(&self) -> Result<Vec<u8>, BytesreprError> {
+        let mut buffer = Vec::with_capacity(self.serialized_length());
+        buffer.extend(self.value.to_bytes()?);
+        buffer.extend(self.by.to_bytes()?);
+        buffer.extend(self.seq.to_bytes()?);
+        buffer.extend(self.timestamp.to_bytes()?);
+        Ok(buffer)
+    }
+}
+
+impl FromBytes for ReadingRecord {
+    fn from_bytes(bytes: &[u8]) -> Result<(Self, &[u8]), BytesreprError> {
+        let (value, remainder) = U512::from_bytes(bytes)?;
+        let (by, remainder) = String::from_bytes(remainder)?;
+        let (seq, remainder) = u64::from_bytes(remainder)?;
+        let (timestamp, remainder) = u64::from_bytes(remainder)?;
+        Ok((
+            ReadingRecord {
+                value,
+                by,
+                seq,
+                timestamp,
+            },
+            remainder,
+        ))
+    }
+}
+
+pub struct EventRecord {
+    pub event_type: String,
+    pub payload: String,
+    pub timestamp: u64,
+}
+
+impl CLTyped for EventRecord {
+    fn cl_type() -> CLType {
+        CLType::Any
+    }
+}
+
+impl ToBytes for EventRecord {
+    fn serialized_length(&self) -> usize {
+        self.event_type.serialized_length()
+            + self.payload.serialized_length()
+            + self.timestamp.serialized_length()
+    }
+
+    fn to_bytes(&self) -> Result<Vec<u8>, BytesreprError> {
+        let mut buffer = Vec::with_capacity(self.serialized_length());
+        buffer.extend(self.event_type.to_bytes()?);
+        buffer.extend(self.payload.to_bytes()?);
+        buffer.extend(self.timestamp.to_bytes()?);
+        Ok(buffer)
+    }
+}
+
+impl FromBytes for EventRecord {
+    fn from_bytes(bytes: &[u8]) -> Result<(Self, &[u8]), BytesreprError> {
+        let (event_type, remainder) = String::from_bytes(bytes)?;
+        let (payload, remainder) = String::from_bytes(remainder)?;
+        let (timestamp, remainder) = u64::from_bytes(remainder)?;
+        Ok((
+            EventRecord {
+                event_type,
+                payload,
+                timestamp,
+            },
+            remainder,
+        ))
+    }
+}
+
+// ───────────────────────── Helpers ─────────────────────────
+
+fn dict_uref(name: &str) -> URef {
     let key = runtime::get_key(name).unwrap_or_revert_with(ApiError::User(20));
     key.into_uref().unwrap_or_revert_with(ApiError::User(21))
 }
@@ -43,14 +186,21 @@ fn next_event_seq() -> u64 {
         .into_uref()
         .unwrap_or_revert_with(ApiError::User(23));
     let current: u64 = storage::read(uref).unwrap_or_revert().unwrap_or(0);
-    storage::write(uref, current + 1);
+    let next = current.checked_add(1).unwrap_or_revert_with(ApiError::User(24));
+    storage::write(uref, next);
     current
 }
 
-fn emit(event: String) {
+fn emit(event_type: &str, payload: String) {
     let seq = next_event_seq();
     let events = dict_uref(EVENTS_DICT);
-    storage::dictionary_put(events, &seq.to_string(), event);
+    let now = runtime::get_blocktime().into();
+    let record = EventRecord {
+        event_type: event_type.to_string(),
+        payload,
+        timestamp: now,
+    };
+    storage::dictionary_put(events, &seq.to_string(), record);
 }
 
 #[no_mangle]
@@ -74,19 +224,25 @@ pub extern "C" fn init() {
 pub extern "C" fn register_oracle() {
     let public_key: String = runtime::get_named_arg("public_key");
     let metadata_uri: String = runtime::get_named_arg("metadata_uri");
+    let caller = runtime::get_caller().to_string();
 
     let oracles = dict_uref(ORACLES_DICT);
-    storage::dictionary_put(oracles, &public_key, metadata_uri);
+    let record = OracleRecord {
+        public_key: public_key.clone(),
+        metadata_uri,
+        registered_at: runtime::get_blocktime().into(),
+    };
+    // Store identity record mapped to caller account hash
+    storage::dictionary_put(oracles, &caller, record);
 
     // Seed reputation entry if absent.
-    let caller = runtime::get_caller().to_string();
     let reputation = dict_uref(REPUTATION_DICT);
     let existing: Option<u64> = storage::dictionary_get(reputation, &caller).unwrap_or_revert();
     if existing.is_none() {
         storage::dictionary_put(reputation, &caller, 0u64);
     }
 
-    emit(format!("REGISTER;agent={caller};key={public_key}"));
+    emit("REGISTER", format!("agent={caller};key={public_key}"));
 }
 
 /// Post a real-world asset reading on-chain and accrue reputation.
@@ -94,23 +250,37 @@ pub extern "C" fn register_oracle() {
 pub extern "C" fn post_reading() {
     let asset: String = runtime::get_named_arg("asset");
     let value: U512 = runtime::get_named_arg("value");
-
     let caller = runtime::get_caller().to_string();
-    let seq = next_event_seq();
 
-    // Store the latest reading for this asset.
+    // Verify identity: caller MUST be a registered oracle
+    let oracles = dict_uref(ORACLES_DICT);
+    let oracle_record: Option<OracleRecord> = storage::dictionary_get(oracles, &caller).unwrap_or_revert();
+    if oracle_record.is_none() {
+        runtime::revert(ApiError::User(30)); // UnauthorizedOracle
+    }
+
+    let seq = next_event_seq();
+    let now = runtime::get_blocktime().into();
+
+    // Store the latest reading for this asset with structured binary record
     let readings = dict_uref(READINGS_DICT);
-    let record = format!("value={};by={};seq={}", value, caller, seq);
+    let record = ReadingRecord {
+        value,
+        by: caller.clone(),
+        seq,
+        timestamp: now,
+    };
     storage::dictionary_put(readings, &asset, record);
 
-    // Accrue reputation for the reporting agent.
+    // Accrue reputation for the reporting agent safely
     let reputation = dict_uref(REPUTATION_DICT);
     let score: u64 = storage::dictionary_get(reputation, &caller)
         .unwrap_or_revert()
         .unwrap_or(0);
-    storage::dictionary_put(reputation, &caller, score + 1);
+    let new_score = score.saturating_add(1);
+    storage::dictionary_put(reputation, &caller, new_score);
 
-    emit(format!("READING;asset={asset};value={value};by={caller}"));
+    emit("READING", format!("asset={asset};value={value};by={caller}"));
 }
 
 // ───────────────────────── Installation ─────────────────────────

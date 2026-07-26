@@ -23,6 +23,7 @@ process.on('uncaughtException', (err) => {
 });
 process.on('unhandledRejection', (reason) => {
     console.error("[Unhandled Rejection]", reason);
+    process.exit(1);
 });
 // ==========================================
 

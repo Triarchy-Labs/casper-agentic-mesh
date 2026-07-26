@@ -12,6 +12,9 @@ use casper_types::{
     contracts::ContractPackageHash, runtime_args, ApiError, URef, U512,
 };
 
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 
 /// Session code executed in the *caller's account context*.
 ///

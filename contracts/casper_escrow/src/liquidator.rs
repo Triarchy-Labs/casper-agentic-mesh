@@ -5,7 +5,8 @@ use odra::ContractRef;
 #[odra::external_contract]
 pub trait EscrowCross {
     fn submit_proof(&mut self, task_id: String, signature: String);
-    fn release(&mut self, task_id: String);
+    fn release(&mut self, task_id: String) -> U512;
+    fn submit_and_release(&mut self, task_id: String, signature: String) -> U512;
 }
 
 #[odra::odra_type]
@@ -22,7 +23,14 @@ pub enum Error {
     FlashLoanFailed = 3,
 }
 
-#[odra::module]
+#[odra::event]
+pub struct ArbitrageExecuted {
+    pub target_task_id: String,
+    pub profit_realized: U512,
+    pub timestamp: u64,
+}
+
+#[odra::module(events = [ArbitrageExecuted])]
 pub struct X402Liquidator {
     pub owner: Var<Address>,
     pub liquidations: Mapping<String, LiquidationRecord>,
@@ -54,32 +62,41 @@ impl X402Liquidator {
         }
 
         // Must be strictly profitable to execute (profit > x402 cost + gas buffer)
-        // In a real environment, gas is paid in CSPR, so we ensure a net-positive yield.
         if expected_bounty <= x402_cost {
             self.env().revert(Error::NotProfitable);
         }
 
         let profit = expected_bounty - x402_cost;
 
-        // Perform the actual Cross-Contract Call to the Escrow contract
+        // Perform single Cross-Contract Call to Escrow contract
         let mut escrow = EscrowCrossContractRef::new(self.env(), escrow_address);
         
-        // 1. Submit the generated cognitive proof
-        escrow.submit_proof(target_task_id.clone(), proof_signature);
+        // Single XCC entry point: submits proof and releases escrowed funds in one call
+        let released_amount = escrow.submit_and_release(target_task_id.clone(), proof_signature);
         
-        // 2. Trigger release (Assuming X402Liquidator acts as or coordinates with the Verifier)
-        escrow.release(target_task_id.clone());
+        let actual_profit = if released_amount > x402_cost {
+            released_amount - x402_cost
+        } else {
+            profit
+        };
 
+        let now = self.env().get_block_time();
         let record = LiquidationRecord {
             target_task_id: target_task_id.clone(),
-            profit_realized: profit,
-            timestamp: self.env().get_block_time(),
+            profit_realized: actual_profit,
+            timestamp: now,
         };
 
         self.liquidations.set(&target_task_id, record);
         
         let current_profit = self.total_profit.get_or_default();
-        self.total_profit.set(current_profit + profit);
+        self.total_profit.set(current_profit.saturating_add(actual_profit));
+
+        self.env().emit_event(ArbitrageExecuted {
+            target_task_id,
+            profit_realized: actual_profit,
+            timestamp: now,
+        });
     }
 
     pub fn get_total_profit(&self) -> U512 {

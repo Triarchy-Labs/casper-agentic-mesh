@@ -27,17 +27,26 @@ export async function verifyTransactionOnChain(
     try {
         const rpcUrl = options.rpcUrl || DEFAULT_RPC;
         
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
         // Native Edge-Compatible Fetch to Casper RPC
-        const response = await fetch(rpcUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                jsonrpc: "2.0",
-                id: 1,
-                method: "info_get_deploy",
-                params: { deploy_hash: txHash }
-            })
-        });
+        let response: Response;
+        try {
+            response = await fetch(rpcUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: "2.0",
+                    id: 1,
+                    method: "info_get_deploy",
+                    params: { deploy_hash: txHash }
+                }),
+                signal: controller.signal,
+            });
+        } finally {
+            clearTimeout(timeoutId);
+        }
 
         if (!response.ok) {
             throw new Error(`RPC HTTP Error: ${response.status}`);

@@ -115,9 +115,19 @@ export function ScrollHero() {
 	// hero live strip — one read of the real ledger (oracle price + agent reputation)
 	const [live, setLive] = useState<{ price: string; rep: number } | null>(null);
 	useEffect(() => {
-		fetch("/api/onchain").then(r => r.ok ? r.json() : null).then(d => {
-			if (d && d.priceUsd) setLive({ price: `$${Number(d.priceUsd).toFixed(6)}`, rep: d.reputation ?? 0 });
-		}).catch(() => { /* strip simply stays quiet */ });
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), 5000);
+		fetch("/api/onchain", { signal: controller.signal })
+			.then((r) => (r.ok ? r.json() : null))
+			.then((d) => {
+				if (d && d.priceUsd) setLive({ price: `$${Number(d.priceUsd).toFixed(6)}`, rep: d.reputation ?? 0 });
+			})
+			.catch(() => { /* strip simply stays quiet */ })
+			.finally(() => clearTimeout(timeoutId));
+		return () => {
+			clearTimeout(timeoutId);
+			controller.abort();
+		};
 	}, []);
 	const wordmarkRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<HTMLDivElement>(null);

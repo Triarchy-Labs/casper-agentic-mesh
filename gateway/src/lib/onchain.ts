@@ -17,15 +17,22 @@ const AGENT_ACCOUNT =
 	"334f6577fd29b3c939d35f8c3c386b5eaebbb1435f088487485980ed2acb6867";
 
 async function rpc(method: string, params: unknown): Promise<any> {
-	const r = await fetch(RPC, {
-		method: "POST",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
-		// Always hit the live ledger.
-		cache: "no-store",
-	});
-	if (!r.ok) throw new Error(`RPC HTTP ${r.status}`);
-	return r.json();
+	const controller = new AbortController();
+	const timeoutId = setTimeout(() => controller.abort(), 8000);
+	try {
+		const r = await fetch(RPC, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+			// Always hit the live ledger.
+			cache: "no-store",
+			signal: controller.signal,
+		});
+		if (!r.ok) throw new Error(`RPC HTTP ${r.status}`);
+		return await r.json();
+	} finally {
+		clearTimeout(timeoutId);
+	}
 }
 
 async function stateRootHash(): Promise<string> {

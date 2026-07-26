@@ -44,6 +44,7 @@ export class SpendingPolicy {
      * Returns null if allowed, or an error string if rejected.
      */
     check(callerId: string, price: number): string | null {
+        this.pruneStale();
         if (price === 0) return null;
 
         // 1. Caller allowlist
@@ -86,6 +87,7 @@ export class SpendingPolicy {
 
     /** Record a successful spend */
     record(callerId: string, amount: number): void {
+        this.pruneStale();
         const today = this.todayStart();
 
         // Per-caller
@@ -105,6 +107,7 @@ export class SpendingPolicy {
     }
 
     getCallerSpend(callerId: string): number {
+        this.pruneStale();
         const entry = this.perCallerSpend.get(callerId);
         if (!entry || entry.dayStart !== this.todayStart()) return 0;
         return entry.amount;
@@ -113,6 +116,22 @@ export class SpendingPolicy {
     getGlobalSpend(): number {
         if (this.globalSpend.dayStart !== this.todayStart()) return 0;
         return this.globalSpend.amount;
+    }
+
+    private pruneStale(): void {
+        const today = this.todayStart();
+        for (const [callerId, spend] of this.perCallerSpend.entries()) {
+            if (spend.dayStart !== today) {
+                this.perCallerSpend.delete(callerId);
+            }
+        }
+        // Enforce max capacity limit (5000 callers max)
+        if (this.perCallerSpend.size > 5000) {
+            const keysToDelete = Array.from(this.perCallerSpend.keys()).slice(0, this.perCallerSpend.size - 5000);
+            for (const key of keysToDelete) {
+                this.perCallerSpend.delete(key);
+            }
+        }
     }
 
     private todayStart(): number {
