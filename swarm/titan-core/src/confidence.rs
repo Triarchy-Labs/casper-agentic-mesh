@@ -24,7 +24,7 @@ impl ConfidenceEngine {
                 if let Some(entry) = json.get(symbol) {
                     if entry["locked"].as_bool().unwrap_or(false) {
                         let now_ms = std::time::SystemTime::now()
-                            .duration_since(std::time::UNIX_EPOCH).expect("clock before UNIX epoch").as_millis() as u64;
+                            .duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis() as u64;
                         if let Some(unlock) = entry["unlock_timestamp_ms"].as_u64() {
                             if now_ms < unlock {
                                 return -5.0; // Жёсткий бан

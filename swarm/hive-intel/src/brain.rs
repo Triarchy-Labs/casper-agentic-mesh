@@ -2,6 +2,7 @@
 ///
 /// Diamond-verified: ВСЕ модули подключены включая OWM Recall.
 /// Bloom rotation, semantic/causal pruning, NaN-safe.
+use std::collections::VecDeque;
 use serde::{Serialize, Deserialize};
 use crate::entity::MemoryEntity;
 use crate::semantic::SemanticStore;
@@ -52,7 +53,7 @@ struct BrainPersist {
     bloom: BloomFilter,
     adaptive: AdaptiveWeightStore,
     peak_equity: std::collections::HashMap<String, f64>,
-    last_events: Vec<(String, i64)>,
+    last_events: VecDeque<(String, i64)>,
 }
 
 /// Центральный мозг Memory Castle.
@@ -63,7 +64,7 @@ pub struct Brain {
     pub adaptive: AdaptiveWeightStore,
     pub last_diagnostics: Option<BrainDiagnostics>,
     pub peak_equity: std::collections::HashMap<String, f64>,
-    pub last_events: Vec<(String, i64)>,
+    pub last_events: VecDeque<(String, i64)>,
     pub bloom_insertions: usize,
     // ═══ Surgical Port modules ═══
     pub dqs_engine: DqsEngine,
@@ -94,7 +95,7 @@ impl Brain {
             adaptive: AdaptiveWeightStore::new(),
             last_diagnostics: None,
             peak_equity: std::collections::HashMap::new(),
-            last_events: Vec::new(),
+            last_events: VecDeque::new(),
             bloom_insertions: 0,
             dqs_engine: DqsEngine::new(),
             changepoint: BayesianChangepoint::new(100.0),
@@ -246,9 +247,9 @@ impl Brain {
         }
 
         // Добавить текущее событие в историю (ring buffer 100 событий)
-        self.last_events.push((event_name.clone(), event_ts));
+        self.last_events.push_back((event_name.clone(), event_ts));
         if self.last_events.len() > 100 {
-            self.last_events.remove(0);
+            self.last_events.pop_front();
         }
 
         // Получить предсказания каузального графа

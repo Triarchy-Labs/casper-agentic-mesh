@@ -6,8 +6,6 @@
  * returns the real deploy hash. That hash is then verified server-side against
  * the live ledger (see lib/casper.ts) before any task is executed.
  */
-import { CasperServiceByJsonRPC, DeployUtil, CLPublicKey } from "casper-js-sdk";
-
 const RPC =
 	process.env.NEXT_PUBLIC_CASPER_RPC_URL ||
 	"https://node.testnet.casper.network/rpc";
@@ -32,6 +30,8 @@ export async function payForTask(
 	if (typeof window === "undefined" || !window.casperWallet) {
 		throw new Error("CASPER_WALLET_REQUIRED");
 	}
+
+	const { CasperServiceByJsonRPC, DeployUtil, CLPublicKey } = await import("casper-js-sdk");
 
 	const sender = CLPublicKey.fromHex(senderPubHex);
 	const recipient = CLPublicKey.fromHex(PLATFORM_PUBKEY);

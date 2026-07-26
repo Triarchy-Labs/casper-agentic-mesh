@@ -52,9 +52,9 @@ pub fn get_next_session_start_utc() -> i64 {
     };
     use chrono::NaiveTime;
     let next_time = if next_hour > hour {
-        today.and_time(NaiveTime::from_hms_opt(next_hour, 0, 0).expect("valid HMS"))
+        today.and_time(NaiveTime::from_hms_opt(next_hour, 0, 0).unwrap_or_default())
     } else {
-        (today + chrono::Duration::days(1)).and_time(NaiveTime::from_hms_opt(next_hour, 0, 0).expect("valid HMS"))
+        (today + chrono::Duration::days(1)).and_time(NaiveTime::from_hms_opt(next_hour, 0, 0).unwrap_or_default())
     };
     next_time.and_utc().timestamp()
 }

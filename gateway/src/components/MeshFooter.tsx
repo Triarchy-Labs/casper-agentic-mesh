@@ -220,9 +220,9 @@ export function MeshFooter() {
 						C<span className="text-[var(--red-700)]">Λ</span>SPER
 					</div>
 					<div className="flex flex-col items-end gap-[1.4vh] pb-[0.8vh] max-sm:items-start max-sm:w-full">
-						<p className="label-13-mono text-white/40">forged by TRIARCHY // the mesh settles here</p>
+						<p className="label-13-mono text-white/40">forged by TRIARCHY {"//"} the mesh settles here</p>
 						<div className="flex items-center gap-3 label-12-mono text-[var(--gray-600)] flex-wrap justify-end max-sm:justify-start">
-							<span className="text-[var(--red-700)]">///</span>
+							<span className="text-[var(--red-700)]">{"///"}</span>
 							<span>REV 2.6</span>
 							<span className="text-[var(--gray-500)]">·</span>
 							<span>UNIT / MESH-01</span>

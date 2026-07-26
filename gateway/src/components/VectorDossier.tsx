@@ -359,7 +359,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.9, ease: glide, delay: 0.15 }}
 						>
-							<span className="label-14-mono text-[var(--red-700)]">{v.index} // {v.kicker}</span>
+							<span className="label-14-mono text-[var(--red-700)]">{v.index} {"//"} {v.kicker}</span>
 							<h2 className="mt-3 uppercase leading-[0.95]" style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontSize: "clamp(40px, 6vw, 104px)", fontWeight: 400 }}>
 								{v.title}
 							</h2>
@@ -454,7 +454,7 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 											</a>
 										))}
 									</div>
-									<p className="mt-6 label-12-mono text-white/35">Don't trust this panel — open the hashes. Full path: PLAYBOOK.md</p>
+									<p className="mt-6 label-12-mono text-white/35">Don&apos;t trust this panel — open the hashes. Full path: PLAYBOOK.md</p>
 								</Section>
 							</div>
 						)}

@@ -18,11 +18,13 @@ export default function AgentDashboard() {
 	} | null>(null);
 
 	useEffect(() => {
+		let isMounted = true;
 		const fetchAgents = async () => {
 			try {
 				const res = await fetch("/api/agents");
-				if (res.ok) {
-					setData(await res.json());
+				if (res.ok && isMounted) {
+					const json = await res.json();
+					if (isMounted) setData(json);
 				}
 			} catch (e) {
 				console.error(e);
@@ -30,7 +32,10 @@ export default function AgentDashboard() {
 		};
 		fetchAgents();
 		const interval = setInterval(fetchAgents, 5000);
-		return () => clearInterval(interval);
+		return () => {
+			isMounted = false;
+			clearInterval(interval);
+		};
 	}, []);
 
 	return (

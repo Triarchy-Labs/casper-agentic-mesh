@@ -213,7 +213,7 @@ export function PixelDecodeText({ text, scrollRef, playOnEnter, fontVw, fsMax }:
 			window.removeEventListener("scroll", onScroll);
 			if (raf) cancelAnimationFrame(raf);
 		};
-	}, [text, playOnEnter, fontVw, fsMax]);
+	}, [text, playOnEnter, fontVw, fsMax, scrollRef]);
 
 	return (
 		<div ref={wrapRef} className="w-full">

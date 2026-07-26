@@ -230,10 +230,16 @@ export function CrystalForge() {
 					gsap.set(glowRef.current, { opacity: Math.min(1, charge) });
 					// headline present during the charge, rolls out before the verdict points land
 					const wantHead = p >= 0.07 && p < 0.62;
-					if (wantHead !== headlineShown) { headlineShown = wantHead; wantHead ? headIn() : headOut(); }
+					if (wantHead !== headlineShown) {
+						headlineShown = wantHead;
+						if (wantHead) headIn(); else headOut();
+					}
 					// the three points pop in on the fully-charged hero, produx-style
 					const wantLabels = p >= 0.68;
-					if (wantLabels !== labelsShown) { labelsShown = wantLabels; wantLabels ? labelsIn() : labelsOut(); }
+					if (wantLabels !== labelsShown) {
+						labelsShown = wantLabels;
+						if (wantLabels) labelsIn(); else labelsOut();
+					}
 				},
 			});
 		}, sectionRef);

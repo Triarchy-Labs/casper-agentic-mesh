@@ -243,16 +243,21 @@ async fn get_pattern(
 
     // Get entity DNA
     let entity_data = s.engine.graph.get(&symbol);
-    let has_data = entity_data.is_some();
+    let Some(entity_ref) = entity_data else {
+        return Json(serde_json::json!({
+            "factor_score": 0.0,
+            "detail": "no data for symbol",
+        }));
+    };
 
-    if !has_data || symbol.is_empty() {
+    if symbol.is_empty() {
         return Json(serde_json::json!({
             "factor_score": 0.0,
             "detail": "no data for symbol",
         }));
     }
 
-    let entity = entity_data.unwrap().clone();
+    let entity = entity_ref.clone();
 
     // Synthesize factor from entity stats
     let mut factor = 0.0_f64;

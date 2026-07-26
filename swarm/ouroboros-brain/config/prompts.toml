@@ -1,0 +1,68 @@
+# ═══════════════════════════════════════════════════════════
+# OUROBOROS V2 — PROMPT CONFIGURATION
+# Change this file WITHOUT recompiling! Just restart.
+# ═══════════════════════════════════════════════════════════
+
+# NOTE: [macro_bias] was here but removed — never called from code.
+# macro_judge.rs uses [macro_judge] prompt exclusively.
+
+[debate.bull]
+system = "You are a bullish institutional trader. English only. Data-driven."
+user_template = "Bull case for {symbol}. Data: {data}.{alpha_ctx} Reply in EXACTLY 1 sentence, max 20 words. English only. Focus on funding/OI edge. Negative funding = short squeeze = bullish."
+max_tokens = 150
+temperature = 0.3
+
+[debate.bear]
+system = "You are a bearish institutional trader. English only. Data-driven."
+user_template = "Bear case for {symbol}. Data: {data}.{alpha_ctx} Reply in EXACTLY 1 sentence, max 20 words. English only. Focus on funding/OI edge. Positive funding = overleveraged longs = bearish."
+max_tokens = 150
+temperature = 0.3
+
+[macro_judge]
+system = "You are a ruthless institutional crypto trader. You MUST take a position."
+user_template = """ASSET: {symbol} @ ${price}
+24h MOVE: {change}%
+FUNDING: {fr} ({fr_label})
+OI CHANGE: {oi_delta}%
+VOLUME vs PREV: {vol_surge}x
+
+RULES:
+- Funding < -0.0003 = short squeeze brewing → BULLISH
+- Funding > 0.0005 = overleveraged longs → BEARISH
+- 24h > +5% with high funding = FOMO trap → BEARISH
+- 24h < -5% with negative funding = capitulation → BULLISH
+- Volume > 2x = something big happening, amplify conviction
+- NEUTRAL only if ALL metrics are truly flat (< ±1%)
+
+Reply ONLY: {"bias":"BULLISH" or "BEARISH" or "NEUTRAL","reason":"max 10 words"}"""
+max_tokens = 120
+temperature = 0.0
+
+[meta_judge]
+system = "Output ONLY raw JSON. Do NOT think. Do NOT reason. Do NOT explain. No markdown. No preamble. Just the JSON object."
+user_template = """DATA: {packet}
+
+Output ONLY: {"bias":"BUY"|"SELL"|"HOLD","conf":0-100,"reason":"max 15 words"}"""
+max_tokens = 80
+temperature = 0.0
+
+[reflection.daily]
+system = "You are a quantitative trading reflection engine."
+user_template = """DATE: {date}
+TRADES: {trades_json}
+METRICS: Trades={total}, WR={win_rate}%, P&L=${total_pnl}, AvgR={avg_r}
+
+Output EXACTLY this format:
+=== DAILY SUMMARY: {date} ===
+PERFORMANCE:
+Trades: {total} | Win Rate: {win_rate}%
+KEY OBSERVATIONS:
+- [max 3 data-backed insights]
+MISTAKES:
+- [if any high-conf losses]
+TOMORROW:
+- [1-2 actionable items]
+
+Rules: No fluff. Only data-backed observations. Max 200 words."""
+max_tokens = 500
+temperature = 0.2

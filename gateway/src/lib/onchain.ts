@@ -16,7 +16,7 @@ const AGENT_ACCOUNT =
 	process.env.CASPER_AGENT_ACCOUNT ||
 	"334f6577fd29b3c939d35f8c3c386b5eaebbb1435f088487485980ed2acb6867";
 
-async function rpc(method: string, params: unknown): Promise<any> {
+async function rpc(method: string, params: unknown): Promise<Record<string, unknown>> {
 	const controller = new AbortController();
 	const timeoutId = setTimeout(() => controller.abort(), 8000);
 	try {
@@ -29,7 +29,7 @@ async function rpc(method: string, params: unknown): Promise<any> {
 			signal: controller.signal,
 		});
 		if (!r.ok) throw new Error(`RPC HTTP ${r.status}`);
-		return await r.json();
+		return (await r.json()) as Record<string, unknown>;
 	} finally {
 		clearTimeout(timeoutId);
 	}
@@ -37,7 +37,8 @@ async function rpc(method: string, params: unknown): Promise<any> {
 
 async function stateRootHash(): Promise<string> {
 	const d = await rpc("chain_get_state_root_hash", []);
-	return d.result.state_root_hash;
+	const result = d.result as Record<string, unknown>;
+	return String(result.state_root_hash);
 }
 
 async function dictItemBytes(
@@ -51,7 +52,10 @@ async function dictItemBytes(
 			URef: { seed_uref: seedUref, dictionary_item_key: key },
 		},
 	});
-	return d?.result?.stored_value?.CLValue?.bytes ?? null;
+	const resObj = d?.result as Record<string, unknown> | undefined;
+	const stored = resObj?.stored_value as Record<string, unknown> | undefined;
+	const clVal = stored?.CLValue as Record<string, unknown> | undefined;
+	return typeof clVal?.bytes === "string" ? clVal.bytes : null;
 }
 
 /** Decode a CES/CLValue String (u32 LE length prefix + utf8 bytes). */

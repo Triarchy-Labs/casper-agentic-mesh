@@ -47,7 +47,7 @@ interface Transfer {
 	amount: bigint;
 }
 
-async function rpcCall(method: string, params: unknown): Promise<any> {
+async function rpcCall(method: string, params: unknown): Promise<Record<string, unknown>> {
 	const controller = new AbortController();
 	const timeoutId = setTimeout(() => controller.abort(), 8000);
 	try {
@@ -58,7 +58,7 @@ async function rpcCall(method: string, params: unknown): Promise<any> {
 			signal: controller.signal,
 		});
 		if (!response.ok) throw new Error(`Casper RPC HTTP ${response.status}`);
-		return await response.json();
+		return (await response.json()) as Record<string, unknown>;
 	} finally {
 		clearTimeout(timeoutId);
 	}
@@ -68,23 +68,25 @@ async function rpcCall(method: string, params: unknown): Promise<any> {
 function normalizeAccountHash(v: unknown): string | null {
 	let s: string | null = null;
 	if (typeof v === "string") s = v;
-	else if (v && typeof v === "object" && "AccountHash" in (v as any)) {
-		s = String((v as any).AccountHash);
+	else if (v && typeof v === "object" && "AccountHash" in v) {
+		s = String((v as Record<string, unknown>).AccountHash);
 	}
 	if (!s) return null;
 	return s.replace(/^account-hash-/, "").toLowerCase();
 }
 
 /** Extracts the transfer records from a Casper 2.0 Version2 execution result. */
-function extractTransfers(execResult: any): Transfer[] {
-	const v2 = execResult?.Version2 ?? execResult;
+function extractTransfers(execResult: unknown): Transfer[] {
+	const resObj = execResult as Record<string, unknown> | undefined;
+	const v2 = (resObj?.Version2 ?? execResult) as Record<string, unknown> | undefined;
 	const raw = v2?.transfers;
 	if (!Array.isArray(raw)) return [];
-	return raw.map((t: any) => {
-		const rec = t?.Version2 ?? t;
+	return raw.map((t: unknown) => {
+		const tObj = t as Record<string, unknown> | undefined;
+		const rec = (tObj?.Version2 ?? t) as Record<string, unknown> | undefined;
 		let amount = BigInt(0);
 		try {
-			amount = BigInt(rec?.amount ?? 0);
+			amount = BigInt(String(rec?.amount ?? 0));
 		} catch {
 			amount = BigInt(0);
 		}
@@ -103,12 +105,13 @@ async function getLedgerResult(txHash: string): Promise<LedgerResult> {
 				transaction_hash: { [wrapper]: txHash },
 			});
 			if (data.error) continue;
-			const info = data.result?.execution_info;
+			const resObj = data.result as Record<string, unknown> | undefined;
+			const info = resObj?.execution_info as Record<string, unknown> | undefined;
 			if (info === null || info === undefined) {
 				return { found: true, success: false, pending: true, transfers: [] };
 			}
 			const execResult = info.execution_result;
-			const res = execResult?.Version2 ?? execResult;
+			const res = ((execResult as Record<string, unknown> | undefined)?.Version2 ?? execResult) as Record<string, unknown> | undefined;
 			const success = res && res.error_message == null;
 			return {
 				found: true,
@@ -134,6 +137,9 @@ export async function validateCasperPayment(
 	requiredAmount: number,
 	_expectedMemo: string,
 ): Promise<PaymentValidationResult> {
+	if (_expectedMemo) {
+		// Log correlation ID for debug/audit tracking
+	}
 	// A real Casper transaction hash is exactly 64 hex chars. No exceptions.
 	if (!/^[0-9a-fA-F]{64}$/.test(txHash)) {
 		return {

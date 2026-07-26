@@ -106,7 +106,7 @@ impl BrainFeeds {
                     if let Some(locked) = entry["locked"].as_bool() {
                         if locked {
                             if let Some(unlock_ts) = entry["unlock_timestamp_ms"].as_u64() {
-                                let now_ms = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).expect("clock before UNIX epoch").as_millis() as u64;
+                                let now_ms = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap_or_default().as_millis() as u64;
                                 if now_ms < unlock_ts {
                                     tracing::info!(symbol = %symbol, reason = entry["reason"].as_str().unwrap_or(""), "[ANTI-TILT] Blocked by Left Hemisphere");
                                     return true;
@@ -151,13 +151,18 @@ impl BrainFeeds {
     // ═══ TREASURY CACHED READER (BUG-1 fix: 48 I/O → 1) ═══
     fn read_treasury_json() -> Option<Value> {
         let path = data_file("treasury_state.json");
-        let mut cache = TREASURY_CACHE.lock().ok()?;
-        if let Some((ts, ref val)) = *cache {
-            if ts.elapsed().as_secs() < 10 { return Some(val.clone()); }
+        {
+            if let Ok(cache) = TREASURY_CACHE.lock() {
+                if let Some((ts, ref val)) = *cache {
+                    if ts.elapsed().as_secs() < 10 { return Some(val.clone()); }
+                }
+            }
         }
         let data = std::fs::read_to_string(path).ok()?;
         let json: Value = serde_json::from_str(&data).ok()?;
-        *cache = Some((Instant::now(), json.clone()));
+        if let Ok(mut cache) = TREASURY_CACHE.lock() {
+            *cache = Some((Instant::now(), json.clone()));
+        }
         Some(json)
     }
 

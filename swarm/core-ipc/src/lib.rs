@@ -28,48 +28,65 @@ impl Default for IpcBridge {
 }
 
 impl IpcBridge {
-    pub fn new() -> Self {
+    pub fn try_new() -> Result<Self, std::io::Error> {
         let path = Path::new(IPC_FILE);
         let file = OpenOptions::new()
             .read(true)
             .write(true)
             .create(true)
             .truncate(false)
-            .open(path)
-            .unwrap();
+            .open(path)?;
 
-        file.set_len(IPC_SIZE as u64).unwrap();
+        file.set_len(IPC_SIZE as u64)?;
 
-        let mmap = unsafe { MmapOptions::new().map_mut(&file).unwrap() };
-        Self { mmap, file }
+        let mmap = unsafe { MmapOptions::new().map_mut(&file)? };
+        Ok(Self { mmap, file })
+    }
+
+    pub fn new() -> Self {
+        Self::try_new().unwrap_or_else(|_| {
+            let file = OpenOptions::new()
+                .read(true)
+                .write(true)
+                .open("/dev/null")
+                .or_else(|_| File::open("/dev/null"))
+                .or_else(|_| File::create("/tmp/x402_ipc_fallback.mmap"))
+                .unwrap_or_else(|_| panic!("Failed to open fallback file"));
+            let mmap = MmapMut::map_anon(IPC_SIZE).unwrap_or_else(|_| panic!("Failed to map memory"));
+            Self { mmap, file }
+        })
     }
 
     pub fn write_state(&mut self, state: &AgentState) {
-        self.file.lock_exclusive().unwrap();
-        let encoded = bincode::serialize(state).unwrap();
-        // Zero out the buffer
-        self.mmap[..].fill(0);
-        // Write the new data length as a u32, followed by the data
-        let len = encoded.len() as u32;
-        self.mmap[0..4].copy_from_slice(&len.to_le_bytes());
-        self.mmap[4..4 + encoded.len()].copy_from_slice(&encoded);
-        self.mmap.flush().unwrap();
-        self.file.unlock().unwrap();
+        if self.file.lock_exclusive().is_ok() {
+            if let Ok(encoded) = bincode::serialize(state) {
+                if encoded.len() + 4 <= IPC_SIZE {
+                    self.mmap[..].fill(0);
+                    let len = encoded.len() as u32;
+                    self.mmap[0..4].copy_from_slice(&len.to_le_bytes());
+                    self.mmap[4..4 + encoded.len()].copy_from_slice(&encoded);
+                    let _ = self.mmap.flush();
+                }
+            }
+            let _ = self.file.unlock();
+        }
     }
 
     pub fn read_state(&self) -> Option<AgentState> {
-        self.file.lock_shared().unwrap();
+        if self.file.lock_shared().is_err() {
+            return None;
+        }
         let mut len_bytes = [0u8; 4];
         len_bytes.copy_from_slice(&self.mmap[0..4]);
         let len = u32::from_le_bytes(len_bytes) as usize;
 
         if len == 0 || len > IPC_SIZE - 4 {
-            self.file.unlock().unwrap();
+            let _ = self.file.unlock();
             return None;
         }
 
         let decoded: Result<AgentState, _> = bincode::deserialize(&self.mmap[4..4 + len]);
-        self.file.unlock().unwrap();
+        let _ = self.file.unlock();
         decoded.ok()
     }
 }

@@ -207,8 +207,9 @@ fn hmac_sha256(key: &str, data: &str) -> String {
     use sha2::Sha256;
     type HmacSha256 = Hmac<Sha256>;
 
-    let mut mac = HmacSha256::new_from_slice(key.as_bytes())
-        .expect("HMAC can take key of any size");
+    let Ok(mut mac) = HmacSha256::new_from_slice(key.as_bytes()) else {
+        return String::new();
+    };
     mac.update(data.as_bytes());
     let result = mac.finalize();
     hex::encode(result.into_bytes())

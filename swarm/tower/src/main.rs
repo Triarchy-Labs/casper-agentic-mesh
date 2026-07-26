@@ -219,9 +219,13 @@ async fn main() {
     });
 
     let port: u16 = env_or("PORT", "10000").parse().unwrap_or(10000);
-    let listener = tokio::net::TcpListener::bind(("0.0.0.0", port))
-        .await
-        .expect("cannot bind status port");
+    let listener = match tokio::net::TcpListener::bind(("0.0.0.0", port)).await {
+        Ok(l) => l,
+        Err(e) => {
+            eprintln!("Failed to bind status port {port}: {e}");
+            return;
+        }
+    };
     println!("🗼 TOWER serve mode: status on 0.0.0.0:{port}, scan every {interval}s");
 
     loop {

@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════
+# OUROBOROS V2 — MODEL POOL CONFIGURATION
+# 3 debate models + 2 judges (macro_judge + meta_judge).
+# ═══════════════════════════════════════════════════════════
+
+[defaults]
+api_base = "https://openrouter.ai/api/v1/chat/completions"
+referer = "https://github.com/Antigravity-Swarm"
+app_title = "Ouroboros-V2"
+max_failures_before_rotate = 2
+
+# ─── DEBATE POOL (rotates on failure) ───
+
+[[debate_pool]]
+id = "google/gemma-4-31b-it:free"
+title = "Gemma-31B"
+vendor = "Google"
+timeout_ms = 15000
+max_tokens = 150
+priority = 1  # primary — most stable, rarely 429
+
+[[debate_pool]]
+id = "qwen/qwen3-next-80b-a3b-instruct:free"
+title = "Qwen3-80B"
+vendor = "Alibaba"
+timeout_ms = 30000
+max_tokens = 150
+priority = 2  # secondary
+
+[[debate_pool]]
+id = "nousresearch/hermes-3-llama-3.1-405b:free"
+title = "Hermes-405B"
+vendor = "NousResearch"
+timeout_ms = 45000
+max_tokens = 150
+priority = 3  # fallback — powerful but often 429
+
+# ─── INDEPENDENT JUDGES (never in debate pool) ───
+
+[macro_judge_model]
+id = "openai/gpt-oss-120b:free"
+title = "GPT-OSS-120B"
+vendor = "OpenAI"
+timeout_ms = 30000
+max_tokens = 120
+
+# NOTE: macro_bias_model removed — was duplicate of meta_judge (both Nemotron)
+
+[meta_judge_model]
+id = "nvidia/nemotron-3-super-120b-a12b:free"
+title = "Nemotron-120B"
+vendor = "NVIDIA"
+timeout_ms = 30000
+max_tokens = 100
+# NOTE: Qwen3-80B removed from meta_judge — it was dual-role (debate pool + judge)
+# NOTE: sentiment_model (Llama-70B) removed — never used in code

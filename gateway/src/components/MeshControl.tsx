@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 
@@ -25,18 +25,6 @@ function Console({ lines }: { lines: string[] }) {
 				<div key={i} className={lineClass(l)}>{l || " "}</div>
 			))}
 		</div>
-	);
-}
-
-function Btn({ onClick, busy, children }: { onClick: () => void; busy: boolean; children: React.ReactNode }) {
-	return (
-		<button
-			onClick={onClick}
-			disabled={busy}
-			className="button-secondary"
-		>
-			{busy ? "running…" : children}
-		</button>
 	);
 }
 

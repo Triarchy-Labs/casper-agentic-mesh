@@ -24,9 +24,8 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
     loop {
         // 1. Process L0 IPC Experience (Liquidations)
         if let Some(state) = ipc.read_state()
-            && state.timestamp > last_timestamp && state.liquidation_target.is_some() {
+            && state.timestamp > last_timestamp && let Some(target) = state.liquidation_target.clone() {
                 last_timestamp = state.timestamp;
-                let target = state.liquidation_target.clone().unwrap();
                 
                 let edge = engine::create_liquidation_edge(target.clone(), state.global_sentiment_modifier, state.timestamp);
                 let key_prefix = format!("edge:{target}");
@@ -42,8 +41,9 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
                 EventKind::Create(_) | EventKind::Modify(_) => {
                     for path in event.paths {
                         if path.extension().and_then(|s| s.to_str()) == Some("md") {
-                            println!("[Memory Node] 📥 New Knowledge Tome Detected: {}", path.file_name().unwrap().to_string_lossy());
-                            if let Ok(_content) = std::fs::read_to_string(&path) {
+                            let file_name = path.file_name().map(|n| n.to_string_lossy()).unwrap_or_default();
+                            println!("[Memory Node] 📥 New Knowledge Tome Detected: {file_name}");
+                            if let Ok(_content) = tokio::fs::read_to_string(&path).await {
                                 // Inject into HyperGraph
                                 let edge = engine::create_override_edge();
                                 if engine::insert_edge(&db, "tome", &edge).is_ok() {

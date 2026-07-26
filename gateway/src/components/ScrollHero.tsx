@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { motion, useScroll, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -137,10 +137,11 @@ export function ScrollHero() {
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [visualsOn, setVisualsOn] = useState(true);
-	useEffect(() => {
-		setVisualsOn(!document.documentElement.classList.contains("bg-off") && !document.documentElement.classList.contains("art-off"));
-	}, [menuOpen]);
+	const visualsOn = useSyncExternalStore(
+		() => () => {},
+		() => typeof document !== "undefined" && !document.documentElement.classList.contains("bg-off") && !document.documentElement.classList.contains("art-off"),
+		() => true
+	);
 
 	// Cursor-follow with lag + spring bump (their gsap.quickTo/lerp equivalent).
 	const rawX = useMotionValue(-200);
@@ -493,7 +494,6 @@ export function ScrollHero() {
 										document.documentElement.classList.toggle("art-off", !next);
 										localStorage.setItem("mesh-bg", next ? "on" : "off");
 										localStorage.setItem("mesh-art", next ? "on" : "off");
-										setVisualsOn(next);
 									}}
 									className="label-13-mono cursor-pointer border border-white/20 px-5 py-3 text-white/80 transition-colors duration-300 hover:bg-white hover:text-black"
 									style={{ borderRadius: 4 }}
@@ -708,7 +708,7 @@ export function ScrollHero() {
 						</div>
 						<div className="absolute -bottom-[9vh] left-1/2 -translate-x-1/2 z-20 assembly-text-overlay flex items-center gap-3 flex-wrap justify-center whitespace-nowrap opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
 							<span className="nb-tag"><span className="text-[var(--red-700)]">◆</span> casper · live on-chain</span>
-							<span className="nb-tag nb-tag-ghost">/// vol.01 — agent economy</span>
+							<span className="nb-tag nb-tag-ghost">{"///"} vol.01 — agent economy</span>
 							<span className="nb-index">2026</span>
 						</div>
 					</div>

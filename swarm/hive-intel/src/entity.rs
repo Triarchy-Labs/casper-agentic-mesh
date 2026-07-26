@@ -156,14 +156,17 @@ impl MemoryEntity {
             }
         }
 
-        // Best side
-        self.best_side = if self.buy_pnl > self.sell_pnl {
-            "Buy".to_string()
+        // Best side — only allocate if string changed
+        let new_side = if self.buy_pnl > self.sell_pnl {
+            "Buy"
         } else if self.sell_pnl > self.buy_pnl {
-            "Sell".to_string()
+            "Sell"
         } else {
-            "Neutral".to_string()
+            "Neutral"
         };
+        if self.best_side != new_side {
+            self.best_side = new_side.to_string();
+        }
     }
 }
 

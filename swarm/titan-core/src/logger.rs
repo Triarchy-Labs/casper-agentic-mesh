@@ -18,11 +18,15 @@ impl TitanLogger {
         let msg = msg.to_string();
         tokio::task::spawn_blocking(move || {
             let now = Local::now().format("%H:%M:%S");
-            tracing::info!(head = %head, time = %now, "{}", msg);
+            let trace_id = std::env::var("TRACE_ID")
+                .or_else(|_| std::env::var("X_TRACE_ID"))
+                .unwrap_or_else(|_| "none".to_string());
+            
+            tracing::info!(head = %head, time = %now, trace_id = %trace_id, "{}", msg);
             
             // UDP to Dashboard
             if let Ok(s) = UdpSocket::bind("0.0.0.0:0") {
-                let _ = s.send_to(format!("[TITAN] [{head}] {msg}").as_bytes(), "127.0.0.1:4444");
+                let _ = s.send_to(format!("[TITAN] [{head}] [trace:{trace_id}] {msg}").as_bytes(), "127.0.0.1:4444");
             }
             
             // File log with rotation (BUG-25: under mutex)
@@ -38,7 +42,17 @@ impl TitanLogger {
                     }
                 }
                 if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(&log_path) {
-                    let _ = writeln!(f, "[{head}] {msg}");
+                    if std::env::var("LOG_FORMAT").unwrap_or_default() == "json" {
+                        let log_entry = serde_json::json!({
+                            "timestamp": Local::now().to_rfc3339(),
+                            "head": head,
+                            "msg": msg,
+                            "trace_id": trace_id
+                        });
+                        let _ = writeln!(f, "{}", log_entry);
+                    } else {
+                        let _ = writeln!(f, "[{head}] [trace:{trace_id}] {msg}");
+                    }
                 }
             }
             

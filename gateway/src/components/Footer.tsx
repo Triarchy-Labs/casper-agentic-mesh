@@ -13,7 +13,7 @@ export function Footer() {
 			<div className="max-w-7xl mx-auto">
 				{/* industrial telemetry strip */}
 				<div className="flex items-center gap-4 mb-6 label-12-mono text-[var(--gray-600)]">
-					<span className="text-[var(--red-700)]">///</span>
+					<span className="text-[var(--red-700)]">{"///"}</span>
 					<span>REV 2.6</span>
 					<span className="text-[var(--gray-500)]">·</span>
 					<span>UNIT / MESH-01</span>

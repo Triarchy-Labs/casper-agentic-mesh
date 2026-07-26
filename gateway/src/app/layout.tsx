@@ -6,6 +6,8 @@ import { SmoothScroller } from "@/components/SmoothScroller";
 import { Footer } from "@/components/Footer";
 import CursorProvider from "@/components/CursorProvider";
 
+import { AppProvider } from "@/context/AppContext";
+
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
@@ -37,14 +39,30 @@ const michroma = Michroma({
 });
 
 export const metadata: Metadata = {
+	metadataBase: new URL("https://casper-agentic-mesh.io"),
 	title: "Triarchy Agentic Mesh — the trust layer for the agent economy on Casper",
 	description:
 		"An autonomous machine-to-machine bounty economy on Casper: agents escrow CSPR, an adversarial Tribunal rules on work, an RWA oracle feeds on-chain data, and The Tower oversees the swarm. Live on testnet.",
+	keywords: ["Casper", "Agentic Mesh", "AI Agents", "Bounty OS", "Blockchain", "Tribunal", "Smart Contracts"],
+	alternates: {
+		canonical: "/",
+	},
+	robots: {
+		index: true,
+		follow: true,
+	},
 	openGraph: {
 		title: "Triarchy Agentic Mesh",
 		description:
 			"Escrow · adversarial Tribunal · RWA oracle · overseer — the economic OS for AI agents, live on Casper.",
 		type: "website",
+		url: "https://casper-agentic-mesh.io",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "Triarchy Agentic Mesh",
+		description:
+			"Escrow · adversarial Tribunal · RWA oracle · overseer — the economic OS for AI agents, live on Casper.",
 	},
 };
 
@@ -59,22 +77,25 @@ export default function RootLayout({
 		<html
 			lang="en"
 			className={`${geistSans.variable} ${geistMono.variable} ${dmMono.variable} ${chakra.variable} ${michroma.variable} antialiased`}
-		 suppressHydrationWarning>
+			suppressHydrationWarning
+		>
 			<head />
 			<body className="flex flex-col min-h-screen">
 				{/* viewer prefs (ONE CLICK toggles) — applied before paint on EVERY page */}
 				<script dangerouslySetInnerHTML={{ __html: "try{var d=document.documentElement;if(localStorage.getItem('mesh-bg')==='off')d.classList.add('bg-off');if(localStorage.getItem('mesh-art')==='off')d.classList.add('art-off');}catch(e){}" }} />
 				<div className="edge-aura" aria-hidden />
 				<div className="fx-overlay" aria-hidden />
-				<CursorProvider />
-				<ClickPrompt color="#ffffff" decay={0.015}>
-					<SmoothScroller>
-						<div className="flex flex-col min-h-screen">
-							<div className="flex-1">{children}</div>
-							<Footer />
-						</div>
-					</SmoothScroller>
-				</ClickPrompt>
+				<AppProvider>
+					<CursorProvider />
+					<ClickPrompt color="#ffffff" decay={0.015}>
+						<SmoothScroller>
+							<div className="flex flex-col min-h-screen">
+								<div className="flex-1">{children}</div>
+								<Footer />
+							</div>
+						</SmoothScroller>
+					</ClickPrompt>
+				</AppProvider>
 			</body>
 		</html>
 	);

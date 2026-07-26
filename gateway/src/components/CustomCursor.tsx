@@ -51,7 +51,6 @@ export default function CustomCursor() {
 		const handleMouseOver = (e: MouseEvent) => {
 			const target = e.target as HTMLElement;
 			if (!target) return;
-			const btn = (target.closest("button") || target.closest("a")) as HTMLElement | null;
 			const cs = window.getComputedStyle(target);
 			const hovering =
 				cs.cursor === "pointer" ||

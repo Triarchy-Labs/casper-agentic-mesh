@@ -30,7 +30,7 @@ async function getBounties(): Promise<Bounty[]> {
         return memoryBounties!;
     } catch {
         memoryBounties = [...defaultBounties];
-        try { await fs.writeFile(DB_FILE, JSON.stringify(memoryBounties, null, 2)); } catch (e) { /* ignore read-only fs on vercel */ }
+        try { await fs.writeFile(DB_FILE, JSON.stringify(memoryBounties, null, 2)); } catch { /* ignore read-only fs on vercel */ }
         return memoryBounties;
     }
 }
@@ -39,7 +39,7 @@ async function saveBounties(bounties: Bounty[]) {
     memoryBounties = bounties;
     try {
         await fs.writeFile(DB_FILE, JSON.stringify(bounties, null, 2));
-    } catch (e) {
+    } catch {
         /* ignore read-only fs on vercel */
     }
 }

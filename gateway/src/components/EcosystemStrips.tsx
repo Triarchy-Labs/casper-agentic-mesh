@@ -71,7 +71,7 @@ export function EcosystemStrips() {
 	return (
 		<div ref={ref} className="w-full overflow-hidden">
 			<div className="mb-[7vh] flex items-baseline gap-4 flex-wrap">
-				<span className="label-13-mono text-[var(--red-700)] uppercase tracking-[0.2em]">/// forged in the open</span>
+				<span className="label-13-mono text-[var(--red-700)] uppercase tracking-[0.2em]">{"///"} forged in the open</span>
 				<span className="label-13-mono text-[var(--gray-800)]/60 uppercase tracking-[0.14em]">— the mesh, its guarantees, its settlement · every line opens its proof</span>
 			</div>
 

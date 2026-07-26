@@ -13,7 +13,7 @@ import { CrystalForge } from "@/components/CrystalForge";
 import { MeshFooter } from "@/components/MeshFooter";
 import { VectorDossier, type DossierOpen } from "@/components/VectorDossier";
 import { OneClickHub } from "@/components/OneClickHub";
-import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import BootSequence from "@/components/BootSequence";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
@@ -24,14 +24,28 @@ gsap.registerPlugin(ScrollTrigger, CustomEase);
 export default function Page() {
   const [booted, setBooted] = useState(false);
   const [dossier, setDossier] = useState<DossierOpen | null>(null);
+
+  const triggerOpen = (slug: string, rect: DOMRect) => {
+    setDossier({ slug, rect });
+  };
+
+  const openDossier = (slug: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    triggerOpen(slug, rect);
+  };
+
+  const handleKeyDownDossier = (slug: string) => (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      const rect = e.currentTarget.getBoundingClientRect();
+      triggerOpen(slug, rect);
+    }
+  };
+
   const openFromLink = (slug: string) => (e: React.MouseEvent) => {
     e.stopPropagation();
     const panel = document.querySelector(`[data-dossier="${slug}"]`);
     const r = (panel ?? (e.currentTarget as HTMLElement)).getBoundingClientRect();
-    setDossier({ slug, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
-  };
-  const openDossier = (slug: string) => (e: React.MouseEvent<HTMLDivElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
     setDossier({ slug, rect: { top: r.top, left: r.left, width: r.width, height: r.height } });
   };
   const containerRef = useRef<HTMLDivElement>(null);
@@ -283,7 +297,7 @@ export default function Page() {
                 <div className="focus-cards grid grid-cols-12 gap-x-[1.39vw] gap-y-[13.67vh] max-sm:grid-cols-1 max-sm:gap-y-[6vh]">
                   {/* 01 ESCROW — col-span-7, big left */}
                   <div className="flex flex-col gap-[1.67vw] col-span-12 md:col-span-7 cursor-pointer">
-                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden" data-dossier="escrow" onClick={openDossier("escrow")}>
+                    <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.27/1] group overflow-hidden" data-dossier="escrow" role="button" tabIndex={0} onClick={openDossier("escrow")} onKeyDown={handleKeyDownDossier("escrow")}>
                       <CornerMarks />
                       {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
                       <div

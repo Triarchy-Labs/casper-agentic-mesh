@@ -164,31 +164,13 @@ const OPERATOR_REPLY = "operator: // in development — the tentacles aren't wir
 export function OneClickHub() {
 	const [visible, setVisible] = useState(false);
 	const [openHub, setOpenHub] = useState(false);
-	// viewer preferences: pure-black background (produx mode) & art-free cards. Persisted.
-	const [bgOn, setBgOn] = useState(true);
-	const [artOn, setArtOn] = useState(true);
 
 	useEffect(() => {
 		const bg = localStorage.getItem("mesh-bg") !== "off";
 		const art = localStorage.getItem("mesh-art") !== "off";
-		setBgOn(bg);
-		setArtOn(art);
 		document.documentElement.classList.toggle("bg-off", !bg);
 		document.documentElement.classList.toggle("art-off", !art);
 	}, []);
-
-	const toggleBg = () => setBgOn((v) => {
-		const next = !v;
-		localStorage.setItem("mesh-bg", next ? "on" : "off");
-		document.documentElement.classList.toggle("bg-off", !next);
-		return next;
-	});
-	const toggleArt = () => setArtOn((v) => {
-		const next = !v;
-		localStorage.setItem("mesh-art", next ? "on" : "off");
-		document.documentElement.classList.toggle("art-off", !next);
-		return next;
-	});
 
 	useEffect(() => {
 		const onScroll = () => setVisible(window.scrollY > window.innerHeight * 0.8);
@@ -258,7 +240,7 @@ export function OneClickHub() {
 		setOpenHub(false);
 		if (cta.anchor) document.querySelector(cta.anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
 		else if (cta.href && cta.ext) window.open(cta.href, "_blank", "noopener,noreferrer");
-		else if (cta.href) window.location.href = cta.href;
+		else if (cta.href) window.location.assign(cta.href);
 	};
 
 	const rowIn = (i: number) => ({
@@ -393,7 +375,7 @@ export function OneClickHub() {
 									{/* separate operator note */}
 									<p className="label-12-mono mt-2 leading-[1.6] text-white/45" style={{ textTransform: "none" }}>
 										<span className="text-white/70">⟡ operator:</span> in development — being wired into every
-										module of the mesh. When it wakes, it answers from the mesh's own sources and every
+										module of the mesh. When it wakes, it answers from the mesh&apos;s own sources and every
 										action waits for your confirmation. The human holds the final toggle.
 									</p>
 

@@ -188,20 +188,27 @@ const BountiesPage = () => {
 			setEscrowResult(`✓ DIRECTIVE REGISTERED · wallet ${userPubKey.substring(0,6)}…${userPubKey.slice(-4)} · on-chain escrow settles via deposit-proxy (PLAYBOOK §B)`);
 		} catch (e: unknown) {
 			setEscrowStatus("error");
-			setEscrowResult(`WALLET REJECTED: ${e instanceof Error ? (e instanceof Error ? e.message : String(e)) : "Connection denied"}`);
+			setEscrowResult(`WALLET REJECTED: ${e instanceof Error ? e.message : "Connection denied"}`);
 		}
 	};
 
 	useEffect(() => {
+		let isMounted = true;
 		const loadBounties = async () => {
 			try {
 				const res = await fetch('/api/bounties');
-				if (res.ok) setBounties(await res.json());
+				if (res.ok && isMounted) {
+					const data = await res.json();
+					if (isMounted) setBounties(data);
+				}
 			} catch (e) {
 				console.error(e);
 			}
 		};
 		loadBounties();
+		return () => {
+			isMounted = false;
+		};
 	}, []);
 
 	return (
@@ -218,7 +225,7 @@ const BountiesPage = () => {
 				>
 					<div className="flex items-center gap-3 mb-6 flex-wrap">
 						<span className="nb-tag"><span className="text-[var(--gray-1000)]">◆</span> x402 arbitrage mesh · live</span>
-						<span className="nb-index">/// escrow · proofs · zero-trust</span>
+						<span className="nb-index">{"///"} escrow · proofs · zero-trust</span>
 					</div>
 					<motion.h1
 						initial={{ opacity: 0, x: -20 }}

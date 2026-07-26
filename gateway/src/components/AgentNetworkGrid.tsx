@@ -132,7 +132,7 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 						<div className="absolute bottom-0 left-0 w-full opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transition-all duration-700 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)]">
 							<h3 className="heading-24 text-white m-0 truncate">{agent.id}</h3>
 							<p className="label-12-mono text-white/50 mt-2 truncate">
-								{agent.task} // {agent.status}
+								{agent.task} {"//"} {agent.status}
 							</p>
 						</div>
 						
@@ -147,16 +147,17 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 	);
 }
 
-export default function AgentNetworkGrid() {
+function AgentNetworkGridComponent() {
 	const [agents, setAgents] = useState<AgentDisplay[]>(FALLBACK_AGENTS);
 
 	useEffect(() => {
+		let isMounted = true;
 		const fetchAgents = async () => {
 			try {
 				const res = await fetch("/api/agents");
-				if (res.ok) {
+				if (res.ok && isMounted) {
 					const data = await res.json();
-					if (data.agents && data.agents.length > 0) {
+					if (data.agents && data.agents.length > 0 && isMounted) {
 						const mapped: AgentDisplay[] = data.agents.map((a: AgentRecord) => ({
 							id: a.id,
 							task: a.capabilities?.[0] || "General",
@@ -179,7 +180,7 @@ export default function AgentNetworkGrid() {
 								mapped.push(fb);
 							}
 						}
-						setAgents(mapped);
+						if (isMounted) setAgents(mapped);
 					}
 				}
 			} catch {
@@ -188,7 +189,10 @@ export default function AgentNetworkGrid() {
 		};
 		fetchAgents();
 		const interval = setInterval(fetchAgents, 5000);
-		return () => clearInterval(interval);
+		return () => {
+			isMounted = false;
+			clearInterval(interval);
+		};
 	}, []);
 
 	return (
@@ -245,3 +249,5 @@ export default function AgentNetworkGrid() {
 		</div>
 	);
 }
+
+export default React.memo(AgentNetworkGridComponent);

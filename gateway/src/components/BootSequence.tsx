@@ -103,7 +103,7 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 				}}
 			>
 				<div style={{ fontSize: "clamp(18px,2vw,30px)", fontWeight: 700, letterSpacing: "0.14em" }}>
-					TRIARCHY <span style={{ color: "#e03529" }}>//</span> AGENTIC MESH
+					TRIARCHY <span style={{ color: "#e03529" }}>{"//"}</span> AGENTIC MESH
 				</div>
 				<div
 					style={{

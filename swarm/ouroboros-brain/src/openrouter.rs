@@ -188,7 +188,7 @@ impl OpenRouterClient {
         let client = Client::builder()
             .timeout(Duration::from_secs(60))
             .build()
-            .expect("Failed to build HTTP client");
+            .unwrap_or_else(|_| Client::new());
 
         Self {
             client,

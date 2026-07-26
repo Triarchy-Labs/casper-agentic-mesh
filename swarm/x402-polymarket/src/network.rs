@@ -19,7 +19,7 @@ pub async fn run_oracle_loop() {
                         state.global_sentiment_modifier = avg_sentiment;
                         state.timestamp = SystemTime::now()
                             .duration_since(UNIX_EPOCH)
-                            .unwrap()
+                            .unwrap_or_default()
                             .as_secs();
 
                         ipc.write_state(&state);

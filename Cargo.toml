@@ -5,7 +5,8 @@ exclude = [
     "contracts/casper_escrow",
     "contracts/deposit-proxy",
     "contracts/oracle-contract",
-    "hackathon_boost_layer/odra_contracts"
+    "hackathon_boost_layer/odra_contracts",
+    "casper-ai-toolkit/casper-eip-712"
 ]
 members = [
     "swarm/casper-client",
@@ -20,8 +21,7 @@ members = [
     "swarm/tribunal",
     "swarm/bounty-judge",
     "swarm/tower",
-    "gateway/src-tauri",
-    "casper-ai-toolkit/casper-eip-712"
+    "gateway/src-tauri"
 ]
 
 [workspace.package]
@@ -51,7 +51,7 @@ axum = "0.8"
 
 # Logging
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 
 # Time
 chrono = { version = "0.4", features = ["serde"] }

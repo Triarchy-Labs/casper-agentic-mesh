@@ -1,0 +1,72 @@
+# ═══════════════════════════════════════════════════════════
+# OUROBOROS V2 — JUDGE SCORING THRESHOLDS
+# Все числа настраиваемые БЕЗ перекомпиляции!
+# ═══════════════════════════════════════════════════════════
+
+[verdict]
+threshold = 1.5       # |score| >= this → BUY/SELL, else HOLD
+score_clamp = 5.0     # max absolute score (prevents runaway)
+
+[confidence]
+base_active = 50.0    # base confidence for BUY/SELL
+base_hold = 30.0      # base confidence for HOLD
+multiplier_active = 10.0  # per |score| point
+multiplier_hold = 5.0
+cap = 95.0            # max confidence
+
+# ─── FACTOR 1: Price Trend (Smart Money = counter-retail) ───
+[factor.price_trend]
+overbought_threshold = 5.0    # > this → SHORT (retail FOMO)
+overbought_score = -2.0
+oversold_threshold = -5.0     # < this → LONG (retail panic)
+oversold_score = 2.0
+moderate_up_threshold = 1.5
+moderate_up_score = 0.5
+moderate_down_threshold = -1.5
+moderate_down_score = -0.5
+
+# ─── FACTOR 2: Funding Rate ───
+[factor.funding_rate]
+squeeze_threshold = -0.0003   # < this → LONG (shorts paying heavily)
+squeeze_score = 1.5
+overheat_threshold = 0.0005   # > this → SHORT (longs overheated)
+overheat_score = -1.5
+
+# ─── FACTOR 3: Open Interest Change ───
+[factor.oi_change]
+growth_threshold = 5.0        # OI rising > 5%
+deleverge_threshold = -5.0    # OI falling < -5%
+growth_up_score = 0.5         # OI up + price up
+growth_down_score = -0.5      # OI up + price down
+delev_up_score = -0.3         # OI down + price up (unsustainable)
+delev_down_score = 0.3        # OI down + price down (slowing)
+
+# ─── FACTOR 4: Volume Surge ───
+[factor.volume_surge]
+anomaly_threshold = 3.0       # volume ratio > this
+anomaly_multiplier = 1.3      # multiply total score
+
+# ─── FACTOR 5: LLM Sentiment ───
+[factor.llm_sentiment]
+bias_score = 0.5              # ± when bull/bear wins keyword count
+
+# ─── FACTOR 6: Alpha Station ───
+[factor.alpha_station]
+squeeze_score = 1.5           # SHORT_SQUEEZE alert
+long_squeeze_score = -1.5     # LONG_SQUEEZE alert
+squeeze_signal_bonus = 1.0    # active squeeze recommendation
+
+# ─── FACTOR 7: ML Prediction ───
+[factor.ml_predictor]
+max_weight = 1.5              # ml_direction * ml_confidence * this
+
+# ─── FACTOR 8: Macro Bias (LLM) ───
+[factor.macro_bias]
+bullish_score = 1.0
+bearish_score = -1.0
+
+# ─── GRAVITY ANCHORS (top-3 assets get amplified) ───
+[gravity]
+BTCUSDT = 1.5
+ETHUSDT = 1.2
+SOLUSDT = 1.1

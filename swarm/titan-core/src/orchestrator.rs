@@ -73,6 +73,15 @@ impl TitanState {
             price_cache: self.price_cache.clone(),
         }
     }
+
+    /// Prune expired cooldowns and stale loss streak entries to prevent memory leaks
+    pub async fn prune_stale_data(&self) {
+        let now_sec = chrono::Local::now().timestamp();
+        self.cooldowns.write().await.retain(|_, &mut expire_sec| expire_sec > now_sec);
+        let active_pos = self.positions.read().await;
+        let hype = self.hype_list.read().await;
+        self.loss_streak.write().await.retain(|sym, &mut count| count > 0 && (active_pos.contains_key(sym) || hype.contains(sym)));
+    }
 }
 
 /// Конфигурация одной "головы"
@@ -91,15 +100,27 @@ pub struct Orchestrator;
 impl Orchestrator {
     /// Boot sequence: загрузка ключей, синхронизация времени, shared state
     pub async fn boot() -> (TitanState, Client) {
-        // V10.5: Initialize structured tracing
-        tracing_subscriber::fmt()
-            .with_env_filter(
-                tracing_subscriber::EnvFilter::try_from_default_env()
-                    .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("bot_v4_titan=info"))
-            )
-            .with_target(false)
-            .compact()
-            .init();
+        // V10.5: Initialize structured tracing (JSON or text format)
+        let log_format = std::env::var("LOG_FORMAT").unwrap_or_else(|_| "json".to_string());
+        if log_format == "json" {
+            let _ = tracing_subscriber::fmt()
+                .json()
+                .with_env_filter(
+                    tracing_subscriber::EnvFilter::try_from_default_env()
+                        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"))
+                )
+                .with_target(true)
+                .try_init();
+        } else {
+            let _ = tracing_subscriber::fmt()
+                .with_env_filter(
+                    tracing_subscriber::EnvFilter::try_from_default_env()
+                        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("bot_v4_titan=info"))
+                )
+                .with_target(false)
+                .compact()
+                .try_init();
+        }
 
         tracing::info!("════════════════════════════════════════════════");
         tracing::info!("TITAN V11.1 — INSTITUTIONAL HARDENING ENGINE");
@@ -124,7 +145,7 @@ impl Orchestrator {
         tracing::info!(keys = api_pool.total_keys(), "[BOOT] API Pool loaded");
 
         // Time sync
-        let main_client = Client::builder().timeout(Duration::from_secs(10)).build().expect("FATAL: HTTP client init failed");
+        let main_client = Client::builder().timeout(Duration::from_secs(10)).build().unwrap_or_else(|_| Client::new());
         let server_time = BybitNetwork::fetch_bybit_server_time(&main_client).await.unwrap_or(0);
         let time_offset = Arc::new(RwLock::new(server_time - chrono::Utc::now().timestamp_millis()));
         tracing::info!(offset_ms = *time_offset.read().await, "[BOOT] Time synced");
@@ -241,7 +262,7 @@ impl Orchestrator {
 
     /// Spawn a trading head (MEDIUM-3m, MONSTER-5m, etc.)
     pub fn spawn_head(state: &TitanState, head: HeadConfig) {
-        let c = Client::builder().timeout(Duration::from_secs(10)).build().expect("FATAL: HTTP client init failed");
+        let c = Client::builder().timeout(Duration::from_secs(10)).build().unwrap_or_else(|_| Client::new());
         let s = state.clone_state();
         let rm = RiskMatrix::new();
 
@@ -383,6 +404,9 @@ impl Orchestrator {
             {
                 state.patience.write().await.purge_stale();
             }
+
+            // Prune expired cooldowns and stale loss streaks (Memory leak fix)
+            state.prune_stale_data().await;
 
             // V10.5: Cleanup stale WS price cache entries (>60s)
             {

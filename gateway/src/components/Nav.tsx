@@ -1,103 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-
-// Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
-const checkCasperConnected = async () => {
-    if (typeof window !== "undefined" && window.casperWallet) {
-        try {
-            const isConnected = await window.casperWallet.isConnected();
-            return { isConnected };
-        } catch {
-            return { isConnected: false };
-        }
-    }
-    return { isConnected: false };
-};
-
-const requestAccess = async () => {
-    if (typeof window !== "undefined" && window.casperWallet) {
-        try {
-            await window.casperWallet.requestConnection();
-            const activeKey = await window.casperWallet.getActivePublicKey();
-            return { address: activeKey };
-        } catch (error) {
-            return { error };
-        }
-    }
-    return { error: "Casper Wallet not installed" };
-};
+import { useApp } from "@/context/AppContext";
 
 export function Nav() {
-	const [connected, setConnected] = useState(false);
-	const [pubKey, setPubKey] = useState("");
-	const [connecting, setConnecting] = useState(false);
-	const [walletMissing, setWalletMissing] = useState(false);
-    const [hoverLogo, setHoverLogo] = useState(false);
-    const [showDisconnect, setShowDisconnect] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    useEffect(() => {
-		const checkConn = async () => {
-			try {
-				const status = await checkCasperConnected();
-				if (status.isConnected) {
-					const access = await requestAccess();
-					if (access.address) {
-						const key = access.address;
-						setPubKey(key.substring(0, 4) + "..." + key.substring(key.length - 4));
-						setConnected(true);
-					}
-				}
-			} catch (e) {
-				console.warn("[Nav] Casper wallet connection check failed:", e);
-			}
-		};
-		checkConn();
-	}, []);
-
-	const handleConnect = async () => {
-        if (connected) {
-            setShowDisconnect(!showDisconnect);
-            return;
-        }
-
-		if (walletMissing) {
-			window.open("https://www.casperwallet.io/", "_blank");
-			return;
-		}
-
-		setConnecting(true);
-		try {
-            if (typeof window === "undefined" || !window.casperWallet) {
-                setWalletMissing(true);
-                return;
-            }
-
-            const access = await requestAccess();
-            if (access.error) {
-                console.log("Casper Wallet connection rejected.", access.error);
-            } else if (access.address) {
-                const key = access.address;
-                setPubKey(key.substring(0, 4) + "..." + key.substring(key.length - 4));
-                setConnected(true);
-            }
-		} catch (error) {
-			console.error("Casper Wallet connect failed", error);
-		} finally {
-			setConnecting(false);
-		}
-	};
-
-    const handleDisconnect = () => {
-        setConnected(false);
-        setPubKey("");
-        setShowDisconnect(false);
-    };
+	const { connected, pubKey, connecting, showDisconnect, connectWallet, disconnectWallet } = useApp();
+	const [menuOpen, setMenuOpen] = useState(false);
 
 	const contentText = connecting ? "CONNECTING…" : connected ? pubKey.toUpperCase() : "WALLET";
+
+	const handleKeyDown = (e: React.KeyboardEvent, action: () => void) => {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			action();
+		}
+	};
 
 	return (
 		<>
@@ -194,12 +113,20 @@ export function Nav() {
 						<BracketLink label="DASHBOARD" href="/dashboard" />
 					</div>
 					<div className="flex items-center gap-[4.1vw] relative">
-						<div onClick={handleConnect}>
+						<div
+							role="button"
+							tabIndex={0}
+							onClick={connectWallet}
+							onKeyDown={(e) => handleKeyDown(e, connectWallet)}
+							className="min-w-[140px] text-center inline-block"
+						>
 							<BracketLink label={contentText} />
 						</div>
 
 						{/* Disconnect Bubble */}
 						<motion.div
+							role="button"
+							tabIndex={0}
 							initial={{ opacity: 0, y: -10, pointerEvents: "none" }}
 							animate={{ opacity: showDisconnect ? 1 : 0, y: showDisconnect ? 10 : -10, pointerEvents: showDisconnect ? "auto" : "none" }}
 							style={{
@@ -214,12 +141,19 @@ export function Nav() {
 								color: "var(--red-700)",
 								marginTop: "8px"
 							}}
-							onClick={handleDisconnect}
+							onClick={disconnectWallet}
+							onKeyDown={(e) => handleKeyDown(e, disconnectWallet)}
 						>
 							<span className="label-14-mono">DISCONNECT</span>
 						</motion.div>
 
-						<div onClick={() => setMenuOpen(!menuOpen)} className="z-[100]">
+						<div
+							role="button"
+							tabIndex={0}
+							onClick={() => setMenuOpen(!menuOpen)}
+							onKeyDown={(e) => handleKeyDown(e, () => setMenuOpen(!menuOpen))}
+							className="z-[100]"
+						>
 							<BracketLink label={menuOpen ? "CLOSE" : "MENU"} />
 						</div>
 					</div>
