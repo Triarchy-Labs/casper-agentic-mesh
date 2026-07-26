@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 
 // produx footer skeleton (from their static HTML), fused with our content:
@@ -159,10 +160,13 @@ export function MeshFooter() {
 				<div ref={bannerRef} className="relative mt-[12vh] w-full overflow-hidden max-lg:mt-[9vh] max-sm:mt-[5.14vh]">
 					<div className="relative w-full aspect-[16/9]">
 						{/* poster paints instantly (412KB), the 4s loop cross-fades over it once playing */}
-						<img
+						<Image
 							src="/footer-crimson-poster.jpg"
 							alt="CASPER — the crimson megacity"
-							className="absolute inset-0 h-full w-full object-cover"
+							fill
+							style={{ objectFit: "cover" }}
+							quality={95}
+							priority={false}
 						/>
 						<video
 							ref={vidRef}

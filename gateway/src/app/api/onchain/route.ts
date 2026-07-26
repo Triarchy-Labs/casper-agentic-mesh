@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getOnChainSnapshot } from "@/lib/onchain";
 
 // Live on-chain snapshot (oracle reading + agent reputation) from Casper testnet.
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
 
 export async function GET(req: Request) {
 	const asset = new URL(req.url).searchParams.get("asset") || "CSPR-USD";

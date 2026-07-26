@@ -5,7 +5,7 @@ import { HoverReel } from "@/components/HoverReel";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Nav } from "@/components/Nav";
+
 import { AgentState } from "@/components/AgentOrb";
 import AgentNetworkGrid, { CornerMarks } from "@/components/AgentNetworkGrid";
 import { payForTask } from "@/lib/pay";
@@ -290,7 +290,6 @@ export default function Dashboard() {
 	return (
 		<main ref={mainRef} className="bg-transparent text-[#ededed] font-mono selection:bg-white selection:text-black flex flex-col min-h-screen">
 			<CarbonFabric muted />
-			<Nav />
 			
             {/* Cinematic Hero Section (Pinned) */}
             <section ref={heroRef} className="h-screen w-full flex flex-col justify-center px-8 md:px-16 pt-24 relative z-0">

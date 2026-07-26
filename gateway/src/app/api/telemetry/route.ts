@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import os from "os";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 30;
 
 // REAL telemetry only (the audit retired the random-jitter theater):
 // - per-core busy % from two os.cpus() samples — the actual utilisation of the threads
@@ -39,7 +39,6 @@ export async function GET() {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "chain_get_state_root_hash" }),
 				signal: ctrl.signal,
-				cache: "no-store",
 			});
 			clearTimeout(to);
 			if (r.ok) rpcMs = Date.now() - t0;

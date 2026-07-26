@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { HoverReel } from "@/components/HoverReel";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { Nav } from "@/components/Nav";
+
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
 
@@ -206,7 +206,6 @@ const BountiesPage = () => {
 	return (
 		<div className="bg-transparent text-[var(--gray-1000)] min-h-screen font-sans relative">
 			<CarbonFabric muted />
-			<Nav />
 
 			<div className="w-full px-[6.53vw] max-sm:px-6 pt-[18vh] pb-[20vh]">
 				{/* 1. Header & Global KPIs Section */}
