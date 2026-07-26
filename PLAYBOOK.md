@@ -21,6 +21,19 @@ Pick your depth. Every path ends with something you verified yourself on
 
 ## Path A — browser only (~2 minutes)
 
+0. **Touch the live mesh first — no wallet, four buttons:** open
+   [casper-agentic-mesh.vercel.app](https://casper-agentic-mesh.vercel.app) → **ONE CLICK** (bottom)
+   → **Try it live** → press all four probes. Each prints a real HTTP response: the on-chain
+   oracle price, a genuine `402 Payment Required` from the x402 gate, live CSPR.cloud testnet
+   blocks, and the MCP discovery manifest. Same thing from a terminal:
+   ```bash
+   curl -X POST https://casper-agentic-mesh.vercel.app/api/hire \
+     -H "Content-Type: application/json" \
+     -d '{"task_id":"probe","description":"x","bounty_cspr":1,"client_id":"judge"}'   # → 402
+   curl https://casper-agentic-mesh.vercel.app/api/mcp                                # → manifest
+   ```
+   (The dashboard's **Casper Live Stream** card scrolls real blocks; the Tower/Tribunal buttons
+   honestly report "frozen" on serverless — Paths B/C below run the real binaries.)
 1. **Open the deployed escrow contract:**
    [contract-package `a7e6a383…4f6d`](https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d)
    → entry points `register_agent`, `create_bounty`, `release_bounty`, `refund_bounty`.
