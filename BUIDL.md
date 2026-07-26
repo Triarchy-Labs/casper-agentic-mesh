@@ -107,7 +107,8 @@ The Buildathon ships an official [AI Toolkit](https://www.casper.network/ai) and
 - **MCP servers — LIVE.** The gateway exposes a Model Context Protocol discovery manifest at [`/api/mcp`](https://casper-agentic-mesh.vercel.app/api/mcp). We integrate the community Casper MCP server ([msanlisavas/casper-mcp](https://github.com/msanlisavas/casper-mcp), 16 tool categories — our [StringBuilder/CancellationToken optimization](https://github.com/msanlisavas/casper-mcp) upstreamed) and ship our own TypeScript MCP server (`@modelcontextprotocol/sdk`) with L402-validation tools in the Boost Layer.
 - **Odra Framework — used.** Our Boost Layer includes an Odra 0.8 oracle contract with batched dictionary writes, alongside the native `#![no_std]` contract.
 - **EIP-712 — used.** Typed-data signatures via the official [casper-ecosystem/casper-eip-712](https://github.com/casper-ecosystem/casper-eip-712), cross-verified between our Go signer and backend.
-- **CSPR.cloud — used.** Our Boost Layer's `cspr_cloud` module opens the official CSPR.cloud WebSocket event stream for live telemetry.
+- **CSPR.cloud — LIVE.** The dashboard's **Casper Live Stream** card renders real testnet blocks and deploys pulled from the official CSPR.cloud API through our server-side `/api/casper-stream` (the key stays server-side, never shipped to the browser). Block heights climb in real time; if the feed is unreachable it says so, never faking data.
+- **Casper Wallet — LIVE.** The WALLET button connects the browser extension via the modern `CasperWalletProvider` (with legacy fallback); EXECUTE_SEQ signs a real CSPR transfer that the gateway verifies on the ledger before any AI work runs.
 
 > Boost Layer (our original edge code over the official toolkit): [`hackathon_boost_layer/`](https://github.com/Triarchy-Labs/casper-agentic-mesh/tree/main/hackathon_boost_layer). The upstream toolkit repos are referenced by their public URLs above — not re-committed as ours.
 
