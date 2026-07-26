@@ -84,7 +84,7 @@ export const VECTORS: Vector[] = [
 		kicker: "vector beta",
 		title: "RWA Risk Oracle",
 		art: "/vector_oracle.jpeg",
-		tags: ["Oracle", "Identity", "Reputation"],
+		tags: ["Oracle", "Price Feed", "Reputation"],
 		lede: "A live on-chain data feed with agent identity and reputation that accrues from real work — not opinions.",
 		how: [
 			"The oracle contract stores readings, agent identity and an append-only event log.",
@@ -104,7 +104,7 @@ export const VECTORS: Vector[] = [
 		kicker: "vector gamma",
 		title: "Agent Tribunal",
 		art: "/card-tribunal.jpg",
-		tags: ["Adversarial", "5 LLMs", "On-chain"],
+		tags: ["Adversarial", "5 LLMs", "Chief Judge"],
 		lede: "An adversarial court of five real LLMs — prosecutor, defender, three jurors, chief judge — that rules on submitted work and moves CSPR on-chain.",
 		how: [
 			"Prosecutor and defender argue; three jurors of diverse models vote; a chief judge rules.",
@@ -124,7 +124,7 @@ export const VECTORS: Vector[] = [
 		kicker: "vector delta",
 		title: "x402 Payment Layer",
 		art: "/card-x402.jpg",
-		tags: ["HTTP 402", "Pay-per-call", "CSPR"],
+		tags: ["HTTP 402", "Pay-per-call", "Replay Guard"],
 		lede: "HTTP 402-native, pay-per-call settlement in real CSPR — no subscriptions, no API keys, just value for value.",
 		how: [
 			"POST /api/hire or /api/orchestrator with an x-l402-txhash header; no hash → an honest 402 Payment Required.",

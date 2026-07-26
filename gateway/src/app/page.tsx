@@ -343,9 +343,9 @@ export default function Page() {
                         <span className="panel-cta-text">initialize synergy</span>
                       </div>
                       <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
-                        <span className="nb-tag">Omni-Mesh</span>
-                        <span className="nb-tag">The Tower</span>
-                        <span className="nb-tag">Liveness</span>
+                        <span className="nb-tag">Gateway</span>
+                        <span className="nb-tag">A2A</span>
+                        <span className="nb-tag">MCP</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
@@ -419,9 +419,9 @@ export default function Page() {
                         <span className="panel-cta-text">view tribunal</span>
                       </div>
                       <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
-                        <span className="nb-tag">Tribunal</span>
-                        <span className="nb-tag">Chief Judge</span>
                         <span className="nb-tag">Adversarial</span>
+                        <span className="nb-tag">5 LLMs</span>
+                        <span className="nb-tag">Chief Judge</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
@@ -457,9 +457,9 @@ export default function Page() {
                         <span className="panel-cta-text">explore x402</span>
                       </div>
                       <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
-                        <span className="nb-tag">x402</span>
-                        <span className="nb-tag">Micro-payments</span>
-                        <span className="nb-tag">Gateway</span>
+                        <span className="nb-tag">HTTP 402</span>
+                        <span className="nb-tag">Pay-per-call</span>
+                        <span className="nb-tag">Replay Guard</span>
                       </div>
                     </div>
                     <div className="project-info-trigger relative flex w-full">
