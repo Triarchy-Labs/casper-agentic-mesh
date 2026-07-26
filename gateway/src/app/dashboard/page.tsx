@@ -539,7 +539,7 @@ export default function Dashboard() {
 															setGasHedged(prev => prev + 100000);
 															setGasPrice(p => p + 0.000120);
 														}}
-														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 text-white/80"
 													>
 														+ 100K
 													</button>
@@ -548,7 +548,7 @@ export default function Dashboard() {
 															setGasHedged(prev => Math.max(0, prev - 100000));
 															setGasPrice(p => Math.max(0.001, p - 0.000100));
 														}}
-														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.2vw] py-[0.4vw] uppercase backdrop-blur-md text-[0.6vw] max-lg:px-[1.8vw] max-lg:py-[0.6vw] max-sm:text-[8px] max-sm:px-2 max-sm:py-1 rounded-none transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 text-white/80"
 													>
 														RELEASE
 													</button>
@@ -675,7 +675,7 @@ export default function Dashboard() {
 																setL402Console("// Console reset. Ready to challenge the live x402 gate");
 															}
 														}}
-														className="font-DM-mono border border-white/5 bg-black/25 px-[1.5vw] py-[0.5vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[2.2vw] max-lg:py-[0.7vw] max-sm:text-[9px] max-sm:px-3 max-sm:py-1.5 rounded-none transition-all hover:bg-white/10 active:scale-95 text-white/80"
+														className="font-DM-mono border border-white/5 bg-black/25 px-[1.5vw] py-[0.5vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[2.2vw] max-lg:py-[0.7vw] max-sm:text-[9px] max-sm:px-3 max-sm:py-1.5 rounded-none transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 text-white/80"
 													>
 														{l402Status === "IDLE" ? "CHALLENGE THE GATE (LIVE)" : l402Status === "CHALLENGED" ? "PROBE WITH FAKE HASH" : l402Status === "..." ? "…" : "RESET GATE"}
 													</button>

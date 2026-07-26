@@ -7,11 +7,11 @@ import { CornerMarks } from "@/components/AgentNetworkGrid";
 function lineClass(line: string): string {
 	if (line.includes("🗡️") || line.includes("PROSECUTION")) return "text-[var(--gray-1000)]";
 	if (line.includes("🛡️") || line.includes("DEFENSE")) return "text-[var(--gray-700)]";
-	if (line.includes("👨‍⚖️") || line.includes("RULING") || line.includes("CHIEF")) return "text-amber-300";
+	if (line.includes("👨‍⚖️") || line.includes("RULING") || line.includes("CHIEF")) return "text-white font-semibold";
 	if (line.includes("✅") || line.includes("APPROVE") || line.includes("ALIVE") || line.includes("healthy")) return "text-white";
 	if (line.includes("❌") || line.includes("REJECT") || line.includes("🚨") || line.includes("STALE")) return "text-[var(--gray-1000)]";
 	if (line.includes("🛑") || line.includes("DEGRADED") || line.includes("frozen")) return "text-[var(--gray-1000)] font-semibold";
-	if (line.includes("⚠️") || line.includes("PARTIAL")) return "text-amber-300";
+	if (line.includes("⚠️") || line.includes("PARTIAL")) return "text-[var(--red-900)]";
 	if (line.includes("🔗") || line.includes("https://")) return "text-[var(--red-900)] underline";
 	if (line.startsWith("⚖️") || line.includes("JUROR")) return "text-white/70";
 	return "text-white/50";
@@ -102,7 +102,7 @@ export function MeshControl() {
 					<button
 						onClick={scanTower}
 						disabled={towerBusy}
-						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{towerBusy ? "scanning..." : "scan mesh"}
 					</button>
@@ -126,6 +126,9 @@ export function MeshControl() {
 					{/* Produx Visual Background */}
 					<div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 70% 70%, var(--red-500) 0%, transparent 70%)" }} />
+					{/* the arena: the empty crimson rooftop — the stage the court convenes over */}
+					<div className="card-art absolute inset-0 bg-cover bg-center opacity-[0.45] group-hover:opacity-[0.58] transition-opacity duration-700" style={{ backgroundImage: "url(/cards/tribunal-arena.webp)" }} />
+					<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/25" />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
 					<div className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto">
@@ -160,7 +163,7 @@ export function MeshControl() {
 					<button
 						onClick={convene}
 						disabled={arenaBusy}
-						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{arenaBusy ? "deliberating..." : "convene tribunal"}
 					</button>

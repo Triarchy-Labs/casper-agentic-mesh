@@ -344,11 +344,11 @@ const BountiesPage = () => {
 								</div>
 								<div className="flex flex-col items-end md:items-start gap-[4px] z-10">
 									<span className="label-14-mono text-[var(--gray-1000)] font-bold">{bounty.bounty}</span>
-									<span className={`inline md:hidden label-12-mono ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+									<span className={`inline md:hidden label-12-mono ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-[var(--red-900)]" : "text-[var(--gray-700)]"}`}>
 										[{bounty.status}]
 									</span>
 								</div>
-								<span className={`hidden md:inline text-right label-14-mono z-10 ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-amber-500" : "text-[var(--gray-700)]"}`}>
+								<span className={`hidden md:inline text-right label-14-mono z-10 ${bounty.status === "OPEN" ? "text-[var(--gray-1000)]" : bounty.status === "IN PROGRESS" ? "text-[var(--red-900)]" : "text-[var(--gray-700)]"}`}>
 									[{bounty.status}]
 								</span>
 							</motion.div>
