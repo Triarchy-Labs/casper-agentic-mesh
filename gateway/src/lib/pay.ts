@@ -1,3 +1,4 @@
+import { getCasperProvider } from "@/lib/casper-wallet";
 /**
  * Real on-chain payment via Casper Wallet — no mocks.
  *
@@ -27,7 +28,8 @@ export async function payForTask(
 	_intent: string,
 	senderPubHex: string,
 ): Promise<string> {
-	if (typeof window === "undefined" || !window.casperWallet) {
+	const provider = getCasperProvider();
+	if (!provider) {
 		throw new Error("CASPER_WALLET_REQUIRED");
 	}
 
@@ -51,7 +53,7 @@ export async function payForTask(
 	);
 
 	const deployJson = DeployUtil.deployToJson(deploy);
-	const signResult = await window.casperWallet.sign(
+	const signResult = await provider.sign(
 		JSON.stringify(deployJson),
 		senderPubHex,
 	);
@@ -59,9 +61,14 @@ export async function payForTask(
 		throw new Error("USER_CANCELLED_PAYMENT");
 	}
 
+	// modern provider returns { signature } (Uint8Array) or { signatureHex }
+	const sig = signResult.signature
+		?? (signResult.signatureHex ? Uint8Array.from(Buffer.from(signResult.signatureHex, "hex")) : undefined);
+	if (!sig) throw new Error("WALLET_SIGN_FAILED");
+
 	const signedDeploy = DeployUtil.setSignature(
 		deploy,
-		signResult.signature,
+		sig,
 		sender,
 	);
 

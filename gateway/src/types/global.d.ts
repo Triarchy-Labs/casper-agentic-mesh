@@ -1,1 +1,2 @@
-export {}; declare global { interface Window { casperWallet?: { requestConnection: () => Promise<void>; getActivePublicKey: () => Promise<string>; signMessage: (msg: string, pub: string) => Promise<string | object>; sign: (deployJson: string, pub: string) => Promise<{ cancelled?: boolean; signature: Uint8Array }>; isConnected: () => Promise<boolean>; } } }
+export {}; declare global { interface Window {
+		CasperWalletProvider?: (opts?: unknown) => any; casperWallet?: { requestConnection: () => Promise<void>; getActivePublicKey: () => Promise<string>; signMessage: (msg: string, pub: string) => Promise<string | object>; sign: (deployJson: string, pub: string) => Promise<{ cancelled?: boolean; signature: Uint8Array }>; isConnected: () => Promise<boolean>; } } }

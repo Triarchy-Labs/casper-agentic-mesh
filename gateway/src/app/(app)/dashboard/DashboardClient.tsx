@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { getCasperProvider } from "@/lib/casper-wallet";
 import Image from "next/image";
 import { HoverReel } from "@/components/HoverReel";
 import HollywoodTelemetry from "@/components/HollywoodTelemetry";
@@ -16,10 +17,11 @@ import { CarbonFabric } from "@/components/CarbonFabric";
 
 // Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
-    if (typeof window !== "undefined" && window.casperWallet) {
+    const provider = getCasperProvider();
+    if (provider) {
         try {
-            await window.casperWallet.requestConnection();
-            const activeKey = await window.casperWallet.getActivePublicKey();
+            await provider.requestConnection();
+            const activeKey = await provider.getActivePublicKey();
             return { address: activeKey };
         } catch (error) {
             return { error: String(error) };

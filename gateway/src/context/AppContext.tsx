@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
+import { getCasperProvider } from "@/lib/casper-wallet";
 
 interface AppContextType {
     connected: boolean;
@@ -20,9 +21,10 @@ interface AppContextType {
 }
 
 const checkCasperConnected = async () => {
-    if (typeof window !== "undefined" && window.casperWallet) {
+    const provider = getCasperProvider();
+    if (provider) {
         try {
-            const isConnected = await window.casperWallet.isConnected();
+            const isConnected = await provider.isConnected();
             return { isConnected };
         } catch {
             return { isConnected: false };
@@ -32,10 +34,11 @@ const checkCasperConnected = async () => {
 };
 
 const requestAccess = async () => {
-    if (typeof window !== "undefined" && window.casperWallet) {
+    const provider = getCasperProvider();
+    if (provider) {
         try {
-            await window.casperWallet.requestConnection();
-            const activeKey = await window.casperWallet.getActivePublicKey();
+            await provider.requestConnection();
+            const activeKey = await provider.getActivePublicKey();
             return { address: activeKey };
         } catch (error) {
             return { error };
@@ -93,7 +96,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
         setConnecting(true);
         try {
-            if (typeof window === "undefined" || !window.casperWallet) {
+            if (!getCasperProvider()) {
                 setWalletMissing(true);
                 return;
             }
