@@ -37,6 +37,18 @@ export function MeshControl() {
 	const [arena, setArena] = useState<string[] | null>(null);
 	const [arenaBusy, setArenaBusy] = useState(false);
 	const [judgeKey, setJudgeKey] = useState("");
+	const [txBusy, setTxBusy] = useState(false);
+
+	const fireLiveTx = async () => {
+		setTxBusy(true); setTowerLines(["⛓️  signing a real register_agent TransactionV1 and submitting to testnet… (~20–60s)"]);
+		try {
+			const r = await fetch("/api/demo-tx", { method: "POST" });
+			const d = await r.json();
+			setTowerLines(d.lines?.length ? d.lines : [d.error ?? "Live-tx demo unavailable."]);
+		} catch {
+			setTowerLines(["🛑 SERVICE DEGRADED: could not reach the signer host. No fabricated hashes — we are working on it."]);
+		} finally { setTxBusy(false); }
+	};
 
 	const scanTower = async () => {
 		setTowerBusy(true); setTowerLines(null);
@@ -97,6 +109,13 @@ export function MeshControl() {
 						className="font-DM-mono border border-white/5 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-6 z-20 transition-all hover:bg-white/10 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						{towerBusy ? "scanning..." : "scan mesh"}
+					</button>
+					<button
+						onClick={fireLiveTx}
+						disabled={txBusy || towerBusy}
+						className="font-DM-mono border border-[var(--red-700)]/40 bg-black/25 px-[2.5vw] py-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:px-[3.5vw] max-lg:py-[0.97vw] max-sm:text-[9px] max-sm:px-4 max-sm:py-2 rounded-none absolute bottom-6 left-[calc(2.5vw+140px)] max-sm:left-auto max-sm:right-6 max-sm:bottom-16 z-20 transition-all hover:bg-[var(--red-700)]/20 hover:border-[var(--red-700)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						{txBusy ? "signing on-chain..." : "fire live tx"}
 					</button>
 					<div className="absolute bottom-6 right-6 flex gap-2 z-20">
 						<span className="font-DM-mono border border-white/5 bg-black/25 p-[0.69vw] uppercase backdrop-blur-md text-[0.69vw] max-lg:p-[0.97vw] max-lg:text-[0.97vw] max-sm:text-[9px] max-sm:p-2 rounded-none">Overseer</span>
