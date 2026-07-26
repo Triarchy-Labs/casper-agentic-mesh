@@ -1,9 +1,9 @@
 # 💎 Triarchy Boost Layer (Hackathon Extension)
 > "Because we love optimization, zero-trust security, and absolute performance, we didn't stop at the MVP. We built a production-ready Boost Layer."
 
-Welcome to the **Triarchy Agentic Mesh Boost Layer**. While the core project relies on heavy enterprise-grade microservices (Golang X402 Facilitators and C# .NET MCP Servers), this sub-project was forged to create a **frictionless, Edge-native bridge** between the blockchain, the AI mesh, and the Cyberpunk Next.js frontend.
+Welcome to the **Triarchy Agentic Mesh Boost Layer** — our original edge code that sits ON TOP of the **official Casper AI Toolkit** (x402 by [make-software](https://github.com/make-software/casper-x402), Casper MCP by [msanlisavas](https://github.com/msanlisavas/casper-mcp), EIP-712 by [casper-ecosystem](https://github.com/casper-ecosystem/casper-eip-712)). Casper ships this toolkit and asks builders to use it; we do, with attribution, and add a **frictionless, Edge-native bridge** between those tools, the AI mesh, and the Cyberpunk Next.js frontend. The toolkit repos are the ecosystem's work — we claim authorship only of this Boost Layer and the mesh.
 
-This layer was subjected to **8 Waves of Internal Penetration Testing and Hardening**. It is strictly typed, strictly linted (`cargo clippy`, `tsc --strict`), and optimized for the Casper Network.
+This layer is strictly typed and linted (`cargo clippy`, `tsc --strict`) and optimized for the Casper Network.
 
 ---
 
@@ -11,10 +11,10 @@ This layer was subjected to **8 Waves of Internal Penetration Testing and Harden
 
 The main project's backend is deeply fragmented across languages for enterprise scale. The Boost Layer provides a **unified TypeScript Edge API** and **Gas-Optimized Rust Contracts** to make frontend integration seamless.
 
-| Component | Main Project (Enterprise) | Boost Layer (Edge / On-chain) | Hackathon Impact |
+| Component | Official Casper Toolkit (upstream, credited) | Boost Layer (our edge code) | Hackathon Impact |
 | :--- | :--- | :--- | :--- |
-| **X402 Protocol** | Golang Facilitator Node | **`x402_middleware` (Next.js Edge)** | Allows Next.js to natively intercept and sign L402 requests without needing Go binaries on the frontend. |
-| **MCP AI Tools** | C# .NET Server (82 Tools) | **`mcp_server` (TypeScript SDK)** | Provides ultra-lightweight L402 validation tools directly to the Agent Mesh via STDIO. Features a **Failover RPC Pool** (`ResilientCasperClient`) replacing single-node SPOFs. |
+| **X402 Protocol** | Golang facilitator (make-software) | **`x402_middleware` (Next.js Edge)** | Allows Next.js to natively intercept and sign L402 requests without needing Go binaries on the frontend. |
+| **MCP AI Tools** | C# .NET server (msanlisavas, 98 tools) | **`mcp_server` (TypeScript SDK)** | Provides ultra-lightweight L402 validation tools directly to the Agent Mesh via STDIO. Features a **Failover RPC Pool** (`ResilientCasperClient`) replacing single-node SPOFs. |
 | **Telemetry** | REST API Polling | **`cspr_cloud` (Dual-Engine SDK)** | Re-introduces missing WebSocket streams (SSE) with Dead-Socket Heartbeat for real-time React Three Fiber (R3F) WebGL matrix visuals. |
 | **Escrow/Oracle** | Native `#![no_std]` Rust | **`odra_contracts` (Odra 0.8)** | Massive gas optimizations (50x batching) and zero-trust ownership transfer. |
 

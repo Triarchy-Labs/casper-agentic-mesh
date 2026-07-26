@@ -128,6 +128,20 @@ trust every claim.
   produx mode / art-free mode — your taste, one tap, remembered). Next step on the
   [roadmap](VISION.md): an embedded mesh operator AI living in this hub.
 
+### Casper AI Toolkit — integrated, not reinvented
+Casper ships an official [AI Toolkit](https://www.casper.network/ai) and asks builders to use
+it. We do, with attribution, and add our own edge code on top ([`hackathon_boost_layer/`](hackathon_boost_layer/)) —
+**we claim authorship only of the mesh and the Boost Layer; the upstream toolkit repos are the
+ecosystem's work:**
+- **x402 — live.** 402 pay-per-call gate with on-chain verification (`POST /api/hire` → real 402);
+  official facilitator [make-software/casper-x402](https://github.com/make-software/casper-x402)
+  + our Next.js edge middleware.
+- **MCP — live.** Discovery manifest at [`/api/mcp`](https://casper-agentic-mesh.vercel.app/api/mcp);
+  community server [msanlisavas/casper-mcp](https://github.com/msanlisavas/casper-mcp) (our
+  optimization upstreamed) + our own `@modelcontextprotocol/sdk` server in the Boost Layer.
+- **Odra 0.8** batched oracle contract · **EIP-712** ([casper-ecosystem](https://github.com/casper-ecosystem/casper-eip-712)) ·
+  **CSPR.cloud** WebSocket telemetry — all wired in the Boost Layer.
+
 ### Roadmap (clearly not yet on-chain)
 Stake-weighted slashing, a decentralized jury swarm, ZK proofs of execution
 safety, flash-loan-funded snipers, soulbound (CEP-78) reputation, and an

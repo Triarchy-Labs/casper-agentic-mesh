@@ -64,6 +64,7 @@ The verdict is a real model call and the payout is a real signed tx — with no 
 | **Working Smart Contracts** | escrow + oracle deployed; full state machine + read-back ([DEPLOYMENTS.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/DEPLOYMENTS.md)) |
 | **Technical Execution** | green workspace tests, CI, contracts build, gateway typechecks |
 | **Use of AI / Agentic** | bounty-judge + multi-model Tribunal + Tower overseer, all real, on-chain settlement |
+| **Casper AI Toolkit** | x402 (live 402 gate + make-software facilitator), MCP (live `/api/mcp` + community server + our TS server), Odra 0.8, EIP-712, CSPR.cloud — integrated with attribution |
 | **Real-World / RWA** | live RWA oracle (real CSPR/USD on-chain) + RWA-pegged pricing |
 | **UX & Design** | cinematic-brutalism gateway with live on-chain panel + click-triggered Mesh Control |
 | **Innovation** | adversarial agent court + Antifragile Mesh (Proof-of-Liveness) — primitives the brief never named |
@@ -98,13 +99,25 @@ We separate shipped reality from vision on purpose — judges should be able to 
 - **🧬 Antifragile Mesh (Proof-of-Liveness)** — agents post an on-chain heartbeat; if one goes dark the Tower nominates a reputation-ranked successor and the Tribunal ratifies — open escrows are rescued, never frozen. Original primitive, live on-chain: heartbeat [`b8a051a6…c89a`](https://testnet.cspr.live/transaction/b8a051a6626e1a3b82e610eb0ab4464e58ae7e3c3bee6ecf16b219eff7f4c89a).
 - **Mesh Control UI** — the dashboard surfaces all of the above as click-triggered panels in the Vercel-Geist / Casper aesthetic ([`gateway/src/components/MeshControl.tsx`](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/gateway/src/components/MeshControl.tsx)), backed by `/api/tower`, `/api/tribunal` (dry-run) and `/api/onchain` (live reads).
 
+### Casper AI Toolkit — integrated, not reinvented
+
+The Buildathon ships an official [AI Toolkit](https://www.casper.network/ai) and asks builders to use it. We do — with clear attribution — and add our own edge layer on top. **We claim authorship only of the mesh and the Boost Layer; the three upstream toolkit repos are the ecosystem's work, credited below.**
+
+- **x402 micropayments — LIVE.** Our gateway enforces HTTP 402 pay-per-call with on-chain payment verification (no bypass; try it: `POST /api/hire` with no header → a real `402`). We integrate the official Casper x402 facilitator ([make-software/casper-x402](https://github.com/make-software/casper-x402)) and ship a lightweight Next.js edge middleware wrapper in our Boost Layer.
+- **MCP servers — LIVE.** The gateway exposes a Model Context Protocol discovery manifest at [`/api/mcp`](https://casper-agentic-mesh.vercel.app/api/mcp). We integrate the community Casper MCP server ([msanlisavas/casper-mcp](https://github.com/msanlisavas/casper-mcp), 16 tool categories — our [StringBuilder/CancellationToken optimization](https://github.com/msanlisavas/casper-mcp) upstreamed) and ship our own TypeScript MCP server (`@modelcontextprotocol/sdk`) with L402-validation tools in the Boost Layer.
+- **Odra Framework — used.** Our Boost Layer includes an Odra 0.8 oracle contract with batched dictionary writes, alongside the native `#![no_std]` contract.
+- **EIP-712 — used.** Typed-data signatures via the official [casper-ecosystem/casper-eip-712](https://github.com/casper-ecosystem/casper-eip-712), cross-verified between our Go signer and backend.
+- **CSPR.cloud — used.** Our Boost Layer's `cspr_cloud` module opens the official CSPR.cloud WebSocket event stream for live telemetry.
+
+> Boost Layer (our original edge code over the official toolkit): [`hackathon_boost_layer/`](https://github.com/Triarchy-Labs/casper-agentic-mesh/tree/main/hackathon_boost_layer). The upstream toolkit repos are referenced by their public URLs above — not re-committed as ours.
+
 ### Roadmap (clearly not yet on-chain)
 
 **Near-term — Casper-native primitives the toolkit already endorses:**
 
 - **Delegated agent custody** — native associated keys + weighted thresholds: a human owner grants an agent a spending key and can revoke it anytime. Trust-minimized custody of an AI agent.
 - **Autonomous succession, executed** — turn the Tower's dry-run Proof-of-Liveness into real on-chain reassignment: a dead agent's open escrows pass to the highest-reputation live successor, ratified by the Tribunal.
-- **MCP server + deeper x402** — publish the gateway as a Model Context Protocol server so any LLM or agent can discover and pay for tools via x402 micropayments.
+- **Deeper MCP + x402 autonomy** — beyond today's live `/api/mcp` manifest and 402 gate: full agent-to-agent tool discovery and pay-per-call settlement across the whole toolkit surface.
 - **Upgradable compliance contracts** — native contract versioning for KYC / compliance tokens an agent can revoke or update, without exposing user data on-chain.
 
 **Mid-term — depth & network effects:**
