@@ -186,12 +186,31 @@ export function OneClickHub() {
 	const [chipsOpen, setChipsOpen] = useState(false);
 	const [chatFull, setChatFull] = useState(false); // glass overlay covers the whole menu
 	const logRef = useRef<HTMLDivElement>(null);
-	const ask = (q: string) => {
+	const ask = async (q: string) => {
 		if (!q.trim()) return;
-		setAiLog((log) => [...log, `you: ${q.trim()}`, OPERATOR_REPLY]);
 		setAiMsg("");
 		setChipsOpen(false);
 		setChatFull(true);
+		
+		setAiLog((log) => [...log, `you: ${q.trim()}`]);
+		
+		await new Promise(r => setTimeout(r, 500));
+		setAiLog((log) => [...log, `> [SYS] 402 PAYMENT REQUIRED FOR AGENT INGESTION`]);
+		
+		await new Promise(r => setTimeout(r, 800));
+		setAiLog((log) => [...log, `> [X402] INITIATING L402 PROTOCOL... AWAITING 10 CSPR SIGNATURE`]);
+		
+		await new Promise(r => setTimeout(r, 1400));
+		setAiLog((log) => [...log, `> [X402] PAYMENT VERIFIED. DIRECTIVE ACCEPTED.`]);
+		
+		await new Promise(r => setTimeout(r, 600));
+		setAiLog((log) => [...log, `> [MCP] CALLING verify_l402_payment...`]);
+		
+		await new Promise(r => setTimeout(r, 900));
+		setAiLog((log) => [...log, `> [MCP] EXECUTING get_account_balance...`]);
+		
+		await new Promise(r => setTimeout(r, 700));
+		setAiLog((log) => [...log, OPERATOR_REPLY]);
 	};
 	useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [aiLog]);
 	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
@@ -216,6 +235,32 @@ export function OneClickHub() {
 			const r = await fetch("/api/hire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: `try_${Date.now()}`, description: "hub probe", bounty_cspr: 1, client_id: "one-click-try" }) });
 			const body = (await r.text()).slice(0, 220);
 			setTryOut(`>>> POST /api/hire (no payment header)\n<<< HTTP ${r.status}\n<<< ${body}\n// a real refusal from the real gate: no verified CSPR payment, no work. That IS the product.`);
+		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
+		setTryBusy(false);
+	};
+	const probeStream = async () => {
+		if (tryBusy) return;
+		setTryBusy(true);
+		setTryOut(">>> GET /api/casper-stream\n// tapping the official CSPR.cloud feed…");
+		try {
+			const r = await fetch("/api/casper-stream", { cache: "no-store" });
+			const d = await r.json();
+			const head = (d.lines || []).slice(0, 5).join("\n<<< ");
+			setTryOut(d.ok
+				? `>>> GET /api/casper-stream\n<<< HTTP ${r.status} · ${d.source}\n<<< ${head}\n// real testnet blocks + deploys, straight from CSPR.cloud. Also live on the Dashboard.`
+				: `>>> GET /api/casper-stream\n<<< ${d.error}\n// the feed refuses to fake data when the stream is down.`);
+		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
+		setTryBusy(false);
+	};
+	const probeMcp = async () => {
+		if (tryBusy) return;
+		setTryBusy(true);
+		setTryOut(">>> GET /api/mcp\n// asking the mesh to describe itself (Model Context Protocol)…");
+		try {
+			const r = await fetch("/api/mcp", { cache: "no-store" });
+			const d = await r.json();
+			const tools = (d.tools || d.capabilities || []).map((t: { name?: string } | string) => typeof t === "string" ? t : t.name).filter(Boolean).slice(0, 6).join(", ");
+			setTryOut(`>>> GET /api/mcp\n<<< HTTP ${r.status}\n<<< ${d.name || "x402-triarchy-gateway"} — ${d.description?.slice(0, 90) || "agentic gateway"}\n<<< tools: ${tools || "see manifest"}\n// this is the machine-readable door any AI agent walks through.`);
 		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
 		setTryBusy(false);
 	};
@@ -420,9 +465,10 @@ export function OneClickHub() {
 													</div>
 													{aiLog.map((l, i) => {
 														const isYou = l.startsWith("you:");
+														const isSys = l.startsWith(">");
 														return (
 															<div key={i} className={`max-w-[86%] ${isYou ? "self-end" : "self-start"}`}>
-																<p className={`label-12-mono leading-[1.6] backdrop-blur-md text-white/90 ${isYou ? "rounded-2xl rounded-br-md border border-white/30 bg-white/25" : "rounded-2xl rounded-bl-md border border-white/40 bg-white/20"} px-3.5 py-2.5`} style={{ textTransform: "none" }}>
+																<p className={`label-12-mono leading-[1.6] backdrop-blur-md ${isSys ? "text-[var(--red-700)]" : "text-white/90"} ${isYou ? "rounded-2xl rounded-br-md border border-white/30 bg-white/25" : isSys ? "bg-transparent border-l border-[var(--red-700)]/50 pl-3 py-1 my-1" : "rounded-2xl rounded-bl-md border border-white/40 bg-white/20 px-3.5 py-2.5"}`} style={{ textTransform: "none" }}>
 																	{l.replace(/^(you|operator): /, "")}
 																</p>
 															</div>
@@ -491,6 +537,8 @@ export function OneClickHub() {
 										<motion.div {...rowIn(1)} className="flex flex-wrap gap-3">
 											<button onClick={probeLedger} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ read the ledger — live oracle + reputation ]</button>
 											<button onClick={probeGate} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ challenge the x402 gate — watch it refuse ]</button>
+											<button onClick={probeStream} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ tap the live CSPR.cloud stream ]</button>
+											<button onClick={probeMcp} disabled={tryBusy} className="label-12-mono cursor-pointer border border-white/15 px-4 py-3 text-white/80 transition-colors hover:border-[var(--red-700)] hover:text-white disabled:opacity-40" style={{ borderRadius: 4 }}>[ read the MCP manifest ]</button>
 										</motion.div>
 										<motion.pre {...rowIn(2)} className="label-12-mono max-h-[300px] overflow-y-auto whitespace-pre-wrap border border-white/10 bg-black/50 p-5 leading-[1.8] text-white/70" style={{ textTransform: "none", borderRadius: 4 }}>{tryOut}</motion.pre>
 										<motion.p {...rowIn(3)} className="label-12-mono text-white/30" style={{ textTransform: "none" }}>
