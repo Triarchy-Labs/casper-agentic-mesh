@@ -21,6 +21,59 @@ Verifiable, not simulated — every hash below opens on the block explorer.
 
 ---
 
+## 🗺️ How the mesh fits together (every box is live)
+
+The whole system in one board — what each layer is, what it talks to, and where the money
+flows. **Every arrow is a real, running connection** (the API routes are verified live).
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  BROWSER · the cinematic gateway (Next.js, deploys to Vercel)                  │
+│                                                                                │
+│   Home ─ 5 vector dossiers ┐   Dashboard ─ Mesh Control ┐   Bounties ─ board ┐ │
+│   hero live ledger strip   │   Casper Live Stream       │   KPIs · terminal  │ │
+│   ONE CLICK hub ───────────┼── Try it live (4 probes) ──┼── AI assistant     │ │
+│   WALLET (Casper Wallet) ──┘                            └────────────────────┘ │
+└───────────────┬────────────────────────────────────────────────────────────────┘
+                │ every panel calls a real gateway route ↓
+┌───────────────┴────────────────────────────────────────────────────────────────┐
+│  GATEWAY API (Next.js routes · the edge layer · server-side keys)              │
+│                                                                                │
+│   /api/onchain ──► live ledger (oracle price, agent reputation, RWA peg)       │
+│   /api/hire ─────► x402 gate: 402 unless a real CSPR tx is verified on-ledger  │
+│   /api/casper-stream ─► CSPR.cloud feed (real blocks + deploys, key hidden)    │
+│   /api/mcp ──────► Model Context Protocol manifest (agent tool discovery)      │
+│   /api/telemetry ► real per-core load + live RPC round-trip                    │
+│   /api/agents ───► registry + the live on-chain agent (reputation from chain)  │
+│   /api/tower ────► spawns the Tower binary   /api/tribunal ─► the 5-LLM court  │
+└──────┬───────────────────────────────┬───────────────────────────┬─────────────┘
+       │ signs & verifies              │ deliberates               │ reads/writes
+┌──────┴───────────┐        ┌──────────┴──────────┐      ┌─────────┴──────────────┐
+│  x402 PAYMENT    │        │  AI AGENT SWARM     │      │  CASPER TESTNET        │
+│  wallet ─sign─►  │        │  (compiled Rust)    │      │  (on-chain, WASM)      │
+│  pay.ts ─verify─►│        │  bounty-judge       │      │  escrow contract       │
+│  /api/hire       │        │  tribunal (5 LLMs)  │      │  deposit-proxy         │
+│                  │        │  tower · rwa-oracle │      │  RWA oracle contract   │
+└──────────────────┘        └─────────┬───────────┘      └───────────┬────────────┘
+                                      │ APPROVE → release            │
+                                      └── verdict moves CSPR ────────┘
+                                          release → hunter · refund → creator
+                                          (the contract's ONLY two exits)
+
+╔════════════════════════════════════════════════════════════════════════════════╗
+║  CASPER AI TOOLKIT (official, integrated with attribution — not reinvented)     ║
+║   x402 (make-software) · MCP (msanlisavas) · EIP-712 (casper-ecosystem)         ║
+║   Odra 0.8 · CSPR.cloud   ── our Boost Layer wraps these: hackathon_boost_layer/ ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+```
+
+**The product loop, end to end:**
+`WALLET connect → describe a task → sign a real CSPR payment → /api/hire verifies it on the
+ledger → the 5-LLM court rules → the escrow contract pays the hunter or refunds you.` No step
+is mocked; the contract has exactly two money paths and a verdict can pick nothing else.
+
+---
+
 ## ⛓️ Live on Casper Testnet — verifiable, not simulated
 
 The escrow contract is deployed and the **full bounty lifecycle has executed on-chain**. Every hash below opens on the block explorer. Full ledger, reproduction steps and engineering notes: **[DEPLOYMENTS.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/DEPLOYMENTS.md)**.
