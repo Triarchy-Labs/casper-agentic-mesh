@@ -1,138 +1,63 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const lusionTransition = "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)";
-
+// LIVE Casper feed via the official CSPR.cloud API (Buildathon AI Toolkit). Every line is a
+// REAL block or deploy pulled from testnet through our server-side /api/casper-stream (the key
+// stays hidden). No random telemetry — if the feed can't reach cspr.cloud it says so, honestly.
 export default function HollywoodTelemetry() {
-	const [logs, setLogs] = useState<{ id: string | number; text: string }[]>([]);
-	const [hovered, setHovered] = useState(false);
+	const [logs, setLogs] = useState<{ id: string; text: string; kind: "block" | "deploy" | "sys" }[]>([
+		{ id: "boot", text: "[SYS] opening cspr.cloud stream · testnet…", kind: "sys" },
+	]);
+	const [live, setLive] = useState(false);
+	const [height, setHeight] = useState<number | null>(null);
+	const seen = useRef<Set<string>>(new Set());
+	const boxRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const bootLogs = [
-			"INIT_SEQUENCE_START",
-			"MOUNTING_LOCAL_FILESYSTEM...",
-			"ESTABLISHING_SECURE_TUNNEL_TO_L402...",
-			"WASM_SANDBOX_ALLOCATION: 1024MB",
-			"BYPASSING_EXTERNAL_FIREWALLS",
-			"AUTH_PROTOCOL: EXTEMPORANEOUS",
-			"SYSTEM_READY",
-		];
-		
-		const liveTelemetryNodes = [
-			"PING_EXTERNAL_NODE_: ",
-			"L402_MEMPOOL_SYNC: ",
-			"PACKET_INSPECTED_OK: 0x",
-			"QUARANTINE_THREAD_SLEEP: ",
-			"WASI_0.2_HEARTBEAT: OK",
-			"P2P_NODE_DISCOVERY: SCANNING",
-			"CASPER_RPC_LATENCY: ",
-			"EXTISM_PLUGIN_LIFECYCLE: ",
-			"SOVEREIGN_ROUTING_HOP: ",
-			"SENTINEL_GOSSIP_WARN: Malicious WASM signature detected: 0x",
-			"MEV_FLASH_LOAN_ARBITRAGE: Borrowed 1,500,000 CSPR from flash-escrow block #1,809,202",
-			"GAS_FUTURES_HEDGING: Purchased gas voucher at 0.0028 CSPR/gas-unit",
-			"SUB_ESCROW_DELEGATION: Split bounty #1049 into 3 sub-escrow nodes",
-			"P2P_LOAD_BALANCER: Latency spike >450ms, spawning replica agent instances",
-			"L402_AUTH_KEY_VERIFICATION: Handshake OK. Invoice payment verified",
-			"SHADOW_SIMULATOR: Pre-execution dry-run OK. Gas: ",
-			"CEP78_REPUTATION_UPDATE: Updated Agent Passport 01c0... with proof: 0x",
-			"DECISION_TREE: Spawned child agent_executor_",
-			"COLLATERAL_LOCKED: Agent 01c0... staked 50,000 CEP-18 in Escrow"
-		];
-
-		let i = 0;
-		let timeoutId: NodeJS.Timeout;
-
-		const streamLogs = () => {
-			if (i < bootLogs.length) {
-				setLogs((prev) => [
-					...prev.slice(-6),
-					{ id: Date.now() + i, text: bootLogs[i] },
-				]);
-				i++;
-				timeoutId = setTimeout(streamLogs, 300);
-			} else {
-				const randomLog = liveTelemetryNodes[Math.floor(Math.random() * liveTelemetryNodes.length)];
-				const suffix = randomLog.endsWith(": ") ? Math.floor(Math.random() * 9999).toString(16).toUpperCase() + "ms" : "";
-				
-				setLogs((prev) => {
-					const newArray = [...prev, { id: `${Date.now()}_${Math.random()}`, text: randomLog + suffix }];
-					return newArray.length > 7 ? newArray.slice(newArray.length - 7) : newArray;
-				});
-				timeoutId = setTimeout(streamLogs, 800 + Math.random() * 2000);
+		let stop = false;
+		const pull = async () => {
+			try {
+				const r = await fetch("/api/casper-stream", { cache: "no-store" });
+				const d = await r.json();
+				if (stop) return;
+				if (!d.ok || !d.lines?.length) {
+					setLive(false);
+					setLogs((prev) => [...prev.slice(-40), { id: `deg-${Date.now()}`, text: `[SYS] ${d.error || "feed frozen — no data faked"}`, kind: "sys" }]);
+					return;
+				}
+				setLive(true);
+				if (d.height) setHeight(d.height);
+				const fresh = (d.lines as string[])
+					.filter((l) => !seen.current.has(l))
+					.map((l) => {
+						seen.current.add(l);
+						return { id: l, text: l, kind: (l.startsWith("[DEPLOY") ? "deploy" : "block") as "block" | "deploy" };
+					});
+				if (fresh.length) setLogs((prev) => [...prev, ...fresh].slice(-48));
+			} catch {
+				if (!stop) setLive(false);
 			}
 		};
-
-		timeoutId = setTimeout(streamLogs, 300);
-		return () => clearTimeout(timeoutId);
+		pull();
+		const int = setInterval(pull, 4000);
+		return () => { stop = true; clearInterval(int); };
 	}, []);
 
-	// Lusion palette — always dark (only canvas inverts)
-	const borderColor = hovered 
-		? "rgba(224,53,41,0.4)"
-		: "rgba(255,255,255,0.1)";
-	// bgColor removed — Peachworlds glass uses inline values
-	const textColor = hovered
-		? "#e03529"
-		: "rgba(255,255,255,0.6)";
-	const headerColor = hovered
-		? "#e03529"
-		: "rgba(255,255,255,0.8)";
-	const glowShadow = hovered
-		? "0 0 25px rgba(224,53,41,0.2)"
-		: "none";
+	useEffect(() => { if (boxRef.current) boxRef.current.scrollTop = boxRef.current.scrollHeight; }, [logs]);
 
 	return (
-		<div
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			style={{
-				position: "absolute",
-				bottom: 40,
-				left: 40,
-				width: 400,
-				height: 220,
-				background: hovered 
-					? "rgba(224,53,41,0.06)"
-					: "rgba(255,255,255,0.06)",
-				border: `1px solid ${borderColor}`,
-				borderRadius: 12,
-				padding: 15,
-				fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace",
-				color: textColor,
-				fontSize: 10,
-				overflow: "hidden",
-				boxShadow: glowShadow,
-				backdropFilter: hovered ? "blur(24px) saturate(1.4)" : "blur(24px) saturate(1.2)",
-				WebkitBackdropFilter: hovered ? "blur(24px) saturate(1.4)" : "blur(24px) saturate(1.2)",
-				zIndex: 20,
-				transition: lusionTransition,
-			}}
-		>
-			<div
-				style={{
-					borderBottom: `1px solid ${borderColor}`,
-					paddingBottom: 5,
-					marginBottom: 10,
-					fontSize: 11,
-					fontWeight: 500,
-					color: headerColor,
-					transition: lusionTransition,
-					letterSpacing: "0.05em",
-				}}
-			>
-				&gt; SYS_TELEMETRY // [root@triarchy-gateway]
+		<div className="relative flex h-full flex-col overflow-hidden">
+			<div className="flex items-center justify-between border-b border-white/10 px-1 pb-3">
+				<span className="label-13-mono tracking-[0.2em] text-white/60">CASPER LIVE STREAM</span>
+				<span className="label-12-mono flex items-center gap-2 text-white/45">
+					<span className={`size-[6px] rounded-full ${live ? "bg-[var(--red-700)]" : "bg-white/30"}`} style={live ? { animation: "crystalPulse 2s ease-in-out infinite" } : undefined} />
+					cspr.cloud{height ? ` · #${height}` : ""}{live ? " · live" : " · …"}
+				</span>
 			</div>
-			<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-				{logs.map((logObj, i) => (
-					<div
-						key={logObj.id}
-						style={{ 
-							opacity: i === logs.length - 1 ? 0.9 : 0.4,
-							transition: "opacity 0.3s",
-						}}
-					>
-						{logObj.text}
+			<div ref={boxRef} className="mt-3 flex flex-1 flex-col gap-1.5 overflow-y-auto pr-1" data-lenis-prevent>
+				{logs.map((l) => (
+					<div key={l.id} className={`label-12-mono leading-[1.5] ${l.kind === "deploy" ? "text-[var(--red-900)]" : l.kind === "sys" ? "text-white/35" : "text-white/70"}`} style={{ textTransform: "none" }}>
+						{l.text}
 					</div>
 				))}
 			</div>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { HoverReel } from "@/components/HoverReel";
+import HollywoodTelemetry from "@/components/HollywoodTelemetry";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -367,6 +368,25 @@ export default function Dashboard() {
                             <div className="flex flex-col gap-[0.73vw]">
                                 <h3 className="heading-32 leading-tight">Swarm Telemetry</h3>
                                 <p className="label-13-mono text-[var(--gray-800)] uppercase">Agent emotional state monitor.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* CASPER LIVE STREAM — real cspr.cloud feed (official AI Toolkit) */}
+                    <div className="col-span-12 flex flex-col grid-item mb-[5vh]">
+                        <div className="focus-card editorial-panel relative w-full overflow-hidden group border border-white/5 bg-[#0a0a0a] p-[2.22vw] max-sm:p-6" style={{ minHeight: "42vh" }}>
+                            <div className="absolute inset-0 bg-gradient-to-br from-[#111] to-[#050505]" />
+                            <div className="absolute inset-0 opacity-[0.12]" style={{ background: "radial-gradient(circle at 80% 20%, var(--red-500) 0%, transparent 70%)" }} />
+                            <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
+                            <div className="relative z-10 h-full">
+                                <HollywoodTelemetry />
+                            </div>
+                        </div>
+                        <div className="mt-[4vh] project-info-trigger relative flex w-full">
+                            <div className="my-[1.5vh] mr-[1vw] size-[0.55vw] border border-[#303030] max-sm:hidden shrink-0"></div>
+                            <div className="flex flex-col gap-[0.73vw]">
+                                <h3 className="heading-32 leading-tight">Casper Live Stream</h3>
+                                <p className="label-13-mono text-[var(--gray-800)] uppercase">Real testnet blocks &amp; deploys via the official CSPR.cloud API. Not a simulation.</p>
                             </div>
                         </div>
                     </div>
