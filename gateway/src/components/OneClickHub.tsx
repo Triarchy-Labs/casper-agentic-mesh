@@ -384,7 +384,7 @@ export function OneClickHub() {
 									{/* COLLAPSED trigger — a glass input bar; tapping it opens the overlay */}
 									<button
 										onClick={() => setChatFull(true)}
-										className="mt-3 flex h-[56px] w-full cursor-pointer items-center gap-3 border border-white/15 bg-white/[0.06] px-3 text-left backdrop-blur-md transition-colors hover:border-[var(--red-700)]"
+										className="mt-3 flex h-[56px] w-full cursor-pointer items-center gap-3 rounded-full border border-white/40 bg-white/20 px-3 text-left backdrop-blur-md transition-colors hover:border-[var(--red-700)]"
 										style={{ borderRadius: 16 }}
 									>
 										<span className="grid size-[38px] shrink-0 place-items-center rounded-full border border-white/15 bg-white/[0.08] text-white/60">?</span>
@@ -403,25 +403,26 @@ export function OneClickHub() {
 												animate={{ clipPath: "inset(0% 0% 0% 0% round 18px)", opacity: 1 }}
 												exit={{ clipPath: "inset(82% 0% 0% 0% round 18px)", opacity: 0 }}
 												transition={{ duration: 0.5, ease: lamaEase }}
-												className="absolute inset-0 z-[60] flex flex-col border border-white/15 bg-[#0a0508]/72 backdrop-blur-2xl backdrop-saturate-150"
-												style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)" }}
+												className="absolute inset-0 z-[60] flex flex-col border border-white/40 bg-white/10 backdrop-blur-2xl backdrop-saturate-150 text-white"
+												style={{ boxShadow: "0 32px 64px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)" }}
 											>
-												<div className="flex h-[56px] shrink-0 items-center justify-between border-b border-white/10 px-5">
+												<div className="pointer-events-none absolute inset-0 bg-black/35" aria-hidden />
+												<div className="relative flex h-[56px] shrink-0 items-center justify-between border-b border-white/25 px-5">
 													<span className="flex items-center gap-3">
-														<span className="grid size-[30px] place-items-center rounded-full border border-white/15 bg-white/[0.08]"><span className="size-[7px] rounded-full bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} /></span>
+														<span className="grid size-[30px] place-items-center rounded-full border border-white/35 bg-white/15"><span className="size-[7px] rounded-full bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} /></span>
 														<ScrambleText text="MESH SESSION · CASPER AI" className="label-12-mono tracking-[0.2em] text-white/80" />
 													</span>
-													<button onClick={() => setChatFull(false)} className="grid size-[34px] cursor-pointer place-items-center rounded-full border border-white/15 text-white/60 transition-colors hover:bg-white hover:text-black" aria-label="Collapse">⤢</button>
+													<button onClick={() => setChatFull(false)} className="grid size-[34px] cursor-pointer place-items-center rounded-full border border-white/40 bg-white/15 text-white/80 transition-colors hover:bg-white hover:text-black" aria-label="Collapse">⤢</button>
 												</div>
-												<div ref={logRef} className="flex flex-1 flex-col gap-2.5 overflow-y-auto p-4" data-lenis-prevent>
-													<div className="max-w-[86%] self-start rounded-2xl rounded-bl-md border border-[var(--red-700)]/25 bg-[#120608]/50 px-3.5 py-2.5 backdrop-blur-md">
-														<p className="label-12-mono leading-[1.6] text-white/60" style={{ textTransform: "none" }}><span className="text-[var(--red-700)]">⟡ operator:</span> in development — I answer from the mesh&apos;s own sources when I wake. Every action waits for your confirmation.</p>
+												<div ref={logRef} className="relative flex flex-1 flex-col gap-2.5 overflow-y-auto p-4" data-lenis-prevent>
+													<div className="max-w-[86%] self-start rounded-2xl rounded-bl-md border border-white/40 bg-white/20 px-3.5 py-2.5 backdrop-blur-md">
+														<p className="label-12-mono leading-[1.6] text-white/85" style={{ textTransform: "none" }}><span className="text-[var(--red-700)]">⟡ operator:</span> in development — I answer from the mesh&apos;s own sources when I wake. Every action waits for your confirmation.</p>
 													</div>
 													{aiLog.map((l, i) => {
 														const isYou = l.startsWith("you:");
 														return (
 															<div key={i} className={`max-w-[86%] ${isYou ? "self-end" : "self-start"}`}>
-																<p className={`label-12-mono leading-[1.6] backdrop-blur-md ${isYou ? "rounded-2xl rounded-br-md border border-white/25 bg-white/[0.12] text-white/85" : "rounded-2xl rounded-bl-md border border-[var(--red-700)]/25 bg-[#120608]/50 text-white/65"} px-3.5 py-2.5`} style={{ textTransform: "none" }}>
+																<p className={`label-12-mono leading-[1.6] backdrop-blur-md text-white/90 ${isYou ? "rounded-2xl rounded-br-md border border-white/30 bg-white/25" : "rounded-2xl rounded-bl-md border border-white/40 bg-white/20"} px-3.5 py-2.5`} style={{ textTransform: "none" }}>
 																	{l.replace(/^(you|operator): /, "")}
 																</p>
 															</div>
@@ -432,23 +433,23 @@ export function OneClickHub() {
 													{chipsOpen && (
 														<motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.3, ease: lamaEase }} className="flex shrink-0 flex-wrap gap-2 overflow-hidden px-4 pb-1">
 															{QUICK_Qs.map((q) => (
-																<button key={q} onClick={() => ask(q)} className="label-12-mono cursor-pointer rounded-full border border-white/20 bg-white/[0.08] px-3 py-2 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ textTransform: "none" }}>{q}</button>
+																<button key={q} onClick={() => ask(q)} className="label-12-mono cursor-pointer rounded-full border border-white/40 bg-white/20 px-3 py-2 text-white/85 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ textTransform: "none" }}>{q}</button>
 															))}
 														</motion.div>
 													)}
 												</AnimatePresence>
-												<div className="flex shrink-0 items-center gap-2 border-t border-white/10 p-3">
-													<button onClick={() => setChipsOpen((v) => !v)} className={`grid size-[44px] shrink-0 cursor-pointer place-items-center rounded-full border backdrop-blur-md transition-colors ${chipsOpen ? "border-[var(--red-700)]/50 text-white" : "border-white/20 text-white/60 hover:bg-white hover:text-black"} bg-white/[0.08]`} aria-label="Quick questions">{chipsOpen ? "×" : "?"}</button>
+												<div className="relative flex shrink-0 items-center gap-2 border-t border-white/25 p-3">
+													<button onClick={() => setChipsOpen((v) => !v)} className={`grid size-[44px] shrink-0 cursor-pointer place-items-center rounded-full border backdrop-blur-md transition-colors ${chipsOpen ? "border-[var(--red-700)]/60 text-white" : "border-white/40 text-white/80 hover:bg-white hover:text-black"} bg-white/20`} aria-label="Quick questions">{chipsOpen ? "×" : "?"}</button>
 													<input
 														value={aiMsg}
 														autoFocus
 														onChange={(e) => setAiMsg(e.target.value)}
 														onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); ask(aiMsg); } }}
 														placeholder="ask the mesh anything…"
-														className="label-12-mono h-[48px] flex-1 rounded-full border border-white/15 bg-white/[0.06] px-4 text-white placeholder:text-white/30 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
+														className="label-12-mono h-[48px] flex-1 rounded-full border border-white/40 bg-white/20 px-4 text-white placeholder:text-white/50 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
 														style={{ textTransform: "none" }}
 													/>
-													<button onClick={() => ask(aiMsg)} className="grid size-[48px] shrink-0 cursor-pointer place-items-center rounded-full border border-white/15 bg-white/[0.1] text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" aria-label="Send">→</button>
+													<button onClick={() => ask(aiMsg)} className="grid size-[48px] shrink-0 cursor-pointer place-items-center rounded-full border border-white/40 bg-white/20 text-white/90 backdrop-blur-md transition-colors hover:bg-white hover:text-black" aria-label="Send">→</button>
 												</div>
 											</motion.div>
 										)}
