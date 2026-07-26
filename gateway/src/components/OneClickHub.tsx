@@ -191,25 +191,24 @@ export function OneClickHub() {
 		setAiMsg("");
 		setChipsOpen(false);
 		setChatFull(true);
-		
 		setAiLog((log) => [...log, `you: ${q.trim()}`]);
-		
-		await new Promise(r => setTimeout(r, 500));
-		setAiLog((log) => [...log, `> [SYS] 402 PAYMENT REQUIRED FOR AGENT INGESTION`]);
-		
-		await new Promise(r => setTimeout(r, 800));
-		setAiLog((log) => [...log, `> [X402] INITIATING L402 PROTOCOL... AWAITING 10 CSPR SIGNATURE`]);
-		
-		await new Promise(r => setTimeout(r, 1400));
-		setAiLog((log) => [...log, `> [X402] PAYMENT VERIFIED. DIRECTIVE ACCEPTED.`]);
-		
-		await new Promise(r => setTimeout(r, 600));
-		setAiLog((log) => [...log, `> [MCP] CALLING verify_l402_payment...`]);
-		
-		await new Promise(r => setTimeout(r, 900));
-		setAiLog((log) => [...log, `> [MCP] EXECUTING get_account_balance...`]);
-		
-		await new Promise(r => setTimeout(r, 700));
+
+		// REAL tool-use trace — the assistant actually hits the mesh's live surfaces and prints
+		// what comes back. No scripted flashes: the MCP line shows the real manifest, the ledger
+		// line shows the real oracle read. This is the operator's tentacles, wired for real.
+		setAiLog((log) => [...log, `> [MCP] GET /api/mcp — discovering tools…`]);
+		try {
+			const m = await fetch("/api/mcp", { cache: "no-store" }).then((r) => r.json());
+			const tools = (m.tools || m.capabilities || []).map((t: { name?: string } | string) => typeof t === "string" ? t : t.name).filter(Boolean).slice(0, 4).join(", ");
+			setAiLog((log) => [...log, `> [MCP] ${m.name || "x402-triarchy-gateway"} · tools: ${tools || "see manifest"}`]);
+		} catch { setAiLog((log) => [...log, `> [MCP] manifest unreachable`]); }
+
+		setAiLog((log) => [...log, `> [CHAIN] GET /api/onchain — reading the ledger…`]);
+		try {
+			const d = await fetch("/api/onchain", { cache: "no-store" }).then((r) => r.json());
+			setAiLog((log) => [...log, `> [CHAIN] oracle CSPR-USD $${Number(d.priceUsd).toFixed(6)} · agent rep ${d.reputation}`]);
+		} catch { setAiLog((log) => [...log, `> [CHAIN] ledger unreachable`]); }
+
 		setAiLog((log) => [...log, OPERATOR_REPLY]);
 	};
 	useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [aiLog]);

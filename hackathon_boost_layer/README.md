@@ -1,59 +1,65 @@
-# 💎 Triarchy Boost Layer (Hackathon Extension)
-> "Because we love optimization, zero-trust security, and absolute performance, we didn't stop at the MVP. We built a production-ready Boost Layer."
+# Triarchy Boost Layer — edge code over the official Casper AI Toolkit
 
-Welcome to the **Triarchy Agentic Mesh Boost Layer** — our original edge code that sits ON TOP of the **official Casper AI Toolkit** (x402 by [make-software](https://github.com/make-software/casper-x402), Casper MCP by [msanlisavas](https://github.com/msanlisavas/casper-mcp), EIP-712 by [casper-ecosystem](https://github.com/casper-ecosystem/casper-eip-712)). Casper ships this toolkit and asks builders to use it; we do, with attribution, and add a **frictionless, Edge-native bridge** between those tools, the AI mesh, and the Cyberpunk Next.js frontend. The toolkit repos are the ecosystem's work — we claim authorship only of this Boost Layer and the mesh.
+> Our original edge layer that sits **on top of** the official Casper AI Toolkit and wires it
+> into the mesh. We claim authorship only of this Boost Layer and the mesh; the upstream toolkit
+> repos are the ecosystem's work, credited below.
 
-This layer is strictly typed and linted (`cargo clippy`, `tsc --strict`) and optimized for the Casper Network.
+The Buildathon ships an [AI Toolkit](https://www.casper.network/ai) — x402, MCP, Odra, CSPR.cloud,
+EIP-712 — and asks builders to use it. We do, with attribution, and add a thin, strictly-typed
+TypeScript/Rust bridge so those tools plug into a Next.js edge frontend without heavy binaries in
+the browser.
 
----
-
-## 🏗️ Architectural Defragmentation
-
-The main project's backend is deeply fragmented across languages for enterprise scale. The Boost Layer provides a **unified TypeScript Edge API** and **Gas-Optimized Rust Contracts** to make frontend integration seamless.
-
-| Component | Official Casper Toolkit (upstream, credited) | Boost Layer (our edge code) | Hackathon Impact |
+| Capability | Official upstream (credited) | Boost Layer (our edge code) | Where it shows in the app |
 | :--- | :--- | :--- | :--- |
-| **X402 Protocol** | Golang facilitator (make-software) | **`x402_middleware` (Next.js Edge)** | Allows Next.js to natively intercept and sign L402 requests without needing Go binaries on the frontend. |
-| **MCP AI Tools** | C# .NET server (msanlisavas, 98 tools) | **`mcp_server` (TypeScript SDK)** | Provides ultra-lightweight L402 validation tools directly to the Agent Mesh via STDIO. Features a **Failover RPC Pool** (`ResilientCasperClient`) replacing single-node SPOFs. |
-| **Telemetry** | REST API Polling | **`cspr_cloud` (Dual-Engine SDK)** | Re-introduces missing WebSocket streams (SSE) with Dead-Socket Heartbeat for real-time React Three Fiber (R3F) WebGL matrix visuals. |
-| **Escrow/Oracle** | Native `#![no_std]` Rust | **`odra_contracts` (Odra 0.8)** | Massive gas optimizations (50x batching) and zero-trust ownership transfer. |
+| **x402 / L402** | [make-software/casper-x402](https://github.com/make-software/casper-x402) (Go facilitator) | `x402_middleware` — a Next.js/Express wrapper | **LIVE**: the gateway's `/api/hire` returns a real `402` until a CSPR payment is verified on the ledger; the dashboard's L402 console fires it live |
+| **MCP** | [msanlisavas/casper-mcp](https://github.com/msanlisavas/casper-mcp) (C# server, 98 tools — our `StringBuilder` / `CancellationToken` optimization upstreamed) | `mcp_server` — a TypeScript `@modelcontextprotocol/sdk` server with L402-validation tools and a **failover RPC pool** (`ResilientCasperClient`, 3 nodes) | **LIVE**: `/api/mcp` serves the discovery manifest; the ONE CLICK assistant hits it for real |
+| **CSPR.cloud** | official CSPR.cloud API | `cspr_cloud` — REST + WebSocket client with a dead-socket heartbeat | **LIVE**: the dashboard's **Casper Live Stream** renders real testnet blocks + deploys via server-side `/api/casper-stream` (key never shipped to the browser) |
+| **Odra** | [odra 0.8](https://odra.dev) | `odra_contracts` — batched-write oracle | an Odra 0.8 oracle contract alongside the native `#![no_std]` one |
+| **EIP-712** | [casper-ecosystem/casper-eip-712](https://github.com/casper-ecosystem/casper-eip-712) | typed-data signing | cross-verified between the Go signer and the backend |
 
 ---
 
-## 🛡️ Zero-Trust Security & Hardening (Internal Audits)
+## What each module actually does
 
-Our core engineering team conducted aggressive Red Team penetration testing against this codebase. Here is what we fixed:
+### `x402_middleware`
+A Next.js edge / Express middleware that speaks HTTP 402. The frontend never needs a Go binary:
+a request without a verified `x-l402-txhash` is refused with a real `402 Payment Required`, and a
+provided hash is validated against the ledger (recipient + amount, single-use, TTL). The gateway's
+`/api/hire` route enforces exactly this today.
 
-### 1. The L402 Wormhole Spoofing Vector (Patched)
-* **Threat:** Attackers could pass a valid Casper transaction hash from a *different* payment (e.g., a 1-mote transfer to themselves) to trick the MCP server into authorizing an AI prompt.
-* **Fix:** The `mcp_server` now performs deep parsing of the raw `Transfer` session arguments. It mandates strict verification of the `target` address against the `requiredGatewayAccount` and compares `BigInt(amount_tx) >= BigInt(minimumPaymentMotes)` using U512 logic, ensuring the prompt request is immutably linked to the correct payment.
+### `mcp_server`
+A TypeScript MCP server built on the canonical `@modelcontextprotocol/sdk`. It exposes L402
+validation tools to any MCP-speaking agent over stdio, and wraps Casper RPC in a
+`ResilientCasperClient` — a failover pool across three testnet nodes with backoff, so a single
+node's 503 doesn't take the agent down. Input is validated with `zod` before it reaches a tool.
+The gateway also publishes an HTTP discovery manifest at `/api/mcp` for browser/agent discovery.
 
-### 2. V8 Socket Leaks & Node Resilience (Hardened)
-* **Threat:** Standard implementations utilizing legacy HTTP pooling can cause memory leaks on V8 (Node.js/Cloudflare Edge) during infinite RPC polling. Furthermore, single RPC nodes (like `rpc.testnet...`) frequently 503 during live demos.
-* **Fix:** `cspr_cloud` implements a **Dual-Engine Model** (REST + WebSocket). The WebSocket engine uses a strict **Dead-Socket Heartbeat (Ping-Pong)** to instantly sever zombie connections. The MCP Server implements a `ResilientCasperClient` with a failover pool of 3 testnet nodes and exponential backoff to guarantee 100% uptime.
+### `cspr_cloud`
+A dual-engine client for the official CSPR.cloud API: REST for point reads, WebSocket for the
+event stream, with a ping-pong heartbeat that severs zombie sockets. In the app it powers the
+**Casper Live Stream** card — real blocks and deploys scrolling in real time (wired via the
+server-side `/api/casper-stream` route so the API key stays hidden).
 
-### 3. LLM Schema Perfection & Supply Chain
-* **Fix:** The MCP Server now strictly enforces input validation via `zod` and `zod-to-json-schema`, eliminating LLM hallucinations caused by bad type inference. Furthermore, we implemented an **Absolute STDIO Guard** intercepting `console.log` to `stderr`, guaranteeing zero JSON-RPC stream corruption. 100% native Edge purity achieved across all Next.js TS components.
+### `odra_contracts`
+An Odra 0.8 oracle contract. `set_prices(assets, prices, decimals)` batches up to 50 assets in
+one transaction (amortizing the base deploy fee), stores a `PriceData { price, decimals,
+last_updated }` per asset so downstream apps can reject stale data, and guards admin transfer
+with a two-step `propose_ownership` / `accept_ownership` to avoid bricking the contract.
 
 ---
 
-## ⚡ Casper Gas Optimization (Odra 0.8)
+## Discipline
 
-Our Rust smart contracts (`odra_contracts`) underwent extreme forensic auditing (`forensic-ecosystem-audit`, `cargo clippy --pedantic`).
+Strictly typed and linted (`cargo clippy`, `tsc --strict`). The MCP server routes `console.log`
+to `stderr` so it can never corrupt the JSON-RPC stdio stream. Payment verification is deep: the
+raw `Transfer` args are parsed and the `target` is checked against the gateway account with U512
+amount comparison — a valid hash from an unrelated transfer cannot spoof an authorization.
 
-- **Batch Deployment Scaling:** Implemented a strict `MAX_BATCH_SIZE = 50` constraint in `set_prices(assets, prices, decimals)`. This allows 50+ assets to update in a single transaction, amortizing the base Casper deploy fee by 50x.
-- **Time-Aware Pricing (DeFi Standard):** The `prices` state maps to a structured `PriceData` object containing `price: u64`, `decimals: u8`, and a critical `last_updated: u64` block timestamp, allowing downstream DeFi apps to check for stale prices.
-- **Two-Step Ownership:** Admin privileges are secured by a strict `propose_ownership` / `accept_ownership` sequence, preventing accidental contract bricking.
-- **WASM Perfection:** Fixed critical Odra 0.8 compilation panics by enforcing `unwrap_or_revert_with` on non-default `Address` types and dynamically generating WASM entrypoints via `build.rs`.
+## On the roadmap (not yet wired in the UI)
 
----
+- The assistant surfacing **each** MCP tool call inline as it runs (today it shows a real MCP
+  manifest fetch + a real ledger read on send; per-tool live tracing is next).
+- The x402 middleware and cspr_cloud WebSocket engine imported directly by the gateway (today the
+  gateway implements the equivalent as first-class API routes; the modules are the reference).
 
-## 🎨 UI/UX Symbiosis (The Cyberpunk Mesh)
-
-The Boost Layer is designed to vanish into the background of the UI, powering the terminal aesthetic without overloading the user:
-
-1. **Invisible X402 (Ingestion Terminal):** L402 payments trigger raw terminal logs (`> [X402] PAYMENT REQUIRED`), bypassing clunky web popups to maintain immersion.
-2. **Matrix Telemetry (cspr_cloud):** Live on-chain pulses are fed via WebSockets directly into the Vector Telemetry UI, creating a scrolling hacker matrix of network status.
-3. **Flashing Executions (MCP):** When the AI Assistant calculates a move, the MCP tool calls (`verify_l402_payment`) flash across the UI, visually proving on-chain interaction.
-
-> *The Triarchy Mesh is not just functional; it is a hyper-optimized, zero-trust ecosystem built for the Web3 Frontier.*
+> Every "LIVE" row above is verifiable in the running app — see the project [PLAYBOOK](../PLAYBOOK.md).
