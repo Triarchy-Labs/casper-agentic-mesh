@@ -20,6 +20,8 @@ members = [
     "swarm/tribunal",
     "swarm/bounty-judge",
     "swarm/tower",
+    "gateway/src-tauri",
+    "casper-ai-toolkit/casper-eip-712"
 ]
 
 [workspace.package]

@@ -1,0 +1,5 @@
+packages:
+  - "gateway"
+  - "hackathon_boost_layer/mcp_server"
+  - "hackathon_boost_layer/cspr_cloud"
+  - "hackathon_boost_layer/x402_middleware"
