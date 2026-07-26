@@ -286,7 +286,7 @@ impl BrainFeeds {
             data_file("vwap_ownership.json"),
         ];
         for path in &paths {
-            if let Ok(content) = std::fs::read_to_string(&path) {
+            if let Ok(content) = std::fs::read_to_string(path) {
                 if let Ok(json) = serde_json::from_str::<Value>(&content) {
                     if let Some(obj) = json.as_object() {
                         if obj.contains_key(symbol) {

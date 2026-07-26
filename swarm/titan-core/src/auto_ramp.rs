@@ -275,7 +275,7 @@ impl AutoRamp {
 
     /// Count trades in recent 96h window from snapshot
     fn count_recent_trades(_now_ts: i64) -> i64 {
-        if let Ok(data) = std::fs::read_to_string(&snapshot_path()) {
+        if let Ok(data) = std::fs::read_to_string(snapshot_path()) {
             if let Ok(json) = serde_json::from_str::<Value>(&data) {
                 let mut total = 0i64;
                 if let Some(obj) = json.as_object() {
@@ -293,7 +293,7 @@ impl AutoRamp {
 
     /// Get 7-day PnL from snapshot (sum of all symbols' net_pnl)
     fn get_7d_pnl() -> f64 {
-        if let Ok(data) = std::fs::read_to_string(&snapshot_path()) {
+        if let Ok(data) = std::fs::read_to_string(snapshot_path()) {
             if let Ok(json) = serde_json::from_str::<Value>(&data) {
                 let mut total_pnl = 0.0;
                 if let Some(obj) = json.as_object() {
@@ -309,7 +309,7 @@ impl AutoRamp {
 
     /// Get overall win rate from snapshot
     fn get_overall_win_rate() -> f64 {
-        if let Ok(data) = std::fs::read_to_string(&snapshot_path()) {
+        if let Ok(data) = std::fs::read_to_string(snapshot_path()) {
             if let Ok(json) = serde_json::from_str::<Value>(&data) {
                 let mut total_wins = 0i64;
                 let mut total_trades = 0i64;
@@ -331,7 +331,7 @@ impl AutoRamp {
 
     /// Load state from disk (or default if missing)
     fn load_state() -> RampState {
-        std::fs::read_to_string(&ramp_state_path())
+        std::fs::read_to_string(ramp_state_path())
             .ok()
             .and_then(|s| serde_json::from_str(&s).ok())
             .unwrap_or_default()

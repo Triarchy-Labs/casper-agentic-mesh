@@ -122,6 +122,7 @@ impl PaperEngine {
     }
 
     /// Открыть виртуальную позицию.
+    #[allow(clippy::too_many_arguments)]
     pub fn open_position(
         &mut self,
         symbol: &str,

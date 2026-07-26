@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use serde_json::json;
 use std::process::Command;
 use std::error::Error;
@@ -113,7 +113,7 @@ async fn post_rpc(client: &Client, node: &str, req: RpcRequest) -> Result<serde_
 
     let json_val: serde_json::Value = resp.json().await?;
     if let Some(err) = json_val.get("error") {
-        return Err(format!("RPC error: {}", err.to_string()).into());
+        return Err(format!("RPC error: {}", err).into());
     }
 
     Ok(json_val)

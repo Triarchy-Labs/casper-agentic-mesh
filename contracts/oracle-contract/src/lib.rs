@@ -162,6 +162,7 @@ pub extern "C" fn call() {
     // init() is called as a separate tx after deployment (Casper 2.0 session rule).
 }
 
+#[cfg(target_arch = "wasm32")]
 #[panic_handler]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}

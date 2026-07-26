@@ -1,18 +1,18 @@
-/// Strategy Evolution Engine — tournament selection + statistical validation.
-///
-/// ПОРТИРОВАНО ИЗ:
-///   - tradememory-protocol/src/tradememory/evolution/engine.py (265 строк)
-/// - tradememory-protocol/src/tradememory/evolution/selector.py (210 строк)
-/// - tradememory-protocol/src/tradememory/evolution/statistical_gates.py (170 строк)
-/// АВТОР ОРИГИНАЛА: mnemox-ai (MIT License)
-///
-/// Pipeline per generation:
-///   1. Generate strategy parameters (mutate existing or explore random)
-///   2. Evaluate IS (in-sample) fitness
-///   3. Rank by IS fitness → top N
-///   4. Validate OOS (out-of-sample) for top N
-///   5. Graduated / Graveyard → feed back to next generation
-///
+//! Strategy Evolution Engine — tournament selection + statistical validation.
+//!
+//! ПОРТИРОВАНО ИЗ:
+//!   - tradememory-protocol/src/tradememory/evolution/engine.py (265 строк)
+//!   - tradememory-protocol/src/tradememory/evolution/selector.py (210 строк)
+//!   - tradememory-protocol/src/tradememory/evolution/statistical_gates.py (170 строк)
+//!   АВТОР ОРИГИНАЛА: mnemox-ai (MIT License)
+//!
+//! Pipeline per generation:
+//!   1. Generate strategy parameters (mutate existing or explore random)
+//!   2. Evaluate IS (in-sample) fitness
+//!   3. Rank by IS fitness → top N
+//!   4. Validate OOS (out-of-sample) for top N
+//!   5. Graduated / Graveyard → feed back to next generation
+//!
 /// Statistical Gates:
 ///   - Deflated Sharpe Ratio (Bailey & Lopez de Prado 2014)
 ///   - Benjamini-Hochberg FDR correction

@@ -9,11 +9,9 @@ use casper_contract::{
     unwrap_or_revert::UnwrapOrRevert,
 };
 use casper_types::{
-    contracts::ContractPackageHash, runtime_args, ApiError, RuntimeArgs, URef, U512,
+    contracts::ContractPackageHash, runtime_args, ApiError, URef, U512,
 };
 
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 /// Session code executed in the *caller's account context*.
 ///
@@ -56,6 +54,7 @@ pub extern "C" fn call() {
     );
 }
 
+#[cfg(target_arch = "wasm32")]
 #[panic_handler]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}

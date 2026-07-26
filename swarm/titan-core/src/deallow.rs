@@ -97,7 +97,7 @@ impl Deallow {
     }
 
     fn read_snapshot() -> Option<Value> {
-        std::fs::read_to_string(&snapshot_path())
+        std::fs::read_to_string(snapshot_path())
             .ok()
             .and_then(|s| serde_json::from_str(&s).ok())
     }

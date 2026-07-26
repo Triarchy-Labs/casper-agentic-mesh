@@ -1,15 +1,15 @@
-/// TURBO Module — SIMD Ускорители + Портированные формулы из deep_causality.
-///
-/// Два источника магии:
-/// 1. SIMD (Single Instruction Multiple Data) — одна инструкция обрабатывает
-///    4-8 чисел одновременно вместо одного. Для cosine similarity = x4-8 ускорение.
-///
-/// 2. deep_causality uncertainty — портированные формулы Monte Carlo simulation
-///    и probabilistic threshold estimation (без их HKT/AST зависимостей).
-///
-/// 3. Batch compute — обработка массивов через итераторы с минимальными аллокациями.
-///
-/// DONOR: deep_causality (uncertainty math), SimSIMD (concept)
+//! TURBO Module — SIMD Ускорители + Портированные формулы из deep_causality.
+//!
+//! Два источника магии:
+//! 1. SIMD (Single Instruction Multiple Data) — одна инструкция обрабатывает
+//!    4-8 чисел одновременно вместо одного. Для cosine similarity = x4-8 ускорение.
+//!
+//! 2. deep_causality uncertainty — портированные формулы Monte Carlo simulation
+//!    и probabilistic threshold estimation (без их HKT/AST зависимостей).
+//!
+//! 3. Batch compute — обработка массивов через итераторы с минимальными аллокациями.
+//!
+//! DONOR: deep_causality (uncertainty math), SimSIMD (concept)
 
 // ════════════════════════════════════════════════════════════════
 // SIMD-accelerated Vector Operations

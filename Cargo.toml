@@ -4,7 +4,8 @@ exclude = [
     "contracts/casper-mesh-contract",
     "contracts/casper_escrow",
     "contracts/deposit-proxy",
-    "contracts/oracle-contract"
+    "contracts/oracle-contract",
+    "hackathon_boost_layer/odra_contracts"
 ]
 members = [
     "swarm/casper-client",

@@ -1,7 +1,7 @@
 use core_ipc::IpcBridge;
 use notify::{Watcher, RecursiveMode, EventKind};
 use std::path::Path;
-use std::sync::mpsc::channel;
+// std::sync::mpsc removed for async
 use std::time::Duration;
 use crate::config;
 use crate::engine;
@@ -11,8 +11,10 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
     
     std::fs::create_dir_all(config::MEMORY_DIR)?;
 
-    let (tx, rx) = channel();
-    let mut watcher = notify::recommended_watcher(tx)?;
+    let (tx, mut rx) = tokio::sync::mpsc::channel(100);
+    let mut watcher = notify::recommended_watcher(move |res| {
+        let _ = tx.blocking_send(res);
+    })?;
     watcher.watch(Path::new(config::MEMORY_DIR), RecursiveMode::Recursive)?;
 
     println!("[Memory Node] Obsidian-Vault Watcher listening on {}...", config::MEMORY_DIR);
@@ -35,7 +37,7 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
             }
 
         // 2. Process Artificial Injection (File Drops)
-        if let Ok(Ok(event)) = rx.recv_timeout(Duration::from_millis(100)) {
+        if let Ok(Some(Ok(event))) = tokio::time::timeout(Duration::from_millis(100), rx.recv()).await {
             match event.kind {
                 EventKind::Create(_) | EventKind::Modify(_) => {
                     for path in event.paths {

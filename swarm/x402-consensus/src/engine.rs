@@ -8,6 +8,7 @@ pub struct AgentVote {
     pub agent_name: String,
     pub action: Action,
     pub confidence: f64,  // 0.0–1.0
+    #[allow(dead_code)]
     pub timestamp: u64,
 }
 
@@ -58,6 +59,7 @@ pub struct GovernorDecision {
     pub vetoed: bool,
     pub veto_reason: Option<String>,
     pub votes_received: usize,
+    #[allow(dead_code)]
     pub timestamp: u64,
 }
 
@@ -156,11 +158,7 @@ impl PolicyGovernor {
         // Step 5: Trend veto — block counter-trend signals
         if self.require_trend_alignment
             && let Some(trend) = trend_vote {
-                let counter_trend = match (majority_action, trend) {
-                    (Action::Buy, Action::Sell) => true,
-                    (Action::Sell, Action::Buy) => true,
-                    _ => false,
-                };
+                let counter_trend = matches!((majority_action, trend), (Action::Buy, Action::Sell) | (Action::Sell, Action::Buy));
                 if counter_trend {
                     return GovernorDecision {
                         action: Action::Wait,

@@ -4,7 +4,7 @@
 //! Architecture:
 //! - Phase A: After each cycle, append verdict to `trading_memory.md` (pending)
 //! - Phase B: On next cycle for same symbol, fetch real PnL from Bybit,
-//!            generate LLM reflection, and update the entry
+//!   generate LLM reflection, and update the entry
 //! - Phase C: Inject last N reflections into Meta Judge prompt
 
 use chrono::Utc;

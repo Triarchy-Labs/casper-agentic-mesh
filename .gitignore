@@ -28,3 +28,5 @@ gateway/docs/AUDIT_FINALIST_ASSIMILATION.md
 gateway/dummy_external_bot.js
 gateway/src/lib/xrpl-transactor.ts
 *.log
+casper_medbay/
+*.rust-doctor-cache.json
