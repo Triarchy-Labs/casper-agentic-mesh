@@ -150,7 +150,7 @@ export function MeshControl() {
 					<div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/25" />
 					<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />
 					
-					<div data-lenis-prevent className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto overscroll-contain" style={{ scrollbarWidth: "thin", scrollbarColor: "var(--red-700) rgba(255,255,255,0.08)" }}>
+					<div data-lenis-prevent className="absolute inset-0 p-[2.22vw] pb-[80px] z-10 flex flex-col overflow-y-auto overflow-x-hidden overscroll-contain" style={{ scrollbarWidth: "none" }}>
 						<CornerMarks />
 						<div className="flex items-center justify-between mb-2">
 							<span className="text-[10px] tracking-widest lowercase text-white/50">dry-run · no funds moved</span>
