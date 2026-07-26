@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import Lenis from "lenis";
@@ -381,9 +382,13 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 					{/* ── FULL-BLEED IMAGE — the morph target: the card art lands edge-to-edge, like
 					       their project photo taking the whole page width. ── */}
 					<div ref={heroRef} className="relative w-full aspect-[1.9/1] max-sm:aspect-[1.3/1] overflow-hidden bg-black">
-						<div
-							className="card-art absolute inset-0 bg-cover bg-center"
-							style={{ backgroundImage: `url(${v.art})`, opacity: showContent ? 1 : 0 }}
+						<Image
+							src={v.art}
+							alt={v.title}
+							fill
+							style={{ objectFit: "cover", opacity: showContent ? 1 : 0 }}
+							quality={95}
+							priority={true}
 						/>
 					</div>
 
@@ -427,7 +432,9 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 								<div className="grid grid-cols-1 gap-[1.39vw] md:grid-cols-2">
 									{v.media.map((mm) => (
 										<motion.figure key={mm.src} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-8% 0px" }} transition={{ duration: 0.8, ease: glide }} className="m-0">
-											<div className="card-art relative aspect-[1.5/1] overflow-hidden border border-white/10 bg-cover bg-center" style={{ backgroundImage: `url(${mm.src})` }} />
+											<div className="card-art relative aspect-[1.5/1] overflow-hidden border border-white/10 bg-black">
+												<Image src={mm.src} alt={mm.cap} fill style={{ objectFit: "cover" }} quality={95} />
+											</div>
 											<figcaption className="label-12-mono mt-3 text-white/40" style={{ textTransform: "none" }}>{mm.cap}</figcaption>
 										</motion.figure>
 									))}
@@ -482,9 +489,11 @@ export function VectorDossier({ open, onClose }: { open: DossierOpen | null; onC
 			    dossier exists (phases only animate it), so measuring never races React's commit. */}
 			<div
 				ref={cloneRef}
-				className="card-art fixed z-[9995] overflow-hidden pointer-events-none bg-cover bg-center"
-				style={{ backgroundImage: `url(${v.art})`, visibility: "hidden" }}
-			/>
+				className="card-art fixed z-[9995] overflow-hidden pointer-events-none bg-black"
+				style={{ visibility: "hidden" }}
+			>
+				<Image src={v.art} alt="Morph Clone" fill style={{ objectFit: "cover" }} quality={95} priority={true} />
+			</div>
 		</div>
 	);
 }

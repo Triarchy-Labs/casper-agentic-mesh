@@ -126,6 +126,10 @@ export function ScrollHero() {
 	const { scrollY } = useScroll();
 	const [scrolled, setScrolled] = useState(false);
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [visualsOn, setVisualsOn] = useState(true);
+	useEffect(() => {
+		setVisualsOn(!document.documentElement.classList.contains("bg-off") && !document.documentElement.classList.contains("art-off"));
+	}, [menuOpen]);
 
 	// Cursor-follow with lag + spring bump (their gsap.quickTo/lerp equivalent).
 	const rawX = useMotionValue(-200);
@@ -467,8 +471,32 @@ export function ScrollHero() {
 								<span className="hover:text-[var(--red-700)] transition-colors cursor-pointer">DASHBOARD</span>
 							</Link>
 						</div>
-						<div className="relative z-10 text-sm opacity-50 font-mono uppercase tracking-widest">
-							ECONOMIC OS FOR THE AGENT ECONOMY · CASPER
+						<div className="relative z-10 flex flex-col gap-5">
+							{/* utility bay — relocated from the ONE CLICK hub to keep it airy */}
+							<div className="flex flex-wrap items-center gap-3">
+								<button
+									onClick={() => {
+										const bgOn = !document.documentElement.classList.contains("bg-off");
+										const artOn = !document.documentElement.classList.contains("art-off");
+										const next = !(bgOn && artOn);
+										document.documentElement.classList.toggle("bg-off", !next);
+										document.documentElement.classList.toggle("art-off", !next);
+										localStorage.setItem("mesh-bg", next ? "on" : "off");
+										localStorage.setItem("mesh-art", next ? "on" : "off");
+										setVisualsOn(next);
+									}}
+									className="label-13-mono cursor-pointer border border-white/20 px-5 py-3 text-white/80 transition-colors duration-300 hover:bg-white hover:text-black"
+									style={{ borderRadius: 4 }}
+								>
+									[ visuals · <span className={visualsOn ? "text-[var(--red-700)]" : "opacity-60"}>{visualsOn ? "on" : "off"}</span> ]
+								</button>
+								<a href="https://github.com/Triarchy-Labs/casper-agentic-mesh" target="_blank" rel="noopener noreferrer" className="label-13-mono border border-white bg-white px-5 py-3 font-bold text-black transition-colors duration-300 hover:bg-[#0a0508] hover:text-white" style={{ borderRadius: 4 }}>[ github ]</a>
+								<a href="https://dorahacks.io/buidl/46714" target="_blank" rel="noopener noreferrer" className="label-13-mono border border-white bg-white px-5 py-3 font-bold text-black transition-colors duration-300 hover:bg-[#0a0508] hover:text-white" style={{ borderRadius: 4, boxShadow: "0 0 0 1px rgba(224,53,41,0.4), 0 0 14px rgba(224,53,41,0.2)" }}>[ dorahacks ]</a>
+								<span className="label-12-mono text-white/30">for judges: <a href="https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/PLAYBOOK.md" target="_blank" rel="noopener noreferrer" className="text-white/55 hover:text-[var(--red-700)] transition-colors">[ playbook ↗ ]</a> · <a href="https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d" target="_blank" rel="noopener noreferrer" className="text-white/55 hover:text-[var(--red-700)] transition-colors">[ live contract ↗ ]</a></span>
+							</div>
+							<div className="text-sm opacity-50 font-mono uppercase tracking-widest">
+								ECONOMIC OS FOR THE AGENT ECONOMY · CASPER
+							</div>
 						</div>
 					</motion.div>
 				)}

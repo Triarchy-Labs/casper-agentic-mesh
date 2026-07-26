@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -286,13 +287,14 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background — aspect from produx Payy card (2211×1740) */}
                       <div
-                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-black opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
-                          backgroundImage: "url(/vector_escrow.jpeg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
                         }}
-                      />
+                      >
+                        <Image src="/vector_escrow.jpeg" alt="Escrow Vector" fill style={{ objectFit: "cover" }} quality={95} priority={true} />
+                      </div>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">01 // vector alpha</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> deposit · release · refund</li>
@@ -325,13 +327,14 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-black opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
-                          backgroundImage: "url(/card-omni-mesh.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
                         }}
-                      />
+                      >
+                        <Image src="/card-omni-mesh.jpg" alt="Omni-Mesh Vector" fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                      </div>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">03 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> escrow · oracle · tribunal</li>
@@ -364,13 +367,14 @@ export default function Page() {
                       <CornerMarks />
                       {/* Vector Illustration Background */}
                       <div 
-                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-black opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{ 
-                          backgroundImage: "url(/vector_oracle.jpeg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
                         }}
-                      />
+                      >
+                        <Image src="/vector_oracle.jpeg" alt="Oracle Vector" fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                      </div>
                       <div className="relative z-10 flex flex-col items-center">
                         <span className="nb-tag mb-6"><span className="text-[var(--red-700)]">◆</span> 02 · RWA Risk Oracle · Vector Beta</span>
                         <h2 className="nb-display text-[clamp(44px,7vw,96px)] mb-[24px]">RWA Risk Oracle</h2>
@@ -401,13 +405,14 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[0.96/1] overflow-hidden group" data-dossier="tribunal" onClick={openDossier("tribunal")}>
                       <CornerMarks />
                       <div
-                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-black opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
-                          backgroundImage: "url(/card-tribunal.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
                         }}
-                      />
+                      >
+                        <Image src="/card-tribunal.jpg" alt="Tribunal Vector" fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                      </div>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">04 // vector gamma</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> prosecutor · defender · jury</li>
@@ -439,13 +444,14 @@ export default function Page() {
                     <div className="synergy-section editorial-panel p-[2.22vw] relative min-h-[48.8vh] md:min-h-0 md:aspect-[1.2/1] overflow-hidden group" data-dossier="x402" onClick={openDossier("x402")}>
                       <CornerMarks />
                       <div
-                        className="card-photo card-art absolute inset-0 bg-cover bg-center opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
+                        className="card-photo card-art absolute inset-0 bg-black opacity-[0.85] group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0 will-change-transform"
                         style={{
-                          backgroundImage: "url(/card-x402.jpg)",
                           transform: "scale(1.15)",
                           transformOrigin: "center center",
                         }}
-                      />
+                      >
+                        <Image src="/card-x402.jpg" alt="X402 Vector" fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                      </div>
                       <p className="label-14-mono text-[var(--red-700)] mb-[16px] z-10">05 // vector delta</p>
                       <ul className="label-13-mono text-[var(--gray-800)] space-y-[12px] flex flex-col z-10 mt-auto">
                         <li className="flex items-center gap-[8px]"><span className="text-[var(--red-700)]">→</span> pay-per-call micro-settlements</li>

@@ -103,7 +103,7 @@ const EDGE = [
 	{ them: "autonomy as a buzzword", us: "one law everywhere, from the footer's [ run ] to the escrow: the human holds the final toggle" },
 ];
 
-function ScrambleCta({ label, href, primary }: { label: string; href: string; primary?: boolean }) {
+export function ScrambleCta({ label, href, primary }: { label: string; href: string; primary?: boolean }) {
 	const [display, setDisplay] = useState(label);
 	const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 	const GLYPHS = "!<>-_\\/[]{}=+*^?#";
@@ -262,7 +262,7 @@ export function OneClickHub() {
 						exit={{ opacity: 0, y: 26 }}
 						transition={{ layout: { duration: 0.55, ease: lamaEase }, duration: 0.45, ease: lamaEase }}
 						style={{ borderRadius: 6 }}
-						className={`fixed bottom-[3.2vh] left-1/2 w-[min(584px,92vw)] -translate-x-1/2 z-[8600] overflow-hidden border backdrop-blur-xl ${
+						className={`fixed bottom-[3.2vh] left-1/2 w-[min(640px,92vw)] -translate-x-1/2 z-[8600] overflow-hidden border backdrop-blur-xl ${
 							openHub
 								? "border-white/15 bg-[#0a0508]/70 backdrop-saturate-150"
 								: "border-white/[0.08] bg-[#0a0508]/45"
@@ -341,7 +341,7 @@ export function OneClickHub() {
 								</motion.div>
 
 								{/* casper ai assistant — the Operator's future seat, honest about its status */}
-								<motion.div {...rowIn(5)} className="mx-6 mb-5 border border-[var(--red-700)]/35 bg-[#120608]/80" style={{ borderRadius: 4 }}>
+								<motion.div {...rowIn(5)} className="mx-6 mb-6 border border-white/12 bg-white/[0.05] backdrop-blur-xl" style={{ borderRadius: 16 }}>
 									<button onClick={() => setAiOpen((v) => !v)} className="flex w-full cursor-pointer items-center justify-between px-4 py-3.5">
 										<span className="label-12-mono text-[var(--red-700)] tracking-[0.18em]">◢◤ casper ai assistant ◥◣</span>
 										<span className="label-13-mono text-white/50">{aiOpen ? "—" : "+"}</span>
@@ -350,7 +350,7 @@ export function OneClickHub() {
 										{aiOpen && (
 											<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.4, ease: lamaEase }} className="overflow-hidden">
 												<div className="px-4 pb-4">
-													<div className="mb-3 flex max-h-[160px] flex-col gap-2 overflow-y-auto border border-white/10 bg-black/40 p-3" style={{ borderRadius: 3 }}>
+													<div className="mb-3 flex max-h-[240px] min-h-[120px] flex-col gap-2 overflow-y-auto border border-white/10 bg-black/30 p-4 backdrop-blur-md" style={{ borderRadius: 12 }}>
 														<p className="label-12-mono leading-[1.6] text-white/55" style={{ textTransform: "none" }}>
 															<span className="text-[var(--red-700)]">⟡ operator:</span> in development — I'm being wired
 															into every module of the mesh. When I wake, I answer from the mesh's own sources and
@@ -373,10 +373,10 @@ export function OneClickHub() {
 															value={aiMsg}
 															onChange={(e) => setAiMsg(e.target.value)}
 															placeholder="ask the mesh anything…"
-															className="label-12-mono h-[44px] flex-1 border border-white/15 bg-black/40 px-3 text-white placeholder:text-white/25 outline-none focus:border-[var(--red-700)]"
-															style={{ borderRadius: 3, textTransform: "none" }}
+															className="label-12-mono h-[52px] flex-1 border border-white/15 bg-white/[0.06] px-4 text-white placeholder:text-white/25 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
+															style={{ borderRadius: 12, textTransform: "none" }}
 														/>
-														<button type="submit" className="label-13-mono h-[44px] cursor-pointer border border-white/15 px-4 text-white/70 transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 3 }}>→</button>
+														<button type="submit" className="label-13-mono h-[52px] cursor-pointer border border-white/15 bg-white/[0.06] px-5 text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 12 }}>→</button>
 													</form>
 												</div>
 											</motion.div>
@@ -384,28 +384,9 @@ export function OneClickHub() {
 									</AnimatePresence>
 								</motion.div>
 
-								{/* the one switch — fabric + card art together (lama's long pitchdeck row) */}
-								<motion.div {...rowIn(5)} className="px-6 pb-3">
-									<button
-										onClick={() => { const next = !(bgOn && artOn); if (next !== bgOn) toggleBg(); if (next !== artOn) toggleArt(); }}
-										className="label-13-mono flex h-[56px] w-full cursor-pointer items-center justify-center gap-3 border border-white/15 text-white/75 transition-colors duration-300 hover:bg-white hover:text-black hover:border-white"
-										style={{ borderRadius: 4 }}
-									>
-										[ visuals · <span className={bgOn && artOn ? "text-[var(--red-700)]" : "opacity-60"}>{bgOn && artOn ? "on" : "off"}</span> ] — fabric + card art, one switch
-									</button>
-								</motion.div>
-
-								{/* bottom CTA pair — lama's light-primary move */}
-								<motion.div {...rowIn(6)} className="grid grid-cols-2 gap-3 px-6 pb-6">
-									<ScrambleCta label="[ github ]" href={REPO} />
-									<ScrambleCta label="[ dorahacks ]" href="https://dorahacks.io/buidl/46714" primary />
-								</motion.div>
-
-								{/* judges find their lane in one quiet line */}
-								<motion.p {...rowIn(7)} className="label-12-mono px-6 pb-5 -mt-2 text-center text-white/25" style={{ textTransform: "none" }}>
-									for judges: <a href={`${REPO}/blob/main/PLAYBOOK.md`} target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[var(--red-700)] transition-colors">[ playbook ↗ ]</a> · <a href="https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d" target="_blank" rel="noopener noreferrer" className="text-white/45 hover:text-[var(--red-700)] transition-colors">[ live contract ↗ ]</a>
-								</motion.p>
-							</motion.div>
+								
+								
+															</motion.div>
 						)}
 					</motion.div>
 				)}
