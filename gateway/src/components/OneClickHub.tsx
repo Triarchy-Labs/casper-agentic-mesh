@@ -307,15 +307,15 @@ export function OneClickHub() {
 								key="capsule"
 								layout="position"
 								onClick={() => setOpenHub(true)}
-								className="group flex h-[64px] w-full cursor-pointer items-center justify-between px-6 transition-colors duration-500 hover:bg-[#0a0508]/60"
+								className="group relative flex h-[64px] w-full cursor-pointer items-center justify-between px-6 transition-colors duration-500 hover:bg-[#0a0508]/60"
 								aria-label="Open the one-click hub"
 							>
-								<span className="flex items-center gap-3.5">
+								<span className="flex items-center gap-3.5 z-10">
 									<span className="size-[7px] bg-[var(--red-700)] opacity-40 transition-opacity duration-500 group-hover:opacity-100" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
 									<span className="label-13-mono uppercase tracking-[0.26em] text-white/70 transition-colors duration-500 group-hover:text-white">one click</span>
 								</span>
-								<span className="label-12-mono hidden tracking-[0.18em] text-white/25 transition-colors duration-500 group-hover:text-white/45 sm:block">your mesh · one touch</span>
-								<span className="flex items-center justify-center text-white/50 transition-colors duration-500 group-hover:text-white">
+								<span className="label-12-mono hidden tracking-[0.18em] text-white/25 transition-colors duration-500 group-hover:text-white/45 sm:block absolute left-1/2 -translate-x-1/2">your mesh</span>
+								<span className="flex items-center justify-center text-white/50 transition-colors duration-500 group-hover:text-white z-10">
 									<svg width="28" height="18" viewBox="0 0 28 18" fill="currentColor">
 										<rect width="28" height="2.5" />
 										<rect y="7.75" width="28" height="2.5" />
