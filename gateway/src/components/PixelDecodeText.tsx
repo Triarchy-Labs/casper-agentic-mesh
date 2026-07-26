@@ -136,7 +136,7 @@ export function PixelDecodeText({ text, scrollRef, playOnEnter, fontVw, fsMax }:
 						if (gv < 0.04 || gv > 0.97) continue;
 						const on = hash(Math.round(cx / cell), Math.round(cy / cell)) < (0.3 + 0.62 * gv) * (0.6 + 0.5 * (1 - vert));
 						if (on) {
-							ctx!.fillStyle = `rgba(241,50,66,${(0.5 + 0.45 * gv) * endFade})`;
+							ctx!.fillStyle = `rgba(224,53,41,${(0.5 + 0.45 * gv) * endFade})`;
 							ctx!.fillRect(cx, cy, cell - 1, cell - 1);
 						}
 					}

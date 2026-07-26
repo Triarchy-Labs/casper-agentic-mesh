@@ -43,7 +43,7 @@ function Strip({ s, i, progress }: { s: (typeof STRIPS)[number]; i: number; prog
 			// premium hover: the strip lifts + scales a touch, border/glow warms to red.
 			whileHover={{ scale: 1.035 }}
 			transition={{ type: "spring", stiffness: 300, damping: 20 }}
-			className={`group w-fit block cursor-pointer border-l-2 ${s.accent ? "border-[var(--red-700)]" : "border-[#2a2024]"} bg-[#0a0608]/85 backdrop-blur-[2px] pl-5 pr-8 py-3.5 flex items-center will-change-transform transition-colors duration-300 hover:bg-[#140a0f]/92 hover:border-[var(--red-700)] hover:shadow-[0_0_28px_-6px_rgba(241,50,66,0.45)]`}
+			className={`group w-fit block cursor-pointer border-l-2 ${s.accent ? "border-[var(--red-700)]" : "border-[#2a2024]"} bg-[#0a0608]/85 backdrop-blur-[2px] pl-5 pr-8 py-3.5 flex items-center will-change-transform transition-colors duration-300 hover:bg-[#140a0f]/92 hover:border-[var(--red-700)] hover:shadow-[0_0_28px_-6px_rgba(224,53,41,0.45)]`}
 		>
 			<div style={{ transform: "skewX(11deg)" }} className="flex items-baseline gap-4 whitespace-nowrap">
 				<span className={`label-13-mono uppercase tracking-[0.16em] transition-colors duration-300 ${s.accent ? "text-[var(--red-700)]" : "text-[var(--gray-800)]/70 group-hover:text-[var(--red-700)]/90"}`}>

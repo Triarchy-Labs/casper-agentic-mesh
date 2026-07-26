@@ -69,7 +69,7 @@ export function GlitchWormProgress({ progress }: GlitchWormProps) {
                                     <div 
                                         key={i} 
                                         className={`w-full max-w-[12px] h-4 rounded-[1px] relative overflow-hidden ${
-                                            isFilled ? "bg-[var(--red-700)] shadow-[0_0_10px_rgba(241,50,66,0.6)]" : "bg-white/5 border border-white/10"
+                                            isFilled ? "bg-[var(--red-700)] shadow-[0_0_10px_rgba(224,53,41,0.6)]" : "bg-white/5 border border-white/10"
                                         }`}
                                     >
                                         {/* The Glitch Head Eating Effect — CSS animation, not Framer */}

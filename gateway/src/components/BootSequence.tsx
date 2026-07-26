@@ -168,9 +168,9 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 					right: 0,
 					bottom: 0,
 					height: "clamp(10px,1.2vh,16px)",
-					background: "rgba(168,85,247,0.22)",
+					background: "rgba(224,53,41,0.15)",
 					boxShadow:
-						"inset 0 0 24px rgba(168,85,247,0.45), 0 -1px 0 rgba(168,85,247,0.6)",
+						"inset 0 0 24px rgba(224,53,41,0.25), 0 -1px 0 rgba(224,53,41,0.4)",
 					overflow: "hidden",
 				}}
 			>
@@ -181,7 +181,7 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 						position: "absolute",
 						inset: 0,
 						background:
-							"linear-gradient(90deg, transparent, rgba(168,85,247,0.5), transparent)",
+							"linear-gradient(90deg, transparent, rgba(224,53,41,0.4), transparent)",
 					}}
 					animate={{ x: ["-100%", "100%"] }}
 					transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
