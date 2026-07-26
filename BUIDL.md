@@ -65,7 +65,7 @@ Verifiable, not simulated — every hash below opens on the block explorer.
 ╚════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-**The product loop, end to end:** `WALLET connect → describe a task → sign a real CSPR payment → /api/hire verifies it on the ledger → the 5-LLM court rules → the contract pays the hunter or refunds you.` No step is mocked; the contract has exactly two money paths and a verdict can pick nothing else.
+**The product loop, end to end:** WALLET connect → describe a task → sign a real CSPR payment → `/api/hire` verifies it on the ledger → the 5-LLM court rules → the contract pays the hunter or refunds you. No step is mocked; the contract has exactly two money paths and a verdict can pick nothing else.
 
 ---
 
