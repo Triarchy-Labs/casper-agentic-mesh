@@ -157,13 +157,13 @@ export function Nav() {
 					<span style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, letterSpacing: "0.16em", fontSize: "clamp(14px,1.1vw,24px)" }}>
 						TRIARCHY{" "}
 						<motion.span
-							style={{ color: "#f13242", display: "inline-block" }}
+							style={{ color: "#e03529", display: "inline-block" }}
 							animate={{
 								scale: [1, 1.09, 1],
 								textShadow: [
-									"0 0 0px rgba(241,50,66,0)",
-									"0 0 11px rgba(241,50,66,0.8)",
-									"0 0 0px rgba(241,50,66,0)",
+									"0 0 0px rgba(224,53,41,0)",
+									"0 0 11px rgba(224,53,41,0.8)",
+									"0 0 0px rgba(224,53,41,0)",
 								],
 							}}
 							transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
@@ -171,13 +171,13 @@ export function Nav() {
 							/
 						</motion.span>
 						<motion.span
-							style={{ color: "#f13242", display: "inline-block" }}
+							style={{ color: "#e03529", display: "inline-block" }}
 							animate={{
 								scale: [1, 1.09, 1],
 								textShadow: [
-									"0 0 0px rgba(241,50,66,0)",
-									"0 0 11px rgba(241,50,66,0.8)",
-									"0 0 0px rgba(241,50,66,0)",
+									"0 0 0px rgba(224,53,41,0)",
+									"0 0 11px rgba(224,53,41,0.8)",
+									"0 0 0px rgba(224,53,41,0)",
 								],
 							}}
 							transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2.4 }}
@@ -240,7 +240,7 @@ function BracketLink({ label, href }: { label: string; href?: string }) {
 			<motion.span
 				variants={{
 					rest: { opacity: 0.3, x: 0 },
-					hover: { opacity: 1, x: -4, color: "#f13242" },
+					hover: { opacity: 1, x: -4, color: "#e03529" },
 				}}
 			>
 				[
@@ -256,7 +256,7 @@ function BracketLink({ label, href }: { label: string; href?: string }) {
 			<motion.span
 				variants={{
 					rest: { opacity: 0.3, x: 0 },
-					hover: { opacity: 1, x: 4, color: "#f13242" },
+					hover: { opacity: 1, x: 4, color: "#e03529" },
 				}}
 			>
 				]

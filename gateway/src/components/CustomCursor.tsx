@@ -6,6 +6,7 @@ export default function CustomCursor() {
 	const arrowRef = useRef<HTMLDivElement>(null);
 	const labelRef = useRef<HTMLDivElement>(null);
 	const [isHovering, setIsHovering] = useState(false);
+	const [hoverGap, setHoverGap] = useState(24);
 	const [isVisible, setIsVisible] = useState(false);
 	const [isTouch, setIsTouch] = useState(false);
 	const mousePos = useRef({ x: -100, y: -100 });
@@ -51,13 +52,21 @@ export default function CustomCursor() {
 		const handleMouseOver = (e: MouseEvent) => {
 			const target = e.target as HTMLElement;
 			if (!target) return;
+			const btn = (target.closest("button") || target.closest("a")) as HTMLElement | null;
 			const cs = window.getComputedStyle(target);
 			const hovering =
 				cs.cursor === "pointer" ||
 				cs.cursor === "crosshair" ||
-				!!target.closest("button") ||
-				!!target.closest("a");
+				!!btn;
 			setIsHovering(hovering);
+			
+			if (hovering && btn) {
+				const w = btn.getBoundingClientRect().width;
+				// Frame the button nicely, bounded to reasonable minimum/maximums
+				setHoverGap(Math.min(Math.max(w + 8, 32), 160));
+			} else {
+				setHoverGap(24); // default hover gap
+			}
 			// Check if over an editorial-panel card or interactive button
 			const overCard = !!target.closest(".editorial-panel") || !!target.closest(".button-primary") || !!target.closest(".button-secondary") || !!target.closest(".btn-ghost");
 			setIsOverCard(overCard);
@@ -129,7 +138,7 @@ export default function CustomCursor() {
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					gap: isHovering ? "16px" : "10px",
+					gap: isHovering ? `${hoverGap}px` : "10px",
 					fontFamily: "ui-monospace, 'Geist Mono', monospace",
 					fontSize: "21px",
 					fontWeight: "bold",

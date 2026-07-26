@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion, useScroll, useSpring, useMotionValue, useMotionValueEvent, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import gsap from "gsap";
@@ -55,7 +56,7 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 			}}
 		>
 			<motion.span
-				animate={{ x: hovered ? -5 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
+				animate={{ x: hovered ? -5 : 0, color: hovered ? "#e03529" : "rgba(255,255,255,0.4)" }}
 				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				[
@@ -80,7 +81,7 @@ function BracketLink({ label, href = "#" }: { label: string; href?: string }) {
 				</motion.span>
 			</span>
 			<motion.span
-				animate={{ x: hovered ? 5 : 0, color: hovered ? "#f13242" : "rgba(255,255,255,0.4)" }}
+				animate={{ x: hovered ? 5 : 0, color: hovered ? "#e03529" : "rgba(255,255,255,0.4)" }}
 				transition={{ duration: 0.4, ease: PX_EASE }}
 			>
 				]
@@ -430,12 +431,11 @@ export function ScrollHero() {
 								zIndex: 0,
 								x: menuPX,
 								y: menuPY,
-								backgroundImage: "url(/menu-triarchs.jpg)",
-								backgroundSize: "cover",
-								backgroundPosition: "center",
 								willChange: "transform",
 							}}
-						/>
+						>
+                            <Image src="/menu-triarchs.jpg" alt="Menu Background" fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                        </motion.div>
 						{/* legibility scrims (fixed) */}
 						<div
 							aria-hidden
@@ -542,13 +542,13 @@ export function ScrollHero() {
 				<span style={{ fontFamily: "var(--font-tech), 'Sora', sans-serif", fontWeight: 300, letterSpacing: "0.16em", fontSize: "clamp(14px,1.1vw,24px)" }}>
 					<span ref={logoTargetRef} style={{ display: "inline-block" }}>TRIARCHY</span>{" "}
 					<motion.span
-						style={{ color: "#f13242", display: "inline-block" }}
+						style={{ color: "#e03529", display: "inline-block" }}
 						animate={{
 							scale: [1, 1.09, 1],
 							textShadow: [
-								"0 0 0px rgba(241,50,66,0)",
-								"0 0 11px rgba(241,50,66,0.8)",
-								"0 0 0px rgba(241,50,66,0)",
+								"0 0 0px rgba(224,53,41,0)",
+								"0 0 11px rgba(224,53,41,0.8)",
+								"0 0 0px rgba(224,53,41,0)",
 							],
 						}}
 						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
@@ -556,13 +556,13 @@ export function ScrollHero() {
 						/
 					</motion.span>
 					<motion.span
-						style={{ color: "#f13242", display: "inline-block" }}
+						style={{ color: "#e03529", display: "inline-block" }}
 						animate={{
 							scale: [1, 1.09, 1],
 							textShadow: [
-								"0 0 0px rgba(241,50,66,0)",
-								"0 0 11px rgba(241,50,66,0.8)",
-								"0 0 0px rgba(241,50,66,0)",
+								"0 0 0px rgba(224,53,41,0)",
+								"0 0 11px rgba(224,53,41,0.8)",
+								"0 0 0px rgba(224,53,41,0)",
 							],
 						}}
 						transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut", delay: 2.4 }}
@@ -643,7 +643,7 @@ export function ScrollHero() {
 							}}
 						>
 							ECONOMIC OS FOR THE AGENT ECONOMY{" "}
-							<span style={{ WebkitTextFillColor: "#f13242", color: "#f13242" }}>·</span> CASPER
+							<span style={{ WebkitTextFillColor: "#e03529", color: "#e03529" }}>·</span> CASPER
 						</div>
 					</div>
 				</div>
@@ -677,21 +677,23 @@ export function ScrollHero() {
 					onMouseLeave={() => gsap.to(".assembly-scrim", { opacity: 0.15, duration: 0.6, ease: "power2.out", overwrite: "auto" })}
 				>
 						{HERO_PIECES.map((p) => (
-							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ backgroundImage: "url(/hero-mosaic.jpg)", backgroundSize: "cover", backgroundPosition: "center", clipPath: p.inset, opacity: 0 }} />
+							<div key={p.id} className={`absolute inset-0 assembly-slice assembly-slice-${p.id}`} style={{ clipPath: p.inset, opacity: 0 }}>
+                                <Image src="/hero-mosaic.jpg" alt="Hero Mosaic" fill style={{ objectFit: "cover" }} quality={95} priority={true} />
+                            </div>
 						))}
 						{/* Uniform idle dim (like a non-hovered card: art ~85%), not the old gradient scrim —
 					    the gradient landed oddly on the card-sized image. Hover lifts it to full. */}
 					<div className="absolute inset-0 bg-black z-10 pointer-events-none assembly-scrim" style={{ opacity: 0 }} />
 						{/* pulsing red aura pinned over the Casper crystal — wrapper handles reveal, inner CSS-pulses */}
 						<div className="crystal-reveal" style={{ position: "absolute", left: "61.5%", top: "39.5%", width: "5%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)", opacity: 0, pointerEvents: "none", zIndex: 12 }}>
-							<div className="crystal-pulse" style={{ width: "100%", height: "100%", borderRadius: "50%", background: "radial-gradient(circle, rgba(241,50,66,0.9) 0%, rgba(241,50,66,0.4) 38%, transparent 68%)", mixBlendMode: "screen" }} />
+							<div className="crystal-pulse" style={{ width: "100%", height: "100%", borderRadius: "50%", background: "radial-gradient(circle, rgba(224,53,41,0.9) 0%, rgba(224,53,41,0.4) 38%, transparent 68%)", mixBlendMode: "screen" }} />
 						</div>
 						<div className="absolute left-[8%] bottom-[12%] z-20 flex flex-col items-start text-left assembly-text-overlay font-mono lowercase tracking-[0.14em] opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>
 							<p className="label-18 text-white mb-2"><span className="text-[var(--red-700)]">◆</span> when agents can’t agree</p>
 							<p className="label-14 text-white/80">↳ escrow holds · the oracle rules</p>
 							<p className="label-14 text-white/80">↳ the tribunal draws the verdict</p>
 						</div>
-						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 0 7px rgba(241,50,66,0.9), 0 0 16px rgba(241,50,66,0.5), 0 2px 6px rgba(0,0,0,0.95)" }}>
+						<div className="absolute right-[8%] bottom-[12%] z-20 assembly-text-overlay font-mono lowercase tracking-[0.14em] text-right opacity-0" style={{ textShadow: "0 0 7px rgba(224,53,41,0.9), 0 0 16px rgba(224,53,41,0.5), 0 2px 6px rgba(0,0,0,0.95)" }}>
 							<p className="label-14 text-[var(--red-700)] font-bold">verdict enforced on casper</p>
 						</div>
 						<div className="absolute -bottom-[9vh] left-1/2 -translate-x-1/2 z-20 assembly-text-overlay flex items-center gap-3 flex-wrap justify-center whitespace-nowrap opacity-0" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.9)" }}>

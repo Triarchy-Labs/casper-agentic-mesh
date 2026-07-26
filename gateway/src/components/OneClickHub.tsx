@@ -136,6 +136,31 @@ export function ScrambleCta({ label, href, primary }: { label: string; href: str
 	);
 }
 
+// inline scramble label — the CTA scramble, but as plain text that assembles once on mount.
+function ScrambleText({ text, className, style }: { text: string; className?: string; style?: React.CSSProperties }) {
+	const [display, setDisplay] = useState(text);
+	useEffect(() => {
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setDisplay(text); return; }
+		const GLYPHS = "!<>-_\\/[]{}=+*^?#";
+		let frame = 0;
+		const t = setInterval(() => {
+			frame++;
+			const progress = frame / 16;
+			setDisplay(text.split("").map((ch, i) => {
+				if (ch === " ") return ch;
+				if (i / text.length < progress) return ch;
+				return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+			}).join(""));
+			if (progress >= 1) { clearInterval(t); setDisplay(text); }
+		}, 30);
+		return () => clearInterval(t);
+	}, [text]);
+	return <span className={className} style={style}>{display}</span>;
+}
+
+const QUICK_Qs = ["How does escrow protect me?", "Show me a real on-chain verdict", "What is x402 here?"];
+const OPERATOR_REPLY = "operator: // in development — the tentacles aren't wired yet. Meanwhile: Try it live, or the playbook.";
+
 export function OneClickHub() {
 	const [visible, setVisible] = useState(false);
 	const [openHub, setOpenHub] = useState(false);
@@ -174,9 +199,17 @@ export function OneClickHub() {
 
 	const [sheet, setSheet] = useState<Sheet | null>(null);
 	const [skillOpen, setSkillOpen] = useState(false);
-	const [aiOpen, setAiOpen] = useState(false);
 	const [aiMsg, setAiMsg] = useState("");
 	const [aiLog, setAiLog] = useState<string[]>([]);
+	const [chipsOpen, setChipsOpen] = useState(false);
+	const logRef = useRef<HTMLDivElement>(null);
+	const ask = (q: string) => {
+		if (!q.trim()) return;
+		setAiLog((log) => [...log, `you: ${q.trim()}`, OPERATOR_REPLY]);
+		setAiMsg("");
+		setChipsOpen(false);
+	};
+	useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [aiLog]);
 	const [tryOut, setTryOut] = useState("// two real probes, zero wallet. pick one.");
 	const [tryBusy, setTryBusy] = useState(false);
 
@@ -282,7 +315,13 @@ export function OneClickHub() {
 									<span className="label-13-mono uppercase tracking-[0.26em] text-white/70 transition-colors duration-500 group-hover:text-white">one click</span>
 								</span>
 								<span className="label-12-mono hidden tracking-[0.18em] text-white/25 transition-colors duration-500 group-hover:text-white/45 sm:block">your mesh · one touch</span>
-								<span className="text-[18px] leading-none text-white/50 transition-colors duration-500 group-hover:text-white">≡</span>
+								<span className="flex items-center justify-center text-white/50 transition-colors duration-500 group-hover:text-white">
+									<svg width="28" height="18" viewBox="0 0 28 18" fill="currentColor">
+										<rect width="28" height="2.5" />
+										<rect y="7.75" width="28" height="2.5" />
+										<rect y="15.5" width="28" height="2.5" />
+									</svg>
+								</span>
 							</motion.button>
 						) : (
 							/* ── panel state ── */
@@ -293,7 +332,11 @@ export function OneClickHub() {
 										<span className="size-[7px] bg-[var(--red-700)]" style={{ animation: "crystalPulse 2.6s ease-in-out infinite" }} />
 										<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">one click</span>
 									</span>
-									<button onClick={() => setOpenHub(false)} className="label-13-mono cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close hub">—</button>
+									<button onClick={() => setOpenHub(false)} className="p-3 -m-3 cursor-pointer text-white/60 transition-colors hover:text-white flex items-center justify-center" aria-label="Close hub">
+										<svg width="28" height="2.5" viewBox="0 0 28 2.5" fill="currentColor">
+											<rect width="28" height="2.5" />
+										</svg>
+									</button>
 								</div>
 
 								{/* rows — lama metrics: 64px tall, ~21px type */}
@@ -340,52 +383,100 @@ export function OneClickHub() {
 									</AnimatePresence>
 								</motion.div>
 
-								{/* casper ai assistant — the Operator's future seat, honest about its status */}
-								<motion.div {...rowIn(5)} className="mx-6 mb-6 border border-white/12 bg-white/[0.05] backdrop-blur-xl" style={{ borderRadius: 16 }}>
-									<button onClick={() => setAiOpen((v) => !v)} className="flex w-full cursor-pointer items-center justify-between px-4 py-3.5">
-										<span className="label-12-mono text-[var(--red-700)] tracking-[0.18em]">◢◤ casper ai assistant ◥◣</span>
-										<span className="label-13-mono text-white/50">{aiOpen ? "—" : "+"}</span>
-									</button>
-									<AnimatePresence initial={false}>
-										{aiOpen && (
-											<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.4, ease: lamaEase }} className="overflow-hidden">
-												<div className="px-4 pb-4">
-													<div className="mb-3 flex max-h-[240px] min-h-[120px] flex-col gap-2 overflow-y-auto border border-white/10 bg-black/30 p-4 backdrop-blur-md" style={{ borderRadius: 12 }}>
-														<p className="label-12-mono leading-[1.6] text-white/55" style={{ textTransform: "none" }}>
-															<span className="text-[var(--red-700)]">⟡ operator:</span> in development — I'm being wired
-															into every module of the mesh. When I wake, I answer from the mesh's own sources and
-															every action waits for your confirmation. The human holds the final toggle.
-														</p>
-														{aiLog.map((l, i) => (
-															<p key={i} className="label-12-mono leading-[1.6] text-white/70" style={{ textTransform: "none" }}>{l}</p>
-														))}
-													</div>
-													<form
-														className="flex items-center gap-2"
-														onSubmit={(e) => {
-															e.preventDefault();
-															if (!aiMsg.trim()) return;
-															setAiLog((log) => [...log, `you: ${aiMsg.trim()}`, "operator: // in development — the tentacles aren't wired yet. Meanwhile: Try it live, or the playbook."]);
-															setAiMsg("");
-														}}
-													>
-														<input
-															value={aiMsg}
-															onChange={(e) => setAiMsg(e.target.value)}
-															placeholder="ask the mesh anything…"
-															className="label-12-mono h-[52px] flex-1 border border-white/15 bg-white/[0.06] px-4 text-white placeholder:text-white/25 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
-															style={{ borderRadius: 12, textTransform: "none" }}
-														/>
-														<button type="submit" className="label-13-mono h-[52px] cursor-pointer border border-white/15 bg-white/[0.06] px-5 text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 12 }}>→</button>
-													</form>
-												</div>
-											</motion.div>
+								{/* casper ai assistant — always open. Header + note are separate plain text ABOVE
+								    the glass window; the window is frosted glass with the log + input inside and
+								    the send button below. As bubbles arrive the window grows (the panel is
+								    bottom-pinned, so it extends upward over the menu). Honest 'in development'. */}
+								<motion.div {...rowIn(5)} className="mx-6 mb-6 mt-2">
+									{/* separate scramble title line */}
+									<ScrambleText text="◢◤ casper ai assistant ◥◣" className="label-12-mono block tracking-[0.18em] text-[var(--red-700)]" />
+									{/* separate operator note */}
+									<p className="label-12-mono mt-2 leading-[1.6] text-white/45" style={{ textTransform: "none" }}>
+										<span className="text-white/70">⟡ operator:</span> in development — being wired into every
+										module of the mesh. When it wakes, it answers from the mesh's own sources and every
+										action waits for your confirmation. The human holds the final toggle.
+									</p>
+
+									{/* THE GLASS — one frosted pane; log + input live inside */}
+									<div className="mt-3 border border-white/15 bg-white/[0.07] p-3 backdrop-blur-2xl backdrop-saturate-150" style={{ borderRadius: 18, boxShadow: "0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)" }}>
+										{aiLog.length > 0 && (
+											<div ref={logRef} className="mb-3 flex max-h-[46vh] flex-col gap-2.5 overflow-y-auto px-1" data-lenis-prevent>
+												{aiLog.map((l, i) => {
+													const isYou = l.startsWith("you:");
+													return (
+														<div key={i} className={`max-w-[85%] ${isYou ? "self-end" : "self-start"}`}>
+															<p className={`label-12-mono leading-[1.6] ${isYou ? "border border-white/15 bg-white/[0.1] text-white/85" : "border border-[var(--red-700)]/25 bg-[#120608]/60 text-white/70"} px-3 py-2`} style={{ textTransform: "none", borderRadius: 12 }}>
+																{l.replace(/^(you|operator): /, "")}
+															</p>
+														</div>
+													);
+												})}
+											</div>
 										)}
-									</AnimatePresence>
+										{/* input INSIDE the glass, with the ? morphing to chips at its left */}
+										<div className="relative flex items-center gap-2">
+											<div className="relative shrink-0">
+												<AnimatePresence initial={false} mode="wait">
+													{!chipsOpen ? (
+														<motion.button
+															key="q"
+															layoutId="ai-quick"
+															onClick={() => setChipsOpen(true)}
+															initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
+															transition={{ duration: 0.25, ease: lamaEase }}
+															className="grid size-[44px] cursor-pointer place-items-center rounded-full border border-white/15 bg-white/[0.08] text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black"
+															aria-label="Quick questions"
+														>?</motion.button>
+													) : (
+														<motion.button
+															key="qx"
+															onClick={() => setChipsOpen(false)}
+															initial={{ opacity: 0, scale: 0.7 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.7 }}
+															transition={{ duration: 0.25, ease: lamaEase }}
+															className="grid size-[44px] cursor-pointer place-items-center rounded-full border border-[var(--red-700)]/40 bg-white/[0.08] text-white/70 backdrop-blur-md"
+															aria-label="Close quick questions"
+														>×</motion.button>
+													)}
+												</AnimatePresence>
+											</div>
+											<input
+												value={aiMsg}
+												onChange={(e) => setAiMsg(e.target.value)}
+												onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); ask(aiMsg); } }}
+												placeholder="ask the mesh anything…"
+												className="label-12-mono h-[44px] flex-1 border border-white/12 bg-white/[0.05] px-4 text-white placeholder:text-white/25 outline-none backdrop-blur-md focus:border-[var(--red-700)]"
+												style={{ borderRadius: 12, textTransform: "none" }}
+											/>
+										</div>
+										{/* the chips morph out from under the ? — inside the glass, bottom */}
+										<AnimatePresence>
+											{chipsOpen && (
+												<motion.div
+													initial={{ opacity: 0, y: -8, height: 0 }} animate={{ opacity: 1, y: 0, height: "auto" }} exit={{ opacity: 0, y: -8, height: 0 }}
+													transition={{ duration: 0.35, ease: lamaEase }}
+													className="mt-2.5 flex flex-wrap gap-2 overflow-hidden"
+												>
+													{QUICK_Qs.map((q) => (
+														<motion.button
+															key={q}
+															layout
+															onClick={() => ask(q)}
+															className="label-12-mono cursor-pointer border border-white/15 bg-white/[0.06] px-3 py-2 text-white/70 backdrop-blur-md transition-colors hover:bg-white hover:text-black"
+															style={{ borderRadius: 999, textTransform: "none" }}
+														>{q}</motion.button>
+													))}
+												</motion.div>
+											)}
+										</AnimatePresence>
+									</div>
+
+									{/* send — UNDER the glass window */}
+									<button onClick={() => ask(aiMsg)} className="label-13-mono mt-3 flex h-[48px] w-full cursor-pointer items-center justify-center border border-white/15 bg-white/[0.06] text-white/80 backdrop-blur-md transition-colors hover:bg-white hover:text-black" style={{ borderRadius: 12 }}>
+										send →
+									</button>
 								</motion.div>
 
-								
-								
+
 															</motion.div>
 						)}
 					</motion.div>
@@ -409,7 +500,7 @@ export function OneClickHub() {
 						>
 							<div className="sticky top-0 z-10 flex h-[56px] items-center justify-between border-b border-white/10 bg-[#0a0508]/70 px-7 backdrop-blur-xl">
 								<span className="label-13-mono uppercase tracking-[0.22em] text-white/90">{sheet === "how" ? "how it works /" : sheet === "pains" ? "pains we kill /" : sheet === "try" ? "try it live /" : "only here /"}</span>
-								<button onClick={() => setSheet(null)} className="label-13-mono cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close">[ close ✕ ]</button>
+								<button onClick={() => setSheet(null)} className="label-13-mono p-2 -m-2 cursor-pointer text-white/60 transition-colors hover:text-white" aria-label="Close">[ close ✕ ]</button>
 							</div>
 							<div className="flex flex-col gap-7 p-7">
 								{sheet === "try" && (

@@ -255,7 +255,7 @@ export function CrystalForge() {
 								top: `${14 + ((i * 37) % 70)}%`,
 								width: `${3 + (i % 3)}px`,
 								height: `${3 + (i % 3)}px`,
-								background: "radial-gradient(circle, rgba(241,50,66,0.9), rgba(241,50,66,0) 70%)",
+								background: "radial-gradient(circle, rgba(224,53,41,0.9), rgba(224,53,41,0) 70%)",
 								animation: `cfDrift ${5 + (i % 5)}s ease-in-out ${(i % 7) * 0.4}s infinite alternate`,
 							}}
 						/>
@@ -268,7 +268,7 @@ export function CrystalForge() {
 				<div
 					ref={glowRef}
 					className="pointer-events-none absolute z-[8] h-[70vh] w-[46vw] max-lg:w-[64vw] max-sm:w-[88vw]"
-					style={{ opacity: 0, background: "radial-gradient(ellipse at center, rgba(241,50,66,0.42), rgba(241,50,66,0.12) 45%, transparent 72%)" }}
+					style={{ opacity: 0, background: "radial-gradient(ellipse at center, rgba(224,53,41,0.42), rgba(224,53,41,0.12) 45%, transparent 72%)" }}
 				/>
 
 				{/* the crystal — scrubbed frame sequence with real alpha (bg keyed out), floats with no box */}
@@ -288,7 +288,7 @@ export function CrystalForge() {
 									<span
 										className="cf-word block translate-y-full opacity-0"
 										style={{
-											background: "linear-gradient(92deg, #ffffff 0%, #f13242 120%)",
+											background: "linear-gradient(92deg, #ffffff 0%, #e03529 120%)",
 											WebkitBackgroundClip: "text",
 											backgroundClip: "text",
 											WebkitTextFillColor: "transparent",

@@ -182,14 +182,14 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 				className="relative z-10 rounded-full border border-white/15 overflow-hidden flex items-center justify-center"
                 animate={{
                     boxShadow: state === "success"
-                        ? "inset 0 -16px 26px rgba(0,0,0,0.6), inset 0 10px 22px rgba(255,180,190,0.28), inset 0 0 26px rgba(0,0,0,0.5), 0 0 44px rgba(241,50,66,0.55), 0 0 0 1px rgba(255,255,255,0.18)"
-                        : "inset 0 -16px 26px rgba(0,0,0,0.62), inset 0 10px 22px rgba(255,180,190,0.22), inset 0 0 26px rgba(0,0,0,0.5), 0 0 30px rgba(241,50,66,0.32), 0 0 0 1px rgba(255,255,255,0.16)"
+                        ? "inset 0 -16px 26px rgba(0,0,0,0.6), inset 0 10px 22px rgba(255,180,190,0.28), inset 0 0 26px rgba(0,0,0,0.5), 0 0 44px rgba(224,53,41,0.55), 0 0 0 1px rgba(255,255,255,0.18)"
+                        : "inset 0 -16px 26px rgba(0,0,0,0.62), inset 0 10px 22px rgba(255,180,190,0.22), inset 0 0 26px rgba(0,0,0,0.5), 0 0 30px rgba(224,53,41,0.32), 0 0 0 1px rgba(255,255,255,0.16)"
                 }}
 			>
 				{/* red aura core — glows from inside the glass */}
 				<motion.div
 					className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none z-0"
-					style={{ width: "72%", height: "72%", background: "radial-gradient(circle, rgba(255,70,90,0.9) 0%, rgba(241,50,66,0.55) 32%, rgba(136,21,31,0.15) 60%, transparent 72%)", filter: "blur(6px)" }}
+					style={{ width: "72%", height: "72%", background: "radial-gradient(circle, rgba(255,70,90,0.9) 0%, rgba(224,53,41,0.55) 32%, rgba(136,21,31,0.15) 60%, transparent 72%)", filter: "blur(6px)" }}
 					animate={{ opacity: [0.7, 1, 0.7], scale: [0.92, 1.02, 0.92] }}
 					transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
 				/>
@@ -208,17 +208,17 @@ export function AgentOrb({ state, size = 120 }: AgentOrbProps) {
 					<motion.div className="flex gap-5 z-10" variants={containerVariants} animate={state} style={{ transformStyle: 'preserve-3d' }}>
 						{/* Left Eye */}
 						<motion.div variants={leftEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(241,50,66,0.7)" }} />
+							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(224,53,41,0.7)" }} />
 
 						{/* Right Eye */}
 						<motion.div variants={rightEyeVariants} animate={state} transition={{ type: "spring", stiffness: 300, damping: 20 }}
-							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(241,50,66,0.7)" }} />
+							style={{ boxShadow: "0 0 12px rgba(255,150,165,0.95), 0 0 30px rgba(224,53,41,0.7)" }} />
 					</motion.div>
 				</motion.div>
 				
 				<AnimatePresence>
 					{state === "working" && (
-						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#f13242]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
+						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#e03529]/5 mix-blend-overlay animate-pulse pointer-events-none z-30" />
 					)}
 					{state === "error" && (
 						<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 shadow-[inset_0_0_20px_#ff003c] mix-blend-overlay pointer-events-none z-30" />

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import { HoverReel } from "@/components/HoverReel";
 import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 
@@ -260,9 +261,10 @@ const BountiesPage = () => {
 								<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(354, 60%, ${26 + idx * 6}%) 0%, transparent 70%)` }} />
 								{KPI_ART[idx] && (
 									<div
-										className="card-art absolute inset-0 bg-cover bg-center opacity-[0.75] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-95 group-hover:scale-110"
-										style={{ backgroundImage: `url(${KPI_ART[idx]})` }}
-									/>
+										className="card-art absolute inset-0 bg-black opacity-[0.75] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-95 group-hover:scale-110"
+									>
+                                        <Image src={KPI_ART[idx]} alt={kpi.label} fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                                    </div>
 								)}
 								{KPI_REEL[idx] && <HoverReel name={KPI_REEL[idx]!} />}
 								<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay pointer-events-none" />

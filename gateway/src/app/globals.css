@@ -162,12 +162,12 @@ body {
 /* Focus visible — on-brand red ring (was off-brand blue) */
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #000000, 0 0 0 3px rgba(241,50,66,0.9), 0 0 16px rgba(241,50,66,0.35);
+  box-shadow: 0 0 0 2px #000000, 0 0 0 3px rgba(224,53,41,0.9), 0 0 16px rgba(224,53,41,0.35);
 }
 /* form controls get a red glow + border on focus, consistently */
 input:focus, textarea:focus, select:focus {
   border-color: var(--red-700) !important;
-  box-shadow: 0 0 0 1px rgba(241,50,66,0.5), 0 0 18px rgba(241,50,66,0.15);
+  box-shadow: 0 0 0 1px rgba(224,53,41,0.5), 0 0 18px rgba(224,53,41,0.15);
   outline: none;
 }
 
@@ -244,7 +244,7 @@ input:focus, textarea:focus, select:focus {
   color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 0px;
-  padding: 0.69vw 2.5vw;
+  padding: 0.5rem 1.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -252,19 +252,7 @@ input:focus, textarea:focus, select:focus {
   font-family: var(--font-DM-mono), var(--font-mono), monospace;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  font-size: 0.69vw;
-}
-@media (max-width: 1024px) {
-  .button-secondary {
-    font-size: 0.97vw;
-    padding: 0.97vw 3.5vw;
-  }
-}
-@media (max-width: 640px) {
-  .button-secondary {
-    font-size: 9px;
-    padding: 8px 16px;
-  }
+  font-size: 0.75rem;
 }
 .button-secondary:hover {
   background-color: rgba(255, 255, 255, 0.1);
@@ -616,8 +604,8 @@ body {
   pointer-events: none;
   z-index: 1;
   background:
-    radial-gradient(60% 50% at 0% 50%, rgba(241,50,66,0.30), transparent 70%),
-    linear-gradient(90deg, rgba(241,50,66,0.16) 0%, transparent 72%);
+    radial-gradient(60% 50% at 0% 50%, rgba(224,53,41,0.30), transparent 70%),
+    linear-gradient(90deg, rgba(224,53,41,0.16) 0%, transparent 72%);
   filter: blur(6px);
   animation: edgeBreathe 7s ease-in-out infinite;
 }
@@ -627,42 +615,13 @@ body {
   top: 0; left: 0;
   width: 2px; height: 100%;
   background: linear-gradient(180deg, transparent, var(--red-700) 18%, var(--red-900) 50%, var(--red-700) 82%, transparent);
-  box-shadow: 0 0 22px 3px rgba(241,50,66,0.55), 0 0 60px 8px rgba(241,50,66,0.25);
+  box-shadow: 0 0 22px 3px rgba(224,53,41,0.55), 0 0 60px 8px rgba(224,53,41,0.25);
 }
 @keyframes edgeBreathe {
   0%, 100% { opacity: 0.75; }
   50% { opacity: 1; }
 }
 
-
-.btn-ghost {
-  font-family: var(--font-DM-mono), var(--font-mono), monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-size: 0.69vw;
-  padding: 0.69vw 2.5vw;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 0px;
-  cursor: pointer;
-  transition: all 180ms ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-@media (max-width: 1024px) {
-  .btn-ghost {
-    font-size: 0.97vw;
-    padding: 0.97vw 3.5vw;
-  }
-}
-@media (max-width: 640px) {
-  .btn-ghost {
-    font-size: 9px;
-    padding: 8px 16px;
-  }
-}
-.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.25); }
 
 /* Frontier custom cursor — dot + lerping ring with screen blend. */
 @media (hover: hover) and (pointer: fine) {
@@ -739,35 +698,23 @@ html.lenis, html.lenis body { height: auto; }
 /* mono HUD tag chip / acrylic tag */
 .nb-tag {
   font-family: var(--font-DM-mono), var(--font-mono), monospace;
-  font-size: 0.69vw; letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255,255,255,0.05);
-  padding: 0.69vw;
+  padding: 0.5rem;
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 0px;
 }
-@media (max-width: 1024px) {
-  .nb-tag {
-    font-size: 0.97vw;
-    padding: 0.97vw;
-  }
-}
-@media (max-width: 640px) {
-  .nb-tag {
-    font-size: 9px;
-    padding: 8px;
-  }
-}
 .nb-tag-ghost { color: var(--gray-1000); border-color: var(--gray-alpha-400); background: rgba(255,255,255,0.03); }
 /* diagonal slash motif from techwear refs */
 .hud-slashes::before { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-right: 12px; opacity: 0.9; }
 .hud-slashes::after  { content: "////"; color: var(--red-700); letter-spacing: -2px; margin-left: 12px; opacity: 0.4; }
 /* thin technical connector lines */
-.tech-line   { height: 1px; background: linear-gradient(90deg, var(--red-700) 0%, rgba(241,50,66,0.0) 100%); }
-.tech-line-v { width: 1px;  background: linear-gradient(180deg, rgba(241,50,66,0.0), var(--red-700), rgba(241,50,66,0.0)); }
+.tech-line   { height: 1px; background: linear-gradient(90deg, var(--red-700) 0%, rgba(224,53,41,0.0) 100%); }
+.tech-line-v { width: 1px;  background: linear-gradient(180deg, rgba(224,53,41,0.0), var(--red-700), rgba(224,53,41,0.0)); }
 /* small index counter like "+ 23 >" */
 .nb-index { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--gray-700); }
 
@@ -806,7 +753,7 @@ html.lenis, html.lenis body { height: auto; }
 .carbon-backlight {
   position: absolute; inset: 0;
   mix-blend-mode: screen;
-  background: radial-gradient(120% 70% at 50% 118%, rgba(241,80,95,0.16), transparent 60%);
+  background: radial-gradient(120% 70% at 50% 118%, rgba(224,53,41,0.16), transparent 60%);
 }
 /* soft top/bottom fade for text legibility + a GENTLE edge vignette for depth
    (kicks in only near the corners, so the fabric centre stays fully visible). */
@@ -846,9 +793,9 @@ html.lenis, html.lenis body { height: auto; }
 }
 .nav-pill:hover {
   color: #fff;
-  border-color: rgba(241,50,66,0.45);
-  background: rgba(241,50,66,0.07);
-  box-shadow: 0 0 16px rgba(241,50,66,0.20);
+  border-color: rgba(224,53,41,0.45);
+  background: rgba(224,53,41,0.07);
+  box-shadow: 0 0 16px rgba(224,53,41,0.20);
 }
 .nav-pill::after {
   content: ""; position: absolute; left: 16px; right: 16px; bottom: 6px; height: 1px;
@@ -886,16 +833,16 @@ html.lenis, html.lenis body { height: auto; }
 .link-sweep:hover::after { transform: scaleX(1); }
 
 /* thin red scrollbar for scroll containers that opt in */
-.scroll-red { scrollbar-width: thin; scrollbar-color: rgba(241,50,66,0.5) transparent; }
+.scroll-red { scrollbar-width: thin; scrollbar-color: rgba(224,53,41,0.5) transparent; }
 .scroll-red::-webkit-scrollbar { display: block; width: 6px; height: 6px; }
-.scroll-red::-webkit-scrollbar-thumb { background: rgba(241,50,66,0.45); border-radius: 0; }
-.scroll-red::-webkit-scrollbar-thumb:hover { background: rgba(241,50,66,0.75); }
+.scroll-red::-webkit-scrollbar-thumb { background: rgba(224,53,41,0.45); border-radius: 0; }
+.scroll-red::-webkit-scrollbar-thumb:hover { background: rgba(224,53,41,0.75); }
 .scroll-red::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
 
 /* full-width brutalist divider (compartmentalization) */
 .hr-brutal {
   border: 0; height: 1px; width: 100%;
-  background: linear-gradient(90deg, rgba(241,50,66,0.5), rgba(255,255,255,0.06) 40%, transparent);
+  background: linear-gradient(90deg, rgba(224,53,41,0.5), rgba(255,255,255,0.06) 40%, transparent);
   margin: 0;
 }
 

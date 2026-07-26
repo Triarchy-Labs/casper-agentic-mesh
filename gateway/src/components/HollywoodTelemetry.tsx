@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 const lusionTransition = "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)";
 
-export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" | "light" }) {
+export default function HollywoodTelemetry() {
 	const [logs, setLogs] = useState<{ id: string | number; text: string }[]>([]);
 	const [hovered, setHovered] = useState(false);
 
@@ -69,17 +69,17 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 
 	// Lusion palette — always dark (only canvas inverts)
 	const borderColor = hovered 
-		? "rgba(241,50,66,0.4)"
+		? "rgba(224,53,41,0.4)"
 		: "rgba(255,255,255,0.1)";
 	// bgColor removed — Peachworlds glass uses inline values
 	const textColor = hovered
-		? "#f13242"
+		? "#e03529"
 		: "rgba(255,255,255,0.6)";
 	const headerColor = hovered
-		? "#f13242"
+		? "#e03529"
 		: "rgba(255,255,255,0.8)";
 	const glowShadow = hovered
-		? "0 0 25px rgba(241,50,66,0.2)"
+		? "0 0 25px rgba(224,53,41,0.2)"
 		: "none";
 
 	return (
@@ -93,8 +93,8 @@ export default function HollywoodTelemetry({ theme = "dark" }: { theme?: "dark" 
 				width: 400,
 				height: 220,
 				background: hovered 
-					? (theme === "dark" ? "rgba(241,50,66,0.06)" : "rgba(241,50,66,0.15)")
-					: (theme === "dark" ? "rgba(255,255,255,0.06)" : "rgba(8,8,8,0.95)"),
+					? "rgba(224,53,41,0.06)"
+					: "rgba(255,255,255,0.06)",
 				border: `1px solid ${borderColor}`,
 				borderRadius: 12,
 				padding: 15,

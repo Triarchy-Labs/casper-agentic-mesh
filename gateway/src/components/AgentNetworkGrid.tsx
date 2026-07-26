@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import type { AgentRecord } from "@/lib/agent_registry";
 import { HoverReel } from "@/components/HoverReel";
@@ -70,9 +71,10 @@ function ProduxCard({ agent, spanClass }: { agent: AgentDisplay; spanClass: stri
 				<div className="absolute inset-0 opacity-[0.15]" style={{ background: "radial-gradient(circle at 30% 30%, var(--red-500) 0%, transparent 70%)" }} />
 				{AGENT_ART[agent.id] && (
 					<div
-						className="card-art absolute inset-0 bg-cover bg-center opacity-[0.82] transition-[transform,opacity] duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-105"
-						style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
-					/>
+						className="card-art absolute inset-0 bg-black opacity-[0.82] transition-[transform,opacity] duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-105"
+					>
+                        <Image src={AGENT_ART[agent.id]} alt={agent.id} fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                    </div>
 				)}
 				{AGENT_REEL[agent.id] && <HoverReel name={AGENT_REEL[agent.id]} />}
 				<div className="absolute inset-0 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay" />
@@ -113,9 +115,10 @@ function AccordionSection({ agents }: { agents: AgentDisplay[] }) {
 					<div className="absolute inset-0 opacity-[0.15]" style={{ background: `radial-gradient(circle at 50% 100%, hsl(354, 60%, ${24 + i * 5}%) 0%, transparent 70%)` }} />
 					{AGENT_ART[agent.id] && (
 						<div
-							className="card-art absolute inset-0 bg-cover bg-center opacity-[0.8] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-110"
-							style={{ backgroundImage: `url(${AGENT_ART[agent.id]})` }}
-						/>
+							className="card-art absolute inset-0 bg-black opacity-[0.8] transition-[transform,opacity] duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:scale-110"
+						>
+                            <Image src={AGENT_ART[agent.id]} alt={agent.id} fill style={{ objectFit: "cover" }} quality={95} priority={false} />
+                        </div>
 					)}
 					{AGENT_REEL[agent.id] && <HoverReel name={AGENT_REEL[agent.id]} />}
 					<div className="absolute inset-0 group-hover:scale-110 transition-transform duration-[1.5s] ease-[cubic-bezier(0.16,1,0.3,1)] bg-[url('/noise.svg')] opacity-20 mix-blend-overlay" />

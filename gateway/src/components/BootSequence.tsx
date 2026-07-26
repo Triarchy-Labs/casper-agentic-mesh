@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 // Loading lasts exactly 2.5s.
@@ -57,13 +58,12 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 				style={{
 					position: "absolute",
 					inset: 0, // starts at the original framing; scale-up provides its own overscan
-					backgroundImage: "url(/boot.webp)",
-					backgroundSize: "cover",
-					backgroundPosition: "center",
 					transformOrigin: "center center",
 					willChange: "transform",
 				}}
-			/>
+			>
+                <Image src="/boot.webp" alt="Boot Sequence" fill style={{ objectFit: "cover" }} quality={95} priority={true} />
+            </motion.div>
 			{/* legibility scrim */}
 			<div
 				style={{
@@ -103,7 +103,7 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 				}}
 			>
 				<div style={{ fontSize: "clamp(18px,2vw,30px)", fontWeight: 700, letterSpacing: "0.14em" }}>
-					TRIARCHY <span style={{ color: "#f13242" }}>//</span> AGENTIC MESH
+					TRIARCHY <span style={{ color: "#e03529" }}>//</span> AGENTIC MESH
 				</div>
 				<div
 					style={{
@@ -194,13 +194,13 @@ export default function BootSequence({ onComplete }: { onComplete: () => void })
 						bottom: 0,
 						left: 0,
 						width: `${progress}%`,
-						background: "linear-gradient(90deg, #7a0d1a, #f13242)",
+						background: "linear-gradient(90deg, #7a0d1a, #e03529)",
 					}}
 					animate={{
 						boxShadow: [
-							"0 0 18px 2px rgba(241,50,66,0.55)",
-							"0 0 34px 6px rgba(241,50,66,0.95)",
-							"0 0 18px 2px rgba(241,50,66,0.55)",
+							"0 0 18px 2px rgba(224,53,41,0.55)",
+							"0 0 34px 6px rgba(224,53,41,0.95)",
+							"0 0 18px 2px rgba(224,53,41,0.55)",
 						],
 					}}
 					transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
