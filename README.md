@@ -7,6 +7,10 @@
 
 ## Agents don't trust each other — the chain enforces the verdict.
 
+> **What is Triarchy?** A trust layer for the AI-agent economy, **live on Casper 2.0 testnet**. A client locks CSPR in an on-chain **escrow**; autonomous agents discover the work via **MCP** and pay an **x402** micro-fee to enter; an adversarial tribunal of **5 LLMs** judges the result; the smart contract settles — **release** to the agent or **refund** to the client. No human middlemen, full on-chain settlement.
+>
+> Under the hood: deterministic **Rust/WASM** contracts (not LLM promises), a live **RWA oracle** feeding real CSPR/USD prices on-chain, and a **Proof-of-Liveness Tower** that rescues escrows from dead agents — a primitive nobody else ships. Every claim below links to a real transaction.
+
 An autonomous machine-to-machine bounty economy on the **Casper Network**: AI
 agents hire, judge and pay each other. In plain words:
 
@@ -94,12 +98,29 @@ reproduction steps and engineering notes: **[DEPLOYMENTS.md](DEPLOYMENTS.md)**.
 | `register_agent` | ✅ `error: None` | [`27a70094…a150`](https://testnet.cspr.live/transaction/27a7009489008d32d6fe463540ec5322423fcd4f1c0413f9eb67f27342e0a150) |
 | `create_bounty` — **lock 10 CSPR in escrow** | ✅ `error: None` | [`4ad2744e…492a`](https://testnet.cspr.live/transaction/4ad2744e9beeb6b6ae161948a03cc97f34dd58744c87e05e64836227d1d4492a) |
 | `release_bounty` — **pay 10 CSPR from escrow** | ✅ `error: None` | [`1ea27a03…1185`](https://testnet.cspr.live/transaction/1ea27a03a072b0db1f8b5f4cf176364eec9ef50cb396bafb9f56829c21204f14) |
+| `refund_bounty` — **return locked CSPR** | ✅ `error: None` | [`895eb553…0d87`](https://testnet.cspr.live/transaction/895eb5531398c44a85554c11c622d3f528ef73ac9e541619f163ec392e120d87) |
 
 **Contract package:** [`a7e6a383…4f6d`](https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d)
 
 ```bash
 ./run_demo.sh   # performs a real on-chain register_agent and prints live tx links
 ```
+
+────────────────────────────────────────────────────────────────
+
+## 🤖 Autonomous agent loop — executed live (AI decision → on-chain payout)
+
+The `bounty-judge` agent asks an LLM to APPROVE/REJECT a submitted proof, and **on approval
+autonomously submits a real `release_bounty` transaction** that pays the hunter. A weak proof
+was REJECTED (no funds moved); a substantive proof was APPROVED and paid out:
+
+| Step | Result | Explorer |
+|------|--------|----------|
+| Lock `bounty-alpha-004` (session deposit) | ✅ `error: None` | [`afa56c8b…04e5`](https://testnet.cspr.live/transaction/afa56c8b780a7d1db35a1e47bb505d1e37439d61ba46a453c339e30e56aa04e5) |
+| **Agent-driven `release_bounty`** (after LLM APPROVE) | ✅ `error: None` | [`c333c9d1…cb89`](https://testnet.cspr.live/transaction/c333c9d1513c633d161627c39ff9cb3cf28ef2f3acf3cda3d19c0d55f9dfcb89) |
+
+The verdict is a real model call and the payout is a real signed tx — with no key or a failed
+call it aborts, never inventing a verdict or a hash.
 
 ────────────────────────────────────────────────────────────────
 
@@ -158,11 +179,16 @@ trust every claim.
 - **RWA Oracle contract + agent** — on-chain data feed, agent identity,
   reputation and an event log ([`contracts/oracle-contract`](contracts/oracle-contract/src/lib.rs));
   the [`rwa-oracle`](swarm/rwa-oracle/src/main.rs) agent posts a **real CSPR/USD
-  price** on-chain. Drives RWA-pegged bounty pricing in the UI.
+  price** on-chain. Drives RWA-pegged bounty pricing in the UI. Package
+  [`16d86943…64b2`](https://testnet.cspr.live/contract-package/16d86943d2d95769bff18da2438c9bf674e35347890705f0ef73ad14e37964b2)
+  · feed tx [`da7ac22b…9300`](https://testnet.cspr.live/transaction/da7ac22bc69c801a3600d43d408a29c85170f9205d224c3345b3f482d1949300).
 - **🔥 Triarchy Tribunal** — an adversarial court of real models (prosecutor,
   defender, a jury of diverse LLMs, a chief judge) that rules on a bounty and
   moves CSPR on-chain (`release`/`refund`), anchoring each verdict on the oracle
-  ([`swarm/tribunal`](swarm/tribunal/src/main.rs)). Fault-tolerant: partial bench →
+  ([`swarm/tribunal`](swarm/tribunal/src/main.rs)). Both paths exercised on testnet:
+  REJECT→refund [`4664e97a…4d03`](https://testnet.cspr.live/transaction/4664e97a3d5be8cfe0cfb1f82a25d71bbc6e2865f2f25edba5809a7e2c4b4d03)
+  · APPROVE→release [`70213268…c375`](https://testnet.cspr.live/transaction/702132683a246c1e07e7c49f0e403b680d85b7114b8ec25772af5991a959c375).
+  Fault-tolerant: partial bench →
   "indicative, not fully precise"; all agents down → "functions frozen, no funds
   moved"; `--dry-run` deliberates without spending.
 - **🗼 The Tower** — an overseer meta-agent that reads the whole on-chain world and
@@ -171,7 +197,7 @@ trust every claim.
 - **🧬 Antifragile Mesh (Proof-of-Liveness)** — agents post an on-chain heartbeat;
   if one goes dark the Tower nominates a reputation-ranked successor and the
   Tribunal ratifies — open escrows are rescued, never frozen. Original primitive,
-  live on-chain.
+  live on-chain: heartbeat [`b8a051a6…c89a`](https://testnet.cspr.live/transaction/b8a051a6626e1a3b82e610eb0ab4464e58ae7e3c3bee6ecf16b219eff7f4c89a).
 - **Mesh Control UI** — the dashboard surfaces all of the above as click-triggered
   panels in the Vercel-Geist / Casper aesthetic ([`gateway/src/components/MeshControl.tsx`](gateway/src/components/MeshControl.tsx)),
   backed by `/api/tower`, `/api/tribunal` (dry-run) and `/api/onchain` (live reads).
