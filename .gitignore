@@ -30,3 +30,6 @@ gateway/src/lib/xrpl-transactor.ts
 *.log
 casper_medbay/
 *.rust-doctor-cache.json
+
+# local design references and agent skills — not part of the deliverable
+.agents/
