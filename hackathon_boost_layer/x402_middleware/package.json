@@ -8,14 +8,20 @@
     "build": "tsc"
   },
   "dependencies": {
-    "express": "4.19.2"
+    "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/express": "4.17.21",
+    "@types/express": "^5.0.6",
     "@types/node": "20.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "next": "^16.2.12",
     "typescript": "5.4.5"
+  },
+  "overrides": {
+    "postcss": "^8.5.23",
+    "sharp": "^0.35.3",
+    "path-to-regexp": "^8.4.2",
+    "body-parser": "^2.3.0"
   }
 }
