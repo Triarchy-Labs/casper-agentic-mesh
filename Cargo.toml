@@ -9,8 +9,7 @@ members = [
     "swarm/tribunal",
     "swarm/bounty-judge",
     "swarm/tower",
-    "swarm/rwa-oracle",
-    "gateway/src-tauri"
+    "swarm/rwa-oracle"
 ]
 
 [workspace.package]

@@ -1,3 +1,7 @@
+# Standalone: the optional desktop shell is not part of the mesh workspace,
+# so CI does not need GTK system libraries to build the agents.
+[workspace]
+
 [package]
 name = "app"
 version = "0.1.0"
