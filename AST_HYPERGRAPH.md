@@ -56,7 +56,7 @@ graph TD
 
 ## 📝 2. Module & AST symbol registry
 
-Indexed **12 modules** and **242 AST definitions**.
+Indexed **8 modules** and **139 AST definitions**.
 
 ### 📂 Smart Contract
 
@@ -106,149 +106,6 @@ Indexed **12 modules** and **242 AST definitions**.
 
 ---
 
-### 📂 Crate: core-ipc
-
-| Kind | Symbol | File |
-| :--- | :--- | :--- |
-| `enum` | `IpcError` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `default` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `drop` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `exclusive` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `fmt` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `from` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `new` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `read_state` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `shared` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `try_new` | `swarm/core-ipc/src/lib.rs` |
-| `function` | `write_state` | `swarm/core-ipc/src/lib.rs` |
-| `impl` | `Default` | `swarm/core-ipc/src/lib.rs` |
-| `impl` | `From` | `swarm/core-ipc/src/lib.rs` |
-| `impl` | `IpcBridge` | `swarm/core-ipc/src/lib.rs` |
-| `impl` | `std` | `swarm/core-ipc/src/lib.rs` |
-| `impl` | `std` | `swarm/core-ipc/src/lib.rs` |
-| `struct` | `AgentState` | `swarm/core-ipc/src/lib.rs` |
-| `struct` | `FileGuard` | `swarm/core-ipc/src/lib.rs` |
-| `struct` | `IpcBridge` | `swarm/core-ipc/src/lib.rs` |
-
----
-
-### 📂 Crate: x402-consensus
-
-| Kind | Symbol | File |
-| :--- | :--- | :--- |
-| `enum` | `Action` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `check_consensus_reached` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `default` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `default` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `fmt` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `is_valid` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `make_vote` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `new` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `now_epoch` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `resolve` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `run_consensus_loop` | `swarm/x402-consensus/src/network.rs` |
-| `function` | `test_confidence_too_high` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `test_confidence_too_low` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `test_legacy_compat` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `test_trend_veto` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `test_unanimous_buy` | `swarm/x402-consensus/src/engine.rs` |
-| `function` | `test_vote_tie` | `swarm/x402-consensus/src/engine.rs` |
-| `impl` | `ConfidenceBand` | `swarm/x402-consensus/src/engine.rs` |
-| `impl` | `Default` | `swarm/x402-consensus/src/engine.rs` |
-| `impl` | `Default` | `swarm/x402-consensus/src/engine.rs` |
-| `impl` | `PolicyGovernor` | `swarm/x402-consensus/src/engine.rs` |
-| `impl` | `std` | `swarm/x402-consensus/src/engine.rs` |
-| `struct` | `AgentVote` | `swarm/x402-consensus/src/engine.rs` |
-| `struct` | `ConfidenceBand` | `swarm/x402-consensus/src/engine.rs` |
-| `struct` | `GovernorDecision` | `swarm/x402-consensus/src/engine.rs` |
-| `struct` | `PolicyGovernor` | `swarm/x402-consensus/src/engine.rs` |
-| `struct` | `agent` | `swarm/x402-consensus/src/network.rs` |
-
----
-
-### 📂 Crate: x402-memory
-
-| Kind | Symbol | File |
-| :--- | :--- | :--- |
-| `function` | `create_liquidation_edge` | `swarm/x402-memory/src/engine.rs` |
-| `function` | `create_override_edge` | `swarm/x402-memory/src/engine.rs` |
-| `function` | `insert_edge` | `swarm/x402-memory/src/engine.rs` |
-| `function` | `run_memory_loop` | `swarm/x402-memory/src/network.rs` |
-| `struct` | `HyperEdge` | `swarm/x402-memory/src/engine.rs` |
-
----
-
-### 📂 Crate: x402-polymarket
-
-| Kind | Symbol | File |
-| :--- | :--- | :--- |
-| `function` | `extract_macro_sentiment` | `swarm/x402-polymarket/src/engine.rs` |
-| `function` | `run_oracle_loop` | `swarm/x402-polymarket/src/network.rs` |
-| `struct` | `Market` | `swarm/x402-polymarket/src/engine.rs` |
-
----
-
-### 📂 Crate: x402-risk
-
-| Kind | Symbol | File |
-| :--- | :--- | :--- |
-| `enum` | `MarketRegime` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `calculate` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `can_open` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `current` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `default` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `default` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `evaluate` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `evaluate_promotion` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `hard_demote` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `is_clear` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `is_exposure_safe` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `is_paused` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `kelly_size` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `modulator` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `new` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `new` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `new` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `new` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `new` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `now_epoch` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `record_trade` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `register_close` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `register_open` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `reset_daily` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `run_risk_loop` | `swarm/x402-risk/src/network.rs` |
-| `function` | `start_cooldown` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `stop_price_long` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `stop_price_short` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `target_price_long` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `target_price_short` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_atr_floor` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_atr_stops` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_bucket_guard` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_kelly_choppy` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_kelly_sizing` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_kill_switch_consecutive` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_kill_switch_pnl` | `swarm/x402-risk/src/engine.rs` |
-| `function` | `test_risk_gate_full` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `AtrStops` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `AutoRamp` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `BucketCapGuard` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `CooldownGate` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `Default` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `Default` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `KillSwitch` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `MarketRegime` | `swarm/x402-risk/src/engine.rs` |
-| `impl` | `RiskGate` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `AtrStops` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `AutoRamp` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `AutoRampStage` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `BucketCapGuard` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `CooldownGate` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `KillSwitch` | `swarm/x402-risk/src/engine.rs` |
-| `struct` | `RiskGate` | `swarm/x402-risk/src/engine.rs` |
-
----
-
 ### 📂 Crate: bounty-judge
 
 | Kind | Symbol | File |
@@ -263,6 +120,18 @@ Indexed **12 modules** and **242 AST definitions**.
 | `function` | `risk_gate` | `swarm/bounty-judge/src/main.rs` |
 | `function` | `verdict_classification` | `swarm/bounty-judge/src/main.rs` |
 | `struct` | `Verdict` | `swarm/bounty-judge/src/main.rs` |
+
+---
+
+### 📂 Crate: rwa-oracle
+
+| Kind | Symbol | File |
+| :--- | :--- | :--- |
+| `function` | `converts_usd_to_micro_usd` | `swarm/rwa-oracle/src/main.rs` |
+| `function` | `env_or` | `swarm/rwa-oracle/src/main.rs` |
+| `function` | `fetch_price_usd` | `swarm/rwa-oracle/src/main.rs` |
+| `function` | `post_reading_on_chain` | `swarm/rwa-oracle/src/main.rs` |
+| `function` | `to_micro_usd` | `swarm/rwa-oracle/src/main.rs` |
 
 ---
 
