@@ -30,7 +30,16 @@ export function runAgent(
 			(err, stdout, stderr) => {
 				const output = `${stdout || ""}${stderr ? `\n${stderr}` : ""}`.trim();
 				if (err && !output) {
-					resolve({ ok: false, output: "", error: err.message });
+					// On serverless the compiled agents simply aren't there. Say so in plain words —
+					// a raw ENOENT spawn trace is noise to anyone reading the panel.
+					const missing = (err as NodeJS.ErrnoException).code === "ENOENT";
+					resolve({
+						ok: false,
+						output: "",
+						error: missing
+							? "🛑 FUNCTIONS FROZEN: this agent is a compiled Rust binary and cannot run on serverless. No funds moved, nothing faked — run it yourself in one command, see PLAYBOOK.md."
+							: err.message,
+					});
 				} else {
 					resolve({ ok: !err, output });
 				}
