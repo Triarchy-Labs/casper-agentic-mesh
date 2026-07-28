@@ -1,10 +1,6 @@
 [workspace]
 resolver = "2"
 exclude = [
-    "contracts/casper-mesh-contract",
-    "contracts/casper_escrow",
-    "contracts/deposit-proxy",
-    "contracts/oracle-contract",
     "hackathon_boost_layer/odra_contracts",
     "casper-ai-toolkit/casper-eip-712"
 ]

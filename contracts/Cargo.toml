@@ -5,8 +5,7 @@ members = [
     "casper-mesh-contract",
     "casper_escrow",
     "deposit-proxy",
-    "oracle-contract",
-    "../hackathon_boost_layer/odra_contracts"
+    "oracle-contract"
 ]
 
 [workspace.package]

@@ -15,4 +15,3 @@ wee_alloc = "0.4.5"
 codegen-units = 1
 lto = true
 
-[workspace]
