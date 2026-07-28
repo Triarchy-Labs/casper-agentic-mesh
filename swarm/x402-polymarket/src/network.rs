@@ -15,14 +15,16 @@ pub async fn run_oracle_loop() {
                     && let Some(avg_sentiment) = engine::extract_macro_sentiment(markets) {
                         println!("[Polymarket Oracle] Global Macro Sentiment Extracted: {avg_sentiment:.4}");
 
-                        let mut state = ipc.read_state().unwrap_or_default();
+                        let mut state = ipc.read_state().ok().flatten().unwrap_or_default();
                         state.global_sentiment_modifier = avg_sentiment;
                         state.timestamp = SystemTime::now()
                             .duration_since(UNIX_EPOCH)
                             .unwrap_or_default()
                             .as_secs();
 
-                        ipc.write_state(&state);
+                        if let Err(e) = ipc.write_state(&state) {
+                            eprintln!("[Polymarket Oracle] IPC write failed: {e}");
+                        }
                         println!("[Polymarket Oracle] L0 IPC Memmap Updated: Sniper Agent leverage modified.");
                     }
             }

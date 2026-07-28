@@ -33,3 +33,9 @@ casper_medbay/
 
 # local design references and agent skills — not part of the deliverable
 .agents/
+
+# HFT-era transplants and local tooling — never part of the mesh
+swarm/ouroboros-brain/
+swarm/titan-core/
+swarm/hive-intel/
+skills-lock.json

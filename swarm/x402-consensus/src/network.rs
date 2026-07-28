@@ -10,7 +10,7 @@ pub async fn run_consensus_loop() {
     let mut last_timestamp = 0;
 
     loop {
-        if let Some(state) = ipc.read_state()
+        if let Some(state) = ipc.read_state().ok().flatten()
             && state.timestamp > last_timestamp
         {
             last_timestamp = state.timestamp;

@@ -9,3 +9,4 @@ serde = { workspace = true }
 bincode = "1"
 memmap2 = "0.9"
 fs2 = "0.4"
+tracing = { workspace = true }

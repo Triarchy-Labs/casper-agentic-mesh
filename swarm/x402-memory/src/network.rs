@@ -23,7 +23,7 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
 
     loop {
         // 1. Process L0 IPC Experience (Liquidations)
-        if let Some(state) = ipc.read_state()
+        if let Some(state) = ipc.read_state().ok().flatten()
             && state.timestamp > last_timestamp && let Some(target) = state.liquidation_target.clone() {
                 last_timestamp = state.timestamp;
                 
@@ -50,10 +50,12 @@ pub async fn run_memory_loop(db: sled::Db) -> Result<(), Box<dyn std::error::Err
                                     println!("[Memory Node] 🧬 Strategy Override Synthesized from Markdown into HyperGraph!");
                                     
                                     // Push to L0 IPC
-                                    let mut state = ipc.read_state().unwrap_or_default();
+                                    let mut state = ipc.read_state().ok().flatten().unwrap_or_default();
                                     state.global_sentiment_modifier += 0.5; 
                                     state.timestamp = edge.timestamp;
-                                    ipc.write_state(&state);
+                                    if let Err(e) = ipc.write_state(&state) {
+                                        eprintln!("[Memory Node] IPC write failed: {e}");
+                                    }
                                     println!("[Memory Node] ⚡ L0 IPC State Mutated via Memory Injection.");
                                 }
                             }

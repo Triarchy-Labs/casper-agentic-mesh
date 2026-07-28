@@ -16,9 +16,7 @@ jobs:
       - name: Build workspace
         run: cargo build --workspace --locked
       - name: Test mesh crates
-        # ouroboros-brain is ported intelligence whose parity tests need
-        # uncommitted trading fixtures; the mesh crates are fully tested.
-        run: cargo test --workspace --exclude ouroboros-brain
+        run: cargo test --workspace
 
   gateway:
     name: Gateway (typecheck + build)

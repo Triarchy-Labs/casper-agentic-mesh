@@ -10,9 +10,6 @@ exclude = [
 ]
 members = [
     "swarm/casper-client",
-    "swarm/ouroboros-brain",
-    "swarm/titan-core",
-    "swarm/hive-intel",
     "swarm/x402-consensus",
     "swarm/x402-risk",
     "swarm/x402-polymarket",

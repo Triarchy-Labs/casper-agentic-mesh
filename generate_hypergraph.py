@@ -20,10 +20,18 @@ def scan_files():
     if client_path.exists():
         symbols["Casper RPC Client"] = parse_rust_file(client_path)
         
-    # 3. Swarm Crates
+    # 3. Swarm Crates — only the ones declared in the Cargo workspace, so the report
+    #    can never drift onto stale directories left on disk.
+    members = set()
+    cargo = (PROJECT_DIR / "Cargo.toml").read_text(encoding="utf-8")
+    for line in cargo.splitlines():
+        line = line.strip().strip(",").strip('"')
+        if line.startswith("swarm/"):
+            members.add(line.split("/", 1)[1])
+
     swarm_dir = PROJECT_DIR / "swarm"
     for crate in swarm_dir.iterdir():
-        if crate.is_dir() and crate.name != "casper-client":
+        if crate.is_dir() and crate.name != "casper-client" and crate.name in members:
             crate_symbols = []
             src_dir = crate / "src"
             if src_dir.exists():
@@ -101,53 +109,68 @@ def generate_report(symbols):
     
     with open(report_path, "w") as f:
         f.write("# 🌌 CASPER AGENTIC MESH — AST HYPERGRAPH & SYSTEM BLUEPRINT\n\n")
-        f.write("> **Автоматически сгенерированный интерактивный индекс связей и структуры проекта.**\n\n")
+        f.write("> **Auto-generated index of the project's structure and symbol graph.**\n\n")
         
-        f.write("## 🗺️ 1. Архитектурный Гиперграф Связей (Mermaid)\n\n")
+        f.write("## 🗺️ 1. Architecture hypergraph (Mermaid)\n\n")
         f.write("```mermaid\ngraph TD\n")
         
         # Define Nodes
-        f.write("    subgraph UI[\"🖥️ GATEWAY FRONTEND & DESKTOP (Tauri/Next.js)\"]\n")
-        f.write("        Dashboard[\"Dashboard Component\"] -->|IPC calls| TauriBridge[\"Tauri Host Commands\"]\n")
-        f.write("        BountiesView[\"Bounties Panel Component\"] -->|Escrow tracking| StateMonitor[\"Zustand State Store\"]\n")
+        f.write("    subgraph UI[\"🖥️ GATEWAY (Next.js on Vercel)\"]\n")
+        f.write("        Home[\"Home · vector dossiers\"] -->|live ledger read| ApiOnchain\n")
+        f.write("        Dash[\"Dashboard · Mesh Control\"] -->|click-triggered| ApiTower\n")
+        f.write("        Dash --> ApiTribunal\n")
+        f.write("        Hub[\"ONE CLICK hub · Try it live\"] --> ApiMcp\n")
+        f.write("        Hub --> ApiHire\n")
+        f.write("        Wallet[\"Casper Wallet connect\"] -->|signs transfer| ApiHire\n")
         f.write("    end\n\n")
-        
-        f.write("    subgraph ROYS[\"🐝 OFF-CHAIN AGENTIC ROYS (Rust)\"]\n")
-        f.write("        Engine[\"swarm-engine (Ciel Swarm Orchestrator)\"] -->|Decision loop| Brain[\"ouroboros-brain (LLM Multi-Agent Debate)\"]\n")
-        f.write("        Engine -->|Micropayment assertions| Consensus[\"x402-consensus (2PC State Validation)\"]\n")
-        f.write("        Consensus -->|Risk check| Risk[\"x402-risk (15-Factor Judge)\"]\n")
-        f.write("        Engine -->|Agent memory vectors| Memory[\"x402-memory (Sovereign Vector DB)\"]\n")
+
+        f.write("    subgraph API[\"🔌 GATEWAY API (server-side keys)\"]\n")
+        f.write("        ApiOnchain[\"/api/onchain\"]\n")
+        f.write("        ApiHire[\"/api/hire · x402 gate\"]\n")
+        f.write("        ApiMcp[\"/api/mcp · MCP manifest\"]\n")
+        f.write("        ApiStream[\"/api/casper-stream · CSPR.cloud\"]\n")
+        f.write("        ApiTower[\"/api/tower\"]\n")
+        f.write("        ApiTribunal[\"/api/tribunal · dry-run\"]\n")
         f.write("    end\n\n")
-        
-        f.write("    subgraph CASPER[\"⛓️ CASPER ON-CHAIN MESH NETWORK\"]\n")
-        f.write("        Client[\"casper-client (Rust RPC Transaction Signer)\"] -->|JSON-RPC calls| Node[\"Casper Node RPC\"]\n")
-        f.write("        Node -->|Triggers EntryPoints| Contract[\"casper-mesh-contract (WASM Smart Contract)\"]\n")
-        f.write("        Contract -->|State updates| AgentRegistry[\"Agent Entity Registry\"]\n")
-        f.write("        Contract -->|State updates| EscrowStore[\"Micropayment Escrow Vault\"]\n")
+
+        f.write("    subgraph AGENTS[\"🐝 AGENT SWARM (compiled Rust)\"]\n")
+        f.write("        Tower[\"tower-overseer · proof-of-liveness\"]\n")
+        f.write("        Tribunal[\"tribunal · 5-LLM adversarial court\"]\n")
+        f.write("        Judge[\"bounty-judge · autonomous payout\"]\n")
+        f.write("        Oracle[\"rwa-oracle · CSPR/USD feed\"]\n")
         f.write("    end\n\n")
-        
-        # Connect Components
-        f.write("    %% Connections between layers\n")
-        f.write("    TauriBridge -->|RPC over Localhost| Engine\n")
-        f.write("    Engine -->|Signs txns via Client| Client\n")
-        f.write("    Dashboard -->|Read balances/events| Node\n")
-        
-        f.write("    %% Styles\n")
+
+        f.write("    subgraph CASPER[\"⛓️ CASPER TESTNET (WASM)\"]\n")
+        f.write("        Client[\"casper-client · TransactionV1 signer\"] -->|JSON-RPC| Node[\"Casper node\"]\n")
+        f.write("        Node -->|entry points| Contract[\"escrow contract\"]\n")
+        f.write("        Node --> OracleContract[\"oracle contract\"]\n")
+        f.write("        Contract -->|release / refund| Escrow[\"escrow purse\"]\n")
+        f.write("    end\n\n")
+
+        f.write("    %% cross-layer\n")
+        f.write("    ApiTower --> Tower\n")
+        f.write("    ApiTribunal --> Tribunal\n")
+        f.write("    ApiOnchain --> Node\n")
+        f.write("    ApiStream -->|official API| Cloud[\"CSPR.cloud\"]\n")
+        f.write("    Tribunal -->|verdict moves CSPR| Client\n")
+        f.write("    Judge -->|release_bounty| Client\n")
+        f.write("    Oracle -->|price post| Client\n")
+        f.write("    Tower -->|read-only scan| Node\n\n")
+
         f.write("    style Contract fill:#ff5e5e,stroke:#fff,stroke-width:2px,color:#fff\n")
-        f.write("    style Engine fill:#4a90e2,stroke:#fff,stroke-width:2px,color:#fff\n")
+        f.write("    style Tribunal fill:#4a90e2,stroke:#fff,stroke-width:2px,color:#fff\n")
         f.write("    style Client fill:#f5a623,stroke:#fff,stroke-width:2px,color:#fff\n")
-        f.write("    style Dashboard fill:#7ed321,stroke:#fff,stroke-width:2px,color:#fff\n")
-        
+        f.write("    style Hub fill:#7ed321,stroke:#fff,stroke-width:2px,color:#fff\n")
         f.write("```\n\n")
         
-        f.write("## 📝 2. Реестр Модулей и Символов AST (Спецификация)\n\n")
+        f.write("## 📝 2. Module & AST symbol registry\n\n")
         
         total_symbols = sum(len(syms) for syms in symbols.values())
-        f.write(f"Всего проиндексировано **{len(symbols)} модулей** и **{total_symbols} ключевых символов (AST definitions)**.\n\n")
+        f.write(f"Indexed **{len(symbols)} modules** and **{total_symbols} AST definitions**.\n\n")
         
         for module_name, syms in symbols.items():
             f.write(f"### 📂 {module_name}\n\n")
-            f.write("| Тип | Имя символа | Путь к файлу |\n")
+            f.write("| Kind | Symbol | File |\n")
             f.write("| :--- | :--- | :--- |\n")
             for s in sorted(syms, key=lambda x: (x["kind"], x["name"])):
                 f.write(f"| `{s['kind']}` | `{s['name']}` | `{s['file']}` |\n")
