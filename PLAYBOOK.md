@@ -32,16 +32,23 @@ Pick your depth. Every path ends with something you verified yourself on
      -d '{"task_id":"probe","description":"x","bounty_cspr":1,"client_id":"judge"}'   # → 402
    curl https://casper-agentic-mesh.vercel.app/api/mcp                                # → manifest
    ```
-   (The dashboard's **Casper Live Stream** card scrolls real blocks; the Tower/Tribunal buttons
-   honestly report "frozen" on serverless — Paths B/C below run the real binaries.)
-1. **Open the deployed escrow contract:**
+   (The dashboard's **Casper Live Stream** card scrolls real blocks, and **SCAN MESH** returns a
+   live scan from the 24/7 overseer — see step 1. Only the Tribunal button needs a host with the
+   compiled court or your own OpenRouter key; Path C below runs it yourself.)
+1. **Watch the Tower think, live:** open
+   [triarchy-tower.onrender.com](https://triarchy-tower.onrender.com) — the overseer runs 24/7,
+   rescans the chain every five minutes and publishes what it sees: ledger state root, the
+   on-chain oracle price, agent reputation, and a proof-of-liveness verdict. Refresh in a few
+   minutes and the scan timestamp moves. Read-only by construction: no keys, no write path.
+   The same report is what **SCAN MESH** returns on the dashboard.
+2. **Open the deployed escrow contract:**
    [contract-package `a7e6a383…4f6d`](https://testnet.cspr.live/contract-package/a7e6a38381899749532a9180c30794edcdab883596f54c883af2bcae98694f6d)
    → entry points `register_agent`, `create_bounty`, `release_bounty`, `refund_bounty`.
-2. **Open a real escrow payout:** [`release_bounty` tx `1ea27a03…`](https://testnet.cspr.live/transaction/1ea27a03a072b0db1f8b5f4cf176364eec9ef50cb396bafb9f56829c21204f14)
+3. **Open a real escrow payout:** [`release_bounty` tx `1ea27a03…`](https://testnet.cspr.live/transaction/1ea27a03a072b0db1f8b5f4cf176364eec9ef50cb396bafb9f56829c21204f14)
    — 10 CSPR leaving escrow to the hunter, `error: None`.
-3. **Open an autonomous LLM ruling that moved money:** [tx `c333c9d1…`](https://testnet.cspr.live/transaction/c333c9d1513c633d161627c39ff9cb3cf28ef2f3acf3cda3d19c0d55f9dfcb89)
+4. **Open an autonomous LLM ruling that moved money:** [tx `c333c9d1…`](https://testnet.cspr.live/transaction/c333c9d1513c633d161627c39ff9cb3cf28ef2f3acf3cda3d19c0d55f9dfcb89)
    — the judge agent approved a proof and submitted the release itself.
-4. **Both tribunal verdict paths:** [REJECT → refund `4664e97a…`](https://testnet.cspr.live/transaction/4664e97a3d5be8cfe0cfb1f82a25d71bbc6e2865f2f25edba5809a7e2c4b4d03)
+5. **Both tribunal verdict paths:** [REJECT → refund `4664e97a…`](https://testnet.cspr.live/transaction/4664e97a3d5be8cfe0cfb1f82a25d71bbc6e2865f2f25edba5809a7e2c4b4d03)
    and [APPROVE → release `70213268…`](https://testnet.cspr.live/transaction/702132683a246c1e07e7c49f0e403b680d85b7114b8ec25772af5991a959c375).
 
 Full ledger with every hash (deploy, init, oracle, heartbeats): [DEPLOYMENTS.md](DEPLOYMENTS.md).

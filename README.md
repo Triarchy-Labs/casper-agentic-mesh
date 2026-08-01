@@ -56,7 +56,7 @@ flows. **Every arrow is a real, running connection** (the API routes are verifie
 │   /api/mcp ──────► Model Context Protocol manifest (agent tool discovery)      │
 │   /api/telemetry ► real per-core load + live RPC round-trip                    │
 │   /api/agents ───► registry + the live on-chain agent (reputation from chain)  │
-│   /api/tower ────► spawns the Tower binary   /api/tribunal ─► the 5-LLM court  │
+│   /api/tower ────► live overseer (24/7 on Render)  /api/tribunal ─► 5-LLM court│
 └──────┬───────────────────────────────┬───────────────────────────┬─────────────┘
        │ signs & verifies              │ deliberates               │ reads/writes
 ┌──────┴───────────┐        ┌──────────┴──────────┐      ┌─────────┴──────────────┐
@@ -267,11 +267,19 @@ cd gateway && npm install && npm run dev
 Full deploy + lifecycle reproduction: **[DEPLOYMENTS.md](DEPLOYMENTS.md)**.
 
 ### Deploying the gateway (Vercel)
-Import this repo and set **Root Directory = `gateway`**. `/api/onchain` (live ledger
-reads) works on serverless as-is. The `/api/tower` and `/api/tribunal` routes spawn
-the compiled Rust agents, so they need those binaries present — run the gateway on a
-host/VM (or a small backend service) for the live Tower/Tribunal buttons; on pure
-serverless they degrade gracefully ("functions frozen — we are working on it").
+Import this repo and set **Root Directory = `gateway`**. `/api/onchain`, `/api/hire`,
+`/api/mcp` and `/api/casper-stream` work on serverless as-is.
+
+**The Tower runs 24/7:** [`triarchy-tower.onrender.com`](https://triarchy-tower.onrender.com)
+— the same `tower-overseer` binary in `--serve` mode, rescanning the chain every five
+minutes and publishing its report as a public status page. One-click deploy of your own:
+[`render.yaml`](render.yaml). Set `TOWER_SERVICE_URL` on the gateway and **SCAN MESH works
+on serverless too** — the route runs the local binary when there is one and proxies the live
+overseer when there isn't.
+
+`/api/tribunal` still spawns the compiled court locally: run the gateway on a host/VM for a
+fresh in-browser deliberation, or paste your own OpenRouter key into the panel. On pure
+serverless without a key it says so plainly rather than faking a verdict.
 
 ────────────────────────────────────────────────────────────────
 

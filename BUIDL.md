@@ -51,7 +51,7 @@ Verifiable, not simulated — every hash below opens on the block explorer.
 │   /api/hire ─────► x402 gate: 402 unless a real CSPR tx is verified on-ledger  │
 │   /api/casper-stream ─► CSPR.cloud feed: real blocks + deploys                 │
 │   /api/mcp ──────► Model Context Protocol manifest — agent tool discovery      │
-│   /api/agents ·  /api/telemetry ·  /api/tower ·  /api/tribunal                 │
+│   /api/tower ────► live 24/7 overseer   /api/agents ·  /api/telemetry ·  …     │
 └──────┬───────────────────────────────┬───────────────────────────┬─────────────┘
        │ signs & verifies              │ deliberates               │ reads / writes
 ┌──────┴───────────┐        ┌──────────┴──────────┐      ┌─────────┴──────────────┐
@@ -218,7 +218,7 @@ cd gateway && npm install && npm run dev
 
 Full deploy + lifecycle reproduction: **[DEPLOYMENTS.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/DEPLOYMENTS.md)**.
 
-**Deploying the gateway (Vercel):** import this repo, set **Root Directory = `gateway`**, and add the env vars (`CASPER_RPC_URL`, `CSPR_CLOUD_API_KEY` for the live stream). `/api/onchain`, `/api/hire`, `/api/mcp` and `/api/casper-stream` work on serverless as-is. The `/api/tower` and `/api/tribunal` routes spawn the compiled Rust agents, so they need those binaries present — run the gateway on a host/VM for the live Tower/Tribunal buttons; on pure serverless they degrade gracefully ("functions frozen — we are working on it").
+**Deploying the gateway (Vercel):** import this repo, set **Root Directory = `gateway`**, and add the env vars (`CASPER_RPC_URL`, `CSPR_CLOUD_API_KEY` for the live stream, `TOWER_SERVICE_URL` for the overseer). `/api/onchain`, `/api/hire`, `/api/mcp` and `/api/casper-stream` work on serverless as-is. **The Tower runs 24/7 at [triarchy-tower.onrender.com](https://triarchy-tower.onrender.com)** — same binary, `--serve` mode, rescanning every five minutes — so SCAN MESH is live on the hosted demo as well; deploy your own with the included [`render.yaml`](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/render.yaml). `/api/tribunal` spawns the compiled court, so a fresh in-browser deliberation needs a host/VM (or your own OpenRouter key pasted into the panel); on pure serverless it says so plainly rather than faking a verdict.
 
 ---
 
