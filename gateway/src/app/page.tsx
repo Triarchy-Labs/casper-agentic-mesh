@@ -439,7 +439,7 @@ export default function Page() {
                       </div>
                       <div className="panel-tags absolute bottom-6 right-6 flex gap-2 z-20">
                         <span className="nb-tag">Adversarial</span>
-                        <span className="nb-tag">5 LLMs</span>
+                        <span className="nb-tag">6 models</span>
                         <span className="nb-tag">Chief Judge</span>
                       </div>
                     </div>

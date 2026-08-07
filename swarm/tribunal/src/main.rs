@@ -135,10 +135,14 @@ async fn main() {
     // Dry-run = deliberate and rule, but never move funds (safe for a UI button).
     let dry_run = std::env::args().any(|a| a == "--dry-run")
         || std::env::var("TRIBUNAL_DRY_RUN").is_ok();
-    let chief_model = env_or("CHIEF_JUDGE_MODEL", "anthropic/claude-opus-4.8-fast");
+    // Six roles, six models, six vendors. The bench is deliberately heterogeneous:
+    // no single provider holds more than one seat, so no provider can swing a verdict.
+    let chief_model = env_or("CHIEF_JUDGE_MODEL", "anthropic/claude-opus-5");
+    let prosecutor_model = env_or("PROSECUTOR_MODEL", "x-ai/grok-4.5");
+    let defender_model = env_or("DEFENDER_MODEL", "moonshotai/kimi-k3");
     let juror_models: Vec<String> = env_or(
         "JUROR_MODELS",
-        "openai/gpt-4o-mini,meta-llama/llama-3.3-70b-instruct,mistralai/mistral-small-2603",
+        "openai/gpt-5.6-terra,meta-llama/llama-4-maverick,mistralai/mistral-small-2603",
     )
     .split(',')
     .map(|s| s.trim().to_string())
@@ -152,20 +156,20 @@ async fn main() {
 
     // 1) Adversarial arguments (run concurrently).
     let prosecutor = ask(
-        &chief_model,
+        &prosecutor_model,
         "You are the PROSECUTOR in a bounty tribunal. Argue, in 2-3 sentences, why the submitted proof FAILS to satisfy the task. Be specific and skeptical.",
         &case,
     );
     let defender = ask(
-        &chief_model,
+        &defender_model,
         "You are the DEFENDER in a bounty tribunal. Argue, in 2-3 sentences, why the submitted proof DOES satisfy the task. Cite concrete evidence in the proof.",
         &case,
     );
     let (prosecutor, defender) = (prosecutor.await, defender.await);
     let prosecution = prosecutor.unwrap_or_else(|e| format!("(prosecutor unavailable: {e})"));
     let defense = defender.unwrap_or_else(|e| format!("(defender unavailable: {e})"));
-    println!("🗡️  PROSECUTION: {prosecution}\n");
-    println!("🛡️  DEFENSE:     {defense}\n");
+    println!("🗡️  PROSECUTION ({prosecutor_model}): {prosecution}\n");
+    println!("🛡️  DEFENSE     ({defender_model}): {defense}\n");
 
     let debate = format!("{case}\n\nPROSECUTION: {prosecution}\nDEFENSE: {defense}");
 

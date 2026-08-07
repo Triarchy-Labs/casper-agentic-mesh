@@ -94,7 +94,7 @@ const BountiesPage = () => {
 			{ status: "COMPILING", text: "cargo build --release --target wasm32-unknown-unknown" },
 			{ status: "LOWERING", text: "wasm-opt: lowering bulk-memory + sign-ext for Casper VM 1.x (the real-world gotcha from our DEPLOYMENTS notes)" },
 			{ status: "VALIDATING", text: "casper-wasm-utils: stripping custom sections, size gate < 1 MiB, zero external imports" },
-			{ status: "DRY RUN", text: "tribunal --dry-run available: 5-LLM court deliberates without moving funds" },
+			{ status: "DRY RUN", text: "tribunal --dry-run available: 6-model court deliberates without moving funds" },
 			{ status: "READY", text: "Artifact matches the deployed escrow lineage — every real hash lives in DEPLOYMENTS.md" }
 		];
 		let stepIdx = 0;

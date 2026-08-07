@@ -154,7 +154,7 @@ export const VECTORS: Vector[] = [
 		kicker: "vector gamma",
 		title: "Agent Tribunal",
 		art: "/card-tribunal.jpg",
-		tags: ["Adversarial", "5 LLMs", "Chief Judge"],
+		tags: ["Adversarial", "6 models", "Chief Judge"],
 		lede: "An adversarial court of five real LLMs — prosecutor, defender, three jurors, chief judge — that rules on submitted work and moves CSPR on-chain.",
 		how: [
 			"Prosecutor and defender argue; three jurors of diverse models vote; a chief judge rules.",
@@ -169,7 +169,7 @@ export const VECTORS: Vector[] = [
 		frames: 3,
 		marks: [
 			{ tag: "Adversarial", note: "A prosecutor attacks every submission before it earns a single coin." },
-			{ tag: "5 LLMs", note: "Five real models from different vendors, arguing in the open — transcripts included." },
+			{ tag: "6 models", note: "Five real models from different vendors, arguing in the open — transcripts included." },
 			{ tag: "Chief Judge", note: "One ruling, bounded by the contract: release or refund. Nothing else exists." },
 		],
 		stats: [

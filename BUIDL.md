@@ -9,7 +9,7 @@
 
 ## Agents don't trust each other — the chain enforces the verdict.
 
-> **What is Triarchy?** A trust layer for the AI-agent economy, **live on Casper 2.0 testnet**. A client locks CSPR in an on-chain **escrow**; autonomous agents discover the work via **MCP** and pay an **x402** micro-fee to enter; an adversarial tribunal of **5 LLMs** judges the result; the smart contract settles — **release** to the agent or **refund** to the client. No human middlemen, full on-chain settlement.
+> **What is Triarchy?** A trust layer for the AI-agent economy, **live on Casper 2.0 testnet**. A client locks CSPR in an on-chain **escrow**; autonomous agents discover the work via **MCP** and pay an **x402** micro-fee to enter; an adversarial tribunal of **six models from six vendors** judges the result; the smart contract settles — **release** to the agent or **refund** to the client. No human middlemen, full on-chain settlement.
 >
 > Under the hood: deterministic **Rust/WASM** contracts (not LLM promises), a live **RWA oracle** feeding real CSPR/USD prices on-chain, and a **Proof-of-Liveness Tower** that rescues escrows from dead agents — a primitive nobody else ships. Every claim below links to a real transaction.
 
@@ -25,7 +25,7 @@ The Casper hackathon presented clear vectors: RWA Oracles, Yield Routers, and DA
 **Deterministic Code > Probabilistic AI:** we do not blindly trust an LLM. The LLM argues; **verifiable Rust code and a WASM contract settle.** In plain words:
 
 - **LOCKED** — CSPR sits in the escrow contract's own purse; nobody can move it out-of-band.
-- **JUDGED** — an adversarial court of 5 real LLMs (prosecutor, defender, 3 jurors, chief judge) argues every submission and votes.
+- **JUDGED** — an adversarial court of **six models from six different vendors**: prosecutor (xAI), defender (Moonshot), three jurors on separate models (OpenAI, Meta, Mistral), chief judge (Anthropic). No vendor holds two seats, so no vendor can swing a verdict.
 - **ENFORCED** — the contract's only money paths are `release` → registered hunter or `refund` → creator. **Any** verdict, hallucinated or not, can do nothing else. Trust is written in code, not promised.
 
 > **⏱ Judges — start here: [PLAYBOOK.md](https://github.com/Triarchy-Labs/casper-agentic-mesh/blob/main/PLAYBOOK.md)** — verify everything yourself in ~10 minutes (browser-only path: 2 minutes). No marketing, only commands and live hashes.
@@ -58,7 +58,7 @@ Verifiable, not simulated — every hash below opens on the block explorer.
 │  x402 PAYMENT    │        │  AI AGENT SWARM     │      │  CASPER TESTNET (WASM) │
 │  wallet ─sign─►  │        │  compiled Rust      │      │  escrow contract       │
 │  verify on-chain │        │  bounty-judge       │      │  deposit-proxy         │
-│  → /api/hire     │        │  tribunal (5 LLMs)  │      │  RWA oracle contract   │
+│  → /api/hire     │        │  tribunal (6 models)│      │  RWA oracle contract   │
 │                  │        │  tower · rwa-oracle │      │                        │
 └──────────────────┘        └─────────┬───────────┘      └───────────┬────────────┘
                                       │ verdict → release / refund   │
@@ -72,7 +72,7 @@ Verifiable, not simulated — every hash below opens on the block explorer.
 ╚════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-**The product loop, end to end:** WALLET connect → describe a task → sign a real CSPR payment → `/api/hire` verifies it on the ledger → the 5-LLM court rules → the contract pays the hunter or refunds you. No step is mocked; the contract has exactly two money paths and a verdict can pick nothing else.
+**The product loop, end to end:** WALLET connect → describe a task → sign a real CSPR payment → `/api/hire` verifies it on the ledger → the six-model court rules → the contract pays the hunter or refunds you. No step is mocked; the contract has exactly two money paths and a verdict can pick nothing else.
 
 ---
 

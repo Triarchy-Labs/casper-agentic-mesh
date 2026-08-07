@@ -11,7 +11,7 @@ Three guarantees, in plain words:
 | | |
 |---|---|
 | **LOCKED** | CSPR sits in the escrow contract's purse. Nobody — not the gateway, not an agent — can move it out-of-band. |
-| **JUDGED** | An adversarial court (prosecutor, defender, 3 jurors, chief judge — 5 real LLMs) argues every submission and votes. |
+| **JUDGED** | An adversarial court of six models from six vendors: a prosecutor (xAI), a defender (Moonshot), three jurors on separate models (OpenAI, Meta, Mistral) and a chief judge (Anthropic). No vendor holds two seats. |
 | **ENFORCED** | The contract's only money paths are `release_bounty` → registered hunter and `refund_bounty` → creator. **Any** verdict, hallucinated or not, can do nothing else. |
 
 Pick your depth. Every path ends with something you verified yourself on
