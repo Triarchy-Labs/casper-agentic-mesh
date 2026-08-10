@@ -1,0 +1,37 @@
+name: Oracle pulse
+# Keeps the on-chain oracle honest: posts a fresh CSPR/USD reading and the agent
+# heartbeat every 12 hours, using the committed disposable testnet key and the
+# committed go-signer. Pure bash + curl — no toolchain to install.
+on:
+  schedule:
+    - cron: "17 */12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Post price + heartbeat
+        run: |
+          set -e
+          SIGNER=./swarm/casper-client/go-signer/casper-tx-signer
+          chmod +x "$SIGNER"
+          PRICE=$(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=casper-network&vs_currencies=usd" \
+            | grep -o '"usd":[0-9.]*' | cut -d: -f2)
+          [ -n "$PRICE" ] || { echo "feed empty — refusing to post a fabricated price"; exit 1; }
+          MICRO=$(awk "BEGIN{printf \"%d\", $PRICE*1000000}")
+          echo "CSPR-USD = \$$PRICE ($MICRO micro-USD)"
+          PKG=16d86943d2d95769bff18da2438c9bf674e35347890705f0ef73ad14e37964b2
+          AGENT=334f6577fd29b3c939d35f8c3c386b5eaebbb1435f088487485980ed2acb6867
+          "$SIGNER" --mode call-entrypoint --node https://node.testnet.casper.network/rpc \
+            --chain casper-test --secret-key swarm/casper-client/key.pem --algo ed25519 \
+            --payment 6000000000 --contract-hash "$PKG" --entrypoint post_reading \
+            --args "asset:string:CSPR-USD,value:u512:$MICRO" | tail -1
+          "$SIGNER" --mode call-entrypoint --node https://node.testnet.casper.network/rpc \
+            --chain casper-test --secret-key swarm/casper-client/key.pem --algo ed25519 \
+            --payment 6000000000 --contract-hash "$PKG" --entrypoint post_reading \
+            --args "asset:string:HEARTBEAT-$AGENT,value:u512:$(date +%s)" | tail -1
