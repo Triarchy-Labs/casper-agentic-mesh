@@ -23,7 +23,10 @@ wait_tx() {
     local r; r=$(rpc "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"info_get_transaction\",\"params\":{\"transaction_hash\":{\"Version1\":\"$tx\"}}}")
     if echo "$r" | grep -q '"execution_info":null'; then printf '.'; sleep 8; continue; fi
     if echo "$r" | grep -q 'execution_info'; then
-      echo "$r" | python3 -c "import sys,json;v=json.load(sys.stdin)['result']['execution_info']['execution_result'].get('Version2',{});print(' cost',v.get('cost'),'| error',v.get('error_message'))"
+      local cost err
+      cost=$(echo "$r" | grep -o '"cost":"[^"]*"' | head -1 | cut -d'"' -f4)
+      err=$(echo "$r" | grep -o '"error_message":[^,}]*' | head -1 | cut -d: -f2- | tr -d '"')
+      echo " cost ${cost:-?} | error ${err:-None}"
       return
     fi
     printf '_'; sleep 8
@@ -34,7 +37,7 @@ echo -e "${CYAN}=== Triarchy Agentic Mesh — live Casper testnet demo ===${NC}"
 
 echo -e "\n${YELLOW}[1/4]${NC} Node connectivity (chain_get_state_root_hash)"
 SRH=$(rpc '{"jsonrpc":"2.0","id":1,"method":"chain_get_state_root_hash","params":[]}' \
-  | python3 -c "import sys,json;print(json.load(sys.stdin)['result']['state_root_hash'])")
+  | grep -o '"state_root_hash":"[a-f0-9]*"' | cut -d'"' -f4)
 echo -e "${GREEN}    state root:${NC} $SRH"
 
 echo -e "\n${YELLOW}[2/4]${NC} Contract package (on-chain)"

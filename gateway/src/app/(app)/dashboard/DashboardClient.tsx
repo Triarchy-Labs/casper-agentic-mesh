@@ -219,7 +219,7 @@ export default function Dashboard() {
             // Real on-chain payment only — no mock/bypass.
             // The L402 payment proof must be a real Casper transaction hash whose
             // execution succeeded on the ledger (verified server-side in casper.ts).
-            if (typeof window === "undefined" || !window.casperWallet) {
+            if (!getCasperProvider()) {
                 throw new Error("CASPER_WALLET_REQUIRED");
             }
             const txHashHeader = await payForTask(inputValue, userPubKey);

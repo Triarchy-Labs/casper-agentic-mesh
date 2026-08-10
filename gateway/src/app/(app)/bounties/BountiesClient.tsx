@@ -8,18 +8,21 @@ import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
 import { CornerMarks } from "@/components/AgentNetworkGrid";
 import { CarbonFabric } from "@/components/CarbonFabric";
 
-// Genuine Casper Wallet Provider Integration (Zero-Mock Policy)
+// Genuine Casper Wallet Provider Integration (Zero-Mock Policy).
+// Uses the shared bridge: modern extensions inject CasperWalletProvider(), older
+// ones the casperWallet global — getCasperProvider() resolves whichever exists.
+import { getCasperProvider } from "@/lib/casper-wallet";
+
 const requestAccess = async (): Promise<{ address?: string; error?: string }> => {
-    if (typeof window !== "undefined" && window.casperWallet) {
-        try {
-            await window.casperWallet.requestConnection();
-            const activeKey = await window.casperWallet.getActivePublicKey();
-            return { address: activeKey };
-        } catch (error) {
-            return { error: String(error) };
-        }
+    const provider = getCasperProvider();
+    if (!provider) return { error: "Casper Wallet not installed" };
+    try {
+        await provider.requestConnection();
+        const activeKey = await provider.getActivePublicKey();
+        return { address: activeKey };
+    } catch (error) {
+        return { error: String(error) };
     }
-    return { error: "Casper Wallet not installed" };
 };
 
 const AnimatedCounter = ({ value, prefix = "", suffix = "", isFloat = false }: { value: number, prefix?: string, suffix?: string, isFloat?: boolean }) => {

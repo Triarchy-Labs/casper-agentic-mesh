@@ -55,7 +55,7 @@ Full ledger with every hash (deploy, init, oracle, heartbeats): [DEPLOYMENTS.md]
 
 ## Path B — one script, real chain (~5 minutes)
 
-Prereqs: `bash`, `curl`, `python3`. (For the live write step: Go ≥ 1.25.)
+Prereqs: `bash` and `curl` — nothing else. (Rebuilding the signer yourself: Go ≥ 1.25.)
 
 ```bash
 git clone https://github.com/Triarchy-Labs/casper-agentic-mesh
