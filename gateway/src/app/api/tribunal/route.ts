@@ -1,5 +1,12 @@
 import { NextResponse } from "next/server";
 import { runAgent } from "@/lib/agents";
+import fs from "node:fs";
+import path from "node:path";
+
+const TRIBUNAL_BIN = path.join(
+	process.env.MESH_REPO_ROOT || path.resolve(process.cwd(), ".."),
+	"target", "debug", "tribunal",
+);
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -10,6 +17,15 @@ export const maxDuration = 300;
 export async function POST(req: Request) {
 	let body: { taskId?: string; description?: string; proof?: string; apiKey?: string } = {};
 	try { body = await req.json(); } catch { /* defaults */ }
+
+	// On serverless the compiled court simply is not there — say so before inviting
+	// anyone to paste a key into a panel that cannot use it.
+	if (!fs.existsSync(TRIBUNAL_BIN)) {
+		return NextResponse.json(
+			{ ok: false, error: "🛑 FUNCTIONS FROZEN: the court is a compiled Rust binary and cannot run on serverless. No funds moved, nothing faked — run it in one command, see PLAYBOOK.md." },
+			{ status: 502 },
+		);
+	}
 
 	const judgeKey = typeof body.apiKey === "string" && body.apiKey.trim().startsWith("sk-") ? body.apiKey.trim() : undefined;
 	if (!process.env.OPENROUTER_API_KEY && !judgeKey) {
