@@ -14,3 +14,20 @@ services:
     envVars:
       - key: TOWER_SCAN_INTERVAL_SECS
         value: "300"
+
+  # THE TRIBUNAL as an on-demand court. Needs OPENROUTER_API_KEY set in the Render
+  # dashboard (never committed). A cooldown guards the model budget: a full bench is
+  # six paid calls, so it convenes at most once per TRIBUNAL_COOLDOWN_SECS.
+  - type: web
+    name: triarchy-tribunal
+    runtime: rust
+    plan: free
+    buildCommand: cargo build --release -p tribunal
+    startCommand: ./target/release/tribunal --serve
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: TRIBUNAL_COOLDOWN_SECS
+        value: "45"
+      - key: OPENROUTER_API_KEY
+        sync: false

@@ -8,4 +8,4 @@ description = "Triarchy Tribunal: adversarial multi-agent court that rules on bo
 serde = { workspace = true }
 serde_json = { workspace = true }
 reqwest = { workspace = true }
-tokio = { workspace = true }
+tokio = { workspace = true, features = ["process"] }

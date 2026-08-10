@@ -18,9 +18,25 @@ export async function POST(req: Request) {
 	let body: { taskId?: string; description?: string; proof?: string; apiKey?: string } = {};
 	try { body = await req.json(); } catch { /* defaults */ }
 
-	// On serverless the compiled court simply is not there — say so before inviting
-	// anyone to paste a key into a panel that cannot use it.
+	// No local binary (serverless): convene the court running on Render instead, so the
+	// hosted button holds a real session rather than reporting "frozen".
 	if (!fs.existsSync(TRIBUNAL_BIN)) {
+		const remote = process.env.TRIBUNAL_SERVICE_URL;
+		if (remote) {
+			try {
+				const r = await fetch(remote, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ description: body.description, proof: body.proof }),
+					signal: AbortSignal.timeout(280_000),
+				});
+				const d = await r.json();
+				if (d?.ok) return NextResponse.json({ ok: true, transcript: (d.lines ?? []).join("\n") });
+				return NextResponse.json({ ok: false, error: d?.error || "The court is unavailable right now." }, { status: 503 });
+			} catch {
+				/* fall through to the honest message */
+			}
+		}
 		return NextResponse.json(
 			{ ok: false, error: "🛑 FUNCTIONS FROZEN: the court is a compiled Rust binary and cannot run on serverless. No funds moved, nothing faked — run it in one command, see PLAYBOOK.md." },
 			{ status: 502 },

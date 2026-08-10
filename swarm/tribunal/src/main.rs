@@ -123,8 +123,82 @@ fn signer_call(package: &str, entrypoint: &str, args: &str, payment: &str) -> Re
     Ok(tx)
 }
 
+/// SERVE MODE (Render / any PaaS): expose the court over plain HTTP so the hosted
+/// dashboard button can convene a real bench instead of reporting "frozen".
+///
+/// The deliberation logic below is untouched — serve re-invokes this same binary in
+/// --dry-run and streams back its transcript. Two guards keep a public button from
+/// draining the model budget: a cooldown between runs (a full bench is six paid model
+/// calls) and a hard cap on the proof length.
+async fn serve() {
+    use std::sync::atomic::{AtomicU64, Ordering};
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+    let port: u16 = env_or("PORT", "10001").parse().unwrap_or(10001);
+    let cooldown: u64 = env_or("TRIBUNAL_COOLDOWN_SECS", "45").parse().unwrap_or(45);
+    let last_run = std::sync::Arc::new(AtomicU64::new(0));
+
+    let listener = match tokio::net::TcpListener::bind(("0.0.0.0", port)).await {
+        Ok(l) => l,
+        Err(e) => { eprintln!("Failed to bind tribunal port {port}: {e}"); return; }
+    };
+    println!("⚖️  TRIBUNAL serve mode: 0.0.0.0:{port}, cooldown {cooldown}s");
+
+    loop {
+        let Ok((mut sock, _)) = listener.accept().await else { continue };
+        let last = last_run.clone();
+        tokio::spawn(async move {
+            let mut buf = vec![0u8; 8192];
+            let n = sock.read(&mut buf).await.unwrap_or(0);
+            let req = String::from_utf8_lossy(&buf[..n]).to_string();
+            let body_json: serde_json::Value = req
+                .split_once("\r\n\r\n")
+                .and_then(|(_, b)| serde_json::from_str(b.trim_end_matches('\0')).ok())
+                .unwrap_or(json!({}));
+
+            let now = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0);
+            let prev = last.load(Ordering::Relaxed);
+
+            let payload = if req.starts_with("GET") {
+                json!({ "ok": true, "role": "tribunal", "convene": "POST /", "cooldown_secs": cooldown })
+            } else if now.saturating_sub(prev) < cooldown {
+                json!({ "ok": false, "error": format!(
+                    "The bench is still in session — a full court is six paid model calls, so it convenes at most every {cooldown}s. Try again in {}s.",
+                    cooldown - now.saturating_sub(prev)) })
+            } else {
+                last.store(now, Ordering::Relaxed);
+                let desc = body_json.get("description").and_then(|v| v.as_str())
+                    .unwrap_or("Optimize the AST hypergraph for the Odra escrow modules.");
+                let proof = body_json.get("proof").and_then(|v| v.as_str()).unwrap_or("");
+                let (desc, proof) = (&desc[..desc.len().min(1200)], &proof[..proof.len().min(4000)]);
+                let exe = std::env::current_exe().unwrap_or_else(|_| "tribunal".into());
+                let out = tokio::process::Command::new(exe)
+                    .args(["--dry-run", "--description", desc, "--proof", proof])
+                    .output().await;
+                match out {
+                    Ok(o) if !o.stdout.is_empty() => json!({
+                        "ok": true,
+                        "lines": String::from_utf8_lossy(&o.stdout).lines().collect::<Vec<_>>(),
+                    }),
+                    Ok(o) => json!({ "ok": false, "error": String::from_utf8_lossy(&o.stderr).trim().to_string() }),
+                    Err(e) => json!({ "ok": false, "error": format!("court unavailable: {e}") }),
+                }
+            };
+
+            let body = payload.to_string();
+            let resp = format!(
+                "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{}",
+                body.len(), body);
+            let _ = sock.write_all(resp.as_bytes()).await;
+        });
+    }
+}
+
 #[tokio::main]
 async fn main() {
+    if std::env::args().any(|a| a == "--serve") { serve().await; return; }
+
     let task_id = arg(&["--task-id", "-t"]).unwrap_or_else(|| "bounty-alpha-006".to_string());
     let description = arg(&["--description", "-d"])
         .unwrap_or_else(|| "Optimize the AST hypergraph for the Odra escrow modules.".to_string());
