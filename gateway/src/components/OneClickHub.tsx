@@ -158,6 +158,22 @@ function ScrambleText({ text, className, style }: { text: string; className?: st
 	return <span className={className} style={style}>{display}</span>;
 }
 
+// The MCP manifest groups tools by domain — { compute: { hire: … }, bounties: { list, create } } —
+// so it is an object, not an array. Flatten whatever shape arrives into readable names.
+function mcpToolNames(src: unknown): string[] {
+	if (Array.isArray(src)) {
+		return src.map((t) => (typeof t === "string" ? t : (t as { name?: string })?.name)).filter(Boolean) as string[];
+	}
+	if (src && typeof src === "object") {
+		return Object.entries(src as Record<string, unknown>).flatMap(([group, v]) =>
+			v && typeof v === "object" && !Array.isArray(v)
+				? Object.keys(v as Record<string, unknown>).map((leaf) => `${group}.${leaf}`)
+				: [group],
+		);
+	}
+	return [];
+}
+
 const QUICK_Qs = ["How does escrow protect me?", "Show me a real on-chain verdict", "What is x402 here?"];
 const OPERATOR_REPLY = "operator: // in development — the tentacles aren't wired yet. Meanwhile: Try it live, or the playbook.";
 
@@ -199,7 +215,7 @@ export function OneClickHub() {
 		setAiLog((log) => [...log, `> [MCP] GET /api/mcp — discovering tools…`]);
 		try {
 			const m = await fetch("/api/mcp", { cache: "no-store" }).then((r) => r.json());
-			const tools = (m.tools || m.capabilities || []).map((t: { name?: string } | string) => typeof t === "string" ? t : t.name).filter(Boolean).slice(0, 4).join(", ");
+			const tools = mcpToolNames(m.tools ?? m.capabilities).slice(0, 4).join(", ");
 			setAiLog((log) => [...log, `> [MCP] ${m.name || "x402-triarchy-gateway"} · tools: ${tools || "see manifest"}`]);
 		} catch { setAiLog((log) => [...log, `> [MCP] manifest unreachable`]); }
 
@@ -274,7 +290,7 @@ export function OneClickHub() {
 		try {
 			const r = await fetch("/api/mcp", { cache: "no-store" });
 			const d = await r.json();
-			const tools = (d.tools || d.capabilities || []).map((t: { name?: string } | string) => typeof t === "string" ? t : t.name).filter(Boolean).slice(0, 6).join(", ");
+			const tools = mcpToolNames(d.tools ?? d.capabilities).slice(0, 6).join(", ");
 			setTryOut(`>>> GET /api/mcp\n<<< HTTP ${r.status}\n<<< ${d.name || "x402-triarchy-gateway"} — ${d.description?.slice(0, 90) || "agentic gateway"}\n<<< tools: ${tools || "see manifest"}\n// this is the machine-readable door any AI agent walks through.`);
 		} catch (e) { setTryOut(`// network error: ${(e as Error).message}`); }
 		setTryBusy(false);
