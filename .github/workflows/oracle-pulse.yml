@@ -1,10 +1,14 @@
 name: Oracle pulse
 # Keeps the on-chain oracle honest: posts a fresh CSPR/USD reading and the agent
-# heartbeat every 12 hours, using the committed disposable testnet key and the
-# committed go-signer. Pure bash + curl — no toolchain to install.
+# heartbeat, using the committed disposable testnet key and the committed go-signer.
+# Pure bash + curl — no toolchain to install.
+#
+# Cadence is set by the Tower's liveness window, not by taste: the Tower calls an
+# agent dead after TOWER_LIVENESS_WINDOW_SECS (3600) without a heartbeat, so pulsing
+# every 20 minutes keeps the agent alive even when GitHub delays a scheduled run.
 on:
   schedule:
-    - cron: "17 */12 * * *"
+    - cron: "*/20 * * * *"
   workflow_dispatch:
 
 permissions:
